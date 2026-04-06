@@ -1,0 +1,22928 @@
+var Ag = Object.defineProperty;
+var Lg = (n, a, l) => (a in n ? Ag(n, a, { enumerable: !0, configurable: !0, writable: !0, value: l }) : (n[a] = l));
+var Ln = (n, a, l) => Lg(n, typeof a != "symbol" ? a + "" : a, l);
+function zg(n, a) {
+    for (var l = 0; l < a.length; l++) {
+        const o = a[l];
+        if (typeof o != "string" && !Array.isArray(o)) {
+            for (const u in o)
+                if (u !== "default" && !(u in n)) {
+                    const f = Object.getOwnPropertyDescriptor(o, u);
+                    f && Object.defineProperty(n, u, f.get ? f : { enumerable: !0, get: () => o[u] });
+                }
+        }
+    }
+    return Object.freeze(Object.defineProperty(n, Symbol.toStringTag, { value: "Module" }));
+}
+(function () {
+    const a = document.createElement("link").relList;
+    if (a && a.supports && a.supports("modulepreload")) return;
+    for (const u of document.querySelectorAll('link[rel="modulepreload"]')) o(u);
+    new MutationObserver((u) => {
+        for (const f of u)
+            if (f.type === "childList")
+                for (const m of f.addedNodes) m.tagName === "LINK" && m.rel === "modulepreload" && o(m);
+    }).observe(document, { childList: !0, subtree: !0 });
+    function l(u) {
+        const f = {};
+        return (
+            u.integrity && (f.integrity = u.integrity),
+            u.referrerPolicy && (f.referrerPolicy = u.referrerPolicy),
+            u.crossOrigin === "use-credentials"
+                ? (f.credentials = "include")
+                : u.crossOrigin === "anonymous"
+                  ? (f.credentials = "omit")
+                  : (f.credentials = "same-origin"),
+            f
+        );
+    }
+    function o(u) {
+        if (u.ep) return;
+        u.ep = !0;
+        const f = l(u);
+        fetch(u.href, f);
+    }
+})();
+function xa(n) {
+    return n && n.__esModule && Object.prototype.hasOwnProperty.call(n, "default") ? n.default : n;
+}
+var oc = { exports: {} },
+    aa = {},
+    cc = { exports: {} },
+    ze = {};
+/**
+ * @license React
+ * react.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ var Wf;
+function Fg() {
+    if (Wf) return ze;
+    Wf = 1;
+    var n = Symbol.for("react.element"),
+        a = Symbol.for("react.portal"),
+        l = Symbol.for("react.fragment"),
+        o = Symbol.for("react.strict_mode"),
+        u = Symbol.for("react.profiler"),
+        f = Symbol.for("react.provider"),
+        m = Symbol.for("react.context"),
+        p = Symbol.for("react.forward_ref"),
+        h = Symbol.for("react.suspense"),
+        v = Symbol.for("react.memo"),
+        y = Symbol.for("react.lazy"),
+        w = Symbol.iterator;
+    function T(E) {
+        return E === null || typeof E != "object"
+            ? null
+            : ((E = (w && E[w]) || E["@@iterator"]), typeof E == "function" ? E : null);
+    }
+    var b = {
+            isMounted: function () {
+                return !1;
+            },
+            enqueueForceUpdate: function () {},
+            enqueueReplaceState: function () {},
+            enqueueSetState: function () {},
+        },
+        j = Object.assign,
+        S = {};
+    function k(E, U, Z) {
+        (this.props = E), (this.context = U), (this.refs = S), (this.updater = Z || b);
+    }
+    (k.prototype.isReactComponent = {}),
+        (k.prototype.setState = function (E, U) {
+            if (typeof E != "object" && typeof E != "function" && E != null)
+                throw Error(
+                    "setState(...): takes an object of state variables to update or a function which returns an object of state variables."
+                );
+            this.updater.enqueueSetState(this, E, U, "setState");
+        }),
+        (k.prototype.forceUpdate = function (E) {
+            this.updater.enqueueForceUpdate(this, E, "forceUpdate");
+        });
+    function I() {}
+    I.prototype = k.prototype;
+    function $(E, U, Z) {
+        (this.props = E), (this.context = U), (this.refs = S), (this.updater = Z || b);
+    }
+    var A = ($.prototype = new I());
+    (A.constructor = $), j(A, k.prototype), (A.isPureReactComponent = !0);
+    var B = Array.isArray,
+        Y = Object.prototype.hasOwnProperty,
+        ne = { current: null },
+        K = { key: !0, ref: !0, __self: !0, __source: !0 };
+    function le(E, U, Z) {
+        var ae,
+            ue = {},
+            ye = null,
+            Ee = null;
+        if (U != null)
+            for (ae in (U.ref !== void 0 && (Ee = U.ref), U.key !== void 0 && (ye = "" + U.key), U))
+                Y.call(U, ae) && !K.hasOwnProperty(ae) && (ue[ae] = U[ae]);
+        var Se = arguments.length - 2;
+        if (Se === 1) ue.children = Z;
+        else if (1 < Se) {
+            for (var D = Array(Se), oe = 0; oe < Se; oe++) D[oe] = arguments[oe + 2];
+            ue.children = D;
+        }
+        if (E && E.defaultProps) for (ae in ((Se = E.defaultProps), Se)) ue[ae] === void 0 && (ue[ae] = Se[ae]);
+        return { $$typeof: n, type: E, key: ye, ref: Ee, props: ue, _owner: ne.current };
+    }
+    function ee(E, U) {
+        return { $$typeof: n, type: E.type, key: U, ref: E.ref, props: E.props, _owner: E._owner };
+    }
+    function re(E) {
+        return typeof E == "object" && E !== null && E.$$typeof === n;
+    }
+    function xe(E) {
+        var U = { "=": "=0", ":": "=2" };
+        return (
+            "$" +
+            E.replace(/[=:]/g, function (Z) {
+                return U[Z];
+            })
+        );
+    }
+    var q = /\/+/g;
+    function te(E, U) {
+        return typeof E == "object" && E !== null && E.key != null ? xe("" + E.key) : U.toString(36);
+    }
+    function F(E, U, Z, ae, ue) {
+        var ye = typeof E;
+        (ye === "undefined" || ye === "boolean") && (E = null);
+        var Ee = !1;
+        if (E === null) Ee = !0;
+        else
+            switch (ye) {
+                case "string":
+                case "number":
+                    Ee = !0;
+                    break;
+                case "object":
+                    switch (E.$$typeof) {
+                        case n:
+                        case a:
+                            Ee = !0;
+                    }
+            }
+        if (Ee)
+            return (
+                (Ee = E),
+                (ue = ue(Ee)),
+                (E = ae === "" ? "." + te(Ee, 0) : ae),
+                B(ue)
+                    ? ((Z = ""),
+                      E != null && (Z = E.replace(q, "$&/") + "/"),
+                      F(ue, U, Z, "", function (oe) {
+                          return oe;
+                      }))
+                    : ue != null &&
+                      (re(ue) &&
+                          (ue = ee(
+                              ue,
+                              Z +
+                                  (!ue.key || (Ee && Ee.key === ue.key) ? "" : ("" + ue.key).replace(q, "$&/") + "/") +
+                                  E
+                          )),
+                      U.push(ue)),
+                1
+            );
+        if (((Ee = 0), (ae = ae === "" ? "." : ae + ":"), B(E)))
+            for (var Se = 0; Se < E.length; Se++) {
+                ye = E[Se];
+                var D = ae + te(ye, Se);
+                Ee += F(ye, U, Z, D, ue);
+            }
+        else if (((D = T(E)), typeof D == "function"))
+            for (E = D.call(E), Se = 0; !(ye = E.next()).done; )
+                (ye = ye.value), (D = ae + te(ye, Se++)), (Ee += F(ye, U, Z, D, ue));
+        else if (ye === "object")
+            throw (
+                ((U = String(E)),
+                Error(
+                    "Objects are not valid as a React child (found: " +
+                        (U === "[object Object]" ? "object with keys {" + Object.keys(E).join(", ") + "}" : U) +
+                        "). If you meant to render a collection of children, use an array instead."
+                ))
+            );
+        return Ee;
+    }
+    function ge(E, U, Z) {
+        if (E == null) return E;
+        var ae = [],
+            ue = 0;
+        return (
+            F(E, ae, "", "", function (ye) {
+                return U.call(Z, ye, ue++);
+            }),
+            ae
+        );
+    }
+    function O(E) {
+        if (E._status === -1) {
+            var U = E._result;
+            (U = U()),
+                U.then(
+                    function (Z) {
+                        (E._status === 0 || E._status === -1) && ((E._status = 1), (E._result = Z));
+                    },
+                    function (Z) {
+                        (E._status === 0 || E._status === -1) && ((E._status = 2), (E._result = Z));
+                    }
+                ),
+                E._status === -1 && ((E._status = 0), (E._result = U));
+        }
+        if (E._status === 1) return E._result.default;
+        throw E._result;
+    }
+    var X = { current: null },
+        M = { transition: null },
+        se = { ReactCurrentDispatcher: X, ReactCurrentBatchConfig: M, ReactCurrentOwner: ne };
+    function G() {
+        throw Error("act(...) is not supported in production builds of React.");
+    }
+    return (
+        (ze.Children = {
+            map: ge,
+            forEach: function (E, U, Z) {
+                ge(
+                    E,
+                    function () {
+                        U.apply(this, arguments);
+                    },
+                    Z
+                );
+            },
+            count: function (E) {
+                var U = 0;
+                return (
+                    ge(E, function () {
+                        U++;
+                    }),
+                    U
+                );
+            },
+            toArray: function (E) {
+                return (
+                    ge(E, function (U) {
+                        return U;
+                    }) || []
+                );
+            },
+            only: function (E) {
+                if (!re(E)) throw Error("React.Children.only expected to receive a single React element child.");
+                return E;
+            },
+        }),
+        (ze.Component = k),
+        (ze.Fragment = l),
+        (ze.Profiler = u),
+        (ze.PureComponent = $),
+        (ze.StrictMode = o),
+        (ze.Suspense = h),
+        (ze.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = se),
+        (ze.act = G),
+        (ze.cloneElement = function (E, U, Z) {
+            if (E == null)
+                throw Error("React.cloneElement(...): The argument must be a React element, but you passed " + E + ".");
+            var ae = j({}, E.props),
+                ue = E.key,
+                ye = E.ref,
+                Ee = E._owner;
+            if (U != null) {
+                if (
+                    (U.ref !== void 0 && ((ye = U.ref), (Ee = ne.current)),
+                    U.key !== void 0 && (ue = "" + U.key),
+                    E.type && E.type.defaultProps)
+                )
+                    var Se = E.type.defaultProps;
+                for (D in U)
+                    Y.call(U, D) && !K.hasOwnProperty(D) && (ae[D] = U[D] === void 0 && Se !== void 0 ? Se[D] : U[D]);
+            }
+            var D = arguments.length - 2;
+            if (D === 1) ae.children = Z;
+            else if (1 < D) {
+                Se = Array(D);
+                for (var oe = 0; oe < D; oe++) Se[oe] = arguments[oe + 2];
+                ae.children = Se;
+            }
+            return { $$typeof: n, type: E.type, key: ue, ref: ye, props: ae, _owner: Ee };
+        }),
+        (ze.createContext = function (E) {
+            return (
+                (E = {
+                    $$typeof: m,
+                    _currentValue: E,
+                    _currentValue2: E,
+                    _threadCount: 0,
+                    Provider: null,
+                    Consumer: null,
+                    _defaultValue: null,
+                    _globalName: null,
+                }),
+                (E.Provider = { $$typeof: f, _context: E }),
+                (E.Consumer = E)
+            );
+        }),
+        (ze.createElement = le),
+        (ze.createFactory = function (E) {
+            var U = le.bind(null, E);
+            return (U.type = E), U;
+        }),
+        (ze.createRef = function () {
+            return { current: null };
+        }),
+        (ze.forwardRef = function (E) {
+            return { $$typeof: p, render: E };
+        }),
+        (ze.isValidElement = re),
+        (ze.lazy = function (E) {
+            return { $$typeof: y, _payload: { _status: -1, _result: E }, _init: O };
+        }),
+        (ze.memo = function (E, U) {
+            return { $$typeof: v, type: E, compare: U === void 0 ? null : U };
+        }),
+        (ze.startTransition = function (E) {
+            var U = M.transition;
+            M.transition = {};
+            try {
+                E();
+            } finally {
+                M.transition = U;
+            }
+        }),
+        (ze.unstable_act = G),
+        (ze.useCallback = function (E, U) {
+            return X.current.useCallback(E, U);
+        }),
+        (ze.useContext = function (E) {
+            return X.current.useContext(E);
+        }),
+        (ze.useDebugValue = function () {}),
+        (ze.useDeferredValue = function (E) {
+            return X.current.useDeferredValue(E);
+        }),
+        (ze.useEffect = function (E, U) {
+            return X.current.useEffect(E, U);
+        }),
+        (ze.useId = function () {
+            return X.current.useId();
+        }),
+        (ze.useImperativeHandle = function (E, U, Z) {
+            return X.current.useImperativeHandle(E, U, Z);
+        }),
+        (ze.useInsertionEffect = function (E, U) {
+            return X.current.useInsertionEffect(E, U);
+        }),
+        (ze.useLayoutEffect = function (E, U) {
+            return X.current.useLayoutEffect(E, U);
+        }),
+        (ze.useMemo = function (E, U) {
+            return X.current.useMemo(E, U);
+        }),
+        (ze.useReducer = function (E, U, Z) {
+            return X.current.useReducer(E, U, Z);
+        }),
+        (ze.useRef = function (E) {
+            return X.current.useRef(E);
+        }),
+        (ze.useState = function (E) {
+            return X.current.useState(E);
+        }),
+        (ze.useSyncExternalStore = function (E, U, Z) {
+            return X.current.useSyncExternalStore(E, U, Z);
+        }),
+        (ze.useTransition = function () {
+            return X.current.useTransition();
+        }),
+        (ze.version = "18.3.1"),
+        ze
+    );
+}
+var Vf;
+function Xc() {
+    return Vf || ((Vf = 1), (cc.exports = Fg())), cc.exports;
+}
+/**
+ * @license React
+ * react-jsx-runtime.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ var Qf;
+function Og() {
+    if (Qf) return aa;
+    Qf = 1;
+    var n = Xc(),
+        a = Symbol.for("react.element"),
+        l = Symbol.for("react.fragment"),
+        o = Object.prototype.hasOwnProperty,
+        u = n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+        f = { key: !0, ref: !0, __self: !0, __source: !0 };
+    function m(p, h, v) {
+        var y,
+            w = {},
+            T = null,
+            b = null;
+        v !== void 0 && (T = "" + v), h.key !== void 0 && (T = "" + h.key), h.ref !== void 0 && (b = h.ref);
+        for (y in h) o.call(h, y) && !f.hasOwnProperty(y) && (w[y] = h[y]);
+        if (p && p.defaultProps) for (y in ((h = p.defaultProps), h)) w[y] === void 0 && (w[y] = h[y]);
+        return { $$typeof: a, type: p, key: T, ref: b, props: w, _owner: u.current };
+    }
+    return (aa.Fragment = l), (aa.jsx = m), (aa.jsxs = m), aa;
+}
+var Kf;
+function Ig() {
+    return Kf || ((Kf = 1), (oc.exports = Og())), oc.exports;
+}
+var r = Ig(),
+    g = Xc();
+const Me = xa(g),
+    Mg = zg({ __proto__: null, default: Me }, [g]);
+var Al = {},
+    uc = { exports: {} },
+    Ft = {},
+    dc = { exports: {} },
+    fc = {};
+/**
+ * @license React
+ * scheduler.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ var Yf;
+function Dg() {
+    return (
+        Yf ||
+            ((Yf = 1),
+            (function (n) {
+                function a(M, se) {
+                    var G = M.length;
+                    M.push(se);
+                    e: for (; 0 < G; ) {
+                        var E = (G - 1) >>> 1,
+                            U = M[E];
+                        if (0 < u(U, se)) (M[E] = se), (M[G] = U), (G = E);
+                        else break e;
+                    }
+                }
+                function l(M) {
+                    return M.length === 0 ? null : M[0];
+                }
+                function o(M) {
+                    if (M.length === 0) return null;
+                    var se = M[0],
+                        G = M.pop();
+                    if (G !== se) {
+                        M[0] = G;
+                        e: for (var E = 0, U = M.length, Z = U >>> 1; E < Z; ) {
+                            var ae = 2 * (E + 1) - 1,
+                                ue = M[ae],
+                                ye = ae + 1,
+                                Ee = M[ye];
+                            if (0 > u(ue, G))
+                                ye < U && 0 > u(Ee, ue)
+                                    ? ((M[E] = Ee), (M[ye] = G), (E = ye))
+                                    : ((M[E] = ue), (M[ae] = G), (E = ae));
+                            else if (ye < U && 0 > u(Ee, G)) (M[E] = Ee), (M[ye] = G), (E = ye);
+                            else break e;
+                        }
+                    }
+                    return se;
+                }
+                function u(M, se) {
+                    var G = M.sortIndex - se.sortIndex;
+                    return G !== 0 ? G : M.id - se.id;
+                }
+                if (typeof performance == "object" && typeof performance.now == "function") {
+                    var f = performance;
+                    n.unstable_now = function () {
+                        return f.now();
+                    };
+                } else {
+                    var m = Date,
+                        p = m.now();
+                    n.unstable_now = function () {
+                        return m.now() - p;
+                    };
+                }
+                var h = [],
+                    v = [],
+                    y = 1,
+                    w = null,
+                    T = 3,
+                    b = !1,
+                    j = !1,
+                    S = !1,
+                    k = typeof setTimeout == "function" ? setTimeout : null,
+                    I = typeof clearTimeout == "function" ? clearTimeout : null,
+                    $ = typeof setImmediate < "u" ? setImmediate : null;
+                typeof navigator < "u" &&
+                    navigator.scheduling !== void 0 &&
+                    navigator.scheduling.isInputPending !== void 0 &&
+                    navigator.scheduling.isInputPending.bind(navigator.scheduling);
+                function A(M) {
+                    for (var se = l(v); se !== null; ) {
+                        if (se.callback === null) o(v);
+                        else if (se.startTime <= M) o(v), (se.sortIndex = se.expirationTime), a(h, se);
+                        else break;
+                        se = l(v);
+                    }
+                }
+                function B(M) {
+                    if (((S = !1), A(M), !j))
+                        if (l(h) !== null) (j = !0), O(Y);
+                        else {
+                            var se = l(v);
+                            se !== null && X(B, se.startTime - M);
+                        }
+                }
+                function Y(M, se) {
+                    (j = !1), S && ((S = !1), I(le), (le = -1)), (b = !0);
+                    var G = T;
+                    try {
+                        for (A(se), w = l(h); w !== null && (!(w.expirationTime > se) || (M && !xe())); ) {
+                            var E = w.callback;
+                            if (typeof E == "function") {
+                                (w.callback = null), (T = w.priorityLevel);
+                                var U = E(w.expirationTime <= se);
+                                (se = n.unstable_now()),
+                                    typeof U == "function" ? (w.callback = U) : w === l(h) && o(h),
+                                    A(se);
+                            } else o(h);
+                            w = l(h);
+                        }
+                        if (w !== null) var Z = !0;
+                        else {
+                            var ae = l(v);
+                            ae !== null && X(B, ae.startTime - se), (Z = !1);
+                        }
+                        return Z;
+                    } finally {
+                        (w = null), (T = G), (b = !1);
+                    }
+                }
+                var ne = !1,
+                    K = null,
+                    le = -1,
+                    ee = 5,
+                    re = -1;
+                function xe() {
+                    return !(n.unstable_now() - re < ee);
+                }
+                function q() {
+                    if (K !== null) {
+                        var M = n.unstable_now();
+                        re = M;
+                        var se = !0;
+                        try {
+                            se = K(!0, M);
+                        } finally {
+                            se ? te() : ((ne = !1), (K = null));
+                        }
+                    } else ne = !1;
+                }
+                var te;
+                if (typeof $ == "function")
+                    te = function () {
+                        $(q);
+                    };
+                else if (typeof MessageChannel < "u") {
+                    var F = new MessageChannel(),
+                        ge = F.port2;
+                    (F.port1.onmessage = q),
+                        (te = function () {
+                            ge.postMessage(null);
+                        });
+                } else
+                    te = function () {
+                        k(q, 0);
+                    };
+                function O(M) {
+                    (K = M), ne || ((ne = !0), te());
+                }
+                function X(M, se) {
+                    le = k(function () {
+                        M(n.unstable_now());
+                    }, se);
+                }
+                (n.unstable_IdlePriority = 5),
+                    (n.unstable_ImmediatePriority = 1),
+                    (n.unstable_LowPriority = 4),
+                    (n.unstable_NormalPriority = 3),
+                    (n.unstable_Profiling = null),
+                    (n.unstable_UserBlockingPriority = 2),
+                    (n.unstable_cancelCallback = function (M) {
+                        M.callback = null;
+                    }),
+                    (n.unstable_continueExecution = function () {
+                        j || b || ((j = !0), O(Y));
+                    }),
+                    (n.unstable_forceFrameRate = function (M) {
+                        0 > M || 125 < M
+                            ? console.error(
+                                  "forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported"
+                              )
+                            : (ee = 0 < M ? Math.floor(1e3 / M) : 5);
+                    }),
+                    (n.unstable_getCurrentPriorityLevel = function () {
+                        return T;
+                    }),
+                    (n.unstable_getFirstCallbackNode = function () {
+                        return l(h);
+                    }),
+                    (n.unstable_next = function (M) {
+                        switch (T) {
+                            case 1:
+                            case 2:
+                            case 3:
+                                var se = 3;
+                                break;
+                            default:
+                                se = T;
+                        }
+                        var G = T;
+                        T = se;
+                        try {
+                            return M();
+                        } finally {
+                            T = G;
+                        }
+                    }),
+                    (n.unstable_pauseExecution = function () {}),
+                    (n.unstable_requestPaint = function () {}),
+                    (n.unstable_runWithPriority = function (M, se) {
+                        switch (M) {
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                                break;
+                            default:
+                                M = 3;
+                        }
+                        var G = T;
+                        T = M;
+                        try {
+                            return se();
+                        } finally {
+                            T = G;
+                        }
+                    }),
+                    (n.unstable_scheduleCallback = function (M, se, G) {
+                        var E = n.unstable_now();
+                        switch (
+                            (typeof G == "object" && G !== null
+                                ? ((G = G.delay), (G = typeof G == "number" && 0 < G ? E + G : E))
+                                : (G = E),
+                            M)
+                        ) {
+                            case 1:
+                                var U = -1;
+                                break;
+                            case 2:
+                                U = 250;
+                                break;
+                            case 5:
+                                U = 1073741823;
+                                break;
+                            case 4:
+                                U = 1e4;
+                                break;
+                            default:
+                                U = 5e3;
+                        }
+                        return (
+                            (U = G + U),
+                            (M = {
+                                id: y++,
+                                callback: se,
+                                priorityLevel: M,
+                                startTime: G,
+                                expirationTime: U,
+                                sortIndex: -1,
+                            }),
+                            G > E
+                                ? ((M.sortIndex = G),
+                                  a(v, M),
+                                  l(h) === null && M === l(v) && (S ? (I(le), (le = -1)) : (S = !0), X(B, G - E)))
+                                : ((M.sortIndex = U), a(h, M), j || b || ((j = !0), O(Y))),
+                            M
+                        );
+                    }),
+                    (n.unstable_shouldYield = xe),
+                    (n.unstable_wrapCallback = function (M) {
+                        var se = T;
+                        return function () {
+                            var G = T;
+                            T = se;
+                            try {
+                                return M.apply(this, arguments);
+                            } finally {
+                                T = G;
+                            }
+                        };
+                    });
+            })(fc)),
+        fc
+    );
+}
+var Gf;
+function Ug() {
+    return Gf || ((Gf = 1), (dc.exports = Dg())), dc.exports;
+}
+/**
+ * @license React
+ * react-dom.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ var Jf;
+function Bg() {
+    if (Jf) return Ft;
+    Jf = 1;
+    var n = Xc(),
+        a = Ug();
+    function l(e) {
+        for (var t = "https://reactjs.org/docs/error-decoder.html?invariant=" + e, s = 1; s < arguments.length; s++)
+            t += "&args[]=" + encodeURIComponent(arguments[s]);
+        return (
+            "Minified React error #" +
+            e +
+            "; visit " +
+            t +
+            " for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+        );
+    }
+    var o = new Set(),
+        u = {};
+    function f(e, t) {
+        m(e, t), m(e + "Capture", t);
+    }
+    function m(e, t) {
+        for (u[e] = t, e = 0; e < t.length; e++) o.add(t[e]);
+    }
+    var p = !(typeof window > "u" || typeof window.document > "u" || typeof window.document.createElement > "u"),
+        h = Object.prototype.hasOwnProperty,
+        v =
+            /^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,
+        y = {},
+        w = {};
+    function T(e) {
+        return h.call(w, e) ? !0 : h.call(y, e) ? !1 : v.test(e) ? (w[e] = !0) : ((y[e] = !0), !1);
+    }
+    function b(e, t, s, i) {
+        if (s !== null && s.type === 0) return !1;
+        switch (typeof t) {
+            case "function":
+            case "symbol":
+                return !0;
+            case "boolean":
+                return i
+                    ? !1
+                    : s !== null
+                      ? !s.acceptsBooleans
+                      : ((e = e.toLowerCase().slice(0, 5)), e !== "data-" && e !== "aria-");
+            default:
+                return !1;
+        }
+    }
+    function j(e, t, s, i) {
+        if (t === null || typeof t > "u" || b(e, t, s, i)) return !0;
+        if (i) return !1;
+        if (s !== null)
+            switch (s.type) {
+                case 3:
+                    return !t;
+                case 4:
+                    return t === !1;
+                case 5:
+                    return isNaN(t);
+                case 6:
+                    return isNaN(t) || 1 > t;
+            }
+        return !1;
+    }
+    function S(e, t, s, i, c, d, x) {
+        (this.acceptsBooleans = t === 2 || t === 3 || t === 4),
+            (this.attributeName = i),
+            (this.attributeNamespace = c),
+            (this.mustUseProperty = s),
+            (this.propertyName = e),
+            (this.type = t),
+            (this.sanitizeURL = d),
+            (this.removeEmptyString = x);
+    }
+    var k = {};
+    "children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style"
+        .split(" ")
+        .forEach(function (e) {
+            k[e] = new S(e, 0, !1, e, null, !1, !1);
+        }),
+        [
+            ["acceptCharset", "accept-charset"],
+            ["className", "class"],
+            ["htmlFor", "for"],
+            ["httpEquiv", "http-equiv"],
+        ].forEach(function (e) {
+            var t = e[0];
+            k[t] = new S(t, 1, !1, e[1], null, !1, !1);
+        }),
+        ["contentEditable", "draggable", "spellCheck", "value"].forEach(function (e) {
+            k[e] = new S(e, 2, !1, e.toLowerCase(), null, !1, !1);
+        }),
+        ["autoReverse", "externalResourcesRequired", "focusable", "preserveAlpha"].forEach(function (e) {
+            k[e] = new S(e, 2, !1, e, null, !1, !1);
+        }),
+        "allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture disableRemotePlayback formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope"
+            .split(" ")
+            .forEach(function (e) {
+                k[e] = new S(e, 3, !1, e.toLowerCase(), null, !1, !1);
+            }),
+        ["checked", "multiple", "muted", "selected"].forEach(function (e) {
+            k[e] = new S(e, 3, !0, e, null, !1, !1);
+        }),
+        ["capture", "download"].forEach(function (e) {
+            k[e] = new S(e, 4, !1, e, null, !1, !1);
+        }),
+        ["cols", "rows", "size", "span"].forEach(function (e) {
+            k[e] = new S(e, 6, !1, e, null, !1, !1);
+        }),
+        ["rowSpan", "start"].forEach(function (e) {
+            k[e] = new S(e, 5, !1, e.toLowerCase(), null, !1, !1);
+        });
+    var I = /[\-:]([a-z])/g;
+    function $(e) {
+        return e[1].toUpperCase();
+    }
+    "accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height"
+        .split(" ")
+        .forEach(function (e) {
+            var t = e.replace(I, $);
+            k[t] = new S(t, 1, !1, e, null, !1, !1);
+        }),
+        "xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function (e) {
+            var t = e.replace(I, $);
+            k[t] = new S(t, 1, !1, e, "http://www.w3.org/1999/xlink", !1, !1);
+        }),
+        ["xml:base", "xml:lang", "xml:space"].forEach(function (e) {
+            var t = e.replace(I, $);
+            k[t] = new S(t, 1, !1, e, "http://www.w3.org/XML/1998/namespace", !1, !1);
+        }),
+        ["tabIndex", "crossOrigin"].forEach(function (e) {
+            k[e] = new S(e, 1, !1, e.toLowerCase(), null, !1, !1);
+        }),
+        (k.xlinkHref = new S("xlinkHref", 1, !1, "xlink:href", "http://www.w3.org/1999/xlink", !0, !1)),
+        ["src", "href", "action", "formAction"].forEach(function (e) {
+            k[e] = new S(e, 1, !1, e.toLowerCase(), null, !0, !0);
+        });
+    function A(e, t, s, i) {
+        var c = k.hasOwnProperty(t) ? k[t] : null;
+        (c !== null
+            ? c.type !== 0
+            : i || !(2 < t.length) || (t[0] !== "o" && t[0] !== "O") || (t[1] !== "n" && t[1] !== "N")) &&
+            (j(t, s, c, i) && (s = null),
+            i || c === null
+                ? T(t) && (s === null ? e.removeAttribute(t) : e.setAttribute(t, "" + s))
+                : c.mustUseProperty
+                  ? (e[c.propertyName] = s === null ? (c.type === 3 ? !1 : "") : s)
+                  : ((t = c.attributeName),
+                    (i = c.attributeNamespace),
+                    s === null
+                        ? e.removeAttribute(t)
+                        : ((c = c.type),
+                          (s = c === 3 || (c === 4 && s === !0) ? "" : "" + s),
+                          i ? e.setAttributeNS(i, t, s) : e.setAttribute(t, s))));
+    }
+    var B = n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+        Y = Symbol.for("react.element"),
+        ne = Symbol.for("react.portal"),
+        K = Symbol.for("react.fragment"),
+        le = Symbol.for("react.strict_mode"),
+        ee = Symbol.for("react.profiler"),
+        re = Symbol.for("react.provider"),
+        xe = Symbol.for("react.context"),
+        q = Symbol.for("react.forward_ref"),
+        te = Symbol.for("react.suspense"),
+        F = Symbol.for("react.suspense_list"),
+        ge = Symbol.for("react.memo"),
+        O = Symbol.for("react.lazy"),
+        X = Symbol.for("react.offscreen"),
+        M = Symbol.iterator;
+    function se(e) {
+        return e === null || typeof e != "object"
+            ? null
+            : ((e = (M && e[M]) || e["@@iterator"]), typeof e == "function" ? e : null);
+    }
+    var G = Object.assign,
+        E;
+    function U(e) {
+        if (E === void 0)
+            try {
+                throw Error();
+            } catch (s) {
+                var t = s.stack.trim().match(/\n( *(at )?)/);
+                E = (t && t[1]) || "";
+            }
+        return (
+            `
+` +
+            E +
+            e
+        );
+    }
+    var Z = !1;
+    function ae(e, t) {
+        if (!e || Z) return "";
+        Z = !0;
+        var s = Error.prepareStackTrace;
+        Error.prepareStackTrace = void 0;
+        try {
+            if (t)
+                if (
+                    ((t = function () {
+                        throw Error();
+                    }),
+                    Object.defineProperty(t.prototype, "props", {
+                        set: function () {
+                            throw Error();
+                        },
+                    }),
+                    typeof Reflect == "object" && Reflect.construct)
+                ) {
+                    try {
+                        Reflect.construct(t, []);
+                    } catch (L) {
+                        var i = L;
+                    }
+                    Reflect.construct(e, [], t);
+                } else {
+                    try {
+                        t.call();
+                    } catch (L) {
+                        i = L;
+                    }
+                    e.call(t.prototype);
+                }
+            else {
+                try {
+                    throw Error();
+                } catch (L) {
+                    i = L;
+                }
+                e();
+            }
+        } catch (L) {
+            if (L && i && typeof L.stack == "string") {
+                for (
+                    var c = L.stack.split(`
+`),
+                        d = i.stack.split(`
+`),
+                        x = c.length - 1,
+                        N = d.length - 1;
+                    1 <= x && 0 <= N && c[x] !== d[N];
+
+                )
+                    N--;
+                for (; 1 <= x && 0 <= N; x--, N--)
+                    if (c[x] !== d[N]) {
+                        if (x !== 1 || N !== 1)
+                            do
+                                if ((x--, N--, 0 > N || c[x] !== d[N])) {
+                                    var C =
+                                        `
+` + c[x].replace(" at new ", " at ");
+                                    return (
+                                        e.displayName &&
+                                            C.includes("<anonymous>") &&
+                                            (C = C.replace("<anonymous>", e.displayName)),
+                                        C
+                                    );
+                                }
+                            while (1 <= x && 0 <= N);
+                        break;
+                    }
+            }
+        } finally {
+            (Z = !1), (Error.prepareStackTrace = s);
+        }
+        return (e = e ? e.displayName || e.name : "") ? U(e) : "";
+    }
+    function ue(e) {
+        switch (e.tag) {
+            case 5:
+                return U(e.type);
+            case 16:
+                return U("Lazy");
+            case 13:
+                return U("Suspense");
+            case 19:
+                return U("SuspenseList");
+            case 0:
+            case 2:
+            case 15:
+                return (e = ae(e.type, !1)), e;
+            case 11:
+                return (e = ae(e.type.render, !1)), e;
+            case 1:
+                return (e = ae(e.type, !0)), e;
+            default:
+                return "";
+        }
+    }
+    function ye(e) {
+        if (e == null) return null;
+        if (typeof e == "function") return e.displayName || e.name || null;
+        if (typeof e == "string") return e;
+        switch (e) {
+            case K:
+                return "Fragment";
+            case ne:
+                return "Portal";
+            case ee:
+                return "Profiler";
+            case le:
+                return "StrictMode";
+            case te:
+                return "Suspense";
+            case F:
+                return "SuspenseList";
+        }
+        if (typeof e == "object")
+            switch (e.$$typeof) {
+                case xe:
+                    return (e.displayName || "Context") + ".Consumer";
+                case re:
+                    return (e._context.displayName || "Context") + ".Provider";
+                case q:
+                    var t = e.render;
+                    return (
+                        (e = e.displayName),
+                        e ||
+                            ((e = t.displayName || t.name || ""),
+                            (e = e !== "" ? "ForwardRef(" + e + ")" : "ForwardRef")),
+                        e
+                    );
+                case ge:
+                    return (t = e.displayName || null), t !== null ? t : ye(e.type) || "Memo";
+                case O:
+                    (t = e._payload), (e = e._init);
+                    try {
+                        return ye(e(t));
+                    } catch {}
+            }
+        return null;
+    }
+    function Ee(e) {
+        var t = e.type;
+        switch (e.tag) {
+            case 24:
+                return "Cache";
+            case 9:
+                return (t.displayName || "Context") + ".Consumer";
+            case 10:
+                return (t._context.displayName || "Context") + ".Provider";
+            case 18:
+                return "DehydratedFragment";
+            case 11:
+                return (
+                    (e = t.render),
+                    (e = e.displayName || e.name || ""),
+                    t.displayName || (e !== "" ? "ForwardRef(" + e + ")" : "ForwardRef")
+                );
+            case 7:
+                return "Fragment";
+            case 5:
+                return t;
+            case 4:
+                return "Portal";
+            case 3:
+                return "Root";
+            case 6:
+                return "Text";
+            case 16:
+                return ye(t);
+            case 8:
+                return t === le ? "StrictMode" : "Mode";
+            case 22:
+                return "Offscreen";
+            case 12:
+                return "Profiler";
+            case 21:
+                return "Scope";
+            case 13:
+                return "Suspense";
+            case 19:
+                return "SuspenseList";
+            case 25:
+                return "TracingMarker";
+            case 1:
+            case 0:
+            case 17:
+            case 2:
+            case 14:
+            case 15:
+                if (typeof t == "function") return t.displayName || t.name || null;
+                if (typeof t == "string") return t;
+        }
+        return null;
+    }
+    function Se(e) {
+        switch (typeof e) {
+            case "boolean":
+            case "number":
+            case "string":
+            case "undefined":
+                return e;
+            case "object":
+                return e;
+            default:
+                return "";
+        }
+    }
+    function D(e) {
+        var t = e.type;
+        return (e = e.nodeName) && e.toLowerCase() === "input" && (t === "checkbox" || t === "radio");
+    }
+    function oe(e) {
+        var t = D(e) ? "checked" : "value",
+            s = Object.getOwnPropertyDescriptor(e.constructor.prototype, t),
+            i = "" + e[t];
+        if (!e.hasOwnProperty(t) && typeof s < "u" && typeof s.get == "function" && typeof s.set == "function") {
+            var c = s.get,
+                d = s.set;
+            return (
+                Object.defineProperty(e, t, {
+                    configurable: !0,
+                    get: function () {
+                        return c.call(this);
+                    },
+                    set: function (x) {
+                        (i = "" + x), d.call(this, x);
+                    },
+                }),
+                Object.defineProperty(e, t, { enumerable: s.enumerable }),
+                {
+                    getValue: function () {
+                        return i;
+                    },
+                    setValue: function (x) {
+                        i = "" + x;
+                    },
+                    stopTracking: function () {
+                        (e._valueTracker = null), delete e[t];
+                    },
+                }
+            );
+        }
+    }
+    function je(e) {
+        e._valueTracker || (e._valueTracker = oe(e));
+    }
+    function ke(e) {
+        if (!e) return !1;
+        var t = e._valueTracker;
+        if (!t) return !0;
+        var s = t.getValue(),
+            i = "";
+        return e && (i = D(e) ? (e.checked ? "true" : "false") : e.value), (e = i), e !== s ? (t.setValue(e), !0) : !1;
+    }
+    function De(e) {
+        if (((e = e || (typeof document < "u" ? document : void 0)), typeof e > "u")) return null;
+        try {
+            return e.activeElement || e.body;
+        } catch {
+            return e.body;
+        }
+    }
+    function Ke(e, t) {
+        var s = t.checked;
+        return G({}, t, {
+            defaultChecked: void 0,
+            defaultValue: void 0,
+            value: void 0,
+            checked: s ?? e._wrapperState.initialChecked,
+        });
+    }
+    function de(e, t) {
+        var s = t.defaultValue == null ? "" : t.defaultValue,
+            i = t.checked != null ? t.checked : t.defaultChecked;
+        (s = Se(t.value != null ? t.value : s)),
+            (e._wrapperState = {
+                initialChecked: i,
+                initialValue: s,
+                controlled: t.type === "checkbox" || t.type === "radio" ? t.checked != null : t.value != null,
+            });
+    }
+    function Ne(e, t) {
+        (t = t.checked), t != null && A(e, "checked", t, !1);
+    }
+    function Ie(e, t) {
+        Ne(e, t);
+        var s = Se(t.value),
+            i = t.type;
+        if (s != null)
+            i === "number"
+                ? ((s === 0 && e.value === "") || e.value != s) && (e.value = "" + s)
+                : e.value !== "" + s && (e.value = "" + s);
+        else if (i === "submit" || i === "reset") {
+            e.removeAttribute("value");
+            return;
+        }
+        t.hasOwnProperty("value")
+            ? Ht(e, t.type, s)
+            : t.hasOwnProperty("defaultValue") && Ht(e, t.type, Se(t.defaultValue)),
+            t.checked == null && t.defaultChecked != null && (e.defaultChecked = !!t.defaultChecked);
+    }
+    function Et(e, t, s) {
+        if (t.hasOwnProperty("value") || t.hasOwnProperty("defaultValue")) {
+            var i = t.type;
+            if (!((i !== "submit" && i !== "reset") || (t.value !== void 0 && t.value !== null))) return;
+            (t = "" + e._wrapperState.initialValue), s || t === e.value || (e.value = t), (e.defaultValue = t);
+        }
+        (s = e.name),
+            s !== "" && (e.name = ""),
+            (e.defaultChecked = !!e._wrapperState.initialChecked),
+            s !== "" && (e.name = s);
+    }
+    function Ht(e, t, s) {
+        (t !== "number" || De(e.ownerDocument) !== e) &&
+            (s == null
+                ? (e.defaultValue = "" + e._wrapperState.initialValue)
+                : e.defaultValue !== "" + s && (e.defaultValue = "" + s));
+    }
+    var hn = Array.isArray;
+    function He(e, t, s, i) {
+        if (((e = e.options), t)) {
+            t = {};
+            for (var c = 0; c < s.length; c++) t["$" + s[c]] = !0;
+            for (s = 0; s < e.length; s++)
+                (c = t.hasOwnProperty("$" + e[s].value)),
+                    e[s].selected !== c && (e[s].selected = c),
+                    c && i && (e[s].defaultSelected = !0);
+        } else {
+            for (s = "" + Se(s), t = null, c = 0; c < e.length; c++) {
+                if (e[c].value === s) {
+                    (e[c].selected = !0), i && (e[c].defaultSelected = !0);
+                    return;
+                }
+                t !== null || e[c].disabled || (t = e[c]);
+            }
+            t !== null && (t.selected = !0);
+        }
+    }
+    function tn(e, t) {
+        if (t.dangerouslySetInnerHTML != null) throw Error(l(91));
+        return G({}, t, { value: void 0, defaultValue: void 0, children: "" + e._wrapperState.initialValue });
+    }
+    function pr(e, t) {
+        var s = t.value;
+        if (s == null) {
+            if (((s = t.children), (t = t.defaultValue), s != null)) {
+                if (t != null) throw Error(l(92));
+                if (hn(s)) {
+                    if (1 < s.length) throw Error(l(93));
+                    s = s[0];
+                }
+                t = s;
+            }
+            t == null && (t = ""), (s = t);
+        }
+        e._wrapperState = { initialValue: Se(s) };
+    }
+    function hr(e, t) {
+        var s = Se(t.value),
+            i = Se(t.defaultValue);
+        s != null &&
+            ((s = "" + s),
+            s !== e.value && (e.value = s),
+            t.defaultValue == null && e.defaultValue !== s && (e.defaultValue = s)),
+            i != null && (e.defaultValue = "" + i);
+    }
+    function Ae(e) {
+        var t = e.textContent;
+        t === e._wrapperState.initialValue && t !== "" && t !== null && (e.value = t);
+    }
+    function Le(e) {
+        switch (e) {
+            case "svg":
+                return "http://www.w3.org/2000/svg";
+            case "math":
+                return "http://www.w3.org/1998/Math/MathML";
+            default:
+                return "http://www.w3.org/1999/xhtml";
+        }
+    }
+    function at(e, t) {
+        return e == null || e === "http://www.w3.org/1999/xhtml"
+            ? Le(t)
+            : e === "http://www.w3.org/2000/svg" && t === "foreignObject"
+              ? "http://www.w3.org/1999/xhtml"
+              : e;
+    }
+    var kt,
+        Or = (function (e) {
+            return typeof MSApp < "u" && MSApp.execUnsafeLocalFunction
+                ? function (t, s, i, c) {
+                      MSApp.execUnsafeLocalFunction(function () {
+                          return e(t, s, i, c);
+                      });
+                  }
+                : e;
+        })(function (e, t) {
+            if (e.namespaceURI !== "http://www.w3.org/2000/svg" || "innerHTML" in e) e.innerHTML = t;
+            else {
+                for (
+                    kt = kt || document.createElement("div"),
+                        kt.innerHTML = "<svg>" + t.valueOf().toString() + "</svg>",
+                        t = kt.firstChild;
+                    e.firstChild;
+
+                )
+                    e.removeChild(e.firstChild);
+                for (; t.firstChild; ) e.appendChild(t.firstChild);
+            }
+        });
+    function qt(e, t) {
+        if (t) {
+            var s = e.firstChild;
+            if (s && s === e.lastChild && s.nodeType === 3) {
+                s.nodeValue = t;
+                return;
+            }
+        }
+        e.textContent = t;
+    }
+    var Wt = {
+            animationIterationCount: !0,
+            aspectRatio: !0,
+            borderImageOutset: !0,
+            borderImageSlice: !0,
+            borderImageWidth: !0,
+            boxFlex: !0,
+            boxFlexGroup: !0,
+            boxOrdinalGroup: !0,
+            columnCount: !0,
+            columns: !0,
+            flex: !0,
+            flexGrow: !0,
+            flexPositive: !0,
+            flexShrink: !0,
+            flexNegative: !0,
+            flexOrder: !0,
+            gridArea: !0,
+            gridRow: !0,
+            gridRowEnd: !0,
+            gridRowSpan: !0,
+            gridRowStart: !0,
+            gridColumn: !0,
+            gridColumnEnd: !0,
+            gridColumnSpan: !0,
+            gridColumnStart: !0,
+            fontWeight: !0,
+            lineClamp: !0,
+            lineHeight: !0,
+            opacity: !0,
+            order: !0,
+            orphans: !0,
+            tabSize: !0,
+            widows: !0,
+            zIndex: !0,
+            zoom: !0,
+            fillOpacity: !0,
+            floodOpacity: !0,
+            stopOpacity: !0,
+            strokeDasharray: !0,
+            strokeDashoffset: !0,
+            strokeMiterlimit: !0,
+            strokeOpacity: !0,
+            strokeWidth: !0,
+        },
+        ji = ["Webkit", "ms", "Moz", "O"];
+    Object.keys(Wt).forEach(function (e) {
+        ji.forEach(function (t) {
+            (t = t + e.charAt(0).toUpperCase() + e.substring(1)), (Wt[t] = Wt[e]);
+        });
+    });
+    function ka(e, t, s) {
+        return t == null || typeof t == "boolean" || t === ""
+            ? ""
+            : s || typeof t != "number" || t === 0 || (Wt.hasOwnProperty(e) && Wt[e])
+              ? ("" + t).trim()
+              : t + "px";
+    }
+    function Ir(e, t) {
+        e = e.style;
+        for (var s in t)
+            if (t.hasOwnProperty(s)) {
+                var i = s.indexOf("--") === 0,
+                    c = ka(s, t[s], i);
+                s === "float" && (s = "cssFloat"), i ? e.setProperty(s, c) : (e[s] = c);
+            }
+    }
+    var ki = G(
+        { menuitem: !0 },
+        {
+            area: !0,
+            base: !0,
+            br: !0,
+            col: !0,
+            embed: !0,
+            hr: !0,
+            img: !0,
+            input: !0,
+            keygen: !0,
+            link: !0,
+            meta: !0,
+            param: !0,
+            source: !0,
+            track: !0,
+            wbr: !0,
+        }
+    );
+    function ws(e, t) {
+        if (t) {
+            if (ki[e] && (t.children != null || t.dangerouslySetInnerHTML != null)) throw Error(l(137, e));
+            if (t.dangerouslySetInnerHTML != null) {
+                if (t.children != null) throw Error(l(60));
+                if (typeof t.dangerouslySetInnerHTML != "object" || !("__html" in t.dangerouslySetInnerHTML))
+                    throw Error(l(61));
+            }
+            if (t.style != null && typeof t.style != "object") throw Error(l(62));
+        }
+    }
+    function bs(e, t) {
+        if (e.indexOf("-") === -1) return typeof t.is == "string";
+        switch (e) {
+            case "annotation-xml":
+            case "color-profile":
+            case "font-face":
+            case "font-face-src":
+            case "font-face-uri":
+            case "font-face-format":
+            case "font-face-name":
+            case "missing-glyph":
+                return !1;
+            default:
+                return !0;
+        }
+    }
+    var H = null;
+    function ie(e) {
+        return (
+            (e = e.target || e.srcElement || window),
+            e.correspondingUseElement && (e = e.correspondingUseElement),
+            e.nodeType === 3 ? e.parentNode : e
+        );
+    }
+    var pe = null,
+        fe = null,
+        ve = null;
+    function Be(e) {
+        if ((e = qs(e))) {
+            if (typeof pe != "function") throw Error(l(280));
+            var t = e.stateNode;
+            t && ((t = Qa(t)), pe(e.stateNode, e.type, t));
+        }
+    }
+    function Pt(e) {
+        fe ? (ve ? ve.push(e) : (ve = [e])) : (fe = e);
+    }
+    function Na() {
+        if (fe) {
+            var e = fe,
+                t = ve;
+            if (((ve = fe = null), Be(e), t)) for (e = 0; e < t.length; e++) Be(t[e]);
+        }
+    }
+    function js(e, t) {
+        return e(t);
+    }
+    function In() {}
+    var Ni = !1;
+    function fu(e, t, s) {
+        if (Ni) return e(t, s);
+        Ni = !0;
+        try {
+            return js(e, t, s);
+        } finally {
+            (Ni = !1), (fe !== null || ve !== null) && (In(), Na());
+        }
+    }
+    function ks(e, t) {
+        var s = e.stateNode;
+        if (s === null) return null;
+        var i = Qa(s);
+        if (i === null) return null;
+        s = i[t];
+        e: switch (t) {
+            case "onClick":
+            case "onClickCapture":
+            case "onDoubleClick":
+            case "onDoubleClickCapture":
+            case "onMouseDown":
+            case "onMouseDownCapture":
+            case "onMouseMove":
+            case "onMouseMoveCapture":
+            case "onMouseUp":
+            case "onMouseUpCapture":
+            case "onMouseEnter":
+                (i = !i.disabled) ||
+                    ((e = e.type), (i = !(e === "button" || e === "input" || e === "select" || e === "textarea"))),
+                    (e = !i);
+                break e;
+            default:
+                e = !1;
+        }
+        if (e) return null;
+        if (s && typeof s != "function") throw Error(l(231, t, typeof s));
+        return s;
+    }
+    var Si = !1;
+    if (p)
+        try {
+            var Ns = {};
+            Object.defineProperty(Ns, "passive", {
+                get: function () {
+                    Si = !0;
+                },
+            }),
+                window.addEventListener("test", Ns, Ns),
+                window.removeEventListener("test", Ns, Ns);
+        } catch {
+            Si = !1;
+        }
+    function Mh(e, t, s, i, c, d, x, N, C) {
+        var L = Array.prototype.slice.call(arguments, 3);
+        try {
+            t.apply(s, L);
+        } catch (V) {
+            this.onError(V);
+        }
+    }
+    var Ss = !1,
+        Sa = null,
+        Ca = !1,
+        Ci = null,
+        Dh = {
+            onError: function (e) {
+                (Ss = !0), (Sa = e);
+            },
+        };
+    function Uh(e, t, s, i, c, d, x, N, C) {
+        (Ss = !1), (Sa = null), Mh.apply(Dh, arguments);
+    }
+    function Bh(e, t, s, i, c, d, x, N, C) {
+        if ((Uh.apply(this, arguments), Ss)) {
+            if (Ss) {
+                var L = Sa;
+                (Ss = !1), (Sa = null);
+            } else throw Error(l(198));
+            Ca || ((Ca = !0), (Ci = L));
+        }
+    }
+    function xr(e) {
+        var t = e,
+            s = e;
+        if (e.alternate) for (; t.return; ) t = t.return;
+        else {
+            e = t;
+            do (t = e), (t.flags & 4098) !== 0 && (s = t.return), (e = t.return);
+            while (e);
+        }
+        return t.tag === 3 ? s : null;
+    }
+    function mu(e) {
+        if (e.tag === 13) {
+            var t = e.memoizedState;
+            if ((t === null && ((e = e.alternate), e !== null && (t = e.memoizedState)), t !== null))
+                return t.dehydrated;
+        }
+        return null;
+    }
+    function pu(e) {
+        if (xr(e) !== e) throw Error(l(188));
+    }
+    function $h(e) {
+        var t = e.alternate;
+        if (!t) {
+            if (((t = xr(e)), t === null)) throw Error(l(188));
+            return t !== e ? null : e;
+        }
+        for (var s = e, i = t; ; ) {
+            var c = s.return;
+            if (c === null) break;
+            var d = c.alternate;
+            if (d === null) {
+                if (((i = c.return), i !== null)) {
+                    s = i;
+                    continue;
+                }
+                break;
+            }
+            if (c.child === d.child) {
+                for (d = c.child; d; ) {
+                    if (d === s) return pu(c), e;
+                    if (d === i) return pu(c), t;
+                    d = d.sibling;
+                }
+                throw Error(l(188));
+            }
+            if (s.return !== i.return) (s = c), (i = d);
+            else {
+                for (var x = !1, N = c.child; N; ) {
+                    if (N === s) {
+                        (x = !0), (s = c), (i = d);
+                        break;
+                    }
+                    if (N === i) {
+                        (x = !0), (i = c), (s = d);
+                        break;
+                    }
+                    N = N.sibling;
+                }
+                if (!x) {
+                    for (N = d.child; N; ) {
+                        if (N === s) {
+                            (x = !0), (s = d), (i = c);
+                            break;
+                        }
+                        if (N === i) {
+                            (x = !0), (i = d), (s = c);
+                            break;
+                        }
+                        N = N.sibling;
+                    }
+                    if (!x) throw Error(l(189));
+                }
+            }
+            if (s.alternate !== i) throw Error(l(190));
+        }
+        if (s.tag !== 3) throw Error(l(188));
+        return s.stateNode.current === s ? e : t;
+    }
+    function hu(e) {
+        return (e = $h(e)), e !== null ? xu(e) : null;
+    }
+    function xu(e) {
+        if (e.tag === 5 || e.tag === 6) return e;
+        for (e = e.child; e !== null; ) {
+            var t = xu(e);
+            if (t !== null) return t;
+            e = e.sibling;
+        }
+        return null;
+    }
+    var gu = a.unstable_scheduleCallback,
+        yu = a.unstable_cancelCallback,
+        Hh = a.unstable_shouldYield,
+        qh = a.unstable_requestPaint,
+        et = a.unstable_now,
+        Wh = a.unstable_getCurrentPriorityLevel,
+        Ti = a.unstable_ImmediatePriority,
+        vu = a.unstable_UserBlockingPriority,
+        Ta = a.unstable_NormalPriority,
+        Vh = a.unstable_LowPriority,
+        wu = a.unstable_IdlePriority,
+        Ea = null,
+        xn = null;
+    function Qh(e) {
+        if (xn && typeof xn.onCommitFiberRoot == "function")
+            try {
+                xn.onCommitFiberRoot(Ea, e, void 0, (e.current.flags & 128) === 128);
+            } catch {}
+    }
+    var nn = Math.clz32 ? Math.clz32 : Gh,
+        Kh = Math.log,
+        Yh = Math.LN2;
+    function Gh(e) {
+        return (e >>>= 0), e === 0 ? 32 : (31 - ((Kh(e) / Yh) | 0)) | 0;
+    }
+    var Pa = 64,
+        Ra = 4194304;
+    function Cs(e) {
+        switch (e & -e) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 4:
+                return 4;
+            case 8:
+                return 8;
+            case 16:
+                return 16;
+            case 32:
+                return 32;
+            case 64:
+            case 128:
+            case 256:
+            case 512:
+            case 1024:
+            case 2048:
+            case 4096:
+            case 8192:
+            case 16384:
+            case 32768:
+            case 65536:
+            case 131072:
+            case 262144:
+            case 524288:
+            case 1048576:
+            case 2097152:
+                return e & 4194240;
+            case 4194304:
+            case 8388608:
+            case 16777216:
+            case 33554432:
+            case 67108864:
+                return e & 130023424;
+            case 134217728:
+                return 134217728;
+            case 268435456:
+                return 268435456;
+            case 536870912:
+                return 536870912;
+            case 1073741824:
+                return 1073741824;
+            default:
+                return e;
+        }
+    }
+    function _a(e, t) {
+        var s = e.pendingLanes;
+        if (s === 0) return 0;
+        var i = 0,
+            c = e.suspendedLanes,
+            d = e.pingedLanes,
+            x = s & 268435455;
+        if (x !== 0) {
+            var N = x & ~c;
+            N !== 0 ? (i = Cs(N)) : ((d &= x), d !== 0 && (i = Cs(d)));
+        } else (x = s & ~c), x !== 0 ? (i = Cs(x)) : d !== 0 && (i = Cs(d));
+        if (i === 0) return 0;
+        if (
+            t !== 0 &&
+            t !== i &&
+            (t & c) === 0 &&
+            ((c = i & -i), (d = t & -t), c >= d || (c === 16 && (d & 4194240) !== 0))
+        )
+            return t;
+        if (((i & 4) !== 0 && (i |= s & 16), (t = e.entangledLanes), t !== 0))
+            for (e = e.entanglements, t &= i; 0 < t; ) (s = 31 - nn(t)), (c = 1 << s), (i |= e[s]), (t &= ~c);
+        return i;
+    }
+    function Jh(e, t) {
+        switch (e) {
+            case 1:
+            case 2:
+            case 4:
+                return t + 250;
+            case 8:
+            case 16:
+            case 32:
+            case 64:
+            case 128:
+            case 256:
+            case 512:
+            case 1024:
+            case 2048:
+            case 4096:
+            case 8192:
+            case 16384:
+            case 32768:
+            case 65536:
+            case 131072:
+            case 262144:
+            case 524288:
+            case 1048576:
+            case 2097152:
+                return t + 5e3;
+            case 4194304:
+            case 8388608:
+            case 16777216:
+            case 33554432:
+            case 67108864:
+                return -1;
+            case 134217728:
+            case 268435456:
+            case 536870912:
+            case 1073741824:
+                return -1;
+            default:
+                return -1;
+        }
+    }
+    function Xh(e, t) {
+        for (var s = e.suspendedLanes, i = e.pingedLanes, c = e.expirationTimes, d = e.pendingLanes; 0 < d; ) {
+            var x = 31 - nn(d),
+                N = 1 << x,
+                C = c[x];
+            C === -1 ? ((N & s) === 0 || (N & i) !== 0) && (c[x] = Jh(N, t)) : C <= t && (e.expiredLanes |= N),
+                (d &= ~N);
+        }
+    }
+    function Ei(e) {
+        return (e = e.pendingLanes & -1073741825), e !== 0 ? e : e & 1073741824 ? 1073741824 : 0;
+    }
+    function bu() {
+        var e = Pa;
+        return (Pa <<= 1), (Pa & 4194240) === 0 && (Pa = 64), e;
+    }
+    function Pi(e) {
+        for (var t = [], s = 0; 31 > s; s++) t.push(e);
+        return t;
+    }
+    function Ts(e, t, s) {
+        (e.pendingLanes |= t),
+            t !== 536870912 && ((e.suspendedLanes = 0), (e.pingedLanes = 0)),
+            (e = e.eventTimes),
+            (t = 31 - nn(t)),
+            (e[t] = s);
+    }
+    function Zh(e, t) {
+        var s = e.pendingLanes & ~t;
+        (e.pendingLanes = t),
+            (e.suspendedLanes = 0),
+            (e.pingedLanes = 0),
+            (e.expiredLanes &= t),
+            (e.mutableReadLanes &= t),
+            (e.entangledLanes &= t),
+            (t = e.entanglements);
+        var i = e.eventTimes;
+        for (e = e.expirationTimes; 0 < s; ) {
+            var c = 31 - nn(s),
+                d = 1 << c;
+            (t[c] = 0), (i[c] = -1), (e[c] = -1), (s &= ~d);
+        }
+    }
+    function Ri(e, t) {
+        var s = (e.entangledLanes |= t);
+        for (e = e.entanglements; s; ) {
+            var i = 31 - nn(s),
+                c = 1 << i;
+            (c & t) | (e[i] & t) && (e[i] |= t), (s &= ~c);
+        }
+    }
+    var Ue = 0;
+    function ju(e) {
+        return (e &= -e), 1 < e ? (4 < e ? ((e & 268435455) !== 0 ? 16 : 536870912) : 4) : 1;
+    }
+    var ku,
+        _i,
+        Nu,
+        Su,
+        Cu,
+        Ai = !1,
+        Aa = [],
+        Mn = null,
+        Dn = null,
+        Un = null,
+        Es = new Map(),
+        Ps = new Map(),
+        Bn = [],
+        ex =
+            "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(
+                " "
+            );
+    function Tu(e, t) {
+        switch (e) {
+            case "focusin":
+            case "focusout":
+                Mn = null;
+                break;
+            case "dragenter":
+            case "dragleave":
+                Dn = null;
+                break;
+            case "mouseover":
+            case "mouseout":
+                Un = null;
+                break;
+            case "pointerover":
+            case "pointerout":
+                Es.delete(t.pointerId);
+                break;
+            case "gotpointercapture":
+            case "lostpointercapture":
+                Ps.delete(t.pointerId);
+        }
+    }
+    function Rs(e, t, s, i, c, d) {
+        return e === null || e.nativeEvent !== d
+            ? ((e = { blockedOn: t, domEventName: s, eventSystemFlags: i, nativeEvent: d, targetContainers: [c] }),
+              t !== null && ((t = qs(t)), t !== null && _i(t)),
+              e)
+            : ((e.eventSystemFlags |= i), (t = e.targetContainers), c !== null && t.indexOf(c) === -1 && t.push(c), e);
+    }
+    function tx(e, t, s, i, c) {
+        switch (t) {
+            case "focusin":
+                return (Mn = Rs(Mn, e, t, s, i, c)), !0;
+            case "dragenter":
+                return (Dn = Rs(Dn, e, t, s, i, c)), !0;
+            case "mouseover":
+                return (Un = Rs(Un, e, t, s, i, c)), !0;
+            case "pointerover":
+                var d = c.pointerId;
+                return Es.set(d, Rs(Es.get(d) || null, e, t, s, i, c)), !0;
+            case "gotpointercapture":
+                return (d = c.pointerId), Ps.set(d, Rs(Ps.get(d) || null, e, t, s, i, c)), !0;
+        }
+        return !1;
+    }
+    function Eu(e) {
+        var t = gr(e.target);
+        if (t !== null) {
+            var s = xr(t);
+            if (s !== null) {
+                if (((t = s.tag), t === 13)) {
+                    if (((t = mu(s)), t !== null)) {
+                        (e.blockedOn = t),
+                            Cu(e.priority, function () {
+                                Nu(s);
+                            });
+                        return;
+                    }
+                } else if (t === 3 && s.stateNode.current.memoizedState.isDehydrated) {
+                    e.blockedOn = s.tag === 3 ? s.stateNode.containerInfo : null;
+                    return;
+                }
+            }
+        }
+        e.blockedOn = null;
+    }
+    function La(e) {
+        if (e.blockedOn !== null) return !1;
+        for (var t = e.targetContainers; 0 < t.length; ) {
+            var s = zi(e.domEventName, e.eventSystemFlags, t[0], e.nativeEvent);
+            if (s === null) {
+                s = e.nativeEvent;
+                var i = new s.constructor(s.type, s);
+                (H = i), s.target.dispatchEvent(i), (H = null);
+            } else return (t = qs(s)), t !== null && _i(t), (e.blockedOn = s), !1;
+            t.shift();
+        }
+        return !0;
+    }
+    function Pu(e, t, s) {
+        La(e) && s.delete(t);
+    }
+    function nx() {
+        (Ai = !1),
+            Mn !== null && La(Mn) && (Mn = null),
+            Dn !== null && La(Dn) && (Dn = null),
+            Un !== null && La(Un) && (Un = null),
+            Es.forEach(Pu),
+            Ps.forEach(Pu);
+    }
+    function _s(e, t) {
+        e.blockedOn === t &&
+            ((e.blockedOn = null), Ai || ((Ai = !0), a.unstable_scheduleCallback(a.unstable_NormalPriority, nx)));
+    }
+    function As(e) {
+        function t(c) {
+            return _s(c, e);
+        }
+        if (0 < Aa.length) {
+            _s(Aa[0], e);
+            for (var s = 1; s < Aa.length; s++) {
+                var i = Aa[s];
+                i.blockedOn === e && (i.blockedOn = null);
+            }
+        }
+        for (
+            Mn !== null && _s(Mn, e),
+                Dn !== null && _s(Dn, e),
+                Un !== null && _s(Un, e),
+                Es.forEach(t),
+                Ps.forEach(t),
+                s = 0;
+            s < Bn.length;
+            s++
+        )
+            (i = Bn[s]), i.blockedOn === e && (i.blockedOn = null);
+        for (; 0 < Bn.length && ((s = Bn[0]), s.blockedOn === null); ) Eu(s), s.blockedOn === null && Bn.shift();
+    }
+    var Mr = B.ReactCurrentBatchConfig,
+        za = !0;
+    function rx(e, t, s, i) {
+        var c = Ue,
+            d = Mr.transition;
+        Mr.transition = null;
+        try {
+            (Ue = 1), Li(e, t, s, i);
+        } finally {
+            (Ue = c), (Mr.transition = d);
+        }
+    }
+    function sx(e, t, s, i) {
+        var c = Ue,
+            d = Mr.transition;
+        Mr.transition = null;
+        try {
+            (Ue = 4), Li(e, t, s, i);
+        } finally {
+            (Ue = c), (Mr.transition = d);
+        }
+    }
+    function Li(e, t, s, i) {
+        if (za) {
+            var c = zi(e, t, s, i);
+            if (c === null) Ji(e, t, i, Fa, s), Tu(e, i);
+            else if (tx(c, e, t, s, i)) i.stopPropagation();
+            else if ((Tu(e, i), t & 4 && -1 < ex.indexOf(e))) {
+                for (; c !== null; ) {
+                    var d = qs(c);
+                    if ((d !== null && ku(d), (d = zi(e, t, s, i)), d === null && Ji(e, t, i, Fa, s), d === c)) break;
+                    c = d;
+                }
+                c !== null && i.stopPropagation();
+            } else Ji(e, t, i, null, s);
+        }
+    }
+    var Fa = null;
+    function zi(e, t, s, i) {
+        if (((Fa = null), (e = ie(i)), (e = gr(e)), e !== null))
+            if (((t = xr(e)), t === null)) e = null;
+            else if (((s = t.tag), s === 13)) {
+                if (((e = mu(t)), e !== null)) return e;
+                e = null;
+            } else if (s === 3) {
+                if (t.stateNode.current.memoizedState.isDehydrated)
+                    return t.tag === 3 ? t.stateNode.containerInfo : null;
+                e = null;
+            } else t !== e && (e = null);
+        return (Fa = e), null;
+    }
+    function Ru(e) {
+        switch (e) {
+            case "cancel":
+            case "click":
+            case "close":
+            case "contextmenu":
+            case "copy":
+            case "cut":
+            case "auxclick":
+            case "dblclick":
+            case "dragend":
+            case "dragstart":
+            case "drop":
+            case "focusin":
+            case "focusout":
+            case "input":
+            case "invalid":
+            case "keydown":
+            case "keypress":
+            case "keyup":
+            case "mousedown":
+            case "mouseup":
+            case "paste":
+            case "pause":
+            case "play":
+            case "pointercancel":
+            case "pointerdown":
+            case "pointerup":
+            case "ratechange":
+            case "reset":
+            case "resize":
+            case "seeked":
+            case "submit":
+            case "touchcancel":
+            case "touchend":
+            case "touchstart":
+            case "volumechange":
+            case "change":
+            case "selectionchange":
+            case "textInput":
+            case "compositionstart":
+            case "compositionend":
+            case "compositionupdate":
+            case "beforeblur":
+            case "afterblur":
+            case "beforeinput":
+            case "blur":
+            case "fullscreenchange":
+            case "focus":
+            case "hashchange":
+            case "popstate":
+            case "select":
+            case "selectstart":
+                return 1;
+            case "drag":
+            case "dragenter":
+            case "dragexit":
+            case "dragleave":
+            case "dragover":
+            case "mousemove":
+            case "mouseout":
+            case "mouseover":
+            case "pointermove":
+            case "pointerout":
+            case "pointerover":
+            case "scroll":
+            case "toggle":
+            case "touchmove":
+            case "wheel":
+            case "mouseenter":
+            case "mouseleave":
+            case "pointerenter":
+            case "pointerleave":
+                return 4;
+            case "message":
+                switch (Wh()) {
+                    case Ti:
+                        return 1;
+                    case vu:
+                        return 4;
+                    case Ta:
+                    case Vh:
+                        return 16;
+                    case wu:
+                        return 536870912;
+                    default:
+                        return 16;
+                }
+            default:
+                return 16;
+        }
+    }
+    var $n = null,
+        Fi = null,
+        Oa = null;
+    function _u() {
+        if (Oa) return Oa;
+        var e,
+            t = Fi,
+            s = t.length,
+            i,
+            c = "value" in $n ? $n.value : $n.textContent,
+            d = c.length;
+        for (e = 0; e < s && t[e] === c[e]; e++);
+        var x = s - e;
+        for (i = 1; i <= x && t[s - i] === c[d - i]; i++);
+        return (Oa = c.slice(e, 1 < i ? 1 - i : void 0));
+    }
+    function Ia(e) {
+        var t = e.keyCode;
+        return (
+            "charCode" in e ? ((e = e.charCode), e === 0 && t === 13 && (e = 13)) : (e = t),
+            e === 10 && (e = 13),
+            32 <= e || e === 13 ? e : 0
+        );
+    }
+    function Ma() {
+        return !0;
+    }
+    function Au() {
+        return !1;
+    }
+    function Mt(e) {
+        function t(s, i, c, d, x) {
+            (this._reactName = s),
+                (this._targetInst = c),
+                (this.type = i),
+                (this.nativeEvent = d),
+                (this.target = x),
+                (this.currentTarget = null);
+            for (var N in e) e.hasOwnProperty(N) && ((s = e[N]), (this[N] = s ? s(d) : d[N]));
+            return (
+                (this.isDefaultPrevented = (d.defaultPrevented != null ? d.defaultPrevented : d.returnValue === !1)
+                    ? Ma
+                    : Au),
+                (this.isPropagationStopped = Au),
+                this
+            );
+        }
+        return (
+            G(t.prototype, {
+                preventDefault: function () {
+                    this.defaultPrevented = !0;
+                    var s = this.nativeEvent;
+                    s &&
+                        (s.preventDefault
+                            ? s.preventDefault()
+                            : typeof s.returnValue != "unknown" && (s.returnValue = !1),
+                        (this.isDefaultPrevented = Ma));
+                },
+                stopPropagation: function () {
+                    var s = this.nativeEvent;
+                    s &&
+                        (s.stopPropagation
+                            ? s.stopPropagation()
+                            : typeof s.cancelBubble != "unknown" && (s.cancelBubble = !0),
+                        (this.isPropagationStopped = Ma));
+                },
+                persist: function () {},
+                isPersistent: Ma,
+            }),
+            t
+        );
+    }
+    var Dr = {
+            eventPhase: 0,
+            bubbles: 0,
+            cancelable: 0,
+            timeStamp: function (e) {
+                return e.timeStamp || Date.now();
+            },
+            defaultPrevented: 0,
+            isTrusted: 0,
+        },
+        Oi = Mt(Dr),
+        Ls = G({}, Dr, { view: 0, detail: 0 }),
+        ax = Mt(Ls),
+        Ii,
+        Mi,
+        zs,
+        Da = G({}, Ls, {
+            screenX: 0,
+            screenY: 0,
+            clientX: 0,
+            clientY: 0,
+            pageX: 0,
+            pageY: 0,
+            ctrlKey: 0,
+            shiftKey: 0,
+            altKey: 0,
+            metaKey: 0,
+            getModifierState: Ui,
+            button: 0,
+            buttons: 0,
+            relatedTarget: function (e) {
+                return e.relatedTarget === void 0
+                    ? e.fromElement === e.srcElement
+                        ? e.toElement
+                        : e.fromElement
+                    : e.relatedTarget;
+            },
+            movementX: function (e) {
+                return "movementX" in e
+                    ? e.movementX
+                    : (e !== zs &&
+                          (zs && e.type === "mousemove"
+                              ? ((Ii = e.screenX - zs.screenX), (Mi = e.screenY - zs.screenY))
+                              : (Mi = Ii = 0),
+                          (zs = e)),
+                      Ii);
+            },
+            movementY: function (e) {
+                return "movementY" in e ? e.movementY : Mi;
+            },
+        }),
+        Lu = Mt(Da),
+        lx = G({}, Da, { dataTransfer: 0 }),
+        ix = Mt(lx),
+        ox = G({}, Ls, { relatedTarget: 0 }),
+        Di = Mt(ox),
+        cx = G({}, Dr, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }),
+        ux = Mt(cx),
+        dx = G({}, Dr, {
+            clipboardData: function (e) {
+                return "clipboardData" in e ? e.clipboardData : window.clipboardData;
+            },
+        }),
+        fx = Mt(dx),
+        mx = G({}, Dr, { data: 0 }),
+        zu = Mt(mx),
+        px = {
+            Esc: "Escape",
+            Spacebar: " ",
+            Left: "ArrowLeft",
+            Up: "ArrowUp",
+            Right: "ArrowRight",
+            Down: "ArrowDown",
+            Del: "Delete",
+            Win: "OS",
+            Menu: "ContextMenu",
+            Apps: "ContextMenu",
+            Scroll: "ScrollLock",
+            MozPrintableKey: "Unidentified",
+        },
+        hx = {
+            8: "Backspace",
+            9: "Tab",
+            12: "Clear",
+            13: "Enter",
+            16: "Shift",
+            17: "Control",
+            18: "Alt",
+            19: "Pause",
+            20: "CapsLock",
+            27: "Escape",
+            32: " ",
+            33: "PageUp",
+            34: "PageDown",
+            35: "End",
+            36: "Home",
+            37: "ArrowLeft",
+            38: "ArrowUp",
+            39: "ArrowRight",
+            40: "ArrowDown",
+            45: "Insert",
+            46: "Delete",
+            112: "F1",
+            113: "F2",
+            114: "F3",
+            115: "F4",
+            116: "F5",
+            117: "F6",
+            118: "F7",
+            119: "F8",
+            120: "F9",
+            121: "F10",
+            122: "F11",
+            123: "F12",
+            144: "NumLock",
+            145: "ScrollLock",
+            224: "Meta",
+        },
+        xx = { Alt: "altKey", Control: "ctrlKey", Meta: "metaKey", Shift: "shiftKey" };
+    function gx(e) {
+        var t = this.nativeEvent;
+        return t.getModifierState ? t.getModifierState(e) : (e = xx[e]) ? !!t[e] : !1;
+    }
+    function Ui() {
+        return gx;
+    }
+    var yx = G({}, Ls, {
+            key: function (e) {
+                if (e.key) {
+                    var t = px[e.key] || e.key;
+                    if (t !== "Unidentified") return t;
+                }
+                return e.type === "keypress"
+                    ? ((e = Ia(e)), e === 13 ? "Enter" : String.fromCharCode(e))
+                    : e.type === "keydown" || e.type === "keyup"
+                      ? hx[e.keyCode] || "Unidentified"
+                      : "";
+            },
+            code: 0,
+            location: 0,
+            ctrlKey: 0,
+            shiftKey: 0,
+            altKey: 0,
+            metaKey: 0,
+            repeat: 0,
+            locale: 0,
+            getModifierState: Ui,
+            charCode: function (e) {
+                return e.type === "keypress" ? Ia(e) : 0;
+            },
+            keyCode: function (e) {
+                return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+            },
+            which: function (e) {
+                return e.type === "keypress" ? Ia(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+            },
+        }),
+        vx = Mt(yx),
+        wx = G({}, Da, {
+            pointerId: 0,
+            width: 0,
+            height: 0,
+            pressure: 0,
+            tangentialPressure: 0,
+            tiltX: 0,
+            tiltY: 0,
+            twist: 0,
+            pointerType: 0,
+            isPrimary: 0,
+        }),
+        Fu = Mt(wx),
+        bx = G({}, Ls, {
+            touches: 0,
+            targetTouches: 0,
+            changedTouches: 0,
+            altKey: 0,
+            metaKey: 0,
+            ctrlKey: 0,
+            shiftKey: 0,
+            getModifierState: Ui,
+        }),
+        jx = Mt(bx),
+        kx = G({}, Dr, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }),
+        Nx = Mt(kx),
+        Sx = G({}, Da, {
+            deltaX: function (e) {
+                return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
+            },
+            deltaY: function (e) {
+                return "deltaY" in e
+                    ? e.deltaY
+                    : "wheelDeltaY" in e
+                      ? -e.wheelDeltaY
+                      : "wheelDelta" in e
+                        ? -e.wheelDelta
+                        : 0;
+            },
+            deltaZ: 0,
+            deltaMode: 0,
+        }),
+        Cx = Mt(Sx),
+        Tx = [9, 13, 27, 32],
+        Bi = p && "CompositionEvent" in window,
+        Fs = null;
+    p && "documentMode" in document && (Fs = document.documentMode);
+    var Ex = p && "TextEvent" in window && !Fs,
+        Ou = p && (!Bi || (Fs && 8 < Fs && 11 >= Fs)),
+        Iu = " ",
+        Mu = !1;
+    function Du(e, t) {
+        switch (e) {
+            case "keyup":
+                return Tx.indexOf(t.keyCode) !== -1;
+            case "keydown":
+                return t.keyCode !== 229;
+            case "keypress":
+            case "mousedown":
+            case "focusout":
+                return !0;
+            default:
+                return !1;
+        }
+    }
+    function Uu(e) {
+        return (e = e.detail), typeof e == "object" && "data" in e ? e.data : null;
+    }
+    var Ur = !1;
+    function Px(e, t) {
+        switch (e) {
+            case "compositionend":
+                return Uu(t);
+            case "keypress":
+                return t.which !== 32 ? null : ((Mu = !0), Iu);
+            case "textInput":
+                return (e = t.data), e === Iu && Mu ? null : e;
+            default:
+                return null;
+        }
+    }
+    function Rx(e, t) {
+        if (Ur)
+            return e === "compositionend" || (!Bi && Du(e, t))
+                ? ((e = _u()), (Oa = Fi = $n = null), (Ur = !1), e)
+                : null;
+        switch (e) {
+            case "paste":
+                return null;
+            case "keypress":
+                if (!(t.ctrlKey || t.altKey || t.metaKey) || (t.ctrlKey && t.altKey)) {
+                    if (t.char && 1 < t.char.length) return t.char;
+                    if (t.which) return String.fromCharCode(t.which);
+                }
+                return null;
+            case "compositionend":
+                return Ou && t.locale !== "ko" ? null : t.data;
+            default:
+                return null;
+        }
+    }
+    var _x = {
+        color: !0,
+        date: !0,
+        datetime: !0,
+        "datetime-local": !0,
+        email: !0,
+        month: !0,
+        number: !0,
+        password: !0,
+        range: !0,
+        search: !0,
+        tel: !0,
+        text: !0,
+        time: !0,
+        url: !0,
+        week: !0,
+    };
+    function Bu(e) {
+        var t = e && e.nodeName && e.nodeName.toLowerCase();
+        return t === "input" ? !!_x[e.type] : t === "textarea";
+    }
+    function $u(e, t, s, i) {
+        Pt(i),
+            (t = qa(t, "onChange")),
+            0 < t.length && ((s = new Oi("onChange", "change", null, s, i)), e.push({ event: s, listeners: t }));
+    }
+    var Os = null,
+        Is = null;
+    function Ax(e) {
+        ld(e, 0);
+    }
+    function Ua(e) {
+        var t = Wr(e);
+        if (ke(t)) return e;
+    }
+    function Lx(e, t) {
+        if (e === "change") return t;
+    }
+    var Hu = !1;
+    if (p) {
+        var $i;
+        if (p) {
+            var Hi = "oninput" in document;
+            if (!Hi) {
+                var qu = document.createElement("div");
+                qu.setAttribute("oninput", "return;"), (Hi = typeof qu.oninput == "function");
+            }
+            $i = Hi;
+        } else $i = !1;
+        Hu = $i && (!document.documentMode || 9 < document.documentMode);
+    }
+    function Wu() {
+        Os && (Os.detachEvent("onpropertychange", Vu), (Is = Os = null));
+    }
+    function Vu(e) {
+        if (e.propertyName === "value" && Ua(Is)) {
+            var t = [];
+            $u(t, Is, e, ie(e)), fu(Ax, t);
+        }
+    }
+    function zx(e, t, s) {
+        e === "focusin" ? (Wu(), (Os = t), (Is = s), Os.attachEvent("onpropertychange", Vu)) : e === "focusout" && Wu();
+    }
+    function Fx(e) {
+        if (e === "selectionchange" || e === "keyup" || e === "keydown") return Ua(Is);
+    }
+    function Ox(e, t) {
+        if (e === "click") return Ua(t);
+    }
+    function Ix(e, t) {
+        if (e === "input" || e === "change") return Ua(t);
+    }
+    function Mx(e, t) {
+        return (e === t && (e !== 0 || 1 / e === 1 / t)) || (e !== e && t !== t);
+    }
+    var rn = typeof Object.is == "function" ? Object.is : Mx;
+    function Ms(e, t) {
+        if (rn(e, t)) return !0;
+        if (typeof e != "object" || e === null || typeof t != "object" || t === null) return !1;
+        var s = Object.keys(e),
+            i = Object.keys(t);
+        if (s.length !== i.length) return !1;
+        for (i = 0; i < s.length; i++) {
+            var c = s[i];
+            if (!h.call(t, c) || !rn(e[c], t[c])) return !1;
+        }
+        return !0;
+    }
+    function Qu(e) {
+        for (; e && e.firstChild; ) e = e.firstChild;
+        return e;
+    }
+    function Ku(e, t) {
+        var s = Qu(e);
+        e = 0;
+        for (var i; s; ) {
+            if (s.nodeType === 3) {
+                if (((i = e + s.textContent.length), e <= t && i >= t)) return { node: s, offset: t - e };
+                e = i;
+            }
+            e: {
+                for (; s; ) {
+                    if (s.nextSibling) {
+                        s = s.nextSibling;
+                        break e;
+                    }
+                    s = s.parentNode;
+                }
+                s = void 0;
+            }
+            s = Qu(s);
+        }
+    }
+    function Yu(e, t) {
+        return e && t
+            ? e === t
+                ? !0
+                : e && e.nodeType === 3
+                  ? !1
+                  : t && t.nodeType === 3
+                    ? Yu(e, t.parentNode)
+                    : "contains" in e
+                      ? e.contains(t)
+                      : e.compareDocumentPosition
+                        ? !!(e.compareDocumentPosition(t) & 16)
+                        : !1
+            : !1;
+    }
+    function Gu() {
+        for (var e = window, t = De(); t instanceof e.HTMLIFrameElement; ) {
+            try {
+                var s = typeof t.contentWindow.location.href == "string";
+            } catch {
+                s = !1;
+            }
+            if (s) e = t.contentWindow;
+            else break;
+            t = De(e.document);
+        }
+        return t;
+    }
+    function qi(e) {
+        var t = e && e.nodeName && e.nodeName.toLowerCase();
+        return (
+            t &&
+            ((t === "input" &&
+                (e.type === "text" ||
+                    e.type === "search" ||
+                    e.type === "tel" ||
+                    e.type === "url" ||
+                    e.type === "password")) ||
+                t === "textarea" ||
+                e.contentEditable === "true")
+        );
+    }
+    function Dx(e) {
+        var t = Gu(),
+            s = e.focusedElem,
+            i = e.selectionRange;
+        if (t !== s && s && s.ownerDocument && Yu(s.ownerDocument.documentElement, s)) {
+            if (i !== null && qi(s)) {
+                if (((t = i.start), (e = i.end), e === void 0 && (e = t), "selectionStart" in s))
+                    (s.selectionStart = t), (s.selectionEnd = Math.min(e, s.value.length));
+                else if (((e = ((t = s.ownerDocument || document) && t.defaultView) || window), e.getSelection)) {
+                    e = e.getSelection();
+                    var c = s.textContent.length,
+                        d = Math.min(i.start, c);
+                    (i = i.end === void 0 ? d : Math.min(i.end, c)),
+                        !e.extend && d > i && ((c = i), (i = d), (d = c)),
+                        (c = Ku(s, d));
+                    var x = Ku(s, i);
+                    c &&
+                        x &&
+                        (e.rangeCount !== 1 ||
+                            e.anchorNode !== c.node ||
+                            e.anchorOffset !== c.offset ||
+                            e.focusNode !== x.node ||
+                            e.focusOffset !== x.offset) &&
+                        ((t = t.createRange()),
+                        t.setStart(c.node, c.offset),
+                        e.removeAllRanges(),
+                        d > i
+                            ? (e.addRange(t), e.extend(x.node, x.offset))
+                            : (t.setEnd(x.node, x.offset), e.addRange(t)));
+                }
+            }
+            for (t = [], e = s; (e = e.parentNode); )
+                e.nodeType === 1 && t.push({ element: e, left: e.scrollLeft, top: e.scrollTop });
+            for (typeof s.focus == "function" && s.focus(), s = 0; s < t.length; s++)
+                (e = t[s]), (e.element.scrollLeft = e.left), (e.element.scrollTop = e.top);
+        }
+    }
+    var Ux = p && "documentMode" in document && 11 >= document.documentMode,
+        Br = null,
+        Wi = null,
+        Ds = null,
+        Vi = !1;
+    function Ju(e, t, s) {
+        var i = s.window === s ? s.document : s.nodeType === 9 ? s : s.ownerDocument;
+        Vi ||
+            Br == null ||
+            Br !== De(i) ||
+            ((i = Br),
+            "selectionStart" in i && qi(i)
+                ? (i = { start: i.selectionStart, end: i.selectionEnd })
+                : ((i = ((i.ownerDocument && i.ownerDocument.defaultView) || window).getSelection()),
+                  (i = {
+                      anchorNode: i.anchorNode,
+                      anchorOffset: i.anchorOffset,
+                      focusNode: i.focusNode,
+                      focusOffset: i.focusOffset,
+                  })),
+            (Ds && Ms(Ds, i)) ||
+                ((Ds = i),
+                (i = qa(Wi, "onSelect")),
+                0 < i.length &&
+                    ((t = new Oi("onSelect", "select", null, t, s)),
+                    e.push({ event: t, listeners: i }),
+                    (t.target = Br))));
+    }
+    function Ba(e, t) {
+        var s = {};
+        return (s[e.toLowerCase()] = t.toLowerCase()), (s["Webkit" + e] = "webkit" + t), (s["Moz" + e] = "moz" + t), s;
+    }
+    var $r = {
+            animationend: Ba("Animation", "AnimationEnd"),
+            animationiteration: Ba("Animation", "AnimationIteration"),
+            animationstart: Ba("Animation", "AnimationStart"),
+            transitionend: Ba("Transition", "TransitionEnd"),
+        },
+        Qi = {},
+        Xu = {};
+    p &&
+        ((Xu = document.createElement("div").style),
+        "AnimationEvent" in window ||
+            (delete $r.animationend.animation,
+            delete $r.animationiteration.animation,
+            delete $r.animationstart.animation),
+        "TransitionEvent" in window || delete $r.transitionend.transition);
+    function $a(e) {
+        if (Qi[e]) return Qi[e];
+        if (!$r[e]) return e;
+        var t = $r[e],
+            s;
+        for (s in t) if (t.hasOwnProperty(s) && s in Xu) return (Qi[e] = t[s]);
+        return e;
+    }
+    var Zu = $a("animationend"),
+        ed = $a("animationiteration"),
+        td = $a("animationstart"),
+        nd = $a("transitionend"),
+        rd = new Map(),
+        sd =
+            "abort auxClick cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(
+                " "
+            );
+    function Hn(e, t) {
+        rd.set(e, t), f(t, [e]);
+    }
+    for (var Ki = 0; Ki < sd.length; Ki++) {
+        var Yi = sd[Ki],
+            Bx = Yi.toLowerCase(),
+            $x = Yi[0].toUpperCase() + Yi.slice(1);
+        Hn(Bx, "on" + $x);
+    }
+    Hn(Zu, "onAnimationEnd"),
+        Hn(ed, "onAnimationIteration"),
+        Hn(td, "onAnimationStart"),
+        Hn("dblclick", "onDoubleClick"),
+        Hn("focusin", "onFocus"),
+        Hn("focusout", "onBlur"),
+        Hn(nd, "onTransitionEnd"),
+        m("onMouseEnter", ["mouseout", "mouseover"]),
+        m("onMouseLeave", ["mouseout", "mouseover"]),
+        m("onPointerEnter", ["pointerout", "pointerover"]),
+        m("onPointerLeave", ["pointerout", "pointerover"]),
+        f("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")),
+        f(
+            "onSelect",
+            "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")
+        ),
+        f("onBeforeInput", ["compositionend", "keypress", "textInput", "paste"]),
+        f("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")),
+        f("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")),
+        f("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
+    var Us =
+            "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(
+                " "
+            ),
+        Hx = new Set("cancel close invalid load scroll toggle".split(" ").concat(Us));
+    function ad(e, t, s) {
+        var i = e.type || "unknown-event";
+        (e.currentTarget = s), Bh(i, t, void 0, e), (e.currentTarget = null);
+    }
+    function ld(e, t) {
+        t = (t & 4) !== 0;
+        for (var s = 0; s < e.length; s++) {
+            var i = e[s],
+                c = i.event;
+            i = i.listeners;
+            e: {
+                var d = void 0;
+                if (t)
+                    for (var x = i.length - 1; 0 <= x; x--) {
+                        var N = i[x],
+                            C = N.instance,
+                            L = N.currentTarget;
+                        if (((N = N.listener), C !== d && c.isPropagationStopped())) break e;
+                        ad(c, N, L), (d = C);
+                    }
+                else
+                    for (x = 0; x < i.length; x++) {
+                        if (
+                            ((N = i[x]),
+                            (C = N.instance),
+                            (L = N.currentTarget),
+                            (N = N.listener),
+                            C !== d && c.isPropagationStopped())
+                        )
+                            break e;
+                        ad(c, N, L), (d = C);
+                    }
+            }
+        }
+        if (Ca) throw ((e = Ci), (Ca = !1), (Ci = null), e);
+    }
+    function We(e, t) {
+        var s = t[ro];
+        s === void 0 && (s = t[ro] = new Set());
+        var i = e + "__bubble";
+        s.has(i) || (id(t, e, 2, !1), s.add(i));
+    }
+    function Gi(e, t, s) {
+        var i = 0;
+        t && (i |= 4), id(s, e, i, t);
+    }
+    var Ha = "_reactListening" + Math.random().toString(36).slice(2);
+    function Bs(e) {
+        if (!e[Ha]) {
+            (e[Ha] = !0),
+                o.forEach(function (s) {
+                    s !== "selectionchange" && (Hx.has(s) || Gi(s, !1, e), Gi(s, !0, e));
+                });
+            var t = e.nodeType === 9 ? e : e.ownerDocument;
+            t === null || t[Ha] || ((t[Ha] = !0), Gi("selectionchange", !1, t));
+        }
+    }
+    function id(e, t, s, i) {
+        switch (Ru(t)) {
+            case 1:
+                var c = rx;
+                break;
+            case 4:
+                c = sx;
+                break;
+            default:
+                c = Li;
+        }
+        (s = c.bind(null, t, s, e)),
+            (c = void 0),
+            !Si || (t !== "touchstart" && t !== "touchmove" && t !== "wheel") || (c = !0),
+            i
+                ? c !== void 0
+                    ? e.addEventListener(t, s, { capture: !0, passive: c })
+                    : e.addEventListener(t, s, !0)
+                : c !== void 0
+                  ? e.addEventListener(t, s, { passive: c })
+                  : e.addEventListener(t, s, !1);
+    }
+    function Ji(e, t, s, i, c) {
+        var d = i;
+        if ((t & 1) === 0 && (t & 2) === 0 && i !== null)
+            e: for (;;) {
+                if (i === null) return;
+                var x = i.tag;
+                if (x === 3 || x === 4) {
+                    var N = i.stateNode.containerInfo;
+                    if (N === c || (N.nodeType === 8 && N.parentNode === c)) break;
+                    if (x === 4)
+                        for (x = i.return; x !== null; ) {
+                            var C = x.tag;
+                            if (
+                                (C === 3 || C === 4) &&
+                                ((C = x.stateNode.containerInfo), C === c || (C.nodeType === 8 && C.parentNode === c))
+                            )
+                                return;
+                            x = x.return;
+                        }
+                    for (; N !== null; ) {
+                        if (((x = gr(N)), x === null)) return;
+                        if (((C = x.tag), C === 5 || C === 6)) {
+                            i = d = x;
+                            continue e;
+                        }
+                        N = N.parentNode;
+                    }
+                }
+                i = i.return;
+            }
+        fu(function () {
+            var L = d,
+                V = ie(s),
+                Q = [];
+            e: {
+                var W = rd.get(e);
+                if (W !== void 0) {
+                    var ce = Oi,
+                        he = e;
+                    switch (e) {
+                        case "keypress":
+                            if (Ia(s) === 0) break e;
+                        case "keydown":
+                        case "keyup":
+                            ce = vx;
+                            break;
+                        case "focusin":
+                            (he = "focus"), (ce = Di);
+                            break;
+                        case "focusout":
+                            (he = "blur"), (ce = Di);
+                            break;
+                        case "beforeblur":
+                        case "afterblur":
+                            ce = Di;
+                            break;
+                        case "click":
+                            if (s.button === 2) break e;
+                        case "auxclick":
+                        case "dblclick":
+                        case "mousedown":
+                        case "mousemove":
+                        case "mouseup":
+                        case "mouseout":
+                        case "mouseover":
+                        case "contextmenu":
+                            ce = Lu;
+                            break;
+                        case "drag":
+                        case "dragend":
+                        case "dragenter":
+                        case "dragexit":
+                        case "dragleave":
+                        case "dragover":
+                        case "dragstart":
+                        case "drop":
+                            ce = ix;
+                            break;
+                        case "touchcancel":
+                        case "touchend":
+                        case "touchmove":
+                        case "touchstart":
+                            ce = jx;
+                            break;
+                        case Zu:
+                        case ed:
+                        case td:
+                            ce = ux;
+                            break;
+                        case nd:
+                            ce = Nx;
+                            break;
+                        case "scroll":
+                            ce = ax;
+                            break;
+                        case "wheel":
+                            ce = Cx;
+                            break;
+                        case "copy":
+                        case "cut":
+                        case "paste":
+                            ce = fx;
+                            break;
+                        case "gotpointercapture":
+                        case "lostpointercapture":
+                        case "pointercancel":
+                        case "pointerdown":
+                        case "pointermove":
+                        case "pointerout":
+                        case "pointerover":
+                        case "pointerup":
+                            ce = Fu;
+                    }
+                    var we = (t & 4) !== 0,
+                        tt = !we && e === "scroll",
+                        R = we ? (W !== null ? W + "Capture" : null) : W;
+                    we = [];
+                    for (var P = L, _; P !== null; ) {
+                        _ = P;
+                        var J = _.stateNode;
+                        if (
+                            (_.tag === 5 &&
+                                J !== null &&
+                                ((_ = J), R !== null && ((J = ks(P, R)), J != null && we.push($s(P, J, _)))),
+                            tt)
+                        )
+                            break;
+                        P = P.return;
+                    }
+                    0 < we.length && ((W = new ce(W, he, null, s, V)), Q.push({ event: W, listeners: we }));
+                }
+            }
+            if ((t & 7) === 0) {
+                e: {
+                    if (
+                        ((W = e === "mouseover" || e === "pointerover"),
+                        (ce = e === "mouseout" || e === "pointerout"),
+                        W && s !== H && (he = s.relatedTarget || s.fromElement) && (gr(he) || he[Sn]))
+                    )
+                        break e;
+                    if (
+                        (ce || W) &&
+                        ((W = V.window === V ? V : (W = V.ownerDocument) ? W.defaultView || W.parentWindow : window),
+                        ce
+                            ? ((he = s.relatedTarget || s.toElement),
+                              (ce = L),
+                              (he = he ? gr(he) : null),
+                              he !== null &&
+                                  ((tt = xr(he)), he !== tt || (he.tag !== 5 && he.tag !== 6)) &&
+                                  (he = null))
+                            : ((ce = null), (he = L)),
+                        ce !== he)
+                    ) {
+                        if (
+                            ((we = Lu),
+                            (J = "onMouseLeave"),
+                            (R = "onMouseEnter"),
+                            (P = "mouse"),
+                            (e === "pointerout" || e === "pointerover") &&
+                                ((we = Fu), (J = "onPointerLeave"), (R = "onPointerEnter"), (P = "pointer")),
+                            (tt = ce == null ? W : Wr(ce)),
+                            (_ = he == null ? W : Wr(he)),
+                            (W = new we(J, P + "leave", ce, s, V)),
+                            (W.target = tt),
+                            (W.relatedTarget = _),
+                            (J = null),
+                            gr(V) === L &&
+                                ((we = new we(R, P + "enter", he, s, V)),
+                                (we.target = _),
+                                (we.relatedTarget = tt),
+                                (J = we)),
+                            (tt = J),
+                            ce && he)
+                        )
+                            t: {
+                                for (we = ce, R = he, P = 0, _ = we; _; _ = Hr(_)) P++;
+                                for (_ = 0, J = R; J; J = Hr(J)) _++;
+                                for (; 0 < P - _; ) (we = Hr(we)), P--;
+                                for (; 0 < _ - P; ) (R = Hr(R)), _--;
+                                for (; P--; ) {
+                                    if (we === R || (R !== null && we === R.alternate)) break t;
+                                    (we = Hr(we)), (R = Hr(R));
+                                }
+                                we = null;
+                            }
+                        else we = null;
+                        ce !== null && od(Q, W, ce, we, !1), he !== null && tt !== null && od(Q, tt, he, we, !0);
+                    }
+                }
+                e: {
+                    if (
+                        ((W = L ? Wr(L) : window),
+                        (ce = W.nodeName && W.nodeName.toLowerCase()),
+                        ce === "select" || (ce === "input" && W.type === "file"))
+                    )
+                        var be = Lx;
+                    else if (Bu(W))
+                        if (Hu) be = Ix;
+                        else {
+                            be = Fx;
+                            var Ce = zx;
+                        }
+                    else
+                        (ce = W.nodeName) &&
+                            ce.toLowerCase() === "input" &&
+                            (W.type === "checkbox" || W.type === "radio") &&
+                            (be = Ox);
+                    if (be && (be = be(e, L))) {
+                        $u(Q, be, s, V);
+                        break e;
+                    }
+                    Ce && Ce(e, W, L),
+                        e === "focusout" &&
+                            (Ce = W._wrapperState) &&
+                            Ce.controlled &&
+                            W.type === "number" &&
+                            Ht(W, "number", W.value);
+                }
+                switch (((Ce = L ? Wr(L) : window), e)) {
+                    case "focusin":
+                        (Bu(Ce) || Ce.contentEditable === "true") && ((Br = Ce), (Wi = L), (Ds = null));
+                        break;
+                    case "focusout":
+                        Ds = Wi = Br = null;
+                        break;
+                    case "mousedown":
+                        Vi = !0;
+                        break;
+                    case "contextmenu":
+                    case "mouseup":
+                    case "dragend":
+                        (Vi = !1), Ju(Q, s, V);
+                        break;
+                    case "selectionchange":
+                        if (Ux) break;
+                    case "keydown":
+                    case "keyup":
+                        Ju(Q, s, V);
+                }
+                var Te;
+                if (Bi)
+                    e: {
+                        switch (e) {
+                            case "compositionstart":
+                                var Re = "onCompositionStart";
+                                break e;
+                            case "compositionend":
+                                Re = "onCompositionEnd";
+                                break e;
+                            case "compositionupdate":
+                                Re = "onCompositionUpdate";
+                                break e;
+                        }
+                        Re = void 0;
+                    }
+                else
+                    Ur
+                        ? Du(e, s) && (Re = "onCompositionEnd")
+                        : e === "keydown" && s.keyCode === 229 && (Re = "onCompositionStart");
+                Re &&
+                    (Ou &&
+                        s.locale !== "ko" &&
+                        (Ur || Re !== "onCompositionStart"
+                            ? Re === "onCompositionEnd" && Ur && (Te = _u())
+                            : (($n = V), (Fi = "value" in $n ? $n.value : $n.textContent), (Ur = !0))),
+                    (Ce = qa(L, Re)),
+                    0 < Ce.length &&
+                        ((Re = new zu(Re, e, null, s, V)),
+                        Q.push({ event: Re, listeners: Ce }),
+                        Te ? (Re.data = Te) : ((Te = Uu(s)), Te !== null && (Re.data = Te)))),
+                    (Te = Ex ? Px(e, s) : Rx(e, s)) &&
+                        ((L = qa(L, "onBeforeInput")),
+                        0 < L.length &&
+                            ((V = new zu("onBeforeInput", "beforeinput", null, s, V)),
+                            Q.push({ event: V, listeners: L }),
+                            (V.data = Te)));
+            }
+            ld(Q, t);
+        });
+    }
+    function $s(e, t, s) {
+        return { instance: e, listener: t, currentTarget: s };
+    }
+    function qa(e, t) {
+        for (var s = t + "Capture", i = []; e !== null; ) {
+            var c = e,
+                d = c.stateNode;
+            c.tag === 5 &&
+                d !== null &&
+                ((c = d),
+                (d = ks(e, s)),
+                d != null && i.unshift($s(e, d, c)),
+                (d = ks(e, t)),
+                d != null && i.push($s(e, d, c))),
+                (e = e.return);
+        }
+        return i;
+    }
+    function Hr(e) {
+        if (e === null) return null;
+        do e = e.return;
+        while (e && e.tag !== 5);
+        return e || null;
+    }
+    function od(e, t, s, i, c) {
+        for (var d = t._reactName, x = []; s !== null && s !== i; ) {
+            var N = s,
+                C = N.alternate,
+                L = N.stateNode;
+            if (C !== null && C === i) break;
+            N.tag === 5 &&
+                L !== null &&
+                ((N = L),
+                c
+                    ? ((C = ks(s, d)), C != null && x.unshift($s(s, C, N)))
+                    : c || ((C = ks(s, d)), C != null && x.push($s(s, C, N)))),
+                (s = s.return);
+        }
+        x.length !== 0 && e.push({ event: t, listeners: x });
+    }
+    var qx = /\r\n?/g,
+        Wx = /\u0000|\uFFFD/g;
+    function cd(e) {
+        return (typeof e == "string" ? e : "" + e)
+            .replace(
+                qx,
+                `
+`
+            )
+            .replace(Wx, "");
+    }
+    function Wa(e, t, s) {
+        if (((t = cd(t)), cd(e) !== t && s)) throw Error(l(425));
+    }
+    function Va() {}
+    var Xi = null,
+        Zi = null;
+    function eo(e, t) {
+        return (
+            e === "textarea" ||
+            e === "noscript" ||
+            typeof t.children == "string" ||
+            typeof t.children == "number" ||
+            (typeof t.dangerouslySetInnerHTML == "object" &&
+                t.dangerouslySetInnerHTML !== null &&
+                t.dangerouslySetInnerHTML.__html != null)
+        );
+    }
+    var to = typeof setTimeout == "function" ? setTimeout : void 0,
+        Vx = typeof clearTimeout == "function" ? clearTimeout : void 0,
+        ud = typeof Promise == "function" ? Promise : void 0,
+        Qx =
+            typeof queueMicrotask == "function"
+                ? queueMicrotask
+                : typeof ud < "u"
+                  ? function (e) {
+                        return ud.resolve(null).then(e).catch(Kx);
+                    }
+                  : to;
+    function Kx(e) {
+        setTimeout(function () {
+            throw e;
+        });
+    }
+    function no(e, t) {
+        var s = t,
+            i = 0;
+        do {
+            var c = s.nextSibling;
+            if ((e.removeChild(s), c && c.nodeType === 8))
+                if (((s = c.data), s === "/$")) {
+                    if (i === 0) {
+                        e.removeChild(c), As(t);
+                        return;
+                    }
+                    i--;
+                } else (s !== "$" && s !== "$?" && s !== "$!") || i++;
+            s = c;
+        } while (s);
+        As(t);
+    }
+    function qn(e) {
+        for (; e != null; e = e.nextSibling) {
+            var t = e.nodeType;
+            if (t === 1 || t === 3) break;
+            if (t === 8) {
+                if (((t = e.data), t === "$" || t === "$!" || t === "$?")) break;
+                if (t === "/$") return null;
+            }
+        }
+        return e;
+    }
+    function dd(e) {
+        e = e.previousSibling;
+        for (var t = 0; e; ) {
+            if (e.nodeType === 8) {
+                var s = e.data;
+                if (s === "$" || s === "$!" || s === "$?") {
+                    if (t === 0) return e;
+                    t--;
+                } else s === "/$" && t++;
+            }
+            e = e.previousSibling;
+        }
+        return null;
+    }
+    var qr = Math.random().toString(36).slice(2),
+        gn = "__reactFiber$" + qr,
+        Hs = "__reactProps$" + qr,
+        Sn = "__reactContainer$" + qr,
+        ro = "__reactEvents$" + qr,
+        Yx = "__reactListeners$" + qr,
+        Gx = "__reactHandles$" + qr;
+    function gr(e) {
+        var t = e[gn];
+        if (t) return t;
+        for (var s = e.parentNode; s; ) {
+            if ((t = s[Sn] || s[gn])) {
+                if (((s = t.alternate), t.child !== null || (s !== null && s.child !== null)))
+                    for (e = dd(e); e !== null; ) {
+                        if ((s = e[gn])) return s;
+                        e = dd(e);
+                    }
+                return t;
+            }
+            (e = s), (s = e.parentNode);
+        }
+        return null;
+    }
+    function qs(e) {
+        return (e = e[gn] || e[Sn]), !e || (e.tag !== 5 && e.tag !== 6 && e.tag !== 13 && e.tag !== 3) ? null : e;
+    }
+    function Wr(e) {
+        if (e.tag === 5 || e.tag === 6) return e.stateNode;
+        throw Error(l(33));
+    }
+    function Qa(e) {
+        return e[Hs] || null;
+    }
+    var so = [],
+        Vr = -1;
+    function Wn(e) {
+        return { current: e };
+    }
+    function Ve(e) {
+        0 > Vr || ((e.current = so[Vr]), (so[Vr] = null), Vr--);
+    }
+    function qe(e, t) {
+        Vr++, (so[Vr] = e.current), (e.current = t);
+    }
+    var Vn = {},
+        yt = Wn(Vn),
+        Rt = Wn(!1),
+        yr = Vn;
+    function Qr(e, t) {
+        var s = e.type.contextTypes;
+        if (!s) return Vn;
+        var i = e.stateNode;
+        if (i && i.__reactInternalMemoizedUnmaskedChildContext === t)
+            return i.__reactInternalMemoizedMaskedChildContext;
+        var c = {},
+            d;
+        for (d in s) c[d] = t[d];
+        return (
+            i &&
+                ((e = e.stateNode),
+                (e.__reactInternalMemoizedUnmaskedChildContext = t),
+                (e.__reactInternalMemoizedMaskedChildContext = c)),
+            c
+        );
+    }
+    function _t(e) {
+        return (e = e.childContextTypes), e != null;
+    }
+    function Ka() {
+        Ve(Rt), Ve(yt);
+    }
+    function fd(e, t, s) {
+        if (yt.current !== Vn) throw Error(l(168));
+        qe(yt, t), qe(Rt, s);
+    }
+    function md(e, t, s) {
+        var i = e.stateNode;
+        if (((t = t.childContextTypes), typeof i.getChildContext != "function")) return s;
+        i = i.getChildContext();
+        for (var c in i) if (!(c in t)) throw Error(l(108, Ee(e) || "Unknown", c));
+        return G({}, s, i);
+    }
+    function Ya(e) {
+        return (
+            (e = ((e = e.stateNode) && e.__reactInternalMemoizedMergedChildContext) || Vn),
+            (yr = yt.current),
+            qe(yt, e),
+            qe(Rt, Rt.current),
+            !0
+        );
+    }
+    function pd(e, t, s) {
+        var i = e.stateNode;
+        if (!i) throw Error(l(169));
+        s ? ((e = md(e, t, yr)), (i.__reactInternalMemoizedMergedChildContext = e), Ve(Rt), Ve(yt), qe(yt, e)) : Ve(Rt),
+            qe(Rt, s);
+    }
+    var Cn = null,
+        Ga = !1,
+        ao = !1;
+    function hd(e) {
+        Cn === null ? (Cn = [e]) : Cn.push(e);
+    }
+    function Jx(e) {
+        (Ga = !0), hd(e);
+    }
+    function Qn() {
+        if (!ao && Cn !== null) {
+            ao = !0;
+            var e = 0,
+                t = Ue;
+            try {
+                var s = Cn;
+                for (Ue = 1; e < s.length; e++) {
+                    var i = s[e];
+                    do i = i(!0);
+                    while (i !== null);
+                }
+                (Cn = null), (Ga = !1);
+            } catch (c) {
+                throw (Cn !== null && (Cn = Cn.slice(e + 1)), gu(Ti, Qn), c);
+            } finally {
+                (Ue = t), (ao = !1);
+            }
+        }
+        return null;
+    }
+    var Kr = [],
+        Yr = 0,
+        Ja = null,
+        Xa = 0,
+        Vt = [],
+        Qt = 0,
+        vr = null,
+        Tn = 1,
+        En = "";
+    function wr(e, t) {
+        (Kr[Yr++] = Xa), (Kr[Yr++] = Ja), (Ja = e), (Xa = t);
+    }
+    function xd(e, t, s) {
+        (Vt[Qt++] = Tn), (Vt[Qt++] = En), (Vt[Qt++] = vr), (vr = e);
+        var i = Tn;
+        e = En;
+        var c = 32 - nn(i) - 1;
+        (i &= ~(1 << c)), (s += 1);
+        var d = 32 - nn(t) + c;
+        if (30 < d) {
+            var x = c - (c % 5);
+            (d = (i & ((1 << x) - 1)).toString(32)),
+                (i >>= x),
+                (c -= x),
+                (Tn = (1 << (32 - nn(t) + c)) | (s << c) | i),
+                (En = d + e);
+        } else (Tn = (1 << d) | (s << c) | i), (En = e);
+    }
+    function lo(e) {
+        e.return !== null && (wr(e, 1), xd(e, 1, 0));
+    }
+    function io(e) {
+        for (; e === Ja; ) (Ja = Kr[--Yr]), (Kr[Yr] = null), (Xa = Kr[--Yr]), (Kr[Yr] = null);
+        for (; e === vr; )
+            (vr = Vt[--Qt]), (Vt[Qt] = null), (En = Vt[--Qt]), (Vt[Qt] = null), (Tn = Vt[--Qt]), (Vt[Qt] = null);
+    }
+    var Dt = null,
+        Ut = null,
+        Qe = !1,
+        sn = null;
+    function gd(e, t) {
+        var s = Jt(5, null, null, 0);
+        (s.elementType = "DELETED"),
+            (s.stateNode = t),
+            (s.return = e),
+            (t = e.deletions),
+            t === null ? ((e.deletions = [s]), (e.flags |= 16)) : t.push(s);
+    }
+    function yd(e, t) {
+        switch (e.tag) {
+            case 5:
+                var s = e.type;
+                return (
+                    (t = t.nodeType !== 1 || s.toLowerCase() !== t.nodeName.toLowerCase() ? null : t),
+                    t !== null ? ((e.stateNode = t), (Dt = e), (Ut = qn(t.firstChild)), !0) : !1
+                );
+            case 6:
+                return (
+                    (t = e.pendingProps === "" || t.nodeType !== 3 ? null : t),
+                    t !== null ? ((e.stateNode = t), (Dt = e), (Ut = null), !0) : !1
+                );
+            case 13:
+                return (
+                    (t = t.nodeType !== 8 ? null : t),
+                    t !== null
+                        ? ((s = vr !== null ? { id: Tn, overflow: En } : null),
+                          (e.memoizedState = { dehydrated: t, treeContext: s, retryLane: 1073741824 }),
+                          (s = Jt(18, null, null, 0)),
+                          (s.stateNode = t),
+                          (s.return = e),
+                          (e.child = s),
+                          (Dt = e),
+                          (Ut = null),
+                          !0)
+                        : !1
+                );
+            default:
+                return !1;
+        }
+    }
+    function oo(e) {
+        return (e.mode & 1) !== 0 && (e.flags & 128) === 0;
+    }
+    function co(e) {
+        if (Qe) {
+            var t = Ut;
+            if (t) {
+                var s = t;
+                if (!yd(e, t)) {
+                    if (oo(e)) throw Error(l(418));
+                    t = qn(s.nextSibling);
+                    var i = Dt;
+                    t && yd(e, t) ? gd(i, s) : ((e.flags = (e.flags & -4097) | 2), (Qe = !1), (Dt = e));
+                }
+            } else {
+                if (oo(e)) throw Error(l(418));
+                (e.flags = (e.flags & -4097) | 2), (Qe = !1), (Dt = e);
+            }
+        }
+    }
+    function vd(e) {
+        for (e = e.return; e !== null && e.tag !== 5 && e.tag !== 3 && e.tag !== 13; ) e = e.return;
+        Dt = e;
+    }
+    function Za(e) {
+        if (e !== Dt) return !1;
+        if (!Qe) return vd(e), (Qe = !0), !1;
+        var t;
+        if (
+            ((t = e.tag !== 3) &&
+                !(t = e.tag !== 5) &&
+                ((t = e.type), (t = t !== "head" && t !== "body" && !eo(e.type, e.memoizedProps))),
+            t && (t = Ut))
+        ) {
+            if (oo(e)) throw (wd(), Error(l(418)));
+            for (; t; ) gd(e, t), (t = qn(t.nextSibling));
+        }
+        if ((vd(e), e.tag === 13)) {
+            if (((e = e.memoizedState), (e = e !== null ? e.dehydrated : null), !e)) throw Error(l(317));
+            e: {
+                for (e = e.nextSibling, t = 0; e; ) {
+                    if (e.nodeType === 8) {
+                        var s = e.data;
+                        if (s === "/$") {
+                            if (t === 0) {
+                                Ut = qn(e.nextSibling);
+                                break e;
+                            }
+                            t--;
+                        } else (s !== "$" && s !== "$!" && s !== "$?") || t++;
+                    }
+                    e = e.nextSibling;
+                }
+                Ut = null;
+            }
+        } else Ut = Dt ? qn(e.stateNode.nextSibling) : null;
+        return !0;
+    }
+    function wd() {
+        for (var e = Ut; e; ) e = qn(e.nextSibling);
+    }
+    function Gr() {
+        (Ut = Dt = null), (Qe = !1);
+    }
+    function uo(e) {
+        sn === null ? (sn = [e]) : sn.push(e);
+    }
+    var Xx = B.ReactCurrentBatchConfig;
+    function Ws(e, t, s) {
+        if (((e = s.ref), e !== null && typeof e != "function" && typeof e != "object")) {
+            if (s._owner) {
+                if (((s = s._owner), s)) {
+                    if (s.tag !== 1) throw Error(l(309));
+                    var i = s.stateNode;
+                }
+                if (!i) throw Error(l(147, e));
+                var c = i,
+                    d = "" + e;
+                return t !== null && t.ref !== null && typeof t.ref == "function" && t.ref._stringRef === d
+                    ? t.ref
+                    : ((t = function (x) {
+                          var N = c.refs;
+                          x === null ? delete N[d] : (N[d] = x);
+                      }),
+                      (t._stringRef = d),
+                      t);
+            }
+            if (typeof e != "string") throw Error(l(284));
+            if (!s._owner) throw Error(l(290, e));
+        }
+        return e;
+    }
+    function el(e, t) {
+        throw (
+            ((e = Object.prototype.toString.call(t)),
+            Error(l(31, e === "[object Object]" ? "object with keys {" + Object.keys(t).join(", ") + "}" : e)))
+        );
+    }
+    function bd(e) {
+        var t = e._init;
+        return t(e._payload);
+    }
+    function jd(e) {
+        function t(R, P) {
+            if (e) {
+                var _ = R.deletions;
+                _ === null ? ((R.deletions = [P]), (R.flags |= 16)) : _.push(P);
+            }
+        }
+        function s(R, P) {
+            if (!e) return null;
+            for (; P !== null; ) t(R, P), (P = P.sibling);
+            return null;
+        }
+        function i(R, P) {
+            for (R = new Map(); P !== null; ) P.key !== null ? R.set(P.key, P) : R.set(P.index, P), (P = P.sibling);
+            return R;
+        }
+        function c(R, P) {
+            return (R = tr(R, P)), (R.index = 0), (R.sibling = null), R;
+        }
+        function d(R, P, _) {
+            return (
+                (R.index = _),
+                e
+                    ? ((_ = R.alternate),
+                      _ !== null ? ((_ = _.index), _ < P ? ((R.flags |= 2), P) : _) : ((R.flags |= 2), P))
+                    : ((R.flags |= 1048576), P)
+            );
+        }
+        function x(R) {
+            return e && R.alternate === null && (R.flags |= 2), R;
+        }
+        function N(R, P, _, J) {
+            return P === null || P.tag !== 6
+                ? ((P = nc(_, R.mode, J)), (P.return = R), P)
+                : ((P = c(P, _)), (P.return = R), P);
+        }
+        function C(R, P, _, J) {
+            var be = _.type;
+            return be === K
+                ? V(R, P, _.props.children, J, _.key)
+                : P !== null &&
+                    (P.elementType === be ||
+                        (typeof be == "object" && be !== null && be.$$typeof === O && bd(be) === P.type))
+                  ? ((J = c(P, _.props)), (J.ref = Ws(R, P, _)), (J.return = R), J)
+                  : ((J = Nl(_.type, _.key, _.props, null, R.mode, J)), (J.ref = Ws(R, P, _)), (J.return = R), J);
+        }
+        function L(R, P, _, J) {
+            return P === null ||
+                P.tag !== 4 ||
+                P.stateNode.containerInfo !== _.containerInfo ||
+                P.stateNode.implementation !== _.implementation
+                ? ((P = rc(_, R.mode, J)), (P.return = R), P)
+                : ((P = c(P, _.children || [])), (P.return = R), P);
+        }
+        function V(R, P, _, J, be) {
+            return P === null || P.tag !== 7
+                ? ((P = Er(_, R.mode, J, be)), (P.return = R), P)
+                : ((P = c(P, _)), (P.return = R), P);
+        }
+        function Q(R, P, _) {
+            if ((typeof P == "string" && P !== "") || typeof P == "number")
+                return (P = nc("" + P, R.mode, _)), (P.return = R), P;
+            if (typeof P == "object" && P !== null) {
+                switch (P.$$typeof) {
+                    case Y:
+                        return (
+                            (_ = Nl(P.type, P.key, P.props, null, R.mode, _)),
+                            (_.ref = Ws(R, null, P)),
+                            (_.return = R),
+                            _
+                        );
+                    case ne:
+                        return (P = rc(P, R.mode, _)), (P.return = R), P;
+                    case O:
+                        var J = P._init;
+                        return Q(R, J(P._payload), _);
+                }
+                if (hn(P) || se(P)) return (P = Er(P, R.mode, _, null)), (P.return = R), P;
+                el(R, P);
+            }
+            return null;
+        }
+        function W(R, P, _, J) {
+            var be = P !== null ? P.key : null;
+            if ((typeof _ == "string" && _ !== "") || typeof _ == "number")
+                return be !== null ? null : N(R, P, "" + _, J);
+            if (typeof _ == "object" && _ !== null) {
+                switch (_.$$typeof) {
+                    case Y:
+                        return _.key === be ? C(R, P, _, J) : null;
+                    case ne:
+                        return _.key === be ? L(R, P, _, J) : null;
+                    case O:
+                        return (be = _._init), W(R, P, be(_._payload), J);
+                }
+                if (hn(_) || se(_)) return be !== null ? null : V(R, P, _, J, null);
+                el(R, _);
+            }
+            return null;
+        }
+        function ce(R, P, _, J, be) {
+            if ((typeof J == "string" && J !== "") || typeof J == "number")
+                return (R = R.get(_) || null), N(P, R, "" + J, be);
+            if (typeof J == "object" && J !== null) {
+                switch (J.$$typeof) {
+                    case Y:
+                        return (R = R.get(J.key === null ? _ : J.key) || null), C(P, R, J, be);
+                    case ne:
+                        return (R = R.get(J.key === null ? _ : J.key) || null), L(P, R, J, be);
+                    case O:
+                        var Ce = J._init;
+                        return ce(R, P, _, Ce(J._payload), be);
+                }
+                if (hn(J) || se(J)) return (R = R.get(_) || null), V(P, R, J, be, null);
+                el(P, J);
+            }
+            return null;
+        }
+        function he(R, P, _, J) {
+            for (var be = null, Ce = null, Te = P, Re = (P = 0), dt = null; Te !== null && Re < _.length; Re++) {
+                Te.index > Re ? ((dt = Te), (Te = null)) : (dt = Te.sibling);
+                var Oe = W(R, Te, _[Re], J);
+                if (Oe === null) {
+                    Te === null && (Te = dt);
+                    break;
+                }
+                e && Te && Oe.alternate === null && t(R, Te),
+                    (P = d(Oe, P, Re)),
+                    Ce === null ? (be = Oe) : (Ce.sibling = Oe),
+                    (Ce = Oe),
+                    (Te = dt);
+            }
+            if (Re === _.length) return s(R, Te), Qe && wr(R, Re), be;
+            if (Te === null) {
+                for (; Re < _.length; Re++)
+                    (Te = Q(R, _[Re], J)),
+                        Te !== null && ((P = d(Te, P, Re)), Ce === null ? (be = Te) : (Ce.sibling = Te), (Ce = Te));
+                return Qe && wr(R, Re), be;
+            }
+            for (Te = i(R, Te); Re < _.length; Re++)
+                (dt = ce(Te, R, Re, _[Re], J)),
+                    dt !== null &&
+                        (e && dt.alternate !== null && Te.delete(dt.key === null ? Re : dt.key),
+                        (P = d(dt, P, Re)),
+                        Ce === null ? (be = dt) : (Ce.sibling = dt),
+                        (Ce = dt));
+            return (
+                e &&
+                    Te.forEach(function (nr) {
+                        return t(R, nr);
+                    }),
+                Qe && wr(R, Re),
+                be
+            );
+        }
+        function we(R, P, _, J) {
+            var be = se(_);
+            if (typeof be != "function") throw Error(l(150));
+            if (((_ = be.call(_)), _ == null)) throw Error(l(151));
+            for (
+                var Ce = (be = null), Te = P, Re = (P = 0), dt = null, Oe = _.next();
+                Te !== null && !Oe.done;
+                Re++, Oe = _.next()
+            ) {
+                Te.index > Re ? ((dt = Te), (Te = null)) : (dt = Te.sibling);
+                var nr = W(R, Te, Oe.value, J);
+                if (nr === null) {
+                    Te === null && (Te = dt);
+                    break;
+                }
+                e && Te && nr.alternate === null && t(R, Te),
+                    (P = d(nr, P, Re)),
+                    Ce === null ? (be = nr) : (Ce.sibling = nr),
+                    (Ce = nr),
+                    (Te = dt);
+            }
+            if (Oe.done) return s(R, Te), Qe && wr(R, Re), be;
+            if (Te === null) {
+                for (; !Oe.done; Re++, Oe = _.next())
+                    (Oe = Q(R, Oe.value, J)),
+                        Oe !== null && ((P = d(Oe, P, Re)), Ce === null ? (be = Oe) : (Ce.sibling = Oe), (Ce = Oe));
+                return Qe && wr(R, Re), be;
+            }
+            for (Te = i(R, Te); !Oe.done; Re++, Oe = _.next())
+                (Oe = ce(Te, R, Re, Oe.value, J)),
+                    Oe !== null &&
+                        (e && Oe.alternate !== null && Te.delete(Oe.key === null ? Re : Oe.key),
+                        (P = d(Oe, P, Re)),
+                        Ce === null ? (be = Oe) : (Ce.sibling = Oe),
+                        (Ce = Oe));
+            return (
+                e &&
+                    Te.forEach(function (_g) {
+                        return t(R, _g);
+                    }),
+                Qe && wr(R, Re),
+                be
+            );
+        }
+        function tt(R, P, _, J) {
+            if (
+                (typeof _ == "object" && _ !== null && _.type === K && _.key === null && (_ = _.props.children),
+                typeof _ == "object" && _ !== null)
+            ) {
+                switch (_.$$typeof) {
+                    case Y:
+                        e: {
+                            for (var be = _.key, Ce = P; Ce !== null; ) {
+                                if (Ce.key === be) {
+                                    if (((be = _.type), be === K)) {
+                                        if (Ce.tag === 7) {
+                                            s(R, Ce.sibling), (P = c(Ce, _.props.children)), (P.return = R), (R = P);
+                                            break e;
+                                        }
+                                    } else if (
+                                        Ce.elementType === be ||
+                                        (typeof be == "object" &&
+                                            be !== null &&
+                                            be.$$typeof === O &&
+                                            bd(be) === Ce.type)
+                                    ) {
+                                        s(R, Ce.sibling),
+                                            (P = c(Ce, _.props)),
+                                            (P.ref = Ws(R, Ce, _)),
+                                            (P.return = R),
+                                            (R = P);
+                                        break e;
+                                    }
+                                    s(R, Ce);
+                                    break;
+                                } else t(R, Ce);
+                                Ce = Ce.sibling;
+                            }
+                            _.type === K
+                                ? ((P = Er(_.props.children, R.mode, J, _.key)), (P.return = R), (R = P))
+                                : ((J = Nl(_.type, _.key, _.props, null, R.mode, J)),
+                                  (J.ref = Ws(R, P, _)),
+                                  (J.return = R),
+                                  (R = J));
+                        }
+                        return x(R);
+                    case ne:
+                        e: {
+                            for (Ce = _.key; P !== null; ) {
+                                if (P.key === Ce)
+                                    if (
+                                        P.tag === 4 &&
+                                        P.stateNode.containerInfo === _.containerInfo &&
+                                        P.stateNode.implementation === _.implementation
+                                    ) {
+                                        s(R, P.sibling), (P = c(P, _.children || [])), (P.return = R), (R = P);
+                                        break e;
+                                    } else {
+                                        s(R, P);
+                                        break;
+                                    }
+                                else t(R, P);
+                                P = P.sibling;
+                            }
+                            (P = rc(_, R.mode, J)), (P.return = R), (R = P);
+                        }
+                        return x(R);
+                    case O:
+                        return (Ce = _._init), tt(R, P, Ce(_._payload), J);
+                }
+                if (hn(_)) return he(R, P, _, J);
+                if (se(_)) return we(R, P, _, J);
+                el(R, _);
+            }
+            return (typeof _ == "string" && _ !== "") || typeof _ == "number"
+                ? ((_ = "" + _),
+                  P !== null && P.tag === 6
+                      ? (s(R, P.sibling), (P = c(P, _)), (P.return = R), (R = P))
+                      : (s(R, P), (P = nc(_, R.mode, J)), (P.return = R), (R = P)),
+                  x(R))
+                : s(R, P);
+        }
+        return tt;
+    }
+    var Jr = jd(!0),
+        kd = jd(!1),
+        tl = Wn(null),
+        nl = null,
+        Xr = null,
+        fo = null;
+    function mo() {
+        fo = Xr = nl = null;
+    }
+    function po(e) {
+        var t = tl.current;
+        Ve(tl), (e._currentValue = t);
+    }
+    function ho(e, t, s) {
+        for (; e !== null; ) {
+            var i = e.alternate;
+            if (
+                ((e.childLanes & t) !== t
+                    ? ((e.childLanes |= t), i !== null && (i.childLanes |= t))
+                    : i !== null && (i.childLanes & t) !== t && (i.childLanes |= t),
+                e === s)
+            )
+                break;
+            e = e.return;
+        }
+    }
+    function Zr(e, t) {
+        (nl = e),
+            (fo = Xr = null),
+            (e = e.dependencies),
+            e !== null && e.firstContext !== null && ((e.lanes & t) !== 0 && (At = !0), (e.firstContext = null));
+    }
+    function Kt(e) {
+        var t = e._currentValue;
+        if (fo !== e)
+            if (((e = { context: e, memoizedValue: t, next: null }), Xr === null)) {
+                if (nl === null) throw Error(l(308));
+                (Xr = e), (nl.dependencies = { lanes: 0, firstContext: e });
+            } else Xr = Xr.next = e;
+        return t;
+    }
+    var br = null;
+    function xo(e) {
+        br === null ? (br = [e]) : br.push(e);
+    }
+    function Nd(e, t, s, i) {
+        var c = t.interleaved;
+        return c === null ? ((s.next = s), xo(t)) : ((s.next = c.next), (c.next = s)), (t.interleaved = s), Pn(e, i);
+    }
+    function Pn(e, t) {
+        e.lanes |= t;
+        var s = e.alternate;
+        for (s !== null && (s.lanes |= t), s = e, e = e.return; e !== null; )
+            (e.childLanes |= t), (s = e.alternate), s !== null && (s.childLanes |= t), (s = e), (e = e.return);
+        return s.tag === 3 ? s.stateNode : null;
+    }
+    var Kn = !1;
+    function go(e) {
+        e.updateQueue = {
+            baseState: e.memoizedState,
+            firstBaseUpdate: null,
+            lastBaseUpdate: null,
+            shared: { pending: null, interleaved: null, lanes: 0 },
+            effects: null,
+        };
+    }
+    function Sd(e, t) {
+        (e = e.updateQueue),
+            t.updateQueue === e &&
+                (t.updateQueue = {
+                    baseState: e.baseState,
+                    firstBaseUpdate: e.firstBaseUpdate,
+                    lastBaseUpdate: e.lastBaseUpdate,
+                    shared: e.shared,
+                    effects: e.effects,
+                });
+    }
+    function Rn(e, t) {
+        return { eventTime: e, lane: t, tag: 0, payload: null, callback: null, next: null };
+    }
+    function Yn(e, t, s) {
+        var i = e.updateQueue;
+        if (i === null) return null;
+        if (((i = i.shared), (Fe & 2) !== 0)) {
+            var c = i.pending;
+            return c === null ? (t.next = t) : ((t.next = c.next), (c.next = t)), (i.pending = t), Pn(e, s);
+        }
+        return (
+            (c = i.interleaved),
+            c === null ? ((t.next = t), xo(i)) : ((t.next = c.next), (c.next = t)),
+            (i.interleaved = t),
+            Pn(e, s)
+        );
+    }
+    function rl(e, t, s) {
+        if (((t = t.updateQueue), t !== null && ((t = t.shared), (s & 4194240) !== 0))) {
+            var i = t.lanes;
+            (i &= e.pendingLanes), (s |= i), (t.lanes = s), Ri(e, s);
+        }
+    }
+    function Cd(e, t) {
+        var s = e.updateQueue,
+            i = e.alternate;
+        if (i !== null && ((i = i.updateQueue), s === i)) {
+            var c = null,
+                d = null;
+            if (((s = s.firstBaseUpdate), s !== null)) {
+                do {
+                    var x = {
+                        eventTime: s.eventTime,
+                        lane: s.lane,
+                        tag: s.tag,
+                        payload: s.payload,
+                        callback: s.callback,
+                        next: null,
+                    };
+                    d === null ? (c = d = x) : (d = d.next = x), (s = s.next);
+                } while (s !== null);
+                d === null ? (c = d = t) : (d = d.next = t);
+            } else c = d = t;
+            (s = {
+                baseState: i.baseState,
+                firstBaseUpdate: c,
+                lastBaseUpdate: d,
+                shared: i.shared,
+                effects: i.effects,
+            }),
+                (e.updateQueue = s);
+            return;
+        }
+        (e = s.lastBaseUpdate), e === null ? (s.firstBaseUpdate = t) : (e.next = t), (s.lastBaseUpdate = t);
+    }
+    function sl(e, t, s, i) {
+        var c = e.updateQueue;
+        Kn = !1;
+        var d = c.firstBaseUpdate,
+            x = c.lastBaseUpdate,
+            N = c.shared.pending;
+        if (N !== null) {
+            c.shared.pending = null;
+            var C = N,
+                L = C.next;
+            (C.next = null), x === null ? (d = L) : (x.next = L), (x = C);
+            var V = e.alternate;
+            V !== null &&
+                ((V = V.updateQueue),
+                (N = V.lastBaseUpdate),
+                N !== x && (N === null ? (V.firstBaseUpdate = L) : (N.next = L), (V.lastBaseUpdate = C)));
+        }
+        if (d !== null) {
+            var Q = c.baseState;
+            (x = 0), (V = L = C = null), (N = d);
+            do {
+                var W = N.lane,
+                    ce = N.eventTime;
+                if ((i & W) === W) {
+                    V !== null &&
+                        (V = V.next =
+                            {
+                                eventTime: ce,
+                                lane: 0,
+                                tag: N.tag,
+                                payload: N.payload,
+                                callback: N.callback,
+                                next: null,
+                            });
+                    e: {
+                        var he = e,
+                            we = N;
+                        switch (((W = t), (ce = s), we.tag)) {
+                            case 1:
+                                if (((he = we.payload), typeof he == "function")) {
+                                    Q = he.call(ce, Q, W);
+                                    break e;
+                                }
+                                Q = he;
+                                break e;
+                            case 3:
+                                he.flags = (he.flags & -65537) | 128;
+                            case 0:
+                                if (
+                                    ((he = we.payload),
+                                    (W = typeof he == "function" ? he.call(ce, Q, W) : he),
+                                    W == null)
+                                )
+                                    break e;
+                                Q = G({}, Q, W);
+                                break e;
+                            case 2:
+                                Kn = !0;
+                        }
+                    }
+                    N.callback !== null &&
+                        N.lane !== 0 &&
+                        ((e.flags |= 64), (W = c.effects), W === null ? (c.effects = [N]) : W.push(N));
+                } else
+                    (ce = { eventTime: ce, lane: W, tag: N.tag, payload: N.payload, callback: N.callback, next: null }),
+                        V === null ? ((L = V = ce), (C = Q)) : (V = V.next = ce),
+                        (x |= W);
+                if (((N = N.next), N === null)) {
+                    if (((N = c.shared.pending), N === null)) break;
+                    (W = N), (N = W.next), (W.next = null), (c.lastBaseUpdate = W), (c.shared.pending = null);
+                }
+            } while (!0);
+            if (
+                (V === null && (C = Q),
+                (c.baseState = C),
+                (c.firstBaseUpdate = L),
+                (c.lastBaseUpdate = V),
+                (t = c.shared.interleaved),
+                t !== null)
+            ) {
+                c = t;
+                do (x |= c.lane), (c = c.next);
+                while (c !== t);
+            } else d === null && (c.shared.lanes = 0);
+            (Nr |= x), (e.lanes = x), (e.memoizedState = Q);
+        }
+    }
+    function Td(e, t, s) {
+        if (((e = t.effects), (t.effects = null), e !== null))
+            for (t = 0; t < e.length; t++) {
+                var i = e[t],
+                    c = i.callback;
+                if (c !== null) {
+                    if (((i.callback = null), (i = s), typeof c != "function")) throw Error(l(191, c));
+                    c.call(i);
+                }
+            }
+    }
+    var Vs = {},
+        yn = Wn(Vs),
+        Qs = Wn(Vs),
+        Ks = Wn(Vs);
+    function jr(e) {
+        if (e === Vs) throw Error(l(174));
+        return e;
+    }
+    function yo(e, t) {
+        switch ((qe(Ks, t), qe(Qs, e), qe(yn, Vs), (e = t.nodeType), e)) {
+            case 9:
+            case 11:
+                t = (t = t.documentElement) ? t.namespaceURI : at(null, "");
+                break;
+            default:
+                (e = e === 8 ? t.parentNode : t), (t = e.namespaceURI || null), (e = e.tagName), (t = at(t, e));
+        }
+        Ve(yn), qe(yn, t);
+    }
+    function es() {
+        Ve(yn), Ve(Qs), Ve(Ks);
+    }
+    function Ed(e) {
+        jr(Ks.current);
+        var t = jr(yn.current),
+            s = at(t, e.type);
+        t !== s && (qe(Qs, e), qe(yn, s));
+    }
+    function vo(e) {
+        Qs.current === e && (Ve(yn), Ve(Qs));
+    }
+    var Ye = Wn(0);
+    function al(e) {
+        for (var t = e; t !== null; ) {
+            if (t.tag === 13) {
+                var s = t.memoizedState;
+                if (s !== null && ((s = s.dehydrated), s === null || s.data === "$?" || s.data === "$!")) return t;
+            } else if (t.tag === 19 && t.memoizedProps.revealOrder !== void 0) {
+                if ((t.flags & 128) !== 0) return t;
+            } else if (t.child !== null) {
+                (t.child.return = t), (t = t.child);
+                continue;
+            }
+            if (t === e) break;
+            for (; t.sibling === null; ) {
+                if (t.return === null || t.return === e) return null;
+                t = t.return;
+            }
+            (t.sibling.return = t.return), (t = t.sibling);
+        }
+        return null;
+    }
+    var wo = [];
+    function bo() {
+        for (var e = 0; e < wo.length; e++) wo[e]._workInProgressVersionPrimary = null;
+        wo.length = 0;
+    }
+    var ll = B.ReactCurrentDispatcher,
+        jo = B.ReactCurrentBatchConfig,
+        kr = 0,
+        Ge = null,
+        lt = null,
+        ct = null,
+        il = !1,
+        Ys = !1,
+        Gs = 0,
+        Zx = 0;
+    function vt() {
+        throw Error(l(321));
+    }
+    function ko(e, t) {
+        if (t === null) return !1;
+        for (var s = 0; s < t.length && s < e.length; s++) if (!rn(e[s], t[s])) return !1;
+        return !0;
+    }
+    function No(e, t, s, i, c, d) {
+        if (
+            ((kr = d),
+            (Ge = t),
+            (t.memoizedState = null),
+            (t.updateQueue = null),
+            (t.lanes = 0),
+            (ll.current = e === null || e.memoizedState === null ? rg : sg),
+            (e = s(i, c)),
+            Ys)
+        ) {
+            d = 0;
+            do {
+                if (((Ys = !1), (Gs = 0), 25 <= d)) throw Error(l(301));
+                (d += 1), (ct = lt = null), (t.updateQueue = null), (ll.current = ag), (e = s(i, c));
+            } while (Ys);
+        }
+        if (((ll.current = ul), (t = lt !== null && lt.next !== null), (kr = 0), (ct = lt = Ge = null), (il = !1), t))
+            throw Error(l(300));
+        return e;
+    }
+    function So() {
+        var e = Gs !== 0;
+        return (Gs = 0), e;
+    }
+    function vn() {
+        var e = { memoizedState: null, baseState: null, baseQueue: null, queue: null, next: null };
+        return ct === null ? (Ge.memoizedState = ct = e) : (ct = ct.next = e), ct;
+    }
+    function Yt() {
+        if (lt === null) {
+            var e = Ge.alternate;
+            e = e !== null ? e.memoizedState : null;
+        } else e = lt.next;
+        var t = ct === null ? Ge.memoizedState : ct.next;
+        if (t !== null) (ct = t), (lt = e);
+        else {
+            if (e === null) throw Error(l(310));
+            (lt = e),
+                (e = {
+                    memoizedState: lt.memoizedState,
+                    baseState: lt.baseState,
+                    baseQueue: lt.baseQueue,
+                    queue: lt.queue,
+                    next: null,
+                }),
+                ct === null ? (Ge.memoizedState = ct = e) : (ct = ct.next = e);
+        }
+        return ct;
+    }
+    function Js(e, t) {
+        return typeof t == "function" ? t(e) : t;
+    }
+    function Co(e) {
+        var t = Yt(),
+            s = t.queue;
+        if (s === null) throw Error(l(311));
+        s.lastRenderedReducer = e;
+        var i = lt,
+            c = i.baseQueue,
+            d = s.pending;
+        if (d !== null) {
+            if (c !== null) {
+                var x = c.next;
+                (c.next = d.next), (d.next = x);
+            }
+            (i.baseQueue = c = d), (s.pending = null);
+        }
+        if (c !== null) {
+            (d = c.next), (i = i.baseState);
+            var N = (x = null),
+                C = null,
+                L = d;
+            do {
+                var V = L.lane;
+                if ((kr & V) === V)
+                    C !== null &&
+                        (C = C.next =
+                            {
+                                lane: 0,
+                                action: L.action,
+                                hasEagerState: L.hasEagerState,
+                                eagerState: L.eagerState,
+                                next: null,
+                            }),
+                        (i = L.hasEagerState ? L.eagerState : e(i, L.action));
+                else {
+                    var Q = {
+                        lane: V,
+                        action: L.action,
+                        hasEagerState: L.hasEagerState,
+                        eagerState: L.eagerState,
+                        next: null,
+                    };
+                    C === null ? ((N = C = Q), (x = i)) : (C = C.next = Q), (Ge.lanes |= V), (Nr |= V);
+                }
+                L = L.next;
+            } while (L !== null && L !== d);
+            C === null ? (x = i) : (C.next = N),
+                rn(i, t.memoizedState) || (At = !0),
+                (t.memoizedState = i),
+                (t.baseState = x),
+                (t.baseQueue = C),
+                (s.lastRenderedState = i);
+        }
+        if (((e = s.interleaved), e !== null)) {
+            c = e;
+            do (d = c.lane), (Ge.lanes |= d), (Nr |= d), (c = c.next);
+            while (c !== e);
+        } else c === null && (s.lanes = 0);
+        return [t.memoizedState, s.dispatch];
+    }
+    function To(e) {
+        var t = Yt(),
+            s = t.queue;
+        if (s === null) throw Error(l(311));
+        s.lastRenderedReducer = e;
+        var i = s.dispatch,
+            c = s.pending,
+            d = t.memoizedState;
+        if (c !== null) {
+            s.pending = null;
+            var x = (c = c.next);
+            do (d = e(d, x.action)), (x = x.next);
+            while (x !== c);
+            rn(d, t.memoizedState) || (At = !0),
+                (t.memoizedState = d),
+                t.baseQueue === null && (t.baseState = d),
+                (s.lastRenderedState = d);
+        }
+        return [d, i];
+    }
+    function Pd() {}
+    function Rd(e, t) {
+        var s = Ge,
+            i = Yt(),
+            c = t(),
+            d = !rn(i.memoizedState, c);
+        if (
+            (d && ((i.memoizedState = c), (At = !0)),
+            (i = i.queue),
+            Eo(Ld.bind(null, s, i, e), [e]),
+            i.getSnapshot !== t || d || (ct !== null && ct.memoizedState.tag & 1))
+        ) {
+            if (((s.flags |= 2048), Xs(9, Ad.bind(null, s, i, c, t), void 0, null), ut === null)) throw Error(l(349));
+            (kr & 30) !== 0 || _d(s, t, c);
+        }
+        return c;
+    }
+    function _d(e, t, s) {
+        (e.flags |= 16384),
+            (e = { getSnapshot: t, value: s }),
+            (t = Ge.updateQueue),
+            t === null
+                ? ((t = { lastEffect: null, stores: null }), (Ge.updateQueue = t), (t.stores = [e]))
+                : ((s = t.stores), s === null ? (t.stores = [e]) : s.push(e));
+    }
+    function Ad(e, t, s, i) {
+        (t.value = s), (t.getSnapshot = i), zd(t) && Fd(e);
+    }
+    function Ld(e, t, s) {
+        return s(function () {
+            zd(t) && Fd(e);
+        });
+    }
+    function zd(e) {
+        var t = e.getSnapshot;
+        e = e.value;
+        try {
+            var s = t();
+            return !rn(e, s);
+        } catch {
+            return !0;
+        }
+    }
+    function Fd(e) {
+        var t = Pn(e, 1);
+        t !== null && cn(t, e, 1, -1);
+    }
+    function Od(e) {
+        var t = vn();
+        return (
+            typeof e == "function" && (e = e()),
+            (t.memoizedState = t.baseState = e),
+            (e = {
+                pending: null,
+                interleaved: null,
+                lanes: 0,
+                dispatch: null,
+                lastRenderedReducer: Js,
+                lastRenderedState: e,
+            }),
+            (t.queue = e),
+            (e = e.dispatch = ng.bind(null, Ge, e)),
+            [t.memoizedState, e]
+        );
+    }
+    function Xs(e, t, s, i) {
+        return (
+            (e = { tag: e, create: t, destroy: s, deps: i, next: null }),
+            (t = Ge.updateQueue),
+            t === null
+                ? ((t = { lastEffect: null, stores: null }), (Ge.updateQueue = t), (t.lastEffect = e.next = e))
+                : ((s = t.lastEffect),
+                  s === null
+                      ? (t.lastEffect = e.next = e)
+                      : ((i = s.next), (s.next = e), (e.next = i), (t.lastEffect = e))),
+            e
+        );
+    }
+    function Id() {
+        return Yt().memoizedState;
+    }
+    function ol(e, t, s, i) {
+        var c = vn();
+        (Ge.flags |= e), (c.memoizedState = Xs(1 | t, s, void 0, i === void 0 ? null : i));
+    }
+    function cl(e, t, s, i) {
+        var c = Yt();
+        i = i === void 0 ? null : i;
+        var d = void 0;
+        if (lt !== null) {
+            var x = lt.memoizedState;
+            if (((d = x.destroy), i !== null && ko(i, x.deps))) {
+                c.memoizedState = Xs(t, s, d, i);
+                return;
+            }
+        }
+        (Ge.flags |= e), (c.memoizedState = Xs(1 | t, s, d, i));
+    }
+    function Md(e, t) {
+        return ol(8390656, 8, e, t);
+    }
+    function Eo(e, t) {
+        return cl(2048, 8, e, t);
+    }
+    function Dd(e, t) {
+        return cl(4, 2, e, t);
+    }
+    function Ud(e, t) {
+        return cl(4, 4, e, t);
+    }
+    function Bd(e, t) {
+        if (typeof t == "function")
+            return (
+                (e = e()),
+                t(e),
+                function () {
+                    t(null);
+                }
+            );
+        if (t != null)
+            return (
+                (e = e()),
+                (t.current = e),
+                function () {
+                    t.current = null;
+                }
+            );
+    }
+    function $d(e, t, s) {
+        return (s = s != null ? s.concat([e]) : null), cl(4, 4, Bd.bind(null, t, e), s);
+    }
+    function Po() {}
+    function Hd(e, t) {
+        var s = Yt();
+        t = t === void 0 ? null : t;
+        var i = s.memoizedState;
+        return i !== null && t !== null && ko(t, i[1]) ? i[0] : ((s.memoizedState = [e, t]), e);
+    }
+    function qd(e, t) {
+        var s = Yt();
+        t = t === void 0 ? null : t;
+        var i = s.memoizedState;
+        return i !== null && t !== null && ko(t, i[1]) ? i[0] : ((e = e()), (s.memoizedState = [e, t]), e);
+    }
+    function Wd(e, t, s) {
+        return (kr & 21) === 0
+            ? (e.baseState && ((e.baseState = !1), (At = !0)), (e.memoizedState = s))
+            : (rn(s, t) || ((s = bu()), (Ge.lanes |= s), (Nr |= s), (e.baseState = !0)), t);
+    }
+    function eg(e, t) {
+        var s = Ue;
+        (Ue = s !== 0 && 4 > s ? s : 4), e(!0);
+        var i = jo.transition;
+        jo.transition = {};
+        try {
+            e(!1), t();
+        } finally {
+            (Ue = s), (jo.transition = i);
+        }
+    }
+    function Vd() {
+        return Yt().memoizedState;
+    }
+    function tg(e, t, s) {
+        var i = Zn(e);
+        if (((s = { lane: i, action: s, hasEagerState: !1, eagerState: null, next: null }), Qd(e))) Kd(t, s);
+        else if (((s = Nd(e, t, s, i)), s !== null)) {
+            var c = St();
+            cn(s, e, i, c), Yd(s, t, i);
+        }
+    }
+    function ng(e, t, s) {
+        var i = Zn(e),
+            c = { lane: i, action: s, hasEagerState: !1, eagerState: null, next: null };
+        if (Qd(e)) Kd(t, c);
+        else {
+            var d = e.alternate;
+            if (e.lanes === 0 && (d === null || d.lanes === 0) && ((d = t.lastRenderedReducer), d !== null))
+                try {
+                    var x = t.lastRenderedState,
+                        N = d(x, s);
+                    if (((c.hasEagerState = !0), (c.eagerState = N), rn(N, x))) {
+                        var C = t.interleaved;
+                        C === null ? ((c.next = c), xo(t)) : ((c.next = C.next), (C.next = c)), (t.interleaved = c);
+                        return;
+                    }
+                } catch {
+                } finally {
+                }
+            (s = Nd(e, t, c, i)), s !== null && ((c = St()), cn(s, e, i, c), Yd(s, t, i));
+        }
+    }
+    function Qd(e) {
+        var t = e.alternate;
+        return e === Ge || (t !== null && t === Ge);
+    }
+    function Kd(e, t) {
+        Ys = il = !0;
+        var s = e.pending;
+        s === null ? (t.next = t) : ((t.next = s.next), (s.next = t)), (e.pending = t);
+    }
+    function Yd(e, t, s) {
+        if ((s & 4194240) !== 0) {
+            var i = t.lanes;
+            (i &= e.pendingLanes), (s |= i), (t.lanes = s), Ri(e, s);
+        }
+    }
+    var ul = {
+            readContext: Kt,
+            useCallback: vt,
+            useContext: vt,
+            useEffect: vt,
+            useImperativeHandle: vt,
+            useInsertionEffect: vt,
+            useLayoutEffect: vt,
+            useMemo: vt,
+            useReducer: vt,
+            useRef: vt,
+            useState: vt,
+            useDebugValue: vt,
+            useDeferredValue: vt,
+            useTransition: vt,
+            useMutableSource: vt,
+            useSyncExternalStore: vt,
+            useId: vt,
+            unstable_isNewReconciler: !1,
+        },
+        rg = {
+            readContext: Kt,
+            useCallback: function (e, t) {
+                return (vn().memoizedState = [e, t === void 0 ? null : t]), e;
+            },
+            useContext: Kt,
+            useEffect: Md,
+            useImperativeHandle: function (e, t, s) {
+                return (s = s != null ? s.concat([e]) : null), ol(4194308, 4, Bd.bind(null, t, e), s);
+            },
+            useLayoutEffect: function (e, t) {
+                return ol(4194308, 4, e, t);
+            },
+            useInsertionEffect: function (e, t) {
+                return ol(4, 2, e, t);
+            },
+            useMemo: function (e, t) {
+                var s = vn();
+                return (t = t === void 0 ? null : t), (e = e()), (s.memoizedState = [e, t]), e;
+            },
+            useReducer: function (e, t, s) {
+                var i = vn();
+                return (
+                    (t = s !== void 0 ? s(t) : t),
+                    (i.memoizedState = i.baseState = t),
+                    (e = {
+                        pending: null,
+                        interleaved: null,
+                        lanes: 0,
+                        dispatch: null,
+                        lastRenderedReducer: e,
+                        lastRenderedState: t,
+                    }),
+                    (i.queue = e),
+                    (e = e.dispatch = tg.bind(null, Ge, e)),
+                    [i.memoizedState, e]
+                );
+            },
+            useRef: function (e) {
+                var t = vn();
+                return (e = { current: e }), (t.memoizedState = e);
+            },
+            useState: Od,
+            useDebugValue: Po,
+            useDeferredValue: function (e) {
+                return (vn().memoizedState = e);
+            },
+            useTransition: function () {
+                var e = Od(!1),
+                    t = e[0];
+                return (e = eg.bind(null, e[1])), (vn().memoizedState = e), [t, e];
+            },
+            useMutableSource: function () {},
+            useSyncExternalStore: function (e, t, s) {
+                var i = Ge,
+                    c = vn();
+                if (Qe) {
+                    if (s === void 0) throw Error(l(407));
+                    s = s();
+                } else {
+                    if (((s = t()), ut === null)) throw Error(l(349));
+                    (kr & 30) !== 0 || _d(i, t, s);
+                }
+                c.memoizedState = s;
+                var d = { value: s, getSnapshot: t };
+                return (
+                    (c.queue = d),
+                    Md(Ld.bind(null, i, d, e), [e]),
+                    (i.flags |= 2048),
+                    Xs(9, Ad.bind(null, i, d, s, t), void 0, null),
+                    s
+                );
+            },
+            useId: function () {
+                var e = vn(),
+                    t = ut.identifierPrefix;
+                if (Qe) {
+                    var s = En,
+                        i = Tn;
+                    (s = (i & ~(1 << (32 - nn(i) - 1))).toString(32) + s),
+                        (t = ":" + t + "R" + s),
+                        (s = Gs++),
+                        0 < s && (t += "H" + s.toString(32)),
+                        (t += ":");
+                } else (s = Zx++), (t = ":" + t + "r" + s.toString(32) + ":");
+                return (e.memoizedState = t);
+            },
+            unstable_isNewReconciler: !1,
+        },
+        sg = {
+            readContext: Kt,
+            useCallback: Hd,
+            useContext: Kt,
+            useEffect: Eo,
+            useImperativeHandle: $d,
+            useInsertionEffect: Dd,
+            useLayoutEffect: Ud,
+            useMemo: qd,
+            useReducer: Co,
+            useRef: Id,
+            useState: function () {
+                return Co(Js);
+            },
+            useDebugValue: Po,
+            useDeferredValue: function (e) {
+                var t = Yt();
+                return Wd(t, lt.memoizedState, e);
+            },
+            useTransition: function () {
+                var e = Co(Js)[0],
+                    t = Yt().memoizedState;
+                return [e, t];
+            },
+            useMutableSource: Pd,
+            useSyncExternalStore: Rd,
+            useId: Vd,
+            unstable_isNewReconciler: !1,
+        },
+        ag = {
+            readContext: Kt,
+            useCallback: Hd,
+            useContext: Kt,
+            useEffect: Eo,
+            useImperativeHandle: $d,
+            useInsertionEffect: Dd,
+            useLayoutEffect: Ud,
+            useMemo: qd,
+            useReducer: To,
+            useRef: Id,
+            useState: function () {
+                return To(Js);
+            },
+            useDebugValue: Po,
+            useDeferredValue: function (e) {
+                var t = Yt();
+                return lt === null ? (t.memoizedState = e) : Wd(t, lt.memoizedState, e);
+            },
+            useTransition: function () {
+                var e = To(Js)[0],
+                    t = Yt().memoizedState;
+                return [e, t];
+            },
+            useMutableSource: Pd,
+            useSyncExternalStore: Rd,
+            useId: Vd,
+            unstable_isNewReconciler: !1,
+        };
+    function an(e, t) {
+        if (e && e.defaultProps) {
+            (t = G({}, t)), (e = e.defaultProps);
+            for (var s in e) t[s] === void 0 && (t[s] = e[s]);
+            return t;
+        }
+        return t;
+    }
+    function Ro(e, t, s, i) {
+        (t = e.memoizedState),
+            (s = s(i, t)),
+            (s = s == null ? t : G({}, t, s)),
+            (e.memoizedState = s),
+            e.lanes === 0 && (e.updateQueue.baseState = s);
+    }
+    var dl = {
+        isMounted: function (e) {
+            return (e = e._reactInternals) ? xr(e) === e : !1;
+        },
+        enqueueSetState: function (e, t, s) {
+            e = e._reactInternals;
+            var i = St(),
+                c = Zn(e),
+                d = Rn(i, c);
+            (d.payload = t),
+                s != null && (d.callback = s),
+                (t = Yn(e, d, c)),
+                t !== null && (cn(t, e, c, i), rl(t, e, c));
+        },
+        enqueueReplaceState: function (e, t, s) {
+            e = e._reactInternals;
+            var i = St(),
+                c = Zn(e),
+                d = Rn(i, c);
+            (d.tag = 1),
+                (d.payload = t),
+                s != null && (d.callback = s),
+                (t = Yn(e, d, c)),
+                t !== null && (cn(t, e, c, i), rl(t, e, c));
+        },
+        enqueueForceUpdate: function (e, t) {
+            e = e._reactInternals;
+            var s = St(),
+                i = Zn(e),
+                c = Rn(s, i);
+            (c.tag = 2), t != null && (c.callback = t), (t = Yn(e, c, i)), t !== null && (cn(t, e, i, s), rl(t, e, i));
+        },
+    };
+    function Gd(e, t, s, i, c, d, x) {
+        return (
+            (e = e.stateNode),
+            typeof e.shouldComponentUpdate == "function"
+                ? e.shouldComponentUpdate(i, d, x)
+                : t.prototype && t.prototype.isPureReactComponent
+                  ? !Ms(s, i) || !Ms(c, d)
+                  : !0
+        );
+    }
+    function Jd(e, t, s) {
+        var i = !1,
+            c = Vn,
+            d = t.contextType;
+        return (
+            typeof d == "object" && d !== null
+                ? (d = Kt(d))
+                : ((c = _t(t) ? yr : yt.current), (i = t.contextTypes), (d = (i = i != null) ? Qr(e, c) : Vn)),
+            (t = new t(s, d)),
+            (e.memoizedState = t.state !== null && t.state !== void 0 ? t.state : null),
+            (t.updater = dl),
+            (e.stateNode = t),
+            (t._reactInternals = e),
+            i &&
+                ((e = e.stateNode),
+                (e.__reactInternalMemoizedUnmaskedChildContext = c),
+                (e.__reactInternalMemoizedMaskedChildContext = d)),
+            t
+        );
+    }
+    function Xd(e, t, s, i) {
+        (e = t.state),
+            typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(s, i),
+            typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(s, i),
+            t.state !== e && dl.enqueueReplaceState(t, t.state, null);
+    }
+    function _o(e, t, s, i) {
+        var c = e.stateNode;
+        (c.props = s), (c.state = e.memoizedState), (c.refs = {}), go(e);
+        var d = t.contextType;
+        typeof d == "object" && d !== null
+            ? (c.context = Kt(d))
+            : ((d = _t(t) ? yr : yt.current), (c.context = Qr(e, d))),
+            (c.state = e.memoizedState),
+            (d = t.getDerivedStateFromProps),
+            typeof d == "function" && (Ro(e, t, d, s), (c.state = e.memoizedState)),
+            typeof t.getDerivedStateFromProps == "function" ||
+                typeof c.getSnapshotBeforeUpdate == "function" ||
+                (typeof c.UNSAFE_componentWillMount != "function" && typeof c.componentWillMount != "function") ||
+                ((t = c.state),
+                typeof c.componentWillMount == "function" && c.componentWillMount(),
+                typeof c.UNSAFE_componentWillMount == "function" && c.UNSAFE_componentWillMount(),
+                t !== c.state && dl.enqueueReplaceState(c, c.state, null),
+                sl(e, s, c, i),
+                (c.state = e.memoizedState)),
+            typeof c.componentDidMount == "function" && (e.flags |= 4194308);
+    }
+    function ts(e, t) {
+        try {
+            var s = "",
+                i = t;
+            do (s += ue(i)), (i = i.return);
+            while (i);
+            var c = s;
+        } catch (d) {
+            c =
+                `
+Error generating stack: ` +
+                d.message +
+                `
+` +
+                d.stack;
+        }
+        return { value: e, source: t, stack: c, digest: null };
+    }
+    function Ao(e, t, s) {
+        return { value: e, source: null, stack: s ?? null, digest: t ?? null };
+    }
+    function Lo(e, t) {
+        try {
+            console.error(t.value);
+        } catch (s) {
+            setTimeout(function () {
+                throw s;
+            });
+        }
+    }
+    var lg = typeof WeakMap == "function" ? WeakMap : Map;
+    function Zd(e, t, s) {
+        (s = Rn(-1, s)), (s.tag = 3), (s.payload = { element: null });
+        var i = t.value;
+        return (
+            (s.callback = function () {
+                yl || ((yl = !0), (Ko = i)), Lo(e, t);
+            }),
+            s
+        );
+    }
+    function ef(e, t, s) {
+        (s = Rn(-1, s)), (s.tag = 3);
+        var i = e.type.getDerivedStateFromError;
+        if (typeof i == "function") {
+            var c = t.value;
+            (s.payload = function () {
+                return i(c);
+            }),
+                (s.callback = function () {
+                    Lo(e, t);
+                });
+        }
+        var d = e.stateNode;
+        return (
+            d !== null &&
+                typeof d.componentDidCatch == "function" &&
+                (s.callback = function () {
+                    Lo(e, t), typeof i != "function" && (Jn === null ? (Jn = new Set([this])) : Jn.add(this));
+                    var x = t.stack;
+                    this.componentDidCatch(t.value, { componentStack: x !== null ? x : "" });
+                }),
+            s
+        );
+    }
+    function tf(e, t, s) {
+        var i = e.pingCache;
+        if (i === null) {
+            i = e.pingCache = new lg();
+            var c = new Set();
+            i.set(t, c);
+        } else (c = i.get(t)), c === void 0 && ((c = new Set()), i.set(t, c));
+        c.has(s) || (c.add(s), (e = wg.bind(null, e, t, s)), t.then(e, e));
+    }
+    function nf(e) {
+        do {
+            var t;
+            if (((t = e.tag === 13) && ((t = e.memoizedState), (t = t !== null ? t.dehydrated !== null : !0)), t))
+                return e;
+            e = e.return;
+        } while (e !== null);
+        return null;
+    }
+    function rf(e, t, s, i, c) {
+        return (e.mode & 1) === 0
+            ? (e === t
+                  ? (e.flags |= 65536)
+                  : ((e.flags |= 128),
+                    (s.flags |= 131072),
+                    (s.flags &= -52805),
+                    s.tag === 1 && (s.alternate === null ? (s.tag = 17) : ((t = Rn(-1, 1)), (t.tag = 2), Yn(s, t, 1))),
+                    (s.lanes |= 1)),
+              e)
+            : ((e.flags |= 65536), (e.lanes = c), e);
+    }
+    var ig = B.ReactCurrentOwner,
+        At = !1;
+    function Nt(e, t, s, i) {
+        t.child = e === null ? kd(t, null, s, i) : Jr(t, e.child, s, i);
+    }
+    function sf(e, t, s, i, c) {
+        s = s.render;
+        var d = t.ref;
+        return (
+            Zr(t, c),
+            (i = No(e, t, s, i, d, c)),
+            (s = So()),
+            e !== null && !At
+                ? ((t.updateQueue = e.updateQueue), (t.flags &= -2053), (e.lanes &= ~c), _n(e, t, c))
+                : (Qe && s && lo(t), (t.flags |= 1), Nt(e, t, i, c), t.child)
+        );
+    }
+    function af(e, t, s, i, c) {
+        if (e === null) {
+            var d = s.type;
+            return typeof d == "function" &&
+                !tc(d) &&
+                d.defaultProps === void 0 &&
+                s.compare === null &&
+                s.defaultProps === void 0
+                ? ((t.tag = 15), (t.type = d), lf(e, t, d, i, c))
+                : ((e = Nl(s.type, null, i, t, t.mode, c)), (e.ref = t.ref), (e.return = t), (t.child = e));
+        }
+        if (((d = e.child), (e.lanes & c) === 0)) {
+            var x = d.memoizedProps;
+            if (((s = s.compare), (s = s !== null ? s : Ms), s(x, i) && e.ref === t.ref)) return _n(e, t, c);
+        }
+        return (t.flags |= 1), (e = tr(d, i)), (e.ref = t.ref), (e.return = t), (t.child = e);
+    }
+    function lf(e, t, s, i, c) {
+        if (e !== null) {
+            var d = e.memoizedProps;
+            if (Ms(d, i) && e.ref === t.ref)
+                if (((At = !1), (t.pendingProps = i = d), (e.lanes & c) !== 0)) (e.flags & 131072) !== 0 && (At = !0);
+                else return (t.lanes = e.lanes), _n(e, t, c);
+        }
+        return zo(e, t, s, i, c);
+    }
+    function of(e, t, s) {
+        var i = t.pendingProps,
+            c = i.children,
+            d = e !== null ? e.memoizedState : null;
+        if (i.mode === "hidden")
+            if ((t.mode & 1) === 0)
+                (t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }), qe(rs, Bt), (Bt |= s);
+            else {
+                if ((s & 1073741824) === 0)
+                    return (
+                        (e = d !== null ? d.baseLanes | s : s),
+                        (t.lanes = t.childLanes = 1073741824),
+                        (t.memoizedState = { baseLanes: e, cachePool: null, transitions: null }),
+                        (t.updateQueue = null),
+                        qe(rs, Bt),
+                        (Bt |= e),
+                        null
+                    );
+                (t.memoizedState = { baseLanes: 0, cachePool: null, transitions: null }),
+                    (i = d !== null ? d.baseLanes : s),
+                    qe(rs, Bt),
+                    (Bt |= i);
+            }
+        else d !== null ? ((i = d.baseLanes | s), (t.memoizedState = null)) : (i = s), qe(rs, Bt), (Bt |= i);
+        return Nt(e, t, c, s), t.child;
+    }
+    function cf(e, t) {
+        var s = t.ref;
+        ((e === null && s !== null) || (e !== null && e.ref !== s)) && ((t.flags |= 512), (t.flags |= 2097152));
+    }
+    function zo(e, t, s, i, c) {
+        var d = _t(s) ? yr : yt.current;
+        return (
+            (d = Qr(t, d)),
+            Zr(t, c),
+            (s = No(e, t, s, i, d, c)),
+            (i = So()),
+            e !== null && !At
+                ? ((t.updateQueue = e.updateQueue), (t.flags &= -2053), (e.lanes &= ~c), _n(e, t, c))
+                : (Qe && i && lo(t), (t.flags |= 1), Nt(e, t, s, c), t.child)
+        );
+    }
+    function uf(e, t, s, i, c) {
+        if (_t(s)) {
+            var d = !0;
+            Ya(t);
+        } else d = !1;
+        if ((Zr(t, c), t.stateNode === null)) ml(e, t), Jd(t, s, i), _o(t, s, i, c), (i = !0);
+        else if (e === null) {
+            var x = t.stateNode,
+                N = t.memoizedProps;
+            x.props = N;
+            var C = x.context,
+                L = s.contextType;
+            typeof L == "object" && L !== null ? (L = Kt(L)) : ((L = _t(s) ? yr : yt.current), (L = Qr(t, L)));
+            var V = s.getDerivedStateFromProps,
+                Q = typeof V == "function" || typeof x.getSnapshotBeforeUpdate == "function";
+            Q ||
+                (typeof x.UNSAFE_componentWillReceiveProps != "function" &&
+                    typeof x.componentWillReceiveProps != "function") ||
+                ((N !== i || C !== L) && Xd(t, x, i, L)),
+                (Kn = !1);
+            var W = t.memoizedState;
+            (x.state = W),
+                sl(t, i, x, c),
+                (C = t.memoizedState),
+                N !== i || W !== C || Rt.current || Kn
+                    ? (typeof V == "function" && (Ro(t, s, V, i), (C = t.memoizedState)),
+                      (N = Kn || Gd(t, s, N, i, W, C, L))
+                          ? (Q ||
+                                (typeof x.UNSAFE_componentWillMount != "function" &&
+                                    typeof x.componentWillMount != "function") ||
+                                (typeof x.componentWillMount == "function" && x.componentWillMount(),
+                                typeof x.UNSAFE_componentWillMount == "function" && x.UNSAFE_componentWillMount()),
+                            typeof x.componentDidMount == "function" && (t.flags |= 4194308))
+                          : (typeof x.componentDidMount == "function" && (t.flags |= 4194308),
+                            (t.memoizedProps = i),
+                            (t.memoizedState = C)),
+                      (x.props = i),
+                      (x.state = C),
+                      (x.context = L),
+                      (i = N))
+                    : (typeof x.componentDidMount == "function" && (t.flags |= 4194308), (i = !1));
+        } else {
+            (x = t.stateNode),
+                Sd(e, t),
+                (N = t.memoizedProps),
+                (L = t.type === t.elementType ? N : an(t.type, N)),
+                (x.props = L),
+                (Q = t.pendingProps),
+                (W = x.context),
+                (C = s.contextType),
+                typeof C == "object" && C !== null ? (C = Kt(C)) : ((C = _t(s) ? yr : yt.current), (C = Qr(t, C)));
+            var ce = s.getDerivedStateFromProps;
+            (V = typeof ce == "function" || typeof x.getSnapshotBeforeUpdate == "function") ||
+                (typeof x.UNSAFE_componentWillReceiveProps != "function" &&
+                    typeof x.componentWillReceiveProps != "function") ||
+                ((N !== Q || W !== C) && Xd(t, x, i, C)),
+                (Kn = !1),
+                (W = t.memoizedState),
+                (x.state = W),
+                sl(t, i, x, c);
+            var he = t.memoizedState;
+            N !== Q || W !== he || Rt.current || Kn
+                ? (typeof ce == "function" && (Ro(t, s, ce, i), (he = t.memoizedState)),
+                  (L = Kn || Gd(t, s, L, i, W, he, C) || !1)
+                      ? (V ||
+                            (typeof x.UNSAFE_componentWillUpdate != "function" &&
+                                typeof x.componentWillUpdate != "function") ||
+                            (typeof x.componentWillUpdate == "function" && x.componentWillUpdate(i, he, C),
+                            typeof x.UNSAFE_componentWillUpdate == "function" &&
+                                x.UNSAFE_componentWillUpdate(i, he, C)),
+                        typeof x.componentDidUpdate == "function" && (t.flags |= 4),
+                        typeof x.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024))
+                      : (typeof x.componentDidUpdate != "function" ||
+                            (N === e.memoizedProps && W === e.memoizedState) ||
+                            (t.flags |= 4),
+                        typeof x.getSnapshotBeforeUpdate != "function" ||
+                            (N === e.memoizedProps && W === e.memoizedState) ||
+                            (t.flags |= 1024),
+                        (t.memoizedProps = i),
+                        (t.memoizedState = he)),
+                  (x.props = i),
+                  (x.state = he),
+                  (x.context = C),
+                  (i = L))
+                : (typeof x.componentDidUpdate != "function" ||
+                      (N === e.memoizedProps && W === e.memoizedState) ||
+                      (t.flags |= 4),
+                  typeof x.getSnapshotBeforeUpdate != "function" ||
+                      (N === e.memoizedProps && W === e.memoizedState) ||
+                      (t.flags |= 1024),
+                  (i = !1));
+        }
+        return Fo(e, t, s, i, d, c);
+    }
+    function Fo(e, t, s, i, c, d) {
+        cf(e, t);
+        var x = (t.flags & 128) !== 0;
+        if (!i && !x) return c && pd(t, s, !1), _n(e, t, d);
+        (i = t.stateNode), (ig.current = t);
+        var N = x && typeof s.getDerivedStateFromError != "function" ? null : i.render();
+        return (
+            (t.flags |= 1),
+            e !== null && x ? ((t.child = Jr(t, e.child, null, d)), (t.child = Jr(t, null, N, d))) : Nt(e, t, N, d),
+            (t.memoizedState = i.state),
+            c && pd(t, s, !0),
+            t.child
+        );
+    }
+    function df(e) {
+        var t = e.stateNode;
+        t.pendingContext ? fd(e, t.pendingContext, t.pendingContext !== t.context) : t.context && fd(e, t.context, !1),
+            yo(e, t.containerInfo);
+    }
+    function ff(e, t, s, i, c) {
+        return Gr(), uo(c), (t.flags |= 256), Nt(e, t, s, i), t.child;
+    }
+    var Oo = { dehydrated: null, treeContext: null, retryLane: 0 };
+    function Io(e) {
+        return { baseLanes: e, cachePool: null, transitions: null };
+    }
+    function mf(e, t, s) {
+        var i = t.pendingProps,
+            c = Ye.current,
+            d = !1,
+            x = (t.flags & 128) !== 0,
+            N;
+        if (
+            ((N = x) || (N = e !== null && e.memoizedState === null ? !1 : (c & 2) !== 0),
+            N ? ((d = !0), (t.flags &= -129)) : (e === null || e.memoizedState !== null) && (c |= 1),
+            qe(Ye, c & 1),
+            e === null)
+        )
+            return (
+                co(t),
+                (e = t.memoizedState),
+                e !== null && ((e = e.dehydrated), e !== null)
+                    ? ((t.mode & 1) === 0 ? (t.lanes = 1) : e.data === "$!" ? (t.lanes = 8) : (t.lanes = 1073741824),
+                      null)
+                    : ((x = i.children),
+                      (e = i.fallback),
+                      d
+                          ? ((i = t.mode),
+                            (d = t.child),
+                            (x = { mode: "hidden", children: x }),
+                            (i & 1) === 0 && d !== null
+                                ? ((d.childLanes = 0), (d.pendingProps = x))
+                                : (d = Sl(x, i, 0, null)),
+                            (e = Er(e, i, s, null)),
+                            (d.return = t),
+                            (e.return = t),
+                            (d.sibling = e),
+                            (t.child = d),
+                            (t.child.memoizedState = Io(s)),
+                            (t.memoizedState = Oo),
+                            e)
+                          : Mo(t, x))
+            );
+        if (((c = e.memoizedState), c !== null && ((N = c.dehydrated), N !== null))) return og(e, t, x, i, N, c, s);
+        if (d) {
+            (d = i.fallback), (x = t.mode), (c = e.child), (N = c.sibling);
+            var C = { mode: "hidden", children: i.children };
+            return (
+                (x & 1) === 0 && t.child !== c
+                    ? ((i = t.child), (i.childLanes = 0), (i.pendingProps = C), (t.deletions = null))
+                    : ((i = tr(c, C)), (i.subtreeFlags = c.subtreeFlags & 14680064)),
+                N !== null ? (d = tr(N, d)) : ((d = Er(d, x, s, null)), (d.flags |= 2)),
+                (d.return = t),
+                (i.return = t),
+                (i.sibling = d),
+                (t.child = i),
+                (i = d),
+                (d = t.child),
+                (x = e.child.memoizedState),
+                (x = x === null ? Io(s) : { baseLanes: x.baseLanes | s, cachePool: null, transitions: x.transitions }),
+                (d.memoizedState = x),
+                (d.childLanes = e.childLanes & ~s),
+                (t.memoizedState = Oo),
+                i
+            );
+        }
+        return (
+            (d = e.child),
+            (e = d.sibling),
+            (i = tr(d, { mode: "visible", children: i.children })),
+            (t.mode & 1) === 0 && (i.lanes = s),
+            (i.return = t),
+            (i.sibling = null),
+            e !== null && ((s = t.deletions), s === null ? ((t.deletions = [e]), (t.flags |= 16)) : s.push(e)),
+            (t.child = i),
+            (t.memoizedState = null),
+            i
+        );
+    }
+    function Mo(e, t) {
+        return (t = Sl({ mode: "visible", children: t }, e.mode, 0, null)), (t.return = e), (e.child = t);
+    }
+    function fl(e, t, s, i) {
+        return (
+            i !== null && uo(i),
+            Jr(t, e.child, null, s),
+            (e = Mo(t, t.pendingProps.children)),
+            (e.flags |= 2),
+            (t.memoizedState = null),
+            e
+        );
+    }
+    function og(e, t, s, i, c, d, x) {
+        if (s)
+            return t.flags & 256
+                ? ((t.flags &= -257), (i = Ao(Error(l(422)))), fl(e, t, x, i))
+                : t.memoizedState !== null
+                  ? ((t.child = e.child), (t.flags |= 128), null)
+                  : ((d = i.fallback),
+                    (c = t.mode),
+                    (i = Sl({ mode: "visible", children: i.children }, c, 0, null)),
+                    (d = Er(d, c, x, null)),
+                    (d.flags |= 2),
+                    (i.return = t),
+                    (d.return = t),
+                    (i.sibling = d),
+                    (t.child = i),
+                    (t.mode & 1) !== 0 && Jr(t, e.child, null, x),
+                    (t.child.memoizedState = Io(x)),
+                    (t.memoizedState = Oo),
+                    d);
+        if ((t.mode & 1) === 0) return fl(e, t, x, null);
+        if (c.data === "$!") {
+            if (((i = c.nextSibling && c.nextSibling.dataset), i)) var N = i.dgst;
+            return (i = N), (d = Error(l(419))), (i = Ao(d, i, void 0)), fl(e, t, x, i);
+        }
+        if (((N = (x & e.childLanes) !== 0), At || N)) {
+            if (((i = ut), i !== null)) {
+                switch (x & -x) {
+                    case 4:
+                        c = 2;
+                        break;
+                    case 16:
+                        c = 8;
+                        break;
+                    case 64:
+                    case 128:
+                    case 256:
+                    case 512:
+                    case 1024:
+                    case 2048:
+                    case 4096:
+                    case 8192:
+                    case 16384:
+                    case 32768:
+                    case 65536:
+                    case 131072:
+                    case 262144:
+                    case 524288:
+                    case 1048576:
+                    case 2097152:
+                    case 4194304:
+                    case 8388608:
+                    case 16777216:
+                    case 33554432:
+                    case 67108864:
+                        c = 32;
+                        break;
+                    case 536870912:
+                        c = 268435456;
+                        break;
+                    default:
+                        c = 0;
+                }
+                (c = (c & (i.suspendedLanes | x)) !== 0 ? 0 : c),
+                    c !== 0 && c !== d.retryLane && ((d.retryLane = c), Pn(e, c), cn(i, e, c, -1));
+            }
+            return ec(), (i = Ao(Error(l(421)))), fl(e, t, x, i);
+        }
+        return c.data === "$?"
+            ? ((t.flags |= 128), (t.child = e.child), (t = bg.bind(null, e)), (c._reactRetry = t), null)
+            : ((e = d.treeContext),
+              (Ut = qn(c.nextSibling)),
+              (Dt = t),
+              (Qe = !0),
+              (sn = null),
+              e !== null &&
+                  ((Vt[Qt++] = Tn), (Vt[Qt++] = En), (Vt[Qt++] = vr), (Tn = e.id), (En = e.overflow), (vr = t)),
+              (t = Mo(t, i.children)),
+              (t.flags |= 4096),
+              t);
+    }
+    function pf(e, t, s) {
+        e.lanes |= t;
+        var i = e.alternate;
+        i !== null && (i.lanes |= t), ho(e.return, t, s);
+    }
+    function Do(e, t, s, i, c) {
+        var d = e.memoizedState;
+        d === null
+            ? (e.memoizedState = {
+                  isBackwards: t,
+                  rendering: null,
+                  renderingStartTime: 0,
+                  last: i,
+                  tail: s,
+                  tailMode: c,
+              })
+            : ((d.isBackwards = t),
+              (d.rendering = null),
+              (d.renderingStartTime = 0),
+              (d.last = i),
+              (d.tail = s),
+              (d.tailMode = c));
+    }
+    function hf(e, t, s) {
+        var i = t.pendingProps,
+            c = i.revealOrder,
+            d = i.tail;
+        if ((Nt(e, t, i.children, s), (i = Ye.current), (i & 2) !== 0)) (i = (i & 1) | 2), (t.flags |= 128);
+        else {
+            if (e !== null && (e.flags & 128) !== 0)
+                e: for (e = t.child; e !== null; ) {
+                    if (e.tag === 13) e.memoizedState !== null && pf(e, s, t);
+                    else if (e.tag === 19) pf(e, s, t);
+                    else if (e.child !== null) {
+                        (e.child.return = e), (e = e.child);
+                        continue;
+                    }
+                    if (e === t) break e;
+                    for (; e.sibling === null; ) {
+                        if (e.return === null || e.return === t) break e;
+                        e = e.return;
+                    }
+                    (e.sibling.return = e.return), (e = e.sibling);
+                }
+            i &= 1;
+        }
+        if ((qe(Ye, i), (t.mode & 1) === 0)) t.memoizedState = null;
+        else
+            switch (c) {
+                case "forwards":
+                    for (s = t.child, c = null; s !== null; )
+                        (e = s.alternate), e !== null && al(e) === null && (c = s), (s = s.sibling);
+                    (s = c),
+                        s === null ? ((c = t.child), (t.child = null)) : ((c = s.sibling), (s.sibling = null)),
+                        Do(t, !1, c, s, d);
+                    break;
+                case "backwards":
+                    for (s = null, c = t.child, t.child = null; c !== null; ) {
+                        if (((e = c.alternate), e !== null && al(e) === null)) {
+                            t.child = c;
+                            break;
+                        }
+                        (e = c.sibling), (c.sibling = s), (s = c), (c = e);
+                    }
+                    Do(t, !0, s, null, d);
+                    break;
+                case "together":
+                    Do(t, !1, null, null, void 0);
+                    break;
+                default:
+                    t.memoizedState = null;
+            }
+        return t.child;
+    }
+    function ml(e, t) {
+        (t.mode & 1) === 0 && e !== null && ((e.alternate = null), (t.alternate = null), (t.flags |= 2));
+    }
+    function _n(e, t, s) {
+        if ((e !== null && (t.dependencies = e.dependencies), (Nr |= t.lanes), (s & t.childLanes) === 0)) return null;
+        if (e !== null && t.child !== e.child) throw Error(l(153));
+        if (t.child !== null) {
+            for (e = t.child, s = tr(e, e.pendingProps), t.child = s, s.return = t; e.sibling !== null; )
+                (e = e.sibling), (s = s.sibling = tr(e, e.pendingProps)), (s.return = t);
+            s.sibling = null;
+        }
+        return t.child;
+    }
+    function cg(e, t, s) {
+        switch (t.tag) {
+            case 3:
+                df(t), Gr();
+                break;
+            case 5:
+                Ed(t);
+                break;
+            case 1:
+                _t(t.type) && Ya(t);
+                break;
+            case 4:
+                yo(t, t.stateNode.containerInfo);
+                break;
+            case 10:
+                var i = t.type._context,
+                    c = t.memoizedProps.value;
+                qe(tl, i._currentValue), (i._currentValue = c);
+                break;
+            case 13:
+                if (((i = t.memoizedState), i !== null))
+                    return i.dehydrated !== null
+                        ? (qe(Ye, Ye.current & 1), (t.flags |= 128), null)
+                        : (s & t.child.childLanes) !== 0
+                          ? mf(e, t, s)
+                          : (qe(Ye, Ye.current & 1), (e = _n(e, t, s)), e !== null ? e.sibling : null);
+                qe(Ye, Ye.current & 1);
+                break;
+            case 19:
+                if (((i = (s & t.childLanes) !== 0), (e.flags & 128) !== 0)) {
+                    if (i) return hf(e, t, s);
+                    t.flags |= 128;
+                }
+                if (
+                    ((c = t.memoizedState),
+                    c !== null && ((c.rendering = null), (c.tail = null), (c.lastEffect = null)),
+                    qe(Ye, Ye.current),
+                    i)
+                )
+                    break;
+                return null;
+            case 22:
+            case 23:
+                return (t.lanes = 0), of(e, t, s);
+        }
+        return _n(e, t, s);
+    }
+    var xf, Uo, gf, yf;
+    (xf = function (e, t) {
+        for (var s = t.child; s !== null; ) {
+            if (s.tag === 5 || s.tag === 6) e.appendChild(s.stateNode);
+            else if (s.tag !== 4 && s.child !== null) {
+                (s.child.return = s), (s = s.child);
+                continue;
+            }
+            if (s === t) break;
+            for (; s.sibling === null; ) {
+                if (s.return === null || s.return === t) return;
+                s = s.return;
+            }
+            (s.sibling.return = s.return), (s = s.sibling);
+        }
+    }),
+        (Uo = function () {}),
+        (gf = function (e, t, s, i) {
+            var c = e.memoizedProps;
+            if (c !== i) {
+                (e = t.stateNode), jr(yn.current);
+                var d = null;
+                switch (s) {
+                    case "input":
+                        (c = Ke(e, c)), (i = Ke(e, i)), (d = []);
+                        break;
+                    case "select":
+                        (c = G({}, c, { value: void 0 })), (i = G({}, i, { value: void 0 })), (d = []);
+                        break;
+                    case "textarea":
+                        (c = tn(e, c)), (i = tn(e, i)), (d = []);
+                        break;
+                    default:
+                        typeof c.onClick != "function" && typeof i.onClick == "function" && (e.onclick = Va);
+                }
+                ws(s, i);
+                var x;
+                s = null;
+                for (L in c)
+                    if (!i.hasOwnProperty(L) && c.hasOwnProperty(L) && c[L] != null)
+                        if (L === "style") {
+                            var N = c[L];
+                            for (x in N) N.hasOwnProperty(x) && (s || (s = {}), (s[x] = ""));
+                        } else
+                            L !== "dangerouslySetInnerHTML" &&
+                                L !== "children" &&
+                                L !== "suppressContentEditableWarning" &&
+                                L !== "suppressHydrationWarning" &&
+                                L !== "autoFocus" &&
+                                (u.hasOwnProperty(L) ? d || (d = []) : (d = d || []).push(L, null));
+                for (L in i) {
+                    var C = i[L];
+                    if (((N = c != null ? c[L] : void 0), i.hasOwnProperty(L) && C !== N && (C != null || N != null)))
+                        if (L === "style")
+                            if (N) {
+                                for (x in N)
+                                    !N.hasOwnProperty(x) || (C && C.hasOwnProperty(x)) || (s || (s = {}), (s[x] = ""));
+                                for (x in C) C.hasOwnProperty(x) && N[x] !== C[x] && (s || (s = {}), (s[x] = C[x]));
+                            } else s || (d || (d = []), d.push(L, s)), (s = C);
+                        else
+                            L === "dangerouslySetInnerHTML"
+                                ? ((C = C ? C.__html : void 0),
+                                  (N = N ? N.__html : void 0),
+                                  C != null && N !== C && (d = d || []).push(L, C))
+                                : L === "children"
+                                  ? (typeof C != "string" && typeof C != "number") || (d = d || []).push(L, "" + C)
+                                  : L !== "suppressContentEditableWarning" &&
+                                    L !== "suppressHydrationWarning" &&
+                                    (u.hasOwnProperty(L)
+                                        ? (C != null && L === "onScroll" && We("scroll", e), d || N === C || (d = []))
+                                        : (d = d || []).push(L, C));
+                }
+                s && (d = d || []).push("style", s);
+                var L = d;
+                (t.updateQueue = L) && (t.flags |= 4);
+            }
+        }),
+        (yf = function (e, t, s, i) {
+            s !== i && (t.flags |= 4);
+        });
+    function Zs(e, t) {
+        if (!Qe)
+            switch (e.tailMode) {
+                case "hidden":
+                    t = e.tail;
+                    for (var s = null; t !== null; ) t.alternate !== null && (s = t), (t = t.sibling);
+                    s === null ? (e.tail = null) : (s.sibling = null);
+                    break;
+                case "collapsed":
+                    s = e.tail;
+                    for (var i = null; s !== null; ) s.alternate !== null && (i = s), (s = s.sibling);
+                    i === null
+                        ? t || e.tail === null
+                            ? (e.tail = null)
+                            : (e.tail.sibling = null)
+                        : (i.sibling = null);
+            }
+    }
+    function wt(e) {
+        var t = e.alternate !== null && e.alternate.child === e.child,
+            s = 0,
+            i = 0;
+        if (t)
+            for (var c = e.child; c !== null; )
+                (s |= c.lanes | c.childLanes),
+                    (i |= c.subtreeFlags & 14680064),
+                    (i |= c.flags & 14680064),
+                    (c.return = e),
+                    (c = c.sibling);
+        else
+            for (c = e.child; c !== null; )
+                (s |= c.lanes | c.childLanes), (i |= c.subtreeFlags), (i |= c.flags), (c.return = e), (c = c.sibling);
+        return (e.subtreeFlags |= i), (e.childLanes = s), t;
+    }
+    function ug(e, t, s) {
+        var i = t.pendingProps;
+        switch ((io(t), t.tag)) {
+            case 2:
+            case 16:
+            case 15:
+            case 0:
+            case 11:
+            case 7:
+            case 8:
+            case 12:
+            case 9:
+            case 14:
+                return wt(t), null;
+            case 1:
+                return _t(t.type) && Ka(), wt(t), null;
+            case 3:
+                return (
+                    (i = t.stateNode),
+                    es(),
+                    Ve(Rt),
+                    Ve(yt),
+                    bo(),
+                    i.pendingContext && ((i.context = i.pendingContext), (i.pendingContext = null)),
+                    (e === null || e.child === null) &&
+                        (Za(t)
+                            ? (t.flags |= 4)
+                            : e === null ||
+                              (e.memoizedState.isDehydrated && (t.flags & 256) === 0) ||
+                              ((t.flags |= 1024), sn !== null && (Jo(sn), (sn = null)))),
+                    Uo(e, t),
+                    wt(t),
+                    null
+                );
+            case 5:
+                vo(t);
+                var c = jr(Ks.current);
+                if (((s = t.type), e !== null && t.stateNode != null))
+                    gf(e, t, s, i, c), e.ref !== t.ref && ((t.flags |= 512), (t.flags |= 2097152));
+                else {
+                    if (!i) {
+                        if (t.stateNode === null) throw Error(l(166));
+                        return wt(t), null;
+                    }
+                    if (((e = jr(yn.current)), Za(t))) {
+                        (i = t.stateNode), (s = t.type);
+                        var d = t.memoizedProps;
+                        switch (((i[gn] = t), (i[Hs] = d), (e = (t.mode & 1) !== 0), s)) {
+                            case "dialog":
+                                We("cancel", i), We("close", i);
+                                break;
+                            case "iframe":
+                            case "object":
+                            case "embed":
+                                We("load", i);
+                                break;
+                            case "video":
+                            case "audio":
+                                for (c = 0; c < Us.length; c++) We(Us[c], i);
+                                break;
+                            case "source":
+                                We("error", i);
+                                break;
+                            case "img":
+                            case "image":
+                            case "link":
+                                We("error", i), We("load", i);
+                                break;
+                            case "details":
+                                We("toggle", i);
+                                break;
+                            case "input":
+                                de(i, d), We("invalid", i);
+                                break;
+                            case "select":
+                                (i._wrapperState = { wasMultiple: !!d.multiple }), We("invalid", i);
+                                break;
+                            case "textarea":
+                                pr(i, d), We("invalid", i);
+                        }
+                        ws(s, d), (c = null);
+                        for (var x in d)
+                            if (d.hasOwnProperty(x)) {
+                                var N = d[x];
+                                x === "children"
+                                    ? typeof N == "string"
+                                        ? i.textContent !== N &&
+                                          (d.suppressHydrationWarning !== !0 && Wa(i.textContent, N, e),
+                                          (c = ["children", N]))
+                                        : typeof N == "number" &&
+                                          i.textContent !== "" + N &&
+                                          (d.suppressHydrationWarning !== !0 && Wa(i.textContent, N, e),
+                                          (c = ["children", "" + N]))
+                                    : u.hasOwnProperty(x) && N != null && x === "onScroll" && We("scroll", i);
+                            }
+                        switch (s) {
+                            case "input":
+                                je(i), Et(i, d, !0);
+                                break;
+                            case "textarea":
+                                je(i), Ae(i);
+                                break;
+                            case "select":
+                            case "option":
+                                break;
+                            default:
+                                typeof d.onClick == "function" && (i.onclick = Va);
+                        }
+                        (i = c), (t.updateQueue = i), i !== null && (t.flags |= 4);
+                    } else {
+                        (x = c.nodeType === 9 ? c : c.ownerDocument),
+                            e === "http://www.w3.org/1999/xhtml" && (e = Le(s)),
+                            e === "http://www.w3.org/1999/xhtml"
+                                ? s === "script"
+                                    ? ((e = x.createElement("div")),
+                                      (e.innerHTML = "<script></script>"),
+                                      (e = e.removeChild(e.firstChild)))
+                                    : typeof i.is == "string"
+                                      ? (e = x.createElement(s, { is: i.is }))
+                                      : ((e = x.createElement(s)),
+                                        s === "select" &&
+                                            ((x = e), i.multiple ? (x.multiple = !0) : i.size && (x.size = i.size)))
+                                : (e = x.createElementNS(e, s)),
+                            (e[gn] = t),
+                            (e[Hs] = i),
+                            xf(e, t, !1, !1),
+                            (t.stateNode = e);
+                        e: {
+                            switch (((x = bs(s, i)), s)) {
+                                case "dialog":
+                                    We("cancel", e), We("close", e), (c = i);
+                                    break;
+                                case "iframe":
+                                case "object":
+                                case "embed":
+                                    We("load", e), (c = i);
+                                    break;
+                                case "video":
+                                case "audio":
+                                    for (c = 0; c < Us.length; c++) We(Us[c], e);
+                                    c = i;
+                                    break;
+                                case "source":
+                                    We("error", e), (c = i);
+                                    break;
+                                case "img":
+                                case "image":
+                                case "link":
+                                    We("error", e), We("load", e), (c = i);
+                                    break;
+                                case "details":
+                                    We("toggle", e), (c = i);
+                                    break;
+                                case "input":
+                                    de(e, i), (c = Ke(e, i)), We("invalid", e);
+                                    break;
+                                case "option":
+                                    c = i;
+                                    break;
+                                case "select":
+                                    (e._wrapperState = { wasMultiple: !!i.multiple }),
+                                        (c = G({}, i, { value: void 0 })),
+                                        We("invalid", e);
+                                    break;
+                                case "textarea":
+                                    pr(e, i), (c = tn(e, i)), We("invalid", e);
+                                    break;
+                                default:
+                                    c = i;
+                            }
+                            ws(s, c), (N = c);
+                            for (d in N)
+                                if (N.hasOwnProperty(d)) {
+                                    var C = N[d];
+                                    d === "style"
+                                        ? Ir(e, C)
+                                        : d === "dangerouslySetInnerHTML"
+                                          ? ((C = C ? C.__html : void 0), C != null && Or(e, C))
+                                          : d === "children"
+                                            ? typeof C == "string"
+                                                ? (s !== "textarea" || C !== "") && qt(e, C)
+                                                : typeof C == "number" && qt(e, "" + C)
+                                            : d !== "suppressContentEditableWarning" &&
+                                              d !== "suppressHydrationWarning" &&
+                                              d !== "autoFocus" &&
+                                              (u.hasOwnProperty(d)
+                                                  ? C != null && d === "onScroll" && We("scroll", e)
+                                                  : C != null && A(e, d, C, x));
+                                }
+                            switch (s) {
+                                case "input":
+                                    je(e), Et(e, i, !1);
+                                    break;
+                                case "textarea":
+                                    je(e), Ae(e);
+                                    break;
+                                case "option":
+                                    i.value != null && e.setAttribute("value", "" + Se(i.value));
+                                    break;
+                                case "select":
+                                    (e.multiple = !!i.multiple),
+                                        (d = i.value),
+                                        d != null
+                                            ? He(e, !!i.multiple, d, !1)
+                                            : i.defaultValue != null && He(e, !!i.multiple, i.defaultValue, !0);
+                                    break;
+                                default:
+                                    typeof c.onClick == "function" && (e.onclick = Va);
+                            }
+                            switch (s) {
+                                case "button":
+                                case "input":
+                                case "select":
+                                case "textarea":
+                                    i = !!i.autoFocus;
+                                    break e;
+                                case "img":
+                                    i = !0;
+                                    break e;
+                                default:
+                                    i = !1;
+                            }
+                        }
+                        i && (t.flags |= 4);
+                    }
+                    t.ref !== null && ((t.flags |= 512), (t.flags |= 2097152));
+                }
+                return wt(t), null;
+            case 6:
+                if (e && t.stateNode != null) yf(e, t, e.memoizedProps, i);
+                else {
+                    if (typeof i != "string" && t.stateNode === null) throw Error(l(166));
+                    if (((s = jr(Ks.current)), jr(yn.current), Za(t))) {
+                        if (
+                            ((i = t.stateNode),
+                            (s = t.memoizedProps),
+                            (i[gn] = t),
+                            (d = i.nodeValue !== s) && ((e = Dt), e !== null))
+                        )
+                            switch (e.tag) {
+                                case 3:
+                                    Wa(i.nodeValue, s, (e.mode & 1) !== 0);
+                                    break;
+                                case 5:
+                                    e.memoizedProps.suppressHydrationWarning !== !0 &&
+                                        Wa(i.nodeValue, s, (e.mode & 1) !== 0);
+                            }
+                        d && (t.flags |= 4);
+                    } else
+                        (i = (s.nodeType === 9 ? s : s.ownerDocument).createTextNode(i)),
+                            (i[gn] = t),
+                            (t.stateNode = i);
+                }
+                return wt(t), null;
+            case 13:
+                if (
+                    (Ve(Ye),
+                    (i = t.memoizedState),
+                    e === null || (e.memoizedState !== null && e.memoizedState.dehydrated !== null))
+                ) {
+                    if (Qe && Ut !== null && (t.mode & 1) !== 0 && (t.flags & 128) === 0)
+                        wd(), Gr(), (t.flags |= 98560), (d = !1);
+                    else if (((d = Za(t)), i !== null && i.dehydrated !== null)) {
+                        if (e === null) {
+                            if (!d) throw Error(l(318));
+                            if (((d = t.memoizedState), (d = d !== null ? d.dehydrated : null), !d))
+                                throw Error(l(317));
+                            d[gn] = t;
+                        } else Gr(), (t.flags & 128) === 0 && (t.memoizedState = null), (t.flags |= 4);
+                        wt(t), (d = !1);
+                    } else sn !== null && (Jo(sn), (sn = null)), (d = !0);
+                    if (!d) return t.flags & 65536 ? t : null;
+                }
+                return (t.flags & 128) !== 0
+                    ? ((t.lanes = s), t)
+                    : ((i = i !== null),
+                      i !== (e !== null && e.memoizedState !== null) &&
+                          i &&
+                          ((t.child.flags |= 8192),
+                          (t.mode & 1) !== 0 && (e === null || (Ye.current & 1) !== 0 ? it === 0 && (it = 3) : ec())),
+                      t.updateQueue !== null && (t.flags |= 4),
+                      wt(t),
+                      null);
+            case 4:
+                return es(), Uo(e, t), e === null && Bs(t.stateNode.containerInfo), wt(t), null;
+            case 10:
+                return po(t.type._context), wt(t), null;
+            case 17:
+                return _t(t.type) && Ka(), wt(t), null;
+            case 19:
+                if ((Ve(Ye), (d = t.memoizedState), d === null)) return wt(t), null;
+                if (((i = (t.flags & 128) !== 0), (x = d.rendering), x === null))
+                    if (i) Zs(d, !1);
+                    else {
+                        if (it !== 0 || (e !== null && (e.flags & 128) !== 0))
+                            for (e = t.child; e !== null; ) {
+                                if (((x = al(e)), x !== null)) {
+                                    for (
+                                        t.flags |= 128,
+                                            Zs(d, !1),
+                                            i = x.updateQueue,
+                                            i !== null && ((t.updateQueue = i), (t.flags |= 4)),
+                                            t.subtreeFlags = 0,
+                                            i = s,
+                                            s = t.child;
+                                        s !== null;
+
+                                    )
+                                        (d = s),
+                                            (e = i),
+                                            (d.flags &= 14680066),
+                                            (x = d.alternate),
+                                            x === null
+                                                ? ((d.childLanes = 0),
+                                                  (d.lanes = e),
+                                                  (d.child = null),
+                                                  (d.subtreeFlags = 0),
+                                                  (d.memoizedProps = null),
+                                                  (d.memoizedState = null),
+                                                  (d.updateQueue = null),
+                                                  (d.dependencies = null),
+                                                  (d.stateNode = null))
+                                                : ((d.childLanes = x.childLanes),
+                                                  (d.lanes = x.lanes),
+                                                  (d.child = x.child),
+                                                  (d.subtreeFlags = 0),
+                                                  (d.deletions = null),
+                                                  (d.memoizedProps = x.memoizedProps),
+                                                  (d.memoizedState = x.memoizedState),
+                                                  (d.updateQueue = x.updateQueue),
+                                                  (d.type = x.type),
+                                                  (e = x.dependencies),
+                                                  (d.dependencies =
+                                                      e === null
+                                                          ? null
+                                                          : { lanes: e.lanes, firstContext: e.firstContext })),
+                                            (s = s.sibling);
+                                    return qe(Ye, (Ye.current & 1) | 2), t.child;
+                                }
+                                e = e.sibling;
+                            }
+                        d.tail !== null && et() > ss && ((t.flags |= 128), (i = !0), Zs(d, !1), (t.lanes = 4194304));
+                    }
+                else {
+                    if (!i)
+                        if (((e = al(x)), e !== null)) {
+                            if (
+                                ((t.flags |= 128),
+                                (i = !0),
+                                (s = e.updateQueue),
+                                s !== null && ((t.updateQueue = s), (t.flags |= 4)),
+                                Zs(d, !0),
+                                d.tail === null && d.tailMode === "hidden" && !x.alternate && !Qe)
+                            )
+                                return wt(t), null;
+                        } else
+                            2 * et() - d.renderingStartTime > ss &&
+                                s !== 1073741824 &&
+                                ((t.flags |= 128), (i = !0), Zs(d, !1), (t.lanes = 4194304));
+                    d.isBackwards
+                        ? ((x.sibling = t.child), (t.child = x))
+                        : ((s = d.last), s !== null ? (s.sibling = x) : (t.child = x), (d.last = x));
+                }
+                return d.tail !== null
+                    ? ((t = d.tail),
+                      (d.rendering = t),
+                      (d.tail = t.sibling),
+                      (d.renderingStartTime = et()),
+                      (t.sibling = null),
+                      (s = Ye.current),
+                      qe(Ye, i ? (s & 1) | 2 : s & 1),
+                      t)
+                    : (wt(t), null);
+            case 22:
+            case 23:
+                return (
+                    Zo(),
+                    (i = t.memoizedState !== null),
+                    e !== null && (e.memoizedState !== null) !== i && (t.flags |= 8192),
+                    i && (t.mode & 1) !== 0
+                        ? (Bt & 1073741824) !== 0 && (wt(t), t.subtreeFlags & 6 && (t.flags |= 8192))
+                        : wt(t),
+                    null
+                );
+            case 24:
+                return null;
+            case 25:
+                return null;
+        }
+        throw Error(l(156, t.tag));
+    }
+    function dg(e, t) {
+        switch ((io(t), t.tag)) {
+            case 1:
+                return _t(t.type) && Ka(), (e = t.flags), e & 65536 ? ((t.flags = (e & -65537) | 128), t) : null;
+            case 3:
+                return (
+                    es(),
+                    Ve(Rt),
+                    Ve(yt),
+                    bo(),
+                    (e = t.flags),
+                    (e & 65536) !== 0 && (e & 128) === 0 ? ((t.flags = (e & -65537) | 128), t) : null
+                );
+            case 5:
+                return vo(t), null;
+            case 13:
+                if ((Ve(Ye), (e = t.memoizedState), e !== null && e.dehydrated !== null)) {
+                    if (t.alternate === null) throw Error(l(340));
+                    Gr();
+                }
+                return (e = t.flags), e & 65536 ? ((t.flags = (e & -65537) | 128), t) : null;
+            case 19:
+                return Ve(Ye), null;
+            case 4:
+                return es(), null;
+            case 10:
+                return po(t.type._context), null;
+            case 22:
+            case 23:
+                return Zo(), null;
+            case 24:
+                return null;
+            default:
+                return null;
+        }
+    }
+    var pl = !1,
+        bt = !1,
+        fg = typeof WeakSet == "function" ? WeakSet : Set,
+        me = null;
+    function ns(e, t) {
+        var s = e.ref;
+        if (s !== null)
+            if (typeof s == "function")
+                try {
+                    s(null);
+                } catch (i) {
+                    Je(e, t, i);
+                }
+            else s.current = null;
+    }
+    function Bo(e, t, s) {
+        try {
+            s();
+        } catch (i) {
+            Je(e, t, i);
+        }
+    }
+    var vf = !1;
+    function mg(e, t) {
+        if (((Xi = za), (e = Gu()), qi(e))) {
+            if ("selectionStart" in e) var s = { start: e.selectionStart, end: e.selectionEnd };
+            else
+                e: {
+                    s = ((s = e.ownerDocument) && s.defaultView) || window;
+                    var i = s.getSelection && s.getSelection();
+                    if (i && i.rangeCount !== 0) {
+                        s = i.anchorNode;
+                        var c = i.anchorOffset,
+                            d = i.focusNode;
+                        i = i.focusOffset;
+                        try {
+                            s.nodeType, d.nodeType;
+                        } catch {
+                            s = null;
+                            break e;
+                        }
+                        var x = 0,
+                            N = -1,
+                            C = -1,
+                            L = 0,
+                            V = 0,
+                            Q = e,
+                            W = null;
+                        t: for (;;) {
+                            for (
+                                var ce;
+                                Q !== s || (c !== 0 && Q.nodeType !== 3) || (N = x + c),
+                                    Q !== d || (i !== 0 && Q.nodeType !== 3) || (C = x + i),
+                                    Q.nodeType === 3 && (x += Q.nodeValue.length),
+                                    (ce = Q.firstChild) !== null;
+
+                            )
+                                (W = Q), (Q = ce);
+                            for (;;) {
+                                if (Q === e) break t;
+                                if (
+                                    (W === s && ++L === c && (N = x),
+                                    W === d && ++V === i && (C = x),
+                                    (ce = Q.nextSibling) !== null)
+                                )
+                                    break;
+                                (Q = W), (W = Q.parentNode);
+                            }
+                            Q = ce;
+                        }
+                        s = N === -1 || C === -1 ? null : { start: N, end: C };
+                    } else s = null;
+                }
+            s = s || { start: 0, end: 0 };
+        } else s = null;
+        for (Zi = { focusedElem: e, selectionRange: s }, za = !1, me = t; me !== null; )
+            if (((t = me), (e = t.child), (t.subtreeFlags & 1028) !== 0 && e !== null)) (e.return = t), (me = e);
+            else
+                for (; me !== null; ) {
+                    t = me;
+                    try {
+                        var he = t.alternate;
+                        if ((t.flags & 1024) !== 0)
+                            switch (t.tag) {
+                                case 0:
+                                case 11:
+                                case 15:
+                                    break;
+                                case 1:
+                                    if (he !== null) {
+                                        var we = he.memoizedProps,
+                                            tt = he.memoizedState,
+                                            R = t.stateNode,
+                                            P = R.getSnapshotBeforeUpdate(
+                                                t.elementType === t.type ? we : an(t.type, we),
+                                                tt
+                                            );
+                                        R.__reactInternalSnapshotBeforeUpdate = P;
+                                    }
+                                    break;
+                                case 3:
+                                    var _ = t.stateNode.containerInfo;
+                                    _.nodeType === 1
+                                        ? (_.textContent = "")
+                                        : _.nodeType === 9 && _.documentElement && _.removeChild(_.documentElement);
+                                    break;
+                                case 5:
+                                case 6:
+                                case 4:
+                                case 17:
+                                    break;
+                                default:
+                                    throw Error(l(163));
+                            }
+                    } catch (J) {
+                        Je(t, t.return, J);
+                    }
+                    if (((e = t.sibling), e !== null)) {
+                        (e.return = t.return), (me = e);
+                        break;
+                    }
+                    me = t.return;
+                }
+        return (he = vf), (vf = !1), he;
+    }
+    function ea(e, t, s) {
+        var i = t.updateQueue;
+        if (((i = i !== null ? i.lastEffect : null), i !== null)) {
+            var c = (i = i.next);
+            do {
+                if ((c.tag & e) === e) {
+                    var d = c.destroy;
+                    (c.destroy = void 0), d !== void 0 && Bo(t, s, d);
+                }
+                c = c.next;
+            } while (c !== i);
+        }
+    }
+    function hl(e, t) {
+        if (((t = t.updateQueue), (t = t !== null ? t.lastEffect : null), t !== null)) {
+            var s = (t = t.next);
+            do {
+                if ((s.tag & e) === e) {
+                    var i = s.create;
+                    s.destroy = i();
+                }
+                s = s.next;
+            } while (s !== t);
+        }
+    }
+    function $o(e) {
+        var t = e.ref;
+        if (t !== null) {
+            var s = e.stateNode;
+            switch (e.tag) {
+                case 5:
+                    e = s;
+                    break;
+                default:
+                    e = s;
+            }
+            typeof t == "function" ? t(e) : (t.current = e);
+        }
+    }
+    function wf(e) {
+        var t = e.alternate;
+        t !== null && ((e.alternate = null), wf(t)),
+            (e.child = null),
+            (e.deletions = null),
+            (e.sibling = null),
+            e.tag === 5 &&
+                ((t = e.stateNode),
+                t !== null && (delete t[gn], delete t[Hs], delete t[ro], delete t[Yx], delete t[Gx])),
+            (e.stateNode = null),
+            (e.return = null),
+            (e.dependencies = null),
+            (e.memoizedProps = null),
+            (e.memoizedState = null),
+            (e.pendingProps = null),
+            (e.stateNode = null),
+            (e.updateQueue = null);
+    }
+    function bf(e) {
+        return e.tag === 5 || e.tag === 3 || e.tag === 4;
+    }
+    function jf(e) {
+        e: for (;;) {
+            for (; e.sibling === null; ) {
+                if (e.return === null || bf(e.return)) return null;
+                e = e.return;
+            }
+            for (e.sibling.return = e.return, e = e.sibling; e.tag !== 5 && e.tag !== 6 && e.tag !== 18; ) {
+                if (e.flags & 2 || e.child === null || e.tag === 4) continue e;
+                (e.child.return = e), (e = e.child);
+            }
+            if (!(e.flags & 2)) return e.stateNode;
+        }
+    }
+    function Ho(e, t, s) {
+        var i = e.tag;
+        if (i === 5 || i === 6)
+            (e = e.stateNode),
+                t
+                    ? s.nodeType === 8
+                        ? s.parentNode.insertBefore(e, t)
+                        : s.insertBefore(e, t)
+                    : (s.nodeType === 8 ? ((t = s.parentNode), t.insertBefore(e, s)) : ((t = s), t.appendChild(e)),
+                      (s = s._reactRootContainer),
+                      s != null || t.onclick !== null || (t.onclick = Va));
+        else if (i !== 4 && ((e = e.child), e !== null))
+            for (Ho(e, t, s), e = e.sibling; e !== null; ) Ho(e, t, s), (e = e.sibling);
+    }
+    function qo(e, t, s) {
+        var i = e.tag;
+        if (i === 5 || i === 6) (e = e.stateNode), t ? s.insertBefore(e, t) : s.appendChild(e);
+        else if (i !== 4 && ((e = e.child), e !== null))
+            for (qo(e, t, s), e = e.sibling; e !== null; ) qo(e, t, s), (e = e.sibling);
+    }
+    var mt = null,
+        ln = !1;
+    function Gn(e, t, s) {
+        for (s = s.child; s !== null; ) kf(e, t, s), (s = s.sibling);
+    }
+    function kf(e, t, s) {
+        if (xn && typeof xn.onCommitFiberUnmount == "function")
+            try {
+                xn.onCommitFiberUnmount(Ea, s);
+            } catch {}
+        switch (s.tag) {
+            case 5:
+                bt || ns(s, t);
+            case 6:
+                var i = mt,
+                    c = ln;
+                (mt = null),
+                    Gn(e, t, s),
+                    (mt = i),
+                    (ln = c),
+                    mt !== null &&
+                        (ln
+                            ? ((e = mt),
+                              (s = s.stateNode),
+                              e.nodeType === 8 ? e.parentNode.removeChild(s) : e.removeChild(s))
+                            : mt.removeChild(s.stateNode));
+                break;
+            case 18:
+                mt !== null &&
+                    (ln
+                        ? ((e = mt),
+                          (s = s.stateNode),
+                          e.nodeType === 8 ? no(e.parentNode, s) : e.nodeType === 1 && no(e, s),
+                          As(e))
+                        : no(mt, s.stateNode));
+                break;
+            case 4:
+                (i = mt), (c = ln), (mt = s.stateNode.containerInfo), (ln = !0), Gn(e, t, s), (mt = i), (ln = c);
+                break;
+            case 0:
+            case 11:
+            case 14:
+            case 15:
+                if (!bt && ((i = s.updateQueue), i !== null && ((i = i.lastEffect), i !== null))) {
+                    c = i = i.next;
+                    do {
+                        var d = c,
+                            x = d.destroy;
+                        (d = d.tag), x !== void 0 && ((d & 2) !== 0 || (d & 4) !== 0) && Bo(s, t, x), (c = c.next);
+                    } while (c !== i);
+                }
+                Gn(e, t, s);
+                break;
+            case 1:
+                if (!bt && (ns(s, t), (i = s.stateNode), typeof i.componentWillUnmount == "function"))
+                    try {
+                        (i.props = s.memoizedProps), (i.state = s.memoizedState), i.componentWillUnmount();
+                    } catch (N) {
+                        Je(s, t, N);
+                    }
+                Gn(e, t, s);
+                break;
+            case 21:
+                Gn(e, t, s);
+                break;
+            case 22:
+                s.mode & 1 ? ((bt = (i = bt) || s.memoizedState !== null), Gn(e, t, s), (bt = i)) : Gn(e, t, s);
+                break;
+            default:
+                Gn(e, t, s);
+        }
+    }
+    function Nf(e) {
+        var t = e.updateQueue;
+        if (t !== null) {
+            e.updateQueue = null;
+            var s = e.stateNode;
+            s === null && (s = e.stateNode = new fg()),
+                t.forEach(function (i) {
+                    var c = jg.bind(null, e, i);
+                    s.has(i) || (s.add(i), i.then(c, c));
+                });
+        }
+    }
+    function on(e, t) {
+        var s = t.deletions;
+        if (s !== null)
+            for (var i = 0; i < s.length; i++) {
+                var c = s[i];
+                try {
+                    var d = e,
+                        x = t,
+                        N = x;
+                    e: for (; N !== null; ) {
+                        switch (N.tag) {
+                            case 5:
+                                (mt = N.stateNode), (ln = !1);
+                                break e;
+                            case 3:
+                                (mt = N.stateNode.containerInfo), (ln = !0);
+                                break e;
+                            case 4:
+                                (mt = N.stateNode.containerInfo), (ln = !0);
+                                break e;
+                        }
+                        N = N.return;
+                    }
+                    if (mt === null) throw Error(l(160));
+                    kf(d, x, c), (mt = null), (ln = !1);
+                    var C = c.alternate;
+                    C !== null && (C.return = null), (c.return = null);
+                } catch (L) {
+                    Je(c, t, L);
+                }
+            }
+        if (t.subtreeFlags & 12854) for (t = t.child; t !== null; ) Sf(t, e), (t = t.sibling);
+    }
+    function Sf(e, t) {
+        var s = e.alternate,
+            i = e.flags;
+        switch (e.tag) {
+            case 0:
+            case 11:
+            case 14:
+            case 15:
+                if ((on(t, e), wn(e), i & 4)) {
+                    try {
+                        ea(3, e, e.return), hl(3, e);
+                    } catch (we) {
+                        Je(e, e.return, we);
+                    }
+                    try {
+                        ea(5, e, e.return);
+                    } catch (we) {
+                        Je(e, e.return, we);
+                    }
+                }
+                break;
+            case 1:
+                on(t, e), wn(e), i & 512 && s !== null && ns(s, s.return);
+                break;
+            case 5:
+                if ((on(t, e), wn(e), i & 512 && s !== null && ns(s, s.return), e.flags & 32)) {
+                    var c = e.stateNode;
+                    try {
+                        qt(c, "");
+                    } catch (we) {
+                        Je(e, e.return, we);
+                    }
+                }
+                if (i & 4 && ((c = e.stateNode), c != null)) {
+                    var d = e.memoizedProps,
+                        x = s !== null ? s.memoizedProps : d,
+                        N = e.type,
+                        C = e.updateQueue;
+                    if (((e.updateQueue = null), C !== null))
+                        try {
+                            N === "input" && d.type === "radio" && d.name != null && Ne(c, d), bs(N, x);
+                            var L = bs(N, d);
+                            for (x = 0; x < C.length; x += 2) {
+                                var V = C[x],
+                                    Q = C[x + 1];
+                                V === "style"
+                                    ? Ir(c, Q)
+                                    : V === "dangerouslySetInnerHTML"
+                                      ? Or(c, Q)
+                                      : V === "children"
+                                        ? qt(c, Q)
+                                        : A(c, V, Q, L);
+                            }
+                            switch (N) {
+                                case "input":
+                                    Ie(c, d);
+                                    break;
+                                case "textarea":
+                                    hr(c, d);
+                                    break;
+                                case "select":
+                                    var W = c._wrapperState.wasMultiple;
+                                    c._wrapperState.wasMultiple = !!d.multiple;
+                                    var ce = d.value;
+                                    ce != null
+                                        ? He(c, !!d.multiple, ce, !1)
+                                        : W !== !!d.multiple &&
+                                          (d.defaultValue != null
+                                              ? He(c, !!d.multiple, d.defaultValue, !0)
+                                              : He(c, !!d.multiple, d.multiple ? [] : "", !1));
+                            }
+                            c[Hs] = d;
+                        } catch (we) {
+                            Je(e, e.return, we);
+                        }
+                }
+                break;
+            case 6:
+                if ((on(t, e), wn(e), i & 4)) {
+                    if (e.stateNode === null) throw Error(l(162));
+                    (c = e.stateNode), (d = e.memoizedProps);
+                    try {
+                        c.nodeValue = d;
+                    } catch (we) {
+                        Je(e, e.return, we);
+                    }
+                }
+                break;
+            case 3:
+                if ((on(t, e), wn(e), i & 4 && s !== null && s.memoizedState.isDehydrated))
+                    try {
+                        As(t.containerInfo);
+                    } catch (we) {
+                        Je(e, e.return, we);
+                    }
+                break;
+            case 4:
+                on(t, e), wn(e);
+                break;
+            case 13:
+                on(t, e),
+                    wn(e),
+                    (c = e.child),
+                    c.flags & 8192 &&
+                        ((d = c.memoizedState !== null),
+                        (c.stateNode.isHidden = d),
+                        !d || (c.alternate !== null && c.alternate.memoizedState !== null) || (Qo = et())),
+                    i & 4 && Nf(e);
+                break;
+            case 22:
+                if (
+                    ((V = s !== null && s.memoizedState !== null),
+                    e.mode & 1 ? ((bt = (L = bt) || V), on(t, e), (bt = L)) : on(t, e),
+                    wn(e),
+                    i & 8192)
+                ) {
+                    if (((L = e.memoizedState !== null), (e.stateNode.isHidden = L) && !V && (e.mode & 1) !== 0))
+                        for (me = e, V = e.child; V !== null; ) {
+                            for (Q = me = V; me !== null; ) {
+                                switch (((W = me), (ce = W.child), W.tag)) {
+                                    case 0:
+                                    case 11:
+                                    case 14:
+                                    case 15:
+                                        ea(4, W, W.return);
+                                        break;
+                                    case 1:
+                                        ns(W, W.return);
+                                        var he = W.stateNode;
+                                        if (typeof he.componentWillUnmount == "function") {
+                                            (i = W), (s = W.return);
+                                            try {
+                                                (t = i),
+                                                    (he.props = t.memoizedProps),
+                                                    (he.state = t.memoizedState),
+                                                    he.componentWillUnmount();
+                                            } catch (we) {
+                                                Je(i, s, we);
+                                            }
+                                        }
+                                        break;
+                                    case 5:
+                                        ns(W, W.return);
+                                        break;
+                                    case 22:
+                                        if (W.memoizedState !== null) {
+                                            Ef(Q);
+                                            continue;
+                                        }
+                                }
+                                ce !== null ? ((ce.return = W), (me = ce)) : Ef(Q);
+                            }
+                            V = V.sibling;
+                        }
+                    e: for (V = null, Q = e; ; ) {
+                        if (Q.tag === 5) {
+                            if (V === null) {
+                                V = Q;
+                                try {
+                                    (c = Q.stateNode),
+                                        L
+                                            ? ((d = c.style),
+                                              typeof d.setProperty == "function"
+                                                  ? d.setProperty("display", "none", "important")
+                                                  : (d.display = "none"))
+                                            : ((N = Q.stateNode),
+                                              (C = Q.memoizedProps.style),
+                                              (x = C != null && C.hasOwnProperty("display") ? C.display : null),
+                                              (N.style.display = ka("display", x)));
+                                } catch (we) {
+                                    Je(e, e.return, we);
+                                }
+                            }
+                        } else if (Q.tag === 6) {
+                            if (V === null)
+                                try {
+                                    Q.stateNode.nodeValue = L ? "" : Q.memoizedProps;
+                                } catch (we) {
+                                    Je(e, e.return, we);
+                                }
+                        } else if (
+                            ((Q.tag !== 22 && Q.tag !== 23) || Q.memoizedState === null || Q === e) &&
+                            Q.child !== null
+                        ) {
+                            (Q.child.return = Q), (Q = Q.child);
+                            continue;
+                        }
+                        if (Q === e) break e;
+                        for (; Q.sibling === null; ) {
+                            if (Q.return === null || Q.return === e) break e;
+                            V === Q && (V = null), (Q = Q.return);
+                        }
+                        V === Q && (V = null), (Q.sibling.return = Q.return), (Q = Q.sibling);
+                    }
+                }
+                break;
+            case 19:
+                on(t, e), wn(e), i & 4 && Nf(e);
+                break;
+            case 21:
+                break;
+            default:
+                on(t, e), wn(e);
+        }
+    }
+    function wn(e) {
+        var t = e.flags;
+        if (t & 2) {
+            try {
+                e: {
+                    for (var s = e.return; s !== null; ) {
+                        if (bf(s)) {
+                            var i = s;
+                            break e;
+                        }
+                        s = s.return;
+                    }
+                    throw Error(l(160));
+                }
+                switch (i.tag) {
+                    case 5:
+                        var c = i.stateNode;
+                        i.flags & 32 && (qt(c, ""), (i.flags &= -33));
+                        var d = jf(e);
+                        qo(e, d, c);
+                        break;
+                    case 3:
+                    case 4:
+                        var x = i.stateNode.containerInfo,
+                            N = jf(e);
+                        Ho(e, N, x);
+                        break;
+                    default:
+                        throw Error(l(161));
+                }
+            } catch (C) {
+                Je(e, e.return, C);
+            }
+            e.flags &= -3;
+        }
+        t & 4096 && (e.flags &= -4097);
+    }
+    function pg(e, t, s) {
+        (me = e), Cf(e);
+    }
+    function Cf(e, t, s) {
+        for (var i = (e.mode & 1) !== 0; me !== null; ) {
+            var c = me,
+                d = c.child;
+            if (c.tag === 22 && i) {
+                var x = c.memoizedState !== null || pl;
+                if (!x) {
+                    var N = c.alternate,
+                        C = (N !== null && N.memoizedState !== null) || bt;
+                    N = pl;
+                    var L = bt;
+                    if (((pl = x), (bt = C) && !L))
+                        for (me = c; me !== null; )
+                            (x = me),
+                                (C = x.child),
+                                x.tag === 22 && x.memoizedState !== null
+                                    ? Pf(c)
+                                    : C !== null
+                                      ? ((C.return = x), (me = C))
+                                      : Pf(c);
+                    for (; d !== null; ) (me = d), Cf(d), (d = d.sibling);
+                    (me = c), (pl = N), (bt = L);
+                }
+                Tf(e);
+            } else (c.subtreeFlags & 8772) !== 0 && d !== null ? ((d.return = c), (me = d)) : Tf(e);
+        }
+    }
+    function Tf(e) {
+        for (; me !== null; ) {
+            var t = me;
+            if ((t.flags & 8772) !== 0) {
+                var s = t.alternate;
+                try {
+                    if ((t.flags & 8772) !== 0)
+                        switch (t.tag) {
+                            case 0:
+                            case 11:
+                            case 15:
+                                bt || hl(5, t);
+                                break;
+                            case 1:
+                                var i = t.stateNode;
+                                if (t.flags & 4 && !bt)
+                                    if (s === null) i.componentDidMount();
+                                    else {
+                                        var c =
+                                            t.elementType === t.type ? s.memoizedProps : an(t.type, s.memoizedProps);
+                                        i.componentDidUpdate(c, s.memoizedState, i.__reactInternalSnapshotBeforeUpdate);
+                                    }
+                                var d = t.updateQueue;
+                                d !== null && Td(t, d, i);
+                                break;
+                            case 3:
+                                var x = t.updateQueue;
+                                if (x !== null) {
+                                    if (((s = null), t.child !== null))
+                                        switch (t.child.tag) {
+                                            case 5:
+                                                s = t.child.stateNode;
+                                                break;
+                                            case 1:
+                                                s = t.child.stateNode;
+                                        }
+                                    Td(t, x, s);
+                                }
+                                break;
+                            case 5:
+                                var N = t.stateNode;
+                                if (s === null && t.flags & 4) {
+                                    s = N;
+                                    var C = t.memoizedProps;
+                                    switch (t.type) {
+                                        case "button":
+                                        case "input":
+                                        case "select":
+                                        case "textarea":
+                                            C.autoFocus && s.focus();
+                                            break;
+                                        case "img":
+                                            C.src && (s.src = C.src);
+                                    }
+                                }
+                                break;
+                            case 6:
+                                break;
+                            case 4:
+                                break;
+                            case 12:
+                                break;
+                            case 13:
+                                if (t.memoizedState === null) {
+                                    var L = t.alternate;
+                                    if (L !== null) {
+                                        var V = L.memoizedState;
+                                        if (V !== null) {
+                                            var Q = V.dehydrated;
+                                            Q !== null && As(Q);
+                                        }
+                                    }
+                                }
+                                break;
+                            case 19:
+                            case 17:
+                            case 21:
+                            case 22:
+                            case 23:
+                            case 25:
+                                break;
+                            default:
+                                throw Error(l(163));
+                        }
+                    bt || (t.flags & 512 && $o(t));
+                } catch (W) {
+                    Je(t, t.return, W);
+                }
+            }
+            if (t === e) {
+                me = null;
+                break;
+            }
+            if (((s = t.sibling), s !== null)) {
+                (s.return = t.return), (me = s);
+                break;
+            }
+            me = t.return;
+        }
+    }
+    function Ef(e) {
+        for (; me !== null; ) {
+            var t = me;
+            if (t === e) {
+                me = null;
+                break;
+            }
+            var s = t.sibling;
+            if (s !== null) {
+                (s.return = t.return), (me = s);
+                break;
+            }
+            me = t.return;
+        }
+    }
+    function Pf(e) {
+        for (; me !== null; ) {
+            var t = me;
+            try {
+                switch (t.tag) {
+                    case 0:
+                    case 11:
+                    case 15:
+                        var s = t.return;
+                        try {
+                            hl(4, t);
+                        } catch (C) {
+                            Je(t, s, C);
+                        }
+                        break;
+                    case 1:
+                        var i = t.stateNode;
+                        if (typeof i.componentDidMount == "function") {
+                            var c = t.return;
+                            try {
+                                i.componentDidMount();
+                            } catch (C) {
+                                Je(t, c, C);
+                            }
+                        }
+                        var d = t.return;
+                        try {
+                            $o(t);
+                        } catch (C) {
+                            Je(t, d, C);
+                        }
+                        break;
+                    case 5:
+                        var x = t.return;
+                        try {
+                            $o(t);
+                        } catch (C) {
+                            Je(t, x, C);
+                        }
+                }
+            } catch (C) {
+                Je(t, t.return, C);
+            }
+            if (t === e) {
+                me = null;
+                break;
+            }
+            var N = t.sibling;
+            if (N !== null) {
+                (N.return = t.return), (me = N);
+                break;
+            }
+            me = t.return;
+        }
+    }
+    var hg = Math.ceil,
+        xl = B.ReactCurrentDispatcher,
+        Wo = B.ReactCurrentOwner,
+        Gt = B.ReactCurrentBatchConfig,
+        Fe = 0,
+        ut = null,
+        rt = null,
+        pt = 0,
+        Bt = 0,
+        rs = Wn(0),
+        it = 0,
+        ta = null,
+        Nr = 0,
+        gl = 0,
+        Vo = 0,
+        na = null,
+        Lt = null,
+        Qo = 0,
+        ss = 1 / 0,
+        An = null,
+        yl = !1,
+        Ko = null,
+        Jn = null,
+        vl = !1,
+        Xn = null,
+        wl = 0,
+        ra = 0,
+        Yo = null,
+        bl = -1,
+        jl = 0;
+    function St() {
+        return (Fe & 6) !== 0 ? et() : bl !== -1 ? bl : (bl = et());
+    }
+    function Zn(e) {
+        return (e.mode & 1) === 0
+            ? 1
+            : (Fe & 2) !== 0 && pt !== 0
+              ? pt & -pt
+              : Xx.transition !== null
+                ? (jl === 0 && (jl = bu()), jl)
+                : ((e = Ue), e !== 0 || ((e = window.event), (e = e === void 0 ? 16 : Ru(e.type))), e);
+    }
+    function cn(e, t, s, i) {
+        if (50 < ra) throw ((ra = 0), (Yo = null), Error(l(185)));
+        Ts(e, s, i),
+            ((Fe & 2) === 0 || e !== ut) &&
+                (e === ut && ((Fe & 2) === 0 && (gl |= s), it === 4 && er(e, pt)),
+                zt(e, i),
+                s === 1 && Fe === 0 && (t.mode & 1) === 0 && ((ss = et() + 500), Ga && Qn()));
+    }
+    function zt(e, t) {
+        var s = e.callbackNode;
+        Xh(e, t);
+        var i = _a(e, e === ut ? pt : 0);
+        if (i === 0) s !== null && yu(s), (e.callbackNode = null), (e.callbackPriority = 0);
+        else if (((t = i & -i), e.callbackPriority !== t)) {
+            if ((s != null && yu(s), t === 1))
+                e.tag === 0 ? Jx(_f.bind(null, e)) : hd(_f.bind(null, e)),
+                    Qx(function () {
+                        (Fe & 6) === 0 && Qn();
+                    }),
+                    (s = null);
+            else {
+                switch (ju(i)) {
+                    case 1:
+                        s = Ti;
+                        break;
+                    case 4:
+                        s = vu;
+                        break;
+                    case 16:
+                        s = Ta;
+                        break;
+                    case 536870912:
+                        s = wu;
+                        break;
+                    default:
+                        s = Ta;
+                }
+                s = Df(s, Rf.bind(null, e));
+            }
+            (e.callbackPriority = t), (e.callbackNode = s);
+        }
+    }
+    function Rf(e, t) {
+        if (((bl = -1), (jl = 0), (Fe & 6) !== 0)) throw Error(l(327));
+        var s = e.callbackNode;
+        if (as() && e.callbackNode !== s) return null;
+        var i = _a(e, e === ut ? pt : 0);
+        if (i === 0) return null;
+        if ((i & 30) !== 0 || (i & e.expiredLanes) !== 0 || t) t = kl(e, i);
+        else {
+            t = i;
+            var c = Fe;
+            Fe |= 2;
+            var d = Lf();
+            (ut !== e || pt !== t) && ((An = null), (ss = et() + 500), Cr(e, t));
+            do
+                try {
+                    yg();
+                    break;
+                } catch (N) {
+                    Af(e, N);
+                }
+            while (!0);
+            mo(), (xl.current = d), (Fe = c), rt !== null ? (t = 0) : ((ut = null), (pt = 0), (t = it));
+        }
+        if (t !== 0) {
+            if ((t === 2 && ((c = Ei(e)), c !== 0 && ((i = c), (t = Go(e, c)))), t === 1))
+                throw ((s = ta), Cr(e, 0), er(e, i), zt(e, et()), s);
+            if (t === 6) er(e, i);
+            else {
+                if (
+                    ((c = e.current.alternate),
+                    (i & 30) === 0 &&
+                        !xg(c) &&
+                        ((t = kl(e, i)), t === 2 && ((d = Ei(e)), d !== 0 && ((i = d), (t = Go(e, d)))), t === 1))
+                )
+                    throw ((s = ta), Cr(e, 0), er(e, i), zt(e, et()), s);
+                switch (((e.finishedWork = c), (e.finishedLanes = i), t)) {
+                    case 0:
+                    case 1:
+                        throw Error(l(345));
+                    case 2:
+                        Tr(e, Lt, An);
+                        break;
+                    case 3:
+                        if ((er(e, i), (i & 130023424) === i && ((t = Qo + 500 - et()), 10 < t))) {
+                            if (_a(e, 0) !== 0) break;
+                            if (((c = e.suspendedLanes), (c & i) !== i)) {
+                                St(), (e.pingedLanes |= e.suspendedLanes & c);
+                                break;
+                            }
+                            e.timeoutHandle = to(Tr.bind(null, e, Lt, An), t);
+                            break;
+                        }
+                        Tr(e, Lt, An);
+                        break;
+                    case 4:
+                        if ((er(e, i), (i & 4194240) === i)) break;
+                        for (t = e.eventTimes, c = -1; 0 < i; ) {
+                            var x = 31 - nn(i);
+                            (d = 1 << x), (x = t[x]), x > c && (c = x), (i &= ~d);
+                        }
+                        if (
+                            ((i = c),
+                            (i = et() - i),
+                            (i =
+                                (120 > i
+                                    ? 120
+                                    : 480 > i
+                                      ? 480
+                                      : 1080 > i
+                                        ? 1080
+                                        : 1920 > i
+                                          ? 1920
+                                          : 3e3 > i
+                                            ? 3e3
+                                            : 4320 > i
+                                              ? 4320
+                                              : 1960 * hg(i / 1960)) - i),
+                            10 < i)
+                        ) {
+                            e.timeoutHandle = to(Tr.bind(null, e, Lt, An), i);
+                            break;
+                        }
+                        Tr(e, Lt, An);
+                        break;
+                    case 5:
+                        Tr(e, Lt, An);
+                        break;
+                    default:
+                        throw Error(l(329));
+                }
+            }
+        }
+        return zt(e, et()), e.callbackNode === s ? Rf.bind(null, e) : null;
+    }
+    function Go(e, t) {
+        var s = na;
+        return (
+            e.current.memoizedState.isDehydrated && (Cr(e, t).flags |= 256),
+            (e = kl(e, t)),
+            e !== 2 && ((t = Lt), (Lt = s), t !== null && Jo(t)),
+            e
+        );
+    }
+    function Jo(e) {
+        Lt === null ? (Lt = e) : Lt.push.apply(Lt, e);
+    }
+    function xg(e) {
+        for (var t = e; ; ) {
+            if (t.flags & 16384) {
+                var s = t.updateQueue;
+                if (s !== null && ((s = s.stores), s !== null))
+                    for (var i = 0; i < s.length; i++) {
+                        var c = s[i],
+                            d = c.getSnapshot;
+                        c = c.value;
+                        try {
+                            if (!rn(d(), c)) return !1;
+                        } catch {
+                            return !1;
+                        }
+                    }
+            }
+            if (((s = t.child), t.subtreeFlags & 16384 && s !== null)) (s.return = t), (t = s);
+            else {
+                if (t === e) break;
+                for (; t.sibling === null; ) {
+                    if (t.return === null || t.return === e) return !0;
+                    t = t.return;
+                }
+                (t.sibling.return = t.return), (t = t.sibling);
+            }
+        }
+        return !0;
+    }
+    function er(e, t) {
+        for (t &= ~Vo, t &= ~gl, e.suspendedLanes |= t, e.pingedLanes &= ~t, e = e.expirationTimes; 0 < t; ) {
+            var s = 31 - nn(t),
+                i = 1 << s;
+            (e[s] = -1), (t &= ~i);
+        }
+    }
+    function _f(e) {
+        if ((Fe & 6) !== 0) throw Error(l(327));
+        as();
+        var t = _a(e, 0);
+        if ((t & 1) === 0) return zt(e, et()), null;
+        var s = kl(e, t);
+        if (e.tag !== 0 && s === 2) {
+            var i = Ei(e);
+            i !== 0 && ((t = i), (s = Go(e, i)));
+        }
+        if (s === 1) throw ((s = ta), Cr(e, 0), er(e, t), zt(e, et()), s);
+        if (s === 6) throw Error(l(345));
+        return (e.finishedWork = e.current.alternate), (e.finishedLanes = t), Tr(e, Lt, An), zt(e, et()), null;
+    }
+    function Xo(e, t) {
+        var s = Fe;
+        Fe |= 1;
+        try {
+            return e(t);
+        } finally {
+            (Fe = s), Fe === 0 && ((ss = et() + 500), Ga && Qn());
+        }
+    }
+    function Sr(e) {
+        Xn !== null && Xn.tag === 0 && (Fe & 6) === 0 && as();
+        var t = Fe;
+        Fe |= 1;
+        var s = Gt.transition,
+            i = Ue;
+        try {
+            if (((Gt.transition = null), (Ue = 1), e)) return e();
+        } finally {
+            (Ue = i), (Gt.transition = s), (Fe = t), (Fe & 6) === 0 && Qn();
+        }
+    }
+    function Zo() {
+        (Bt = rs.current), Ve(rs);
+    }
+    function Cr(e, t) {
+        (e.finishedWork = null), (e.finishedLanes = 0);
+        var s = e.timeoutHandle;
+        if ((s !== -1 && ((e.timeoutHandle = -1), Vx(s)), rt !== null))
+            for (s = rt.return; s !== null; ) {
+                var i = s;
+                switch ((io(i), i.tag)) {
+                    case 1:
+                        (i = i.type.childContextTypes), i != null && Ka();
+                        break;
+                    case 3:
+                        es(), Ve(Rt), Ve(yt), bo();
+                        break;
+                    case 5:
+                        vo(i);
+                        break;
+                    case 4:
+                        es();
+                        break;
+                    case 13:
+                        Ve(Ye);
+                        break;
+                    case 19:
+                        Ve(Ye);
+                        break;
+                    case 10:
+                        po(i.type._context);
+                        break;
+                    case 22:
+                    case 23:
+                        Zo();
+                }
+                s = s.return;
+            }
+        if (
+            ((ut = e),
+            (rt = e = tr(e.current, null)),
+            (pt = Bt = t),
+            (it = 0),
+            (ta = null),
+            (Vo = gl = Nr = 0),
+            (Lt = na = null),
+            br !== null)
+        ) {
+            for (t = 0; t < br.length; t++)
+                if (((s = br[t]), (i = s.interleaved), i !== null)) {
+                    s.interleaved = null;
+                    var c = i.next,
+                        d = s.pending;
+                    if (d !== null) {
+                        var x = d.next;
+                        (d.next = c), (i.next = x);
+                    }
+                    s.pending = i;
+                }
+            br = null;
+        }
+        return e;
+    }
+    function Af(e, t) {
+        do {
+            var s = rt;
+            try {
+                if ((mo(), (ll.current = ul), il)) {
+                    for (var i = Ge.memoizedState; i !== null; ) {
+                        var c = i.queue;
+                        c !== null && (c.pending = null), (i = i.next);
+                    }
+                    il = !1;
+                }
+                if (
+                    ((kr = 0),
+                    (ct = lt = Ge = null),
+                    (Ys = !1),
+                    (Gs = 0),
+                    (Wo.current = null),
+                    s === null || s.return === null)
+                ) {
+                    (it = 1), (ta = t), (rt = null);
+                    break;
+                }
+                e: {
+                    var d = e,
+                        x = s.return,
+                        N = s,
+                        C = t;
+                    if (
+                        ((t = pt),
+                        (N.flags |= 32768),
+                        C !== null && typeof C == "object" && typeof C.then == "function")
+                    ) {
+                        var L = C,
+                            V = N,
+                            Q = V.tag;
+                        if ((V.mode & 1) === 0 && (Q === 0 || Q === 11 || Q === 15)) {
+                            var W = V.alternate;
+                            W
+                                ? ((V.updateQueue = W.updateQueue),
+                                  (V.memoizedState = W.memoizedState),
+                                  (V.lanes = W.lanes))
+                                : ((V.updateQueue = null), (V.memoizedState = null));
+                        }
+                        var ce = nf(x);
+                        if (ce !== null) {
+                            (ce.flags &= -257), rf(ce, x, N, d, t), ce.mode & 1 && tf(d, L, t), (t = ce), (C = L);
+                            var he = t.updateQueue;
+                            if (he === null) {
+                                var we = new Set();
+                                we.add(C), (t.updateQueue = we);
+                            } else he.add(C);
+                            break e;
+                        } else {
+                            if ((t & 1) === 0) {
+                                tf(d, L, t), ec();
+                                break e;
+                            }
+                            C = Error(l(426));
+                        }
+                    } else if (Qe && N.mode & 1) {
+                        var tt = nf(x);
+                        if (tt !== null) {
+                            (tt.flags & 65536) === 0 && (tt.flags |= 256), rf(tt, x, N, d, t), uo(ts(C, N));
+                            break e;
+                        }
+                    }
+                    (d = C = ts(C, N)), it !== 4 && (it = 2), na === null ? (na = [d]) : na.push(d), (d = x);
+                    do {
+                        switch (d.tag) {
+                            case 3:
+                                (d.flags |= 65536), (t &= -t), (d.lanes |= t);
+                                var R = Zd(d, C, t);
+                                Cd(d, R);
+                                break e;
+                            case 1:
+                                N = C;
+                                var P = d.type,
+                                    _ = d.stateNode;
+                                if (
+                                    (d.flags & 128) === 0 &&
+                                    (typeof P.getDerivedStateFromError == "function" ||
+                                        (_ !== null &&
+                                            typeof _.componentDidCatch == "function" &&
+                                            (Jn === null || !Jn.has(_))))
+                                ) {
+                                    (d.flags |= 65536), (t &= -t), (d.lanes |= t);
+                                    var J = ef(d, N, t);
+                                    Cd(d, J);
+                                    break e;
+                                }
+                        }
+                        d = d.return;
+                    } while (d !== null);
+                }
+                Ff(s);
+            } catch (be) {
+                (t = be), rt === s && s !== null && (rt = s = s.return);
+                continue;
+            }
+            break;
+        } while (!0);
+    }
+    function Lf() {
+        var e = xl.current;
+        return (xl.current = ul), e === null ? ul : e;
+    }
+    function ec() {
+        (it === 0 || it === 3 || it === 2) && (it = 4),
+            ut === null || ((Nr & 268435455) === 0 && (gl & 268435455) === 0) || er(ut, pt);
+    }
+    function kl(e, t) {
+        var s = Fe;
+        Fe |= 2;
+        var i = Lf();
+        (ut !== e || pt !== t) && ((An = null), Cr(e, t));
+        do
+            try {
+                gg();
+                break;
+            } catch (c) {
+                Af(e, c);
+            }
+        while (!0);
+        if ((mo(), (Fe = s), (xl.current = i), rt !== null)) throw Error(l(261));
+        return (ut = null), (pt = 0), it;
+    }
+    function gg() {
+        for (; rt !== null; ) zf(rt);
+    }
+    function yg() {
+        for (; rt !== null && !Hh(); ) zf(rt);
+    }
+    function zf(e) {
+        var t = Mf(e.alternate, e, Bt);
+        (e.memoizedProps = e.pendingProps), t === null ? Ff(e) : (rt = t), (Wo.current = null);
+    }
+    function Ff(e) {
+        var t = e;
+        do {
+            var s = t.alternate;
+            if (((e = t.return), (t.flags & 32768) === 0)) {
+                if (((s = ug(s, t, Bt)), s !== null)) {
+                    rt = s;
+                    return;
+                }
+            } else {
+                if (((s = dg(s, t)), s !== null)) {
+                    (s.flags &= 32767), (rt = s);
+                    return;
+                }
+                if (e !== null) (e.flags |= 32768), (e.subtreeFlags = 0), (e.deletions = null);
+                else {
+                    (it = 6), (rt = null);
+                    return;
+                }
+            }
+            if (((t = t.sibling), t !== null)) {
+                rt = t;
+                return;
+            }
+            rt = t = e;
+        } while (t !== null);
+        it === 0 && (it = 5);
+    }
+    function Tr(e, t, s) {
+        var i = Ue,
+            c = Gt.transition;
+        try {
+            (Gt.transition = null), (Ue = 1), vg(e, t, s, i);
+        } finally {
+            (Gt.transition = c), (Ue = i);
+        }
+        return null;
+    }
+    function vg(e, t, s, i) {
+        do as();
+        while (Xn !== null);
+        if ((Fe & 6) !== 0) throw Error(l(327));
+        s = e.finishedWork;
+        var c = e.finishedLanes;
+        if (s === null) return null;
+        if (((e.finishedWork = null), (e.finishedLanes = 0), s === e.current)) throw Error(l(177));
+        (e.callbackNode = null), (e.callbackPriority = 0);
+        var d = s.lanes | s.childLanes;
+        if (
+            (Zh(e, d),
+            e === ut && ((rt = ut = null), (pt = 0)),
+            ((s.subtreeFlags & 2064) === 0 && (s.flags & 2064) === 0) ||
+                vl ||
+                ((vl = !0),
+                Df(Ta, function () {
+                    return as(), null;
+                })),
+            (d = (s.flags & 15990) !== 0),
+            (s.subtreeFlags & 15990) !== 0 || d)
+        ) {
+            (d = Gt.transition), (Gt.transition = null);
+            var x = Ue;
+            Ue = 1;
+            var N = Fe;
+            (Fe |= 4),
+                (Wo.current = null),
+                mg(e, s),
+                Sf(s, e),
+                Dx(Zi),
+                (za = !!Xi),
+                (Zi = Xi = null),
+                (e.current = s),
+                pg(s),
+                qh(),
+                (Fe = N),
+                (Ue = x),
+                (Gt.transition = d);
+        } else e.current = s;
+        if (
+            (vl && ((vl = !1), (Xn = e), (wl = c)),
+            (d = e.pendingLanes),
+            d === 0 && (Jn = null),
+            Qh(s.stateNode),
+            zt(e, et()),
+            t !== null)
+        )
+            for (i = e.onRecoverableError, s = 0; s < t.length; s++)
+                (c = t[s]), i(c.value, { componentStack: c.stack, digest: c.digest });
+        if (yl) throw ((yl = !1), (e = Ko), (Ko = null), e);
+        return (
+            (wl & 1) !== 0 && e.tag !== 0 && as(),
+            (d = e.pendingLanes),
+            (d & 1) !== 0 ? (e === Yo ? ra++ : ((ra = 0), (Yo = e))) : (ra = 0),
+            Qn(),
+            null
+        );
+    }
+    function as() {
+        if (Xn !== null) {
+            var e = ju(wl),
+                t = Gt.transition,
+                s = Ue;
+            try {
+                if (((Gt.transition = null), (Ue = 16 > e ? 16 : e), Xn === null)) var i = !1;
+                else {
+                    if (((e = Xn), (Xn = null), (wl = 0), (Fe & 6) !== 0)) throw Error(l(331));
+                    var c = Fe;
+                    for (Fe |= 4, me = e.current; me !== null; ) {
+                        var d = me,
+                            x = d.child;
+                        if ((me.flags & 16) !== 0) {
+                            var N = d.deletions;
+                            if (N !== null) {
+                                for (var C = 0; C < N.length; C++) {
+                                    var L = N[C];
+                                    for (me = L; me !== null; ) {
+                                        var V = me;
+                                        switch (V.tag) {
+                                            case 0:
+                                            case 11:
+                                            case 15:
+                                                ea(8, V, d);
+                                        }
+                                        var Q = V.child;
+                                        if (Q !== null) (Q.return = V), (me = Q);
+                                        else
+                                            for (; me !== null; ) {
+                                                V = me;
+                                                var W = V.sibling,
+                                                    ce = V.return;
+                                                if ((wf(V), V === L)) {
+                                                    me = null;
+                                                    break;
+                                                }
+                                                if (W !== null) {
+                                                    (W.return = ce), (me = W);
+                                                    break;
+                                                }
+                                                me = ce;
+                                            }
+                                    }
+                                }
+                                var he = d.alternate;
+                                if (he !== null) {
+                                    var we = he.child;
+                                    if (we !== null) {
+                                        he.child = null;
+                                        do {
+                                            var tt = we.sibling;
+                                            (we.sibling = null), (we = tt);
+                                        } while (we !== null);
+                                    }
+                                }
+                                me = d;
+                            }
+                        }
+                        if ((d.subtreeFlags & 2064) !== 0 && x !== null) (x.return = d), (me = x);
+                        else
+                            e: for (; me !== null; ) {
+                                if (((d = me), (d.flags & 2048) !== 0))
+                                    switch (d.tag) {
+                                        case 0:
+                                        case 11:
+                                        case 15:
+                                            ea(9, d, d.return);
+                                    }
+                                var R = d.sibling;
+                                if (R !== null) {
+                                    (R.return = d.return), (me = R);
+                                    break e;
+                                }
+                                me = d.return;
+                            }
+                    }
+                    var P = e.current;
+                    for (me = P; me !== null; ) {
+                        x = me;
+                        var _ = x.child;
+                        if ((x.subtreeFlags & 2064) !== 0 && _ !== null) (_.return = x), (me = _);
+                        else
+                            e: for (x = P; me !== null; ) {
+                                if (((N = me), (N.flags & 2048) !== 0))
+                                    try {
+                                        switch (N.tag) {
+                                            case 0:
+                                            case 11:
+                                            case 15:
+                                                hl(9, N);
+                                        }
+                                    } catch (be) {
+                                        Je(N, N.return, be);
+                                    }
+                                if (N === x) {
+                                    me = null;
+                                    break e;
+                                }
+                                var J = N.sibling;
+                                if (J !== null) {
+                                    (J.return = N.return), (me = J);
+                                    break e;
+                                }
+                                me = N.return;
+                            }
+                    }
+                    if (((Fe = c), Qn(), xn && typeof xn.onPostCommitFiberRoot == "function"))
+                        try {
+                            xn.onPostCommitFiberRoot(Ea, e);
+                        } catch {}
+                    i = !0;
+                }
+                return i;
+            } finally {
+                (Ue = s), (Gt.transition = t);
+            }
+        }
+        return !1;
+    }
+    function Of(e, t, s) {
+        (t = ts(s, t)), (t = Zd(e, t, 1)), (e = Yn(e, t, 1)), (t = St()), e !== null && (Ts(e, 1, t), zt(e, t));
+    }
+    function Je(e, t, s) {
+        if (e.tag === 3) Of(e, e, s);
+        else
+            for (; t !== null; ) {
+                if (t.tag === 3) {
+                    Of(t, e, s);
+                    break;
+                } else if (t.tag === 1) {
+                    var i = t.stateNode;
+                    if (
+                        typeof t.type.getDerivedStateFromError == "function" ||
+                        (typeof i.componentDidCatch == "function" && (Jn === null || !Jn.has(i)))
+                    ) {
+                        (e = ts(s, e)),
+                            (e = ef(t, e, 1)),
+                            (t = Yn(t, e, 1)),
+                            (e = St()),
+                            t !== null && (Ts(t, 1, e), zt(t, e));
+                        break;
+                    }
+                }
+                t = t.return;
+            }
+    }
+    function wg(e, t, s) {
+        var i = e.pingCache;
+        i !== null && i.delete(t),
+            (t = St()),
+            (e.pingedLanes |= e.suspendedLanes & s),
+            ut === e &&
+                (pt & s) === s &&
+                (it === 4 || (it === 3 && (pt & 130023424) === pt && 500 > et() - Qo) ? Cr(e, 0) : (Vo |= s)),
+            zt(e, t);
+    }
+    function If(e, t) {
+        t === 0 && ((e.mode & 1) === 0 ? (t = 1) : ((t = Ra), (Ra <<= 1), (Ra & 130023424) === 0 && (Ra = 4194304)));
+        var s = St();
+        (e = Pn(e, t)), e !== null && (Ts(e, t, s), zt(e, s));
+    }
+    function bg(e) {
+        var t = e.memoizedState,
+            s = 0;
+        t !== null && (s = t.retryLane), If(e, s);
+    }
+    function jg(e, t) {
+        var s = 0;
+        switch (e.tag) {
+            case 13:
+                var i = e.stateNode,
+                    c = e.memoizedState;
+                c !== null && (s = c.retryLane);
+                break;
+            case 19:
+                i = e.stateNode;
+                break;
+            default:
+                throw Error(l(314));
+        }
+        i !== null && i.delete(t), If(e, s);
+    }
+    var Mf;
+    Mf = function (e, t, s) {
+        if (e !== null)
+            if (e.memoizedProps !== t.pendingProps || Rt.current) At = !0;
+            else {
+                if ((e.lanes & s) === 0 && (t.flags & 128) === 0) return (At = !1), cg(e, t, s);
+                At = (e.flags & 131072) !== 0;
+            }
+        else (At = !1), Qe && (t.flags & 1048576) !== 0 && xd(t, Xa, t.index);
+        switch (((t.lanes = 0), t.tag)) {
+            case 2:
+                var i = t.type;
+                ml(e, t), (e = t.pendingProps);
+                var c = Qr(t, yt.current);
+                Zr(t, s), (c = No(null, t, i, e, c, s));
+                var d = So();
+                return (
+                    (t.flags |= 1),
+                    typeof c == "object" && c !== null && typeof c.render == "function" && c.$$typeof === void 0
+                        ? ((t.tag = 1),
+                          (t.memoizedState = null),
+                          (t.updateQueue = null),
+                          _t(i) ? ((d = !0), Ya(t)) : (d = !1),
+                          (t.memoizedState = c.state !== null && c.state !== void 0 ? c.state : null),
+                          go(t),
+                          (c.updater = dl),
+                          (t.stateNode = c),
+                          (c._reactInternals = t),
+                          _o(t, i, e, s),
+                          (t = Fo(null, t, i, !0, d, s)))
+                        : ((t.tag = 0), Qe && d && lo(t), Nt(null, t, c, s), (t = t.child)),
+                    t
+                );
+            case 16:
+                i = t.elementType;
+                e: {
+                    switch (
+                        (ml(e, t),
+                        (e = t.pendingProps),
+                        (c = i._init),
+                        (i = c(i._payload)),
+                        (t.type = i),
+                        (c = t.tag = Ng(i)),
+                        (e = an(i, e)),
+                        c)
+                    ) {
+                        case 0:
+                            t = zo(null, t, i, e, s);
+                            break e;
+                        case 1:
+                            t = uf(null, t, i, e, s);
+                            break e;
+                        case 11:
+                            t = sf(null, t, i, e, s);
+                            break e;
+                        case 14:
+                            t = af(null, t, i, an(i.type, e), s);
+                            break e;
+                    }
+                    throw Error(l(306, i, ""));
+                }
+                return t;
+            case 0:
+                return (i = t.type), (c = t.pendingProps), (c = t.elementType === i ? c : an(i, c)), zo(e, t, i, c, s);
+            case 1:
+                return (i = t.type), (c = t.pendingProps), (c = t.elementType === i ? c : an(i, c)), uf(e, t, i, c, s);
+            case 3:
+                e: {
+                    if ((df(t), e === null)) throw Error(l(387));
+                    (i = t.pendingProps), (d = t.memoizedState), (c = d.element), Sd(e, t), sl(t, i, null, s);
+                    var x = t.memoizedState;
+                    if (((i = x.element), d.isDehydrated))
+                        if (
+                            ((d = {
+                                element: i,
+                                isDehydrated: !1,
+                                cache: x.cache,
+                                pendingSuspenseBoundaries: x.pendingSuspenseBoundaries,
+                                transitions: x.transitions,
+                            }),
+                            (t.updateQueue.baseState = d),
+                            (t.memoizedState = d),
+                            t.flags & 256)
+                        ) {
+                            (c = ts(Error(l(423)), t)), (t = ff(e, t, i, s, c));
+                            break e;
+                        } else if (i !== c) {
+                            (c = ts(Error(l(424)), t)), (t = ff(e, t, i, s, c));
+                            break e;
+                        } else
+                            for (
+                                Ut = qn(t.stateNode.containerInfo.firstChild),
+                                    Dt = t,
+                                    Qe = !0,
+                                    sn = null,
+                                    s = kd(t, null, i, s),
+                                    t.child = s;
+                                s;
+
+                            )
+                                (s.flags = (s.flags & -3) | 4096), (s = s.sibling);
+                    else {
+                        if ((Gr(), i === c)) {
+                            t = _n(e, t, s);
+                            break e;
+                        }
+                        Nt(e, t, i, s);
+                    }
+                    t = t.child;
+                }
+                return t;
+            case 5:
+                return (
+                    Ed(t),
+                    e === null && co(t),
+                    (i = t.type),
+                    (c = t.pendingProps),
+                    (d = e !== null ? e.memoizedProps : null),
+                    (x = c.children),
+                    eo(i, c) ? (x = null) : d !== null && eo(i, d) && (t.flags |= 32),
+                    cf(e, t),
+                    Nt(e, t, x, s),
+                    t.child
+                );
+            case 6:
+                return e === null && co(t), null;
+            case 13:
+                return mf(e, t, s);
+            case 4:
+                return (
+                    yo(t, t.stateNode.containerInfo),
+                    (i = t.pendingProps),
+                    e === null ? (t.child = Jr(t, null, i, s)) : Nt(e, t, i, s),
+                    t.child
+                );
+            case 11:
+                return (i = t.type), (c = t.pendingProps), (c = t.elementType === i ? c : an(i, c)), sf(e, t, i, c, s);
+            case 7:
+                return Nt(e, t, t.pendingProps, s), t.child;
+            case 8:
+                return Nt(e, t, t.pendingProps.children, s), t.child;
+            case 12:
+                return Nt(e, t, t.pendingProps.children, s), t.child;
+            case 10:
+                e: {
+                    if (
+                        ((i = t.type._context),
+                        (c = t.pendingProps),
+                        (d = t.memoizedProps),
+                        (x = c.value),
+                        qe(tl, i._currentValue),
+                        (i._currentValue = x),
+                        d !== null)
+                    )
+                        if (rn(d.value, x)) {
+                            if (d.children === c.children && !Rt.current) {
+                                t = _n(e, t, s);
+                                break e;
+                            }
+                        } else
+                            for (d = t.child, d !== null && (d.return = t); d !== null; ) {
+                                var N = d.dependencies;
+                                if (N !== null) {
+                                    x = d.child;
+                                    for (var C = N.firstContext; C !== null; ) {
+                                        if (C.context === i) {
+                                            if (d.tag === 1) {
+                                                (C = Rn(-1, s & -s)), (C.tag = 2);
+                                                var L = d.updateQueue;
+                                                if (L !== null) {
+                                                    L = L.shared;
+                                                    var V = L.pending;
+                                                    V === null ? (C.next = C) : ((C.next = V.next), (V.next = C)),
+                                                        (L.pending = C);
+                                                }
+                                            }
+                                            (d.lanes |= s),
+                                                (C = d.alternate),
+                                                C !== null && (C.lanes |= s),
+                                                ho(d.return, s, t),
+                                                (N.lanes |= s);
+                                            break;
+                                        }
+                                        C = C.next;
+                                    }
+                                } else if (d.tag === 10) x = d.type === t.type ? null : d.child;
+                                else if (d.tag === 18) {
+                                    if (((x = d.return), x === null)) throw Error(l(341));
+                                    (x.lanes |= s),
+                                        (N = x.alternate),
+                                        N !== null && (N.lanes |= s),
+                                        ho(x, s, t),
+                                        (x = d.sibling);
+                                } else x = d.child;
+                                if (x !== null) x.return = d;
+                                else
+                                    for (x = d; x !== null; ) {
+                                        if (x === t) {
+                                            x = null;
+                                            break;
+                                        }
+                                        if (((d = x.sibling), d !== null)) {
+                                            (d.return = x.return), (x = d);
+                                            break;
+                                        }
+                                        x = x.return;
+                                    }
+                                d = x;
+                            }
+                    Nt(e, t, c.children, s), (t = t.child);
+                }
+                return t;
+            case 9:
+                return (
+                    (c = t.type),
+                    (i = t.pendingProps.children),
+                    Zr(t, s),
+                    (c = Kt(c)),
+                    (i = i(c)),
+                    (t.flags |= 1),
+                    Nt(e, t, i, s),
+                    t.child
+                );
+            case 14:
+                return (i = t.type), (c = an(i, t.pendingProps)), (c = an(i.type, c)), af(e, t, i, c, s);
+            case 15:
+                return lf(e, t, t.type, t.pendingProps, s);
+            case 17:
+                return (
+                    (i = t.type),
+                    (c = t.pendingProps),
+                    (c = t.elementType === i ? c : an(i, c)),
+                    ml(e, t),
+                    (t.tag = 1),
+                    _t(i) ? ((e = !0), Ya(t)) : (e = !1),
+                    Zr(t, s),
+                    Jd(t, i, c),
+                    _o(t, i, c, s),
+                    Fo(null, t, i, !0, e, s)
+                );
+            case 19:
+                return hf(e, t, s);
+            case 22:
+                return of(e, t, s);
+        }
+        throw Error(l(156, t.tag));
+    };
+    function Df(e, t) {
+        return gu(e, t);
+    }
+    function kg(e, t, s, i) {
+        (this.tag = e),
+            (this.key = s),
+            (this.sibling = this.child = this.return = this.stateNode = this.type = this.elementType = null),
+            (this.index = 0),
+            (this.ref = null),
+            (this.pendingProps = t),
+            (this.dependencies = this.memoizedState = this.updateQueue = this.memoizedProps = null),
+            (this.mode = i),
+            (this.subtreeFlags = this.flags = 0),
+            (this.deletions = null),
+            (this.childLanes = this.lanes = 0),
+            (this.alternate = null);
+    }
+    function Jt(e, t, s, i) {
+        return new kg(e, t, s, i);
+    }
+    function tc(e) {
+        return (e = e.prototype), !(!e || !e.isReactComponent);
+    }
+    function Ng(e) {
+        if (typeof e == "function") return tc(e) ? 1 : 0;
+        if (e != null) {
+            if (((e = e.$$typeof), e === q)) return 11;
+            if (e === ge) return 14;
+        }
+        return 2;
+    }
+    function tr(e, t) {
+        var s = e.alternate;
+        return (
+            s === null
+                ? ((s = Jt(e.tag, t, e.key, e.mode)),
+                  (s.elementType = e.elementType),
+                  (s.type = e.type),
+                  (s.stateNode = e.stateNode),
+                  (s.alternate = e),
+                  (e.alternate = s))
+                : ((s.pendingProps = t), (s.type = e.type), (s.flags = 0), (s.subtreeFlags = 0), (s.deletions = null)),
+            (s.flags = e.flags & 14680064),
+            (s.childLanes = e.childLanes),
+            (s.lanes = e.lanes),
+            (s.child = e.child),
+            (s.memoizedProps = e.memoizedProps),
+            (s.memoizedState = e.memoizedState),
+            (s.updateQueue = e.updateQueue),
+            (t = e.dependencies),
+            (s.dependencies = t === null ? null : { lanes: t.lanes, firstContext: t.firstContext }),
+            (s.sibling = e.sibling),
+            (s.index = e.index),
+            (s.ref = e.ref),
+            s
+        );
+    }
+    function Nl(e, t, s, i, c, d) {
+        var x = 2;
+        if (((i = e), typeof e == "function")) tc(e) && (x = 1);
+        else if (typeof e == "string") x = 5;
+        else
+            e: switch (e) {
+                case K:
+                    return Er(s.children, c, d, t);
+                case le:
+                    (x = 8), (c |= 8);
+                    break;
+                case ee:
+                    return (e = Jt(12, s, t, c | 2)), (e.elementType = ee), (e.lanes = d), e;
+                case te:
+                    return (e = Jt(13, s, t, c)), (e.elementType = te), (e.lanes = d), e;
+                case F:
+                    return (e = Jt(19, s, t, c)), (e.elementType = F), (e.lanes = d), e;
+                case X:
+                    return Sl(s, c, d, t);
+                default:
+                    if (typeof e == "object" && e !== null)
+                        switch (e.$$typeof) {
+                            case re:
+                                x = 10;
+                                break e;
+                            case xe:
+                                x = 9;
+                                break e;
+                            case q:
+                                x = 11;
+                                break e;
+                            case ge:
+                                x = 14;
+                                break e;
+                            case O:
+                                (x = 16), (i = null);
+                                break e;
+                        }
+                    throw Error(l(130, e == null ? e : typeof e, ""));
+            }
+        return (t = Jt(x, s, t, c)), (t.elementType = e), (t.type = i), (t.lanes = d), t;
+    }
+    function Er(e, t, s, i) {
+        return (e = Jt(7, e, i, t)), (e.lanes = s), e;
+    }
+    function Sl(e, t, s, i) {
+        return (e = Jt(22, e, i, t)), (e.elementType = X), (e.lanes = s), (e.stateNode = { isHidden: !1 }), e;
+    }
+    function nc(e, t, s) {
+        return (e = Jt(6, e, null, t)), (e.lanes = s), e;
+    }
+    function rc(e, t, s) {
+        return (
+            (t = Jt(4, e.children !== null ? e.children : [], e.key, t)),
+            (t.lanes = s),
+            (t.stateNode = { containerInfo: e.containerInfo, pendingChildren: null, implementation: e.implementation }),
+            t
+        );
+    }
+    function Sg(e, t, s, i, c) {
+        (this.tag = t),
+            (this.containerInfo = e),
+            (this.finishedWork = this.pingCache = this.current = this.pendingChildren = null),
+            (this.timeoutHandle = -1),
+            (this.callbackNode = this.pendingContext = this.context = null),
+            (this.callbackPriority = 0),
+            (this.eventTimes = Pi(0)),
+            (this.expirationTimes = Pi(-1)),
+            (this.entangledLanes =
+                this.finishedLanes =
+                this.mutableReadLanes =
+                this.expiredLanes =
+                this.pingedLanes =
+                this.suspendedLanes =
+                this.pendingLanes =
+                    0),
+            (this.entanglements = Pi(0)),
+            (this.identifierPrefix = i),
+            (this.onRecoverableError = c),
+            (this.mutableSourceEagerHydrationData = null);
+    }
+    function sc(e, t, s, i, c, d, x, N, C) {
+        return (
+            (e = new Sg(e, t, s, N, C)),
+            t === 1 ? ((t = 1), d === !0 && (t |= 8)) : (t = 0),
+            (d = Jt(3, null, null, t)),
+            (e.current = d),
+            (d.stateNode = e),
+            (d.memoizedState = {
+                element: i,
+                isDehydrated: s,
+                cache: null,
+                transitions: null,
+                pendingSuspenseBoundaries: null,
+            }),
+            go(d),
+            e
+        );
+    }
+    function Cg(e, t, s) {
+        var i = 3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
+        return { $$typeof: ne, key: i == null ? null : "" + i, children: e, containerInfo: t, implementation: s };
+    }
+    function Uf(e) {
+        if (!e) return Vn;
+        e = e._reactInternals;
+        e: {
+            if (xr(e) !== e || e.tag !== 1) throw Error(l(170));
+            var t = e;
+            do {
+                switch (t.tag) {
+                    case 3:
+                        t = t.stateNode.context;
+                        break e;
+                    case 1:
+                        if (_t(t.type)) {
+                            t = t.stateNode.__reactInternalMemoizedMergedChildContext;
+                            break e;
+                        }
+                }
+                t = t.return;
+            } while (t !== null);
+            throw Error(l(171));
+        }
+        if (e.tag === 1) {
+            var s = e.type;
+            if (_t(s)) return md(e, s, t);
+        }
+        return t;
+    }
+    function Bf(e, t, s, i, c, d, x, N, C) {
+        return (
+            (e = sc(s, i, !0, e, c, d, x, N, C)),
+            (e.context = Uf(null)),
+            (s = e.current),
+            (i = St()),
+            (c = Zn(s)),
+            (d = Rn(i, c)),
+            (d.callback = t ?? null),
+            Yn(s, d, c),
+            (e.current.lanes = c),
+            Ts(e, c, i),
+            zt(e, i),
+            e
+        );
+    }
+    function Cl(e, t, s, i) {
+        var c = t.current,
+            d = St(),
+            x = Zn(c);
+        return (
+            (s = Uf(s)),
+            t.context === null ? (t.context = s) : (t.pendingContext = s),
+            (t = Rn(d, x)),
+            (t.payload = { element: e }),
+            (i = i === void 0 ? null : i),
+            i !== null && (t.callback = i),
+            (e = Yn(c, t, x)),
+            e !== null && (cn(e, c, x, d), rl(e, c, x)),
+            x
+        );
+    }
+    function Tl(e) {
+        if (((e = e.current), !e.child)) return null;
+        switch (e.child.tag) {
+            case 5:
+                return e.child.stateNode;
+            default:
+                return e.child.stateNode;
+        }
+    }
+    function $f(e, t) {
+        if (((e = e.memoizedState), e !== null && e.dehydrated !== null)) {
+            var s = e.retryLane;
+            e.retryLane = s !== 0 && s < t ? s : t;
+        }
+    }
+    function ac(e, t) {
+        $f(e, t), (e = e.alternate) && $f(e, t);
+    }
+    function Tg() {
+        return null;
+    }
+    var Hf =
+        typeof reportError == "function"
+            ? reportError
+            : function (e) {
+                  console.error(e);
+              };
+    function lc(e) {
+        this._internalRoot = e;
+    }
+    (El.prototype.render = lc.prototype.render =
+        function (e) {
+            var t = this._internalRoot;
+            if (t === null) throw Error(l(409));
+            Cl(e, t, null, null);
+        }),
+        (El.prototype.unmount = lc.prototype.unmount =
+            function () {
+                var e = this._internalRoot;
+                if (e !== null) {
+                    this._internalRoot = null;
+                    var t = e.containerInfo;
+                    Sr(function () {
+                        Cl(null, e, null, null);
+                    }),
+                        (t[Sn] = null);
+                }
+            });
+    function El(e) {
+        this._internalRoot = e;
+    }
+    El.prototype.unstable_scheduleHydration = function (e) {
+        if (e) {
+            var t = Su();
+            e = { blockedOn: null, target: e, priority: t };
+            for (var s = 0; s < Bn.length && t !== 0 && t < Bn[s].priority; s++);
+            Bn.splice(s, 0, e), s === 0 && Eu(e);
+        }
+    };
+    function ic(e) {
+        return !(!e || (e.nodeType !== 1 && e.nodeType !== 9 && e.nodeType !== 11));
+    }
+    function Pl(e) {
+        return !(
+            !e ||
+            (e.nodeType !== 1 &&
+                e.nodeType !== 9 &&
+                e.nodeType !== 11 &&
+                (e.nodeType !== 8 || e.nodeValue !== " react-mount-point-unstable "))
+        );
+    }
+    function qf() {}
+    function Eg(e, t, s, i, c) {
+        if (c) {
+            if (typeof i == "function") {
+                var d = i;
+                i = function () {
+                    var L = Tl(x);
+                    d.call(L);
+                };
+            }
+            var x = Bf(t, i, e, 0, null, !1, !1, "", qf);
+            return (e._reactRootContainer = x), (e[Sn] = x.current), Bs(e.nodeType === 8 ? e.parentNode : e), Sr(), x;
+        }
+        for (; (c = e.lastChild); ) e.removeChild(c);
+        if (typeof i == "function") {
+            var N = i;
+            i = function () {
+                var L = Tl(C);
+                N.call(L);
+            };
+        }
+        var C = sc(e, 0, !1, null, null, !1, !1, "", qf);
+        return (
+            (e._reactRootContainer = C),
+            (e[Sn] = C.current),
+            Bs(e.nodeType === 8 ? e.parentNode : e),
+            Sr(function () {
+                Cl(t, C, s, i);
+            }),
+            C
+        );
+    }
+    function Rl(e, t, s, i, c) {
+        var d = s._reactRootContainer;
+        if (d) {
+            var x = d;
+            if (typeof c == "function") {
+                var N = c;
+                c = function () {
+                    var C = Tl(x);
+                    N.call(C);
+                };
+            }
+            Cl(t, x, e, c);
+        } else x = Eg(s, t, e, c, i);
+        return Tl(x);
+    }
+    (ku = function (e) {
+        switch (e.tag) {
+            case 3:
+                var t = e.stateNode;
+                if (t.current.memoizedState.isDehydrated) {
+                    var s = Cs(t.pendingLanes);
+                    s !== 0 && (Ri(t, s | 1), zt(t, et()), (Fe & 6) === 0 && ((ss = et() + 500), Qn()));
+                }
+                break;
+            case 13:
+                Sr(function () {
+                    var i = Pn(e, 1);
+                    if (i !== null) {
+                        var c = St();
+                        cn(i, e, 1, c);
+                    }
+                }),
+                    ac(e, 1);
+        }
+    }),
+        (_i = function (e) {
+            if (e.tag === 13) {
+                var t = Pn(e, 134217728);
+                if (t !== null) {
+                    var s = St();
+                    cn(t, e, 134217728, s);
+                }
+                ac(e, 134217728);
+            }
+        }),
+        (Nu = function (e) {
+            if (e.tag === 13) {
+                var t = Zn(e),
+                    s = Pn(e, t);
+                if (s !== null) {
+                    var i = St();
+                    cn(s, e, t, i);
+                }
+                ac(e, t);
+            }
+        }),
+        (Su = function () {
+            return Ue;
+        }),
+        (Cu = function (e, t) {
+            var s = Ue;
+            try {
+                return (Ue = e), t();
+            } finally {
+                Ue = s;
+            }
+        }),
+        (pe = function (e, t, s) {
+            switch (t) {
+                case "input":
+                    if ((Ie(e, s), (t = s.name), s.type === "radio" && t != null)) {
+                        for (s = e; s.parentNode; ) s = s.parentNode;
+                        for (
+                            s = s.querySelectorAll("input[name=" + JSON.stringify("" + t) + '][type="radio"]'), t = 0;
+                            t < s.length;
+                            t++
+                        ) {
+                            var i = s[t];
+                            if (i !== e && i.form === e.form) {
+                                var c = Qa(i);
+                                if (!c) throw Error(l(90));
+                                ke(i), Ie(i, c);
+                            }
+                        }
+                    }
+                    break;
+                case "textarea":
+                    hr(e, s);
+                    break;
+                case "select":
+                    (t = s.value), t != null && He(e, !!s.multiple, t, !1);
+            }
+        }),
+        (js = Xo),
+        (In = Sr);
+    var Pg = { usingClientEntryPoint: !1, Events: [qs, Wr, Qa, Pt, Na, Xo] },
+        sa = { findFiberByHostInstance: gr, bundleType: 0, version: "18.3.1", rendererPackageName: "react-dom" },
+        Rg = {
+            bundleType: sa.bundleType,
+            version: sa.version,
+            rendererPackageName: sa.rendererPackageName,
+            rendererConfig: sa.rendererConfig,
+            overrideHookState: null,
+            overrideHookStateDeletePath: null,
+            overrideHookStateRenamePath: null,
+            overrideProps: null,
+            overridePropsDeletePath: null,
+            overridePropsRenamePath: null,
+            setErrorHandler: null,
+            setSuspenseHandler: null,
+            scheduleUpdate: null,
+            currentDispatcherRef: B.ReactCurrentDispatcher,
+            findHostInstanceByFiber: function (e) {
+                return (e = hu(e)), e === null ? null : e.stateNode;
+            },
+            findFiberByHostInstance: sa.findFiberByHostInstance || Tg,
+            findHostInstancesForRefresh: null,
+            scheduleRefresh: null,
+            scheduleRoot: null,
+            setRefreshHandler: null,
+            getCurrentFiber: null,
+            reconcilerVersion: "18.3.1-next-f1338f8080-20240426",
+        };
+    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
+        var _l = __REACT_DEVTOOLS_GLOBAL_HOOK__;
+        if (!_l.isDisabled && _l.supportsFiber)
+            try {
+                (Ea = _l.inject(Rg)), (xn = _l);
+            } catch {}
+    }
+    return (
+        (Ft.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = Pg),
+        (Ft.createPortal = function (e, t) {
+            var s = 2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
+            if (!ic(t)) throw Error(l(200));
+            return Cg(e, t, null, s);
+        }),
+        (Ft.createRoot = function (e, t) {
+            if (!ic(e)) throw Error(l(299));
+            var s = !1,
+                i = "",
+                c = Hf;
+            return (
+                t != null &&
+                    (t.unstable_strictMode === !0 && (s = !0),
+                    t.identifierPrefix !== void 0 && (i = t.identifierPrefix),
+                    t.onRecoverableError !== void 0 && (c = t.onRecoverableError)),
+                (t = sc(e, 1, !1, null, null, s, !1, i, c)),
+                (e[Sn] = t.current),
+                Bs(e.nodeType === 8 ? e.parentNode : e),
+                new lc(t)
+            );
+        }),
+        (Ft.findDOMNode = function (e) {
+            if (e == null) return null;
+            if (e.nodeType === 1) return e;
+            var t = e._reactInternals;
+            if (t === void 0)
+                throw typeof e.render == "function"
+                    ? Error(l(188))
+                    : ((e = Object.keys(e).join(",")), Error(l(268, e)));
+            return (e = hu(t)), (e = e === null ? null : e.stateNode), e;
+        }),
+        (Ft.flushSync = function (e) {
+            return Sr(e);
+        }),
+        (Ft.hydrate = function (e, t, s) {
+            if (!Pl(t)) throw Error(l(200));
+            return Rl(null, e, t, !0, s);
+        }),
+        (Ft.hydrateRoot = function (e, t, s) {
+            if (!ic(e)) throw Error(l(405));
+            var i = (s != null && s.hydratedSources) || null,
+                c = !1,
+                d = "",
+                x = Hf;
+            if (
+                (s != null &&
+                    (s.unstable_strictMode === !0 && (c = !0),
+                    s.identifierPrefix !== void 0 && (d = s.identifierPrefix),
+                    s.onRecoverableError !== void 0 && (x = s.onRecoverableError)),
+                (t = Bf(t, null, e, 1, s ?? null, c, !1, d, x)),
+                (e[Sn] = t.current),
+                Bs(e),
+                i)
+            )
+                for (e = 0; e < i.length; e++)
+                    (s = i[e]),
+                        (c = s._getVersion),
+                        (c = c(s._source)),
+                        t.mutableSourceEagerHydrationData == null
+                            ? (t.mutableSourceEagerHydrationData = [s, c])
+                            : t.mutableSourceEagerHydrationData.push(s, c);
+            return new El(t);
+        }),
+        (Ft.render = function (e, t, s) {
+            if (!Pl(t)) throw Error(l(200));
+            return Rl(null, e, t, !1, s);
+        }),
+        (Ft.unmountComponentAtNode = function (e) {
+            if (!Pl(e)) throw Error(l(40));
+            return e._reactRootContainer
+                ? (Sr(function () {
+                      Rl(null, null, e, !1, function () {
+                          (e._reactRootContainer = null), (e[Sn] = null);
+                      });
+                  }),
+                  !0)
+                : !1;
+        }),
+        (Ft.unstable_batchedUpdates = Xo),
+        (Ft.unstable_renderSubtreeIntoContainer = function (e, t, s, i) {
+            if (!Pl(s)) throw Error(l(200));
+            if (e == null || e._reactInternals === void 0) throw Error(l(38));
+            return Rl(e, t, s, !1, i);
+        }),
+        (Ft.version = "18.3.1-next-f1338f8080-20240426"),
+        Ft
+    );
+}
+var Xf;
+function pp() {
+    if (Xf) return uc.exports;
+    Xf = 1;
+    function n() {
+        if (
+            !(
+                typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ > "u" ||
+                typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE != "function"
+            )
+        )
+            try {
+                __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(n);
+            } catch (a) {
+                console.error(a);
+            }
+    }
+    return n(), (uc.exports = Bg()), uc.exports;
+}
+var Zf;
+function $g() {
+    if (Zf) return Al;
+    Zf = 1;
+    var n = pp();
+    return (Al.createRoot = n.createRoot), (Al.hydrateRoot = n.hydrateRoot), Al;
+}
+var Hg = $g();
+const qg = xa(Hg);
+var Zc = pp();
+/**
+ * @remix-run/router v1.23.2
+ *
+ * Copyright (c) Remix Software Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ *
+ * @license MIT
+ */ function da() {
+    return (
+        (da = Object.assign
+            ? Object.assign.bind()
+            : function (n) {
+                  for (var a = 1; a < arguments.length; a++) {
+                      var l = arguments[a];
+                      for (var o in l) Object.prototype.hasOwnProperty.call(l, o) && (n[o] = l[o]);
+                  }
+                  return n;
+              }),
+        da.apply(this, arguments)
+    );
+}
+var sr;
+(function (n) {
+    (n.Pop = "POP"), (n.Push = "PUSH"), (n.Replace = "REPLACE");
+})(sr || (sr = {}));
+const em = "popstate";
+function Wg(n) {
+    n === void 0 && (n = {});
+    function a(o, u) {
+        let { pathname: f, search: m, hash: p } = o.location;
+        return _c(
+            "",
+            { pathname: f, search: m, hash: p },
+            (u.state && u.state.usr) || null,
+            (u.state && u.state.key) || "default"
+        );
+    }
+    function l(o, u) {
+        return typeof u == "string" ? u : Kl(u);
+    }
+    return Qg(a, l, null, n);
+}
+function Xe(n, a) {
+    if (n === !1 || n === null || typeof n > "u") throw new Error(a);
+}
+function eu(n, a) {
+    if (!n) {
+        typeof console < "u" && console.warn(a);
+        try {
+            throw new Error(a);
+        } catch {}
+    }
+}
+function Vg() {
+    return Math.random().toString(36).substr(2, 8);
+}
+function tm(n, a) {
+    return { usr: n.state, key: n.key, idx: a };
+}
+function _c(n, a, l, o) {
+    return (
+        l === void 0 && (l = null),
+        da(
+            { pathname: typeof n == "string" ? n : n.pathname, search: "", hash: "" },
+            typeof a == "string" ? hs(a) : a,
+            { state: l, key: (a && a.key) || o || Vg() }
+        )
+    );
+}
+function Kl(n) {
+    let { pathname: a = "/", search: l = "", hash: o = "" } = n;
+    return (
+        l && l !== "?" && (a += l.charAt(0) === "?" ? l : "?" + l),
+        o && o !== "#" && (a += o.charAt(0) === "#" ? o : "#" + o),
+        a
+    );
+}
+function hs(n) {
+    let a = {};
+    if (n) {
+        let l = n.indexOf("#");
+        l >= 0 && ((a.hash = n.substr(l)), (n = n.substr(0, l)));
+        let o = n.indexOf("?");
+        o >= 0 && ((a.search = n.substr(o)), (n = n.substr(0, o))), n && (a.pathname = n);
+    }
+    return a;
+}
+function Qg(n, a, l, o) {
+    o === void 0 && (o = {});
+    let { window: u = document.defaultView, v5Compat: f = !1 } = o,
+        m = u.history,
+        p = sr.Pop,
+        h = null,
+        v = y();
+    v == null && ((v = 0), m.replaceState(da({}, m.state, { idx: v }), ""));
+    function y() {
+        return (m.state || { idx: null }).idx;
+    }
+    function w() {
+        p = sr.Pop;
+        let k = y(),
+            I = k == null ? null : k - v;
+        (v = k), h && h({ action: p, location: S.location, delta: I });
+    }
+    function T(k, I) {
+        p = sr.Push;
+        let $ = _c(S.location, k, I);
+        v = y() + 1;
+        let A = tm($, v),
+            B = S.createHref($);
+        try {
+            m.pushState(A, "", B);
+        } catch (Y) {
+            if (Y instanceof DOMException && Y.name === "DataCloneError") throw Y;
+            u.location.assign(B);
+        }
+        f && h && h({ action: p, location: S.location, delta: 1 });
+    }
+    function b(k, I) {
+        p = sr.Replace;
+        let $ = _c(S.location, k, I);
+        v = y();
+        let A = tm($, v),
+            B = S.createHref($);
+        m.replaceState(A, "", B), f && h && h({ action: p, location: S.location, delta: 0 });
+    }
+    function j(k) {
+        let I = u.location.origin !== "null" ? u.location.origin : u.location.href,
+            $ = typeof k == "string" ? k : Kl(k);
+        return (
+            ($ = $.replace(/ $/, "%20")),
+            Xe(I, "No window.location.(origin|href) available to create URL for href: " + $),
+            new URL($, I)
+        );
+    }
+    let S = {
+        get action() {
+            return p;
+        },
+        get location() {
+            return n(u, m);
+        },
+        listen(k) {
+            if (h) throw new Error("A history only accepts one active listener");
+            return (
+                u.addEventListener(em, w),
+                (h = k),
+                () => {
+                    u.removeEventListener(em, w), (h = null);
+                }
+            );
+        },
+        createHref(k) {
+            return a(u, k);
+        },
+        createURL: j,
+        encodeLocation(k) {
+            let I = j(k);
+            return { pathname: I.pathname, search: I.search, hash: I.hash };
+        },
+        push: T,
+        replace: b,
+        go(k) {
+            return m.go(k);
+        },
+    };
+    return S;
+}
+var nm;
+(function (n) {
+    (n.data = "data"), (n.deferred = "deferred"), (n.redirect = "redirect"), (n.error = "error");
+})(nm || (nm = {}));
+function Kg(n, a, l) {
+    return l === void 0 && (l = "/"), Yg(n, a, l);
+}
+function Yg(n, a, l, o) {
+    let u = typeof a == "string" ? hs(a) : a,
+        f = ms(u.pathname || "/", l);
+    if (f == null) return null;
+    let m = hp(n);
+    Gg(m);
+    let p = null;
+    for (let h = 0; p == null && h < m.length; ++h) {
+        let v = iy(f);
+        p = ay(m[h], v);
+    }
+    return p;
+}
+function hp(n, a, l, o) {
+    a === void 0 && (a = []), l === void 0 && (l = []), o === void 0 && (o = "");
+    let u = (f, m, p) => {
+        let h = {
+            relativePath: p === void 0 ? f.path || "" : p,
+            caseSensitive: f.caseSensitive === !0,
+            childrenIndex: m,
+            route: f,
+        };
+        h.relativePath.startsWith("/") &&
+            (Xe(
+                h.relativePath.startsWith(o),
+                'Absolute route path "' +
+                    h.relativePath +
+                    '" nested under path ' +
+                    ('"' + o + '" is not valid. An absolute child route path ') +
+                    "must start with the combined path of all its parent routes."
+            ),
+            (h.relativePath = h.relativePath.slice(o.length)));
+        let v = ar([o, h.relativePath]),
+            y = l.concat(h);
+        f.children &&
+            f.children.length > 0 &&
+            (Xe(
+                f.index !== !0,
+                "Index routes must not have child routes. Please remove " +
+                    ('all child routes from route path "' + v + '".')
+            ),
+            hp(f.children, a, y, v)),
+            !(f.path == null && !f.index) && a.push({ path: v, score: ry(v, f.index), routesMeta: y });
+    };
+    return (
+        n.forEach((f, m) => {
+            var p;
+            if (f.path === "" || !((p = f.path) != null && p.includes("?"))) u(f, m);
+            else for (let h of xp(f.path)) u(f, m, h);
+        }),
+        a
+    );
+}
+function xp(n) {
+    let a = n.split("/");
+    if (a.length === 0) return [];
+    let [l, ...o] = a,
+        u = l.endsWith("?"),
+        f = l.replace(/\?$/, "");
+    if (o.length === 0) return u ? [f, ""] : [f];
+    let m = xp(o.join("/")),
+        p = [];
+    return (
+        p.push(...m.map((h) => (h === "" ? f : [f, h].join("/")))),
+        u && p.push(...m),
+        p.map((h) => (n.startsWith("/") && h === "" ? "/" : h))
+    );
+}
+function Gg(n) {
+    n.sort((a, l) =>
+        a.score !== l.score
+            ? l.score - a.score
+            : sy(
+                  a.routesMeta.map((o) => o.childrenIndex),
+                  l.routesMeta.map((o) => o.childrenIndex)
+              )
+    );
+}
+const Jg = /^:[\w-]+$/,
+    Xg = 3,
+    Zg = 2,
+    ey = 1,
+    ty = 10,
+    ny = -2,
+    rm = (n) => n === "*";
+function ry(n, a) {
+    let l = n.split("/"),
+        o = l.length;
+    return (
+        l.some(rm) && (o += ny),
+        a && (o += Zg),
+        l.filter((u) => !rm(u)).reduce((u, f) => u + (Jg.test(f) ? Xg : f === "" ? ey : ty), o)
+    );
+}
+function sy(n, a) {
+    return n.length === a.length && n.slice(0, -1).every((o, u) => o === a[u]) ? n[n.length - 1] - a[a.length - 1] : 0;
+}
+function ay(n, a, l) {
+    let { routesMeta: o } = n,
+        u = {},
+        f = "/",
+        m = [];
+    for (let p = 0; p < o.length; ++p) {
+        let h = o[p],
+            v = p === o.length - 1,
+            y = f === "/" ? a : a.slice(f.length) || "/",
+            w = Ac({ path: h.relativePath, caseSensitive: h.caseSensitive, end: v }, y),
+            T = h.route;
+        if (!w) return null;
+        Object.assign(u, w.params),
+            m.push({ params: u, pathname: ar([f, w.pathname]), pathnameBase: fy(ar([f, w.pathnameBase])), route: T }),
+            w.pathnameBase !== "/" && (f = ar([f, w.pathnameBase]));
+    }
+    return m;
+}
+function Ac(n, a) {
+    typeof n == "string" && (n = { path: n, caseSensitive: !1, end: !0 });
+    let [l, o] = ly(n.path, n.caseSensitive, n.end),
+        u = a.match(l);
+    if (!u) return null;
+    let f = u[0],
+        m = f.replace(/(.)\/+$/, "$1"),
+        p = u.slice(1);
+    return {
+        params: o.reduce((v, y, w) => {
+            let { paramName: T, isOptional: b } = y;
+            if (T === "*") {
+                let S = p[w] || "";
+                m = f.slice(0, f.length - S.length).replace(/(.)\/+$/, "$1");
+            }
+            const j = p[w];
+            return b && !j ? (v[T] = void 0) : (v[T] = (j || "").replace(/%2F/g, "/")), v;
+        }, {}),
+        pathname: f,
+        pathnameBase: m,
+        pattern: n,
+    };
+}
+function ly(n, a, l) {
+    a === void 0 && (a = !1),
+        l === void 0 && (l = !0),
+        eu(
+            n === "*" || !n.endsWith("*") || n.endsWith("/*"),
+            'Route path "' +
+                n +
+                '" will be treated as if it were ' +
+                ('"' + n.replace(/\*$/, "/*") + '" because the `*` character must ') +
+                "always follow a `/` in the pattern. To get rid of this warning, " +
+                ('please change the route path to "' + n.replace(/\*$/, "/*") + '".')
+        );
+    let o = [],
+        u =
+            "^" +
+            n
+                .replace(/\/*\*?$/, "")
+                .replace(/^\/*/, "/")
+                .replace(/[\\.*+^${}|()[\]]/g, "\\$&")
+                .replace(
+                    /\/:([\w-]+)(\?)?/g,
+                    (m, p, h) => (o.push({ paramName: p, isOptional: h != null }), h ? "/?([^\\/]+)?" : "/([^\\/]+)")
+                );
+    return (
+        n.endsWith("*")
+            ? (o.push({ paramName: "*" }), (u += n === "*" || n === "/*" ? "(.*)$" : "(?:\\/(.+)|\\/*)$"))
+            : l
+              ? (u += "\\/*$")
+              : n !== "" && n !== "/" && (u += "(?:(?=\\/|$))"),
+        [new RegExp(u, a ? void 0 : "i"), o]
+    );
+}
+function iy(n) {
+    try {
+        return n
+            .split("/")
+            .map((a) => decodeURIComponent(a).replace(/\//g, "%2F"))
+            .join("/");
+    } catch (a) {
+        return (
+            eu(
+                !1,
+                'The URL path "' +
+                    n +
+                    '" could not be decoded because it is is a malformed URL segment. This is probably due to a bad percent ' +
+                    ("encoding (" + a + ").")
+            ),
+            n
+        );
+    }
+}
+function ms(n, a) {
+    if (a === "/") return n;
+    if (!n.toLowerCase().startsWith(a.toLowerCase())) return null;
+    let l = a.endsWith("/") ? a.length - 1 : a.length,
+        o = n.charAt(l);
+    return o && o !== "/" ? null : n.slice(l) || "/";
+}
+const oy = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i,
+    cy = (n) => oy.test(n);
+function uy(n, a) {
+    a === void 0 && (a = "/");
+    let { pathname: l, search: o = "", hash: u = "" } = typeof n == "string" ? hs(n) : n,
+        f;
+    if (l)
+        if (cy(l)) f = l;
+        else {
+            if (l.includes("//")) {
+                let m = l;
+                (l = l.replace(/\/\/+/g, "/")),
+                    eu(!1, "Pathnames cannot have embedded double slashes - normalizing " + (m + " -> " + l));
+            }
+            l.startsWith("/") ? (f = sm(l.substring(1), "/")) : (f = sm(l, a));
+        }
+    else f = a;
+    return { pathname: f, search: my(o), hash: py(u) };
+}
+function sm(n, a) {
+    let l = a.replace(/\/+$/, "").split("/");
+    return (
+        n.split("/").forEach((u) => {
+            u === ".." ? l.length > 1 && l.pop() : u !== "." && l.push(u);
+        }),
+        l.length > 1 ? l.join("/") : "/"
+    );
+}
+function mc(n, a, l, o) {
+    return (
+        "Cannot include a '" +
+        n +
+        "' character in a manually specified " +
+        ("`to." + a + "` field [" + JSON.stringify(o) + "].  Please separate it out to the ") +
+        ("`to." + l + "` field. Alternatively you may provide the full path as ") +
+        'a string in <Link to="..."> and the router will parse it for you.'
+    );
+}
+function dy(n) {
+    return n.filter((a, l) => l === 0 || (a.route.path && a.route.path.length > 0));
+}
+function gp(n, a) {
+    let l = dy(n);
+    return a ? l.map((o, u) => (u === l.length - 1 ? o.pathname : o.pathnameBase)) : l.map((o) => o.pathnameBase);
+}
+function yp(n, a, l, o) {
+    o === void 0 && (o = !1);
+    let u;
+    typeof n == "string"
+        ? (u = hs(n))
+        : ((u = da({}, n)),
+          Xe(!u.pathname || !u.pathname.includes("?"), mc("?", "pathname", "search", u)),
+          Xe(!u.pathname || !u.pathname.includes("#"), mc("#", "pathname", "hash", u)),
+          Xe(!u.search || !u.search.includes("#"), mc("#", "search", "hash", u)));
+    let f = n === "" || u.pathname === "",
+        m = f ? "/" : u.pathname,
+        p;
+    if (m == null) p = l;
+    else {
+        let w = a.length - 1;
+        if (!o && m.startsWith("..")) {
+            let T = m.split("/");
+            for (; T[0] === ".."; ) T.shift(), (w -= 1);
+            u.pathname = T.join("/");
+        }
+        p = w >= 0 ? a[w] : "/";
+    }
+    let h = uy(u, p),
+        v = m && m !== "/" && m.endsWith("/"),
+        y = (f || m === ".") && l.endsWith("/");
+    return !h.pathname.endsWith("/") && (v || y) && (h.pathname += "/"), h;
+}
+const ar = (n) => n.join("/").replace(/\/\/+/g, "/"),
+    fy = (n) => n.replace(/\/+$/, "").replace(/^\/*/, "/"),
+    my = (n) => (!n || n === "?" ? "" : n.startsWith("?") ? n : "?" + n),
+    py = (n) => (!n || n === "#" ? "" : n.startsWith("#") ? n : "#" + n);
+function hy(n) {
+    return (
+        n != null &&
+        typeof n.status == "number" &&
+        typeof n.statusText == "string" &&
+        typeof n.internal == "boolean" &&
+        "data" in n
+    );
+}
+const vp = ["post", "put", "patch", "delete"];
+new Set(vp);
+const xy = ["get", ...vp];
+new Set(xy);
+/**
+ * React Router v6.30.3
+ *
+ * Copyright (c) Remix Software Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ *
+ * @license MIT
+ */ function fa() {
+    return (
+        (fa = Object.assign
+            ? Object.assign.bind()
+            : function (n) {
+                  for (var a = 1; a < arguments.length; a++) {
+                      var l = arguments[a];
+                      for (var o in l) Object.prototype.hasOwnProperty.call(l, o) && (n[o] = l[o]);
+                  }
+                  return n;
+              }),
+        fa.apply(this, arguments)
+    );
+}
+const ci = g.createContext(null),
+    wp = g.createContext(null),
+    dr = g.createContext(null),
+    ui = g.createContext(null),
+    Fn = g.createContext({ outlet: null, matches: [], isDataRoute: !1 }),
+    bp = g.createContext(null);
+function gy(n, a) {
+    let { relative: l } = a === void 0 ? {} : a;
+    ga() || Xe(!1);
+    let { basename: o, navigator: u } = g.useContext(dr),
+        { hash: f, pathname: m, search: p } = fi(n, { relative: l }),
+        h = m;
+    return o !== "/" && (h = m === "/" ? o : ar([o, m])), u.createHref({ pathname: h, search: p, hash: f });
+}
+function ga() {
+    return g.useContext(ui) != null;
+}
+function jn() {
+    return ga() || Xe(!1), g.useContext(ui).location;
+}
+function jp(n) {
+    g.useContext(dr).static || g.useLayoutEffect(n);
+}
+function xt() {
+    let { isDataRoute: n } = g.useContext(Fn);
+    return n ? Ay() : yy();
+}
+function yy() {
+    ga() || Xe(!1);
+    let n = g.useContext(ci),
+        { basename: a, future: l, navigator: o } = g.useContext(dr),
+        { matches: u } = g.useContext(Fn),
+        { pathname: f } = jn(),
+        m = JSON.stringify(gp(u, l.v7_relativeSplatPath)),
+        p = g.useRef(!1);
+    return (
+        jp(() => {
+            p.current = !0;
+        }),
+        g.useCallback(
+            function (v, y) {
+                if ((y === void 0 && (y = {}), !p.current)) return;
+                if (typeof v == "number") {
+                    o.go(v);
+                    return;
+                }
+                let w = yp(v, JSON.parse(m), f, y.relative === "path");
+                n == null && a !== "/" && (w.pathname = w.pathname === "/" ? a : ar([a, w.pathname])),
+                    (y.replace ? o.replace : o.push)(w, y.state, y);
+            },
+            [a, o, m, f, n]
+        )
+    );
+}
+const vy = g.createContext(null);
+function wy(n) {
+    let a = g.useContext(Fn).outlet;
+    return a && g.createElement(vy.Provider, { value: n }, a);
+}
+function di() {
+    let { matches: n } = g.useContext(Fn),
+        a = n[n.length - 1];
+    return a ? a.params : {};
+}
+function fi(n, a) {
+    let { relative: l } = a === void 0 ? {} : a,
+        { future: o } = g.useContext(dr),
+        { matches: u } = g.useContext(Fn),
+        { pathname: f } = jn(),
+        m = JSON.stringify(gp(u, o.v7_relativeSplatPath));
+    return g.useMemo(() => yp(n, JSON.parse(m), f, l === "path"), [n, m, f, l]);
+}
+function by(n, a) {
+    return jy(n, a);
+}
+function jy(n, a, l, o) {
+    ga() || Xe(!1);
+    let { navigator: u } = g.useContext(dr),
+        { matches: f } = g.useContext(Fn),
+        m = f[f.length - 1],
+        p = m ? m.params : {};
+    m && m.pathname;
+    let h = m ? m.pathnameBase : "/";
+    m && m.route;
+    let v = jn(),
+        y;
+    if (a) {
+        var w;
+        let k = typeof a == "string" ? hs(a) : a;
+        h === "/" || ((w = k.pathname) != null && w.startsWith(h)) || Xe(!1), (y = k);
+    } else y = v;
+    let T = y.pathname || "/",
+        b = T;
+    if (h !== "/") {
+        let k = h.replace(/^\//, "").split("/");
+        b = "/" + T.replace(/^\//, "").split("/").slice(k.length).join("/");
+    }
+    let j = Kg(n, { pathname: b }),
+        S = Ty(
+            j &&
+                j.map((k) =>
+                    Object.assign({}, k, {
+                        params: Object.assign({}, p, k.params),
+                        pathname: ar([h, u.encodeLocation ? u.encodeLocation(k.pathname).pathname : k.pathname]),
+                        pathnameBase:
+                            k.pathnameBase === "/"
+                                ? h
+                                : ar([
+                                      h,
+                                      u.encodeLocation ? u.encodeLocation(k.pathnameBase).pathname : k.pathnameBase,
+                                  ]),
+                    })
+                ),
+            f,
+            l,
+            o
+        );
+    return a && S
+        ? g.createElement(
+              ui.Provider,
+              {
+                  value: {
+                      location: fa({ pathname: "/", search: "", hash: "", state: null, key: "default" }, y),
+                      navigationType: sr.Pop,
+                  },
+              },
+              S
+          )
+        : S;
+}
+function ky() {
+    let n = _y(),
+        a = hy(n) ? n.status + " " + n.statusText : n instanceof Error ? n.message : JSON.stringify(n),
+        l = n instanceof Error ? n.stack : null,
+        u = { padding: "0.5rem", backgroundColor: "rgba(200,200,200, 0.5)" };
+    return g.createElement(
+        g.Fragment,
+        null,
+        g.createElement("h2", null, "Unexpected Application Error!"),
+        g.createElement("h3", { style: { fontStyle: "italic" } }, a),
+        l ? g.createElement("pre", { style: u }, l) : null,
+        null
+    );
+}
+const Ny = g.createElement(ky, null);
+class Sy extends g.Component {
+    constructor(a) {
+        super(a), (this.state = { location: a.location, revalidation: a.revalidation, error: a.error });
+    }
+    static getDerivedStateFromError(a) {
+        return { error: a };
+    }
+    static getDerivedStateFromProps(a, l) {
+        return l.location !== a.location || (l.revalidation !== "idle" && a.revalidation === "idle")
+            ? { error: a.error, location: a.location, revalidation: a.revalidation }
+            : {
+                  error: a.error !== void 0 ? a.error : l.error,
+                  location: l.location,
+                  revalidation: a.revalidation || l.revalidation,
+              };
+    }
+    componentDidCatch(a, l) {
+        console.error("React Router caught the following error during render", a, l);
+    }
+    render() {
+        return this.state.error !== void 0
+            ? g.createElement(
+                  Fn.Provider,
+                  { value: this.props.routeContext },
+                  g.createElement(bp.Provider, { value: this.state.error, children: this.props.component })
+              )
+            : this.props.children;
+    }
+}
+function Cy(n) {
+    let { routeContext: a, match: l, children: o } = n,
+        u = g.useContext(ci);
+    return (
+        u &&
+            u.static &&
+            u.staticContext &&
+            (l.route.errorElement || l.route.ErrorBoundary) &&
+            (u.staticContext._deepestRenderedBoundaryId = l.route.id),
+        g.createElement(Fn.Provider, { value: a }, o)
+    );
+}
+function Ty(n, a, l, o) {
+    var u;
+    if ((a === void 0 && (a = []), l === void 0 && (l = null), o === void 0 && (o = null), n == null)) {
+        var f;
+        if (!l) return null;
+        if (l.errors) n = l.matches;
+        else if ((f = o) != null && f.v7_partialHydration && a.length === 0 && !l.initialized && l.matches.length > 0)
+            n = l.matches;
+        else return null;
+    }
+    let m = n,
+        p = (u = l) == null ? void 0 : u.errors;
+    if (p != null) {
+        let y = m.findIndex((w) => w.route.id && (p == null ? void 0 : p[w.route.id]) !== void 0);
+        y >= 0 || Xe(!1), (m = m.slice(0, Math.min(m.length, y + 1)));
+    }
+    let h = !1,
+        v = -1;
+    if (l && o && o.v7_partialHydration)
+        for (let y = 0; y < m.length; y++) {
+            let w = m[y];
+            if (((w.route.HydrateFallback || w.route.hydrateFallbackElement) && (v = y), w.route.id)) {
+                let { loaderData: T, errors: b } = l,
+                    j = w.route.loader && T[w.route.id] === void 0 && (!b || b[w.route.id] === void 0);
+                if (w.route.lazy || j) {
+                    (h = !0), v >= 0 ? (m = m.slice(0, v + 1)) : (m = [m[0]]);
+                    break;
+                }
+            }
+        }
+    return m.reduceRight((y, w, T) => {
+        let b,
+            j = !1,
+            S = null,
+            k = null;
+        l &&
+            ((b = p && w.route.id ? p[w.route.id] : void 0),
+            (S = w.route.errorElement || Ny),
+            h &&
+                (v < 0 && T === 0
+                    ? (Ly("route-fallback"), (j = !0), (k = null))
+                    : v === T && ((j = !0), (k = w.route.hydrateFallbackElement || null))));
+        let I = a.concat(m.slice(0, T + 1)),
+            $ = () => {
+                let A;
+                return (
+                    b
+                        ? (A = S)
+                        : j
+                          ? (A = k)
+                          : w.route.Component
+                            ? (A = g.createElement(w.route.Component, null))
+                            : w.route.element
+                              ? (A = w.route.element)
+                              : (A = y),
+                    g.createElement(Cy, {
+                        match: w,
+                        routeContext: { outlet: y, matches: I, isDataRoute: l != null },
+                        children: A,
+                    })
+                );
+            };
+        return l && (w.route.ErrorBoundary || w.route.errorElement || T === 0)
+            ? g.createElement(Sy, {
+                  location: l.location,
+                  revalidation: l.revalidation,
+                  component: S,
+                  error: b,
+                  children: $(),
+                  routeContext: { outlet: null, matches: I, isDataRoute: !0 },
+              })
+            : $();
+    }, null);
+}
+var kp = (function (n) {
+        return (
+            (n.UseBlocker = "useBlocker"),
+            (n.UseRevalidator = "useRevalidator"),
+            (n.UseNavigateStable = "useNavigate"),
+            n
+        );
+    })(kp || {}),
+    Np = (function (n) {
+        return (
+            (n.UseBlocker = "useBlocker"),
+            (n.UseLoaderData = "useLoaderData"),
+            (n.UseActionData = "useActionData"),
+            (n.UseRouteError = "useRouteError"),
+            (n.UseNavigation = "useNavigation"),
+            (n.UseRouteLoaderData = "useRouteLoaderData"),
+            (n.UseMatches = "useMatches"),
+            (n.UseRevalidator = "useRevalidator"),
+            (n.UseNavigateStable = "useNavigate"),
+            (n.UseRouteId = "useRouteId"),
+            n
+        );
+    })(Np || {});
+function Ey(n) {
+    let a = g.useContext(ci);
+    return a || Xe(!1), a;
+}
+function Py(n) {
+    let a = g.useContext(wp);
+    return a || Xe(!1), a;
+}
+function Ry(n) {
+    let a = g.useContext(Fn);
+    return a || Xe(!1), a;
+}
+function Sp(n) {
+    let a = Ry(),
+        l = a.matches[a.matches.length - 1];
+    return l.route.id || Xe(!1), l.route.id;
+}
+function _y() {
+    var n;
+    let a = g.useContext(bp),
+        l = Py(),
+        o = Sp();
+    return a !== void 0 ? a : (n = l.errors) == null ? void 0 : n[o];
+}
+function Ay() {
+    let { router: n } = Ey(kp.UseNavigateStable),
+        a = Sp(Np.UseNavigateStable),
+        l = g.useRef(!1);
+    return (
+        jp(() => {
+            l.current = !0;
+        }),
+        g.useCallback(
+            function (u, f) {
+                f === void 0 && (f = {}),
+                    l.current && (typeof u == "number" ? n.navigate(u) : n.navigate(u, fa({ fromRouteId: a }, f)));
+            },
+            [n, a]
+        )
+    );
+}
+const am = {};
+function Ly(n, a, l) {
+    am[n] || (am[n] = !0);
+}
+function zy(n, a) {
+    n == null || n.v7_startTransition, n == null || n.v7_relativeSplatPath;
+}
+function Fy(n) {
+    return wy(n.context);
+}
+function nt(n) {
+    Xe(!1);
+}
+function Oy(n) {
+    let {
+        basename: a = "/",
+        children: l = null,
+        location: o,
+        navigationType: u = sr.Pop,
+        navigator: f,
+        static: m = !1,
+        future: p,
+    } = n;
+    ga() && Xe(!1);
+    let h = a.replace(/^\/*/, "/"),
+        v = g.useMemo(
+            () => ({ basename: h, navigator: f, static: m, future: fa({ v7_relativeSplatPath: !1 }, p) }),
+            [h, p, f, m]
+        );
+    typeof o == "string" && (o = hs(o));
+    let { pathname: y = "/", search: w = "", hash: T = "", state: b = null, key: j = "default" } = o,
+        S = g.useMemo(() => {
+            let k = ms(y, h);
+            return k == null
+                ? null
+                : { location: { pathname: k, search: w, hash: T, state: b, key: j }, navigationType: u };
+        }, [h, y, w, T, b, j, u]);
+    return S == null
+        ? null
+        : g.createElement(dr.Provider, { value: v }, g.createElement(ui.Provider, { children: l, value: S }));
+}
+function Iy(n) {
+    let { children: a, location: l } = n;
+    return by(Lc(a), l);
+}
+new Promise(() => {});
+function Lc(n, a) {
+    a === void 0 && (a = []);
+    let l = [];
+    return (
+        g.Children.forEach(n, (o, u) => {
+            if (!g.isValidElement(o)) return;
+            let f = [...a, u];
+            if (o.type === g.Fragment) {
+                l.push.apply(l, Lc(o.props.children, f));
+                return;
+            }
+            o.type !== nt && Xe(!1), !o.props.index || !o.props.children || Xe(!1);
+            let m = {
+                id: o.props.id || f.join("-"),
+                caseSensitive: o.props.caseSensitive,
+                element: o.props.element,
+                Component: o.props.Component,
+                index: o.props.index,
+                path: o.props.path,
+                loader: o.props.loader,
+                action: o.props.action,
+                errorElement: o.props.errorElement,
+                ErrorBoundary: o.props.ErrorBoundary,
+                hasErrorBoundary: o.props.ErrorBoundary != null || o.props.errorElement != null,
+                shouldRevalidate: o.props.shouldRevalidate,
+                handle: o.props.handle,
+                lazy: o.props.lazy,
+            };
+            o.props.children && (m.children = Lc(o.props.children, f)), l.push(m);
+        }),
+        l
+    );
+}
+/**
+ * React Router DOM v6.30.3
+ *
+ * Copyright (c) Remix Software Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ *
+ * @license MIT
+ */ function Yl() {
+    return (
+        (Yl = Object.assign
+            ? Object.assign.bind()
+            : function (n) {
+                  for (var a = 1; a < arguments.length; a++) {
+                      var l = arguments[a];
+                      for (var o in l) Object.prototype.hasOwnProperty.call(l, o) && (n[o] = l[o]);
+                  }
+                  return n;
+              }),
+        Yl.apply(this, arguments)
+    );
+}
+function Cp(n, a) {
+    if (n == null) return {};
+    var l = {},
+        o = Object.keys(n),
+        u,
+        f;
+    for (f = 0; f < o.length; f++) (u = o[f]), !(a.indexOf(u) >= 0) && (l[u] = n[u]);
+    return l;
+}
+function My(n) {
+    return !!(n.metaKey || n.altKey || n.ctrlKey || n.shiftKey);
+}
+function Dy(n, a) {
+    return n.button === 0 && (!a || a === "_self") && !My(n);
+}
+function zc(n) {
+    return (
+        n === void 0 && (n = ""),
+        new URLSearchParams(
+            typeof n == "string" || Array.isArray(n) || n instanceof URLSearchParams
+                ? n
+                : Object.keys(n).reduce((a, l) => {
+                      let o = n[l];
+                      return a.concat(Array.isArray(o) ? o.map((u) => [l, u]) : [[l, o]]);
+                  }, [])
+        )
+    );
+}
+function Uy(n, a) {
+    let l = zc(n);
+    return (
+        a &&
+            a.forEach((o, u) => {
+                l.has(u) ||
+                    a.getAll(u).forEach((f) => {
+                        l.append(u, f);
+                    });
+            }),
+        l
+    );
+}
+const By = [
+        "onClick",
+        "relative",
+        "reloadDocument",
+        "replace",
+        "state",
+        "target",
+        "to",
+        "preventScrollReset",
+        "viewTransition",
+    ],
+    $y = ["aria-current", "caseSensitive", "className", "end", "style", "to", "viewTransition", "children"],
+    Hy = "6";
+try {
+    window.__reactRouterVersion = Hy;
+} catch {}
+const qy = g.createContext({ isTransitioning: !1 }),
+    Wy = "startTransition",
+    lm = Mg[Wy];
+function Vy(n) {
+    let { basename: a, children: l, future: o, window: u } = n,
+        f = g.useRef();
+    f.current == null && (f.current = Wg({ window: u, v5Compat: !0 }));
+    let m = f.current,
+        [p, h] = g.useState({ action: m.action, location: m.location }),
+        { v7_startTransition: v } = o || {},
+        y = g.useCallback(
+            (w) => {
+                v && lm ? lm(() => h(w)) : h(w);
+            },
+            [h, v]
+        );
+    return (
+        g.useLayoutEffect(() => m.listen(y), [m, y]),
+        g.useEffect(() => zy(o), [o]),
+        g.createElement(Oy, {
+            basename: a,
+            children: l,
+            location: p.location,
+            navigationType: p.action,
+            navigator: m,
+            future: o,
+        })
+    );
+}
+const Qy = typeof window < "u" && typeof window.document < "u" && typeof window.document.createElement < "u",
+    Ky = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i,
+    st = g.forwardRef(function (a, l) {
+        let {
+                onClick: o,
+                relative: u,
+                reloadDocument: f,
+                replace: m,
+                state: p,
+                target: h,
+                to: v,
+                preventScrollReset: y,
+                viewTransition: w,
+            } = a,
+            T = Cp(a, By),
+            { basename: b } = g.useContext(dr),
+            j,
+            S = !1;
+        if (typeof v == "string" && Ky.test(v) && ((j = v), Qy))
+            try {
+                let A = new URL(window.location.href),
+                    B = v.startsWith("//") ? new URL(A.protocol + v) : new URL(v),
+                    Y = ms(B.pathname, b);
+                B.origin === A.origin && Y != null ? (v = Y + B.search + B.hash) : (S = !0);
+            } catch {}
+        let k = gy(v, { relative: u }),
+            I = Gy(v, { replace: m, state: p, target: h, preventScrollReset: y, relative: u, viewTransition: w });
+        function $(A) {
+            o && o(A), A.defaultPrevented || I(A);
+        }
+        return g.createElement("a", Yl({}, T, { href: j || k, onClick: S || f ? o : $, ref: l, target: h }));
+    }),
+    $t = g.forwardRef(function (a, l) {
+        let {
+                "aria-current": o = "page",
+                caseSensitive: u = !1,
+                className: f = "",
+                end: m = !1,
+                style: p,
+                to: h,
+                viewTransition: v,
+                children: y,
+            } = a,
+            w = Cp(a, $y),
+            T = fi(h, { relative: w.relative }),
+            b = jn(),
+            j = g.useContext(wp),
+            { navigator: S, basename: k } = g.useContext(dr),
+            I = j != null && Jy(T) && v === !0,
+            $ = S.encodeLocation ? S.encodeLocation(T).pathname : T.pathname,
+            A = b.pathname,
+            B = j && j.navigation && j.navigation.location ? j.navigation.location.pathname : null;
+        u || ((A = A.toLowerCase()), (B = B ? B.toLowerCase() : null), ($ = $.toLowerCase())),
+            B && k && (B = ms(B, k) || B);
+        const Y = $ !== "/" && $.endsWith("/") ? $.length - 1 : $.length;
+        let ne = A === $ || (!m && A.startsWith($) && A.charAt(Y) === "/"),
+            K = B != null && (B === $ || (!m && B.startsWith($) && B.charAt($.length) === "/")),
+            le = { isActive: ne, isPending: K, isTransitioning: I },
+            ee = ne ? o : void 0,
+            re;
+        typeof f == "function"
+            ? (re = f(le))
+            : (re = [f, ne ? "active" : null, K ? "pending" : null, I ? "transitioning" : null]
+                  .filter(Boolean)
+                  .join(" "));
+        let xe = typeof p == "function" ? p(le) : p;
+        return g.createElement(
+            st,
+            Yl({}, w, { "aria-current": ee, className: re, ref: l, style: xe, to: h, viewTransition: v }),
+            typeof y == "function" ? y(le) : y
+        );
+    });
+var Fc;
+(function (n) {
+    (n.UseScrollRestoration = "useScrollRestoration"),
+        (n.UseSubmit = "useSubmit"),
+        (n.UseSubmitFetcher = "useSubmitFetcher"),
+        (n.UseFetcher = "useFetcher"),
+        (n.useViewTransitionState = "useViewTransitionState");
+})(Fc || (Fc = {}));
+var im;
+(function (n) {
+    (n.UseFetcher = "useFetcher"), (n.UseFetchers = "useFetchers"), (n.UseScrollRestoration = "useScrollRestoration");
+})(im || (im = {}));
+function Yy(n) {
+    let a = g.useContext(ci);
+    return a || Xe(!1), a;
+}
+function Gy(n, a) {
+    let {
+            target: l,
+            replace: o,
+            state: u,
+            preventScrollReset: f,
+            relative: m,
+            viewTransition: p,
+        } = a === void 0 ? {} : a,
+        h = xt(),
+        v = jn(),
+        y = fi(n, { relative: m });
+    return g.useCallback(
+        (w) => {
+            if (Dy(w, l)) {
+                w.preventDefault();
+                let T = o !== void 0 ? o : Kl(v) === Kl(y);
+                h(n, { replace: T, state: u, preventScrollReset: f, relative: m, viewTransition: p });
+            }
+        },
+        [v, h, y, o, u, l, n, f, m, p]
+    );
+}
+function Tp(n) {
+    let a = g.useRef(zc(n)),
+        l = g.useRef(!1),
+        o = jn(),
+        u = g.useMemo(() => Uy(o.search, l.current ? null : a.current), [o.search]),
+        f = xt(),
+        m = g.useCallback(
+            (p, h) => {
+                const v = zc(typeof p == "function" ? p(u) : p);
+                (l.current = !0), f("?" + v, h);
+            },
+            [f, u]
+        );
+    return [u, m];
+}
+function Jy(n, a) {
+    a === void 0 && (a = {});
+    let l = g.useContext(qy);
+    l == null && Xe(!1);
+    let { basename: o } = Yy(Fc.useViewTransitionState),
+        u = fi(n, { relative: a.relative });
+    if (!l.isTransitioning) return !1;
+    let f = ms(l.currentLocation.pathname, o) || l.currentLocation.pathname,
+        m = ms(l.nextLocation.pathname, o) || l.nextLocation.pathname;
+    return Ac(u.pathname, m) != null || Ac(u.pathname, f) != null;
+}
+var pc, om;
+function Xy() {
+    if (om) return pc;
+    om = 1;
+    var n = typeof Element < "u",
+        a = typeof Map == "function",
+        l = typeof Set == "function",
+        o = typeof ArrayBuffer == "function" && !!ArrayBuffer.isView;
+    function u(f, m) {
+        if (f === m) return !0;
+        if (f && m && typeof f == "object" && typeof m == "object") {
+            if (f.constructor !== m.constructor) return !1;
+            var p, h, v;
+            if (Array.isArray(f)) {
+                if (((p = f.length), p != m.length)) return !1;
+                for (h = p; h-- !== 0; ) if (!u(f[h], m[h])) return !1;
+                return !0;
+            }
+            var y;
+            if (a && f instanceof Map && m instanceof Map) {
+                if (f.size !== m.size) return !1;
+                for (y = f.entries(); !(h = y.next()).done; ) if (!m.has(h.value[0])) return !1;
+                for (y = f.entries(); !(h = y.next()).done; ) if (!u(h.value[1], m.get(h.value[0]))) return !1;
+                return !0;
+            }
+            if (l && f instanceof Set && m instanceof Set) {
+                if (f.size !== m.size) return !1;
+                for (y = f.entries(); !(h = y.next()).done; ) if (!m.has(h.value[0])) return !1;
+                return !0;
+            }
+            if (o && ArrayBuffer.isView(f) && ArrayBuffer.isView(m)) {
+                if (((p = f.length), p != m.length)) return !1;
+                for (h = p; h-- !== 0; ) if (f[h] !== m[h]) return !1;
+                return !0;
+            }
+            if (f.constructor === RegExp) return f.source === m.source && f.flags === m.flags;
+            if (
+                f.valueOf !== Object.prototype.valueOf &&
+                typeof f.valueOf == "function" &&
+                typeof m.valueOf == "function"
+            )
+                return f.valueOf() === m.valueOf();
+            if (
+                f.toString !== Object.prototype.toString &&
+                typeof f.toString == "function" &&
+                typeof m.toString == "function"
+            )
+                return f.toString() === m.toString();
+            if (((v = Object.keys(f)), (p = v.length), p !== Object.keys(m).length)) return !1;
+            for (h = p; h-- !== 0; ) if (!Object.prototype.hasOwnProperty.call(m, v[h])) return !1;
+            if (n && f instanceof Element) return !1;
+            for (h = p; h-- !== 0; )
+                if (!((v[h] === "_owner" || v[h] === "__v" || v[h] === "__o") && f.$$typeof) && !u(f[v[h]], m[v[h]]))
+                    return !1;
+            return !0;
+        }
+        return f !== f && m !== m;
+    }
+    return (
+        (pc = function (m, p) {
+            try {
+                return u(m, p);
+            } catch (h) {
+                if ((h.message || "").match(/stack|recursion/i))
+                    return console.warn("react-fast-compare cannot handle circular refs"), !1;
+                throw h;
+            }
+        }),
+        pc
+    );
+}
+var Zy = Xy();
+const e0 = xa(Zy);
+var hc, cm;
+function t0() {
+    if (cm) return hc;
+    cm = 1;
+    var n = function (a, l, o, u, f, m, p, h) {
+        if (!a) {
+            var v;
+            if (l === void 0)
+                v = new Error(
+                    "Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings."
+                );
+            else {
+                var y = [o, u, f, m, p, h],
+                    w = 0;
+                (v = new Error(
+                    l.replace(/%s/g, function () {
+                        return y[w++];
+                    })
+                )),
+                    (v.name = "Invariant Violation");
+            }
+            throw ((v.framesToPop = 1), v);
+        }
+    };
+    return (hc = n), hc;
+}
+var n0 = t0();
+const um = xa(n0);
+var xc, dm;
+function r0() {
+    return (
+        dm ||
+            ((dm = 1),
+            (xc = function (a, l, o, u) {
+                var f = o ? o.call(u, a, l) : void 0;
+                if (f !== void 0) return !!f;
+                if (a === l) return !0;
+                if (typeof a != "object" || !a || typeof l != "object" || !l) return !1;
+                var m = Object.keys(a),
+                    p = Object.keys(l);
+                if (m.length !== p.length) return !1;
+                for (var h = Object.prototype.hasOwnProperty.bind(l), v = 0; v < m.length; v++) {
+                    var y = m[v];
+                    if (!h(y)) return !1;
+                    var w = a[y],
+                        T = l[y];
+                    if (((f = o ? o.call(u, w, T, y) : void 0), f === !1 || (f === void 0 && w !== T))) return !1;
+                }
+                return !0;
+            })),
+        xc
+    );
+}
+var s0 = r0();
+const a0 = xa(s0);
+var Ep = ((n) => (
+        (n.BASE = "base"),
+        (n.BODY = "body"),
+        (n.HEAD = "head"),
+        (n.HTML = "html"),
+        (n.LINK = "link"),
+        (n.META = "meta"),
+        (n.NOSCRIPT = "noscript"),
+        (n.SCRIPT = "script"),
+        (n.STYLE = "style"),
+        (n.TITLE = "title"),
+        (n.FRAGMENT = "Symbol(react.fragment)"),
+        n
+    ))(Ep || {}),
+    gc = {
+        link: { rel: ["amphtml", "canonical", "alternate"] },
+        script: { type: ["application/ld+json"] },
+        meta: {
+            charset: "",
+            name: ["generator", "robots", "description"],
+            property: [
+                "og:type",
+                "og:title",
+                "og:url",
+                "og:image",
+                "og:image:alt",
+                "og:description",
+                "twitter:url",
+                "twitter:title",
+                "twitter:description",
+                "twitter:image",
+                "twitter:image:alt",
+                "twitter:card",
+                "twitter:site",
+            ],
+        },
+    },
+    fm = Object.values(Ep),
+    mi = {
+        accesskey: "accessKey",
+        charset: "charSet",
+        class: "className",
+        contenteditable: "contentEditable",
+        contextmenu: "contextMenu",
+        "http-equiv": "httpEquiv",
+        itemprop: "itemProp",
+        tabindex: "tabIndex",
+    },
+    Pp = Object.entries(mi).reduce((n, [a, l]) => ((n[l] = a), n), {}),
+    dn = "data-rh",
+    ds = {
+        DEFAULT_TITLE: "defaultTitle",
+        DEFER: "defer",
+        ENCODE_SPECIAL_CHARACTERS: "encodeSpecialCharacters",
+        ON_CHANGE_CLIENT_STATE: "onChangeClientState",
+        TITLE_TEMPLATE: "titleTemplate",
+        PRIORITIZE_SEO_TAGS: "prioritizeSeoTags",
+    },
+    fs = (n, a) => {
+        for (let l = n.length - 1; l >= 0; l -= 1) {
+            const o = n[l];
+            if (Object.prototype.hasOwnProperty.call(o, a)) return o[a];
+        }
+        return null;
+    },
+    l0 = (n) => {
+        let a = fs(n, "title");
+        const l = fs(n, ds.TITLE_TEMPLATE);
+        if ((Array.isArray(a) && (a = a.join("")), l && a)) return l.replace(/%s/g, () => a);
+        const o = fs(n, ds.DEFAULT_TITLE);
+        return a || o || void 0;
+    },
+    i0 = (n) => fs(n, ds.ON_CHANGE_CLIENT_STATE) || (() => {}),
+    yc = (n, a) =>
+        a
+            .filter((l) => typeof l[n] < "u")
+            .map((l) => l[n])
+            .reduce((l, o) => ({ ...l, ...o }), {}),
+    o0 = (n, a) =>
+        a
+            .filter((l) => typeof l.base < "u")
+            .map((l) => l.base)
+            .reverse()
+            .reduce((l, o) => {
+                if (!l.length) {
+                    const u = Object.keys(o);
+                    for (let f = 0; f < u.length; f += 1) {
+                        const p = u[f].toLowerCase();
+                        if (n.indexOf(p) !== -1 && o[p]) return l.concat(o);
+                    }
+                }
+                return l;
+            }, []),
+    c0 = (n) => console && typeof console.warn == "function" && console.warn(n),
+    la = (n, a, l) => {
+        const o = {};
+        return l
+            .filter((u) =>
+                Array.isArray(u[n])
+                    ? !0
+                    : (typeof u[n] < "u" &&
+                          c0(`Helmet: ${n} should be of type "Array". Instead found type "${typeof u[n]}"`),
+                      !1)
+            )
+            .map((u) => u[n])
+            .reverse()
+            .reduce((u, f) => {
+                const m = {};
+                f.filter((h) => {
+                    let v;
+                    const y = Object.keys(h);
+                    for (let T = 0; T < y.length; T += 1) {
+                        const b = y[T],
+                            j = b.toLowerCase();
+                        a.indexOf(j) !== -1 &&
+                            !(v === "rel" && h[v].toLowerCase() === "canonical") &&
+                            !(j === "rel" && h[j].toLowerCase() === "stylesheet") &&
+                            (v = j),
+                            a.indexOf(b) !== -1 &&
+                                (b === "innerHTML" || b === "cssText" || b === "itemprop") &&
+                                (v = b);
+                    }
+                    if (!v || !h[v]) return !1;
+                    const w = h[v].toLowerCase();
+                    return o[v] || (o[v] = {}), m[v] || (m[v] = {}), o[v][w] ? !1 : ((m[v][w] = !0), !0);
+                })
+                    .reverse()
+                    .forEach((h) => u.push(h));
+                const p = Object.keys(m);
+                for (let h = 0; h < p.length; h += 1) {
+                    const v = p[h],
+                        y = { ...o[v], ...m[v] };
+                    o[v] = y;
+                }
+                return u;
+            }, [])
+            .reverse();
+    },
+    u0 = (n, a) => {
+        if (Array.isArray(n) && n.length) {
+            for (let l = 0; l < n.length; l += 1) if (n[l][a]) return !0;
+        }
+        return !1;
+    },
+    d0 = (n) => ({
+        baseTag: o0(["href"], n),
+        bodyAttributes: yc("bodyAttributes", n),
+        defer: fs(n, ds.DEFER),
+        encode: fs(n, ds.ENCODE_SPECIAL_CHARACTERS),
+        htmlAttributes: yc("htmlAttributes", n),
+        linkTags: la("link", ["rel", "href"], n),
+        metaTags: la("meta", ["name", "charset", "http-equiv", "property", "itemprop"], n),
+        noscriptTags: la("noscript", ["innerHTML"], n),
+        onChangeClientState: i0(n),
+        scriptTags: la("script", ["src", "innerHTML"], n),
+        styleTags: la("style", ["cssText"], n),
+        title: l0(n),
+        titleAttributes: yc("titleAttributes", n),
+        prioritizeSeoTags: u0(n, ds.PRIORITIZE_SEO_TAGS),
+    }),
+    Rp = (n) => (Array.isArray(n) ? n.join("") : n),
+    f0 = (n, a) => {
+        const l = Object.keys(n);
+        for (let o = 0; o < l.length; o += 1) if (a[l[o]] && a[l[o]].includes(n[l[o]])) return !0;
+        return !1;
+    },
+    vc = (n, a) =>
+        Array.isArray(n)
+            ? n.reduce((l, o) => (f0(o, a) ? l.priority.push(o) : l.default.push(o), l), { priority: [], default: [] })
+            : { default: n, priority: [] },
+    mm = (n, a) => ({ ...n, [a]: void 0 }),
+    m0 = ["noscript", "script", "style"],
+    Oc = (n, a = !0) =>
+        a === !1
+            ? String(n)
+            : String(n)
+                  .replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/"/g, "&quot;")
+                  .replace(/'/g, "&#x27;"),
+    _p = (n) =>
+        Object.keys(n).reduce((a, l) => {
+            const o = typeof n[l] < "u" ? `${l}="${n[l]}"` : `${l}`;
+            return a ? `${a} ${o}` : o;
+        }, ""),
+    p0 = (n, a, l, o) => {
+        const u = _p(l),
+            f = Rp(a);
+        return u ? `<${n} ${dn}="true" ${u}>${Oc(f, o)}</${n}>` : `<${n} ${dn}="true">${Oc(f, o)}</${n}>`;
+    },
+    h0 = (n, a, l = !0) =>
+        a.reduce((o, u) => {
+            const f = u,
+                m = Object.keys(f)
+                    .filter((v) => !(v === "innerHTML" || v === "cssText"))
+                    .reduce((v, y) => {
+                        const w = typeof f[y] > "u" ? y : `${y}="${Oc(f[y], l)}"`;
+                        return v ? `${v} ${w}` : w;
+                    }, ""),
+                p = f.innerHTML || f.cssText || "",
+                h = m0.indexOf(n) === -1;
+            return `${o}<${n} ${dn}="true" ${m}${h ? "/>" : `>${p}</${n}>`}`;
+        }, ""),
+    Ap = (n, a = {}) =>
+        Object.keys(n).reduce((l, o) => {
+            const u = mi[o];
+            return (l[u || o] = n[o]), l;
+        }, a),
+    x0 = (n, a, l) => {
+        const o = { key: a, [dn]: !0 },
+            u = Ap(l, o);
+        return [Me.createElement("title", u, a)];
+    },
+    $l = (n, a) =>
+        a.map((l, o) => {
+            const u = { key: o, [dn]: !0 };
+            return (
+                Object.keys(l).forEach((f) => {
+                    const p = mi[f] || f;
+                    if (p === "innerHTML" || p === "cssText") {
+                        const h = l.innerHTML || l.cssText;
+                        u.dangerouslySetInnerHTML = { __html: h };
+                    } else u[p] = l[f];
+                }),
+                Me.createElement(n, u)
+            );
+        }),
+    Zt = (n, a, l = !0) => {
+        switch (n) {
+            case "title":
+                return {
+                    toComponent: () => x0(n, a.title, a.titleAttributes),
+                    toString: () => p0(n, a.title, a.titleAttributes, l),
+                };
+            case "bodyAttributes":
+            case "htmlAttributes":
+                return { toComponent: () => Ap(a), toString: () => _p(a) };
+            default:
+                return { toComponent: () => $l(n, a), toString: () => h0(n, a, l) };
+        }
+    },
+    g0 = ({ metaTags: n, linkTags: a, scriptTags: l, encode: o }) => {
+        const u = vc(n, gc.meta),
+            f = vc(a, gc.link),
+            m = vc(l, gc.script);
+        return {
+            priorityMethods: {
+                toComponent: () => [...$l("meta", u.priority), ...$l("link", f.priority), ...$l("script", m.priority)],
+                toString: () =>
+                    `${Zt("meta", u.priority, o)} ${Zt("link", f.priority, o)} ${Zt("script", m.priority, o)}`,
+            },
+            metaTags: u.default,
+            linkTags: f.default,
+            scriptTags: m.default,
+        };
+    },
+    y0 = (n) => {
+        const {
+            baseTag: a,
+            bodyAttributes: l,
+            encode: o = !0,
+            htmlAttributes: u,
+            noscriptTags: f,
+            styleTags: m,
+            title: p = "",
+            titleAttributes: h,
+            prioritizeSeoTags: v,
+        } = n;
+        let { linkTags: y, metaTags: w, scriptTags: T } = n,
+            b = { toComponent: () => [], toString: () => "" };
+        return (
+            v && ({ priorityMethods: b, linkTags: y, metaTags: w, scriptTags: T } = g0(n)),
+            {
+                priority: b,
+                base: Zt("base", a, o),
+                bodyAttributes: Zt("bodyAttributes", l, o),
+                htmlAttributes: Zt("htmlAttributes", u, o),
+                link: Zt("link", y, o),
+                meta: Zt("meta", w, o),
+                noscript: Zt("noscript", f, o),
+                script: Zt("script", T, o),
+                style: Zt("style", m, o),
+                title: Zt("title", { title: p, titleAttributes: h }, o),
+            }
+        );
+    },
+    Ic = y0,
+    Ll = [],
+    tu = !!(typeof window < "u" && window.document && window.document.createElement),
+    Mc = class {
+        constructor(n, a) {
+            Ln(this, "instances", []);
+            Ln(this, "canUseDOM", tu);
+            Ln(this, "context");
+            Ln(this, "value", {
+                setHelmet: (n) => {
+                    this.context.helmet = n;
+                },
+                helmetInstances: {
+                    get: () => (this.canUseDOM ? Ll : this.instances),
+                    add: (n) => {
+                        (this.canUseDOM ? Ll : this.instances).push(n);
+                    },
+                    remove: (n) => {
+                        const a = (this.canUseDOM ? Ll : this.instances).indexOf(n);
+                        (this.canUseDOM ? Ll : this.instances).splice(a, 1);
+                    },
+                },
+            });
+            (this.context = n),
+                (this.canUseDOM = a || !1),
+                a ||
+                    (n.helmet = Ic({
+                        baseTag: [],
+                        bodyAttributes: {},
+                        htmlAttributes: {},
+                        linkTags: [],
+                        metaTags: [],
+                        noscriptTags: [],
+                        scriptTags: [],
+                        styleTags: [],
+                        title: "",
+                        titleAttributes: {},
+                    }));
+        }
+    },
+    v0 = parseInt(Me.version.split(".")[0], 10),
+    Dc = v0 >= 19,
+    w0 = {},
+    Lp = Me.createContext(w0),
+    Ar,
+    zp =
+        ((Ar = class extends g.Component {
+            constructor(l) {
+                super(l);
+                Ln(this, "helmetData");
+                Dc ? (this.helmetData = null) : (this.helmetData = new Mc(this.props.context || {}, Ar.canUseDOM));
+            }
+            render() {
+                return Dc
+                    ? Me.createElement(Me.Fragment, null, this.props.children)
+                    : Me.createElement(Lp.Provider, { value: this.helmetData.value }, this.props.children);
+            }
+        }),
+        Ln(Ar, "canUseDOM", tu),
+        Ar),
+    ls = (n, a) => {
+        const l = document.head || document.querySelector("head"),
+            o = l.querySelectorAll(`${n}[${dn}]`),
+            u = [].slice.call(o),
+            f = [];
+        let m;
+        return (
+            a &&
+                a.length &&
+                a.forEach((p) => {
+                    const h = document.createElement(n);
+                    for (const v in p)
+                        if (Object.prototype.hasOwnProperty.call(p, v))
+                            if (v === "innerHTML") h.innerHTML = p.innerHTML;
+                            else if (v === "cssText") {
+                                const y = p.cssText;
+                                h.appendChild(document.createTextNode(y));
+                            } else {
+                                const y = v,
+                                    w = typeof p[y] > "u" ? "" : p[y];
+                                h.setAttribute(v, w);
+                            }
+                    h.setAttribute(dn, "true"),
+                        u.some((v, y) => ((m = y), h.isEqualNode(v))) ? u.splice(m, 1) : f.push(h);
+                }),
+            u.forEach((p) => {
+                var h;
+                return (h = p.parentNode) == null ? void 0 : h.removeChild(p);
+            }),
+            f.forEach((p) => l.appendChild(p)),
+            { oldTags: u, newTags: f }
+        );
+    },
+    Uc = (n, a) => {
+        const l = document.getElementsByTagName(n)[0];
+        if (!l) return;
+        const o = l.getAttribute(dn),
+            u = o ? o.split(",") : [],
+            f = [...u],
+            m = Object.keys(a);
+        for (const p of m) {
+            const h = a[p] || "";
+            l.getAttribute(p) !== h && l.setAttribute(p, h), u.indexOf(p) === -1 && u.push(p);
+            const v = f.indexOf(p);
+            v !== -1 && f.splice(v, 1);
+        }
+        for (let p = f.length - 1; p >= 0; p -= 1) l.removeAttribute(f[p]);
+        u.length === f.length
+            ? l.removeAttribute(dn)
+            : l.getAttribute(dn) !== m.join(",") && l.setAttribute(dn, m.join(","));
+    },
+    b0 = (n, a) => {
+        typeof n < "u" && document.title !== n && (document.title = Rp(n)), Uc("title", a);
+    },
+    pm = (n, a) => {
+        const {
+            baseTag: l,
+            bodyAttributes: o,
+            htmlAttributes: u,
+            linkTags: f,
+            metaTags: m,
+            noscriptTags: p,
+            onChangeClientState: h,
+            scriptTags: v,
+            styleTags: y,
+            title: w,
+            titleAttributes: T,
+        } = n;
+        Uc("body", o), Uc("html", u), b0(w, T);
+        const b = {
+                baseTag: ls("base", l),
+                linkTags: ls("link", f),
+                metaTags: ls("meta", m),
+                noscriptTags: ls("noscript", p),
+                scriptTags: ls("script", v),
+                styleTags: ls("style", y),
+            },
+            j = {},
+            S = {};
+        Object.keys(b).forEach((k) => {
+            const { newTags: I, oldTags: $ } = b[k];
+            I.length && (j[k] = I), $.length && (S[k] = b[k].oldTags);
+        }),
+            a && a(),
+            h(n, j, S);
+    },
+    ia = null,
+    j0 = (n) => {
+        ia && cancelAnimationFrame(ia),
+            n.defer
+                ? (ia = requestAnimationFrame(() => {
+                      pm(n, () => {
+                          ia = null;
+                      });
+                  }))
+                : (pm(n), (ia = null));
+    },
+    k0 = j0,
+    hm = class extends g.Component {
+        constructor() {
+            super(...arguments);
+            Ln(this, "rendered", !1);
+        }
+        shouldComponentUpdate(a) {
+            return !a0(a, this.props);
+        }
+        componentDidUpdate() {
+            this.emitChange();
+        }
+        componentWillUnmount() {
+            const { helmetInstances: a } = this.props.context;
+            a.remove(this), this.emitChange();
+        }
+        emitChange() {
+            const { helmetInstances: a, setHelmet: l } = this.props.context;
+            let o = null;
+            const u = d0(
+                a.get().map((f) => {
+                    const { context: m, ...p } = f.props;
+                    return p;
+                })
+            );
+            zp.canUseDOM ? k0(u) : Ic && (o = Ic(u)), l(o);
+        }
+        init() {
+            if (this.rendered) return;
+            this.rendered = !0;
+            const { helmetInstances: a } = this.props.context;
+            a.add(this), this.emitChange();
+        }
+        render() {
+            return this.init(), null;
+        }
+    },
+    Hl = [],
+    xm = (n) => {
+        const a = {};
+        for (const l of Object.keys(n)) a[Pp[l] || l] = n[l];
+        return a;
+    },
+    Pr = (n) => {
+        const a = {};
+        for (const l of Object.keys(n)) {
+            const o = mi[l];
+            a[o || l] = n[l];
+        }
+        return a;
+    },
+    gm = (n, a) => {
+        if (!tu) return;
+        const l = document.getElementsByTagName(n)[0];
+        if (!l) return;
+        const o = "data-rh-managed",
+            u = l.getAttribute(o),
+            f = u ? u.split(",") : [],
+            m = Object.keys(a);
+        for (const p of f) m.includes(p) || l.removeAttribute(p);
+        for (const p of m) {
+            const h = a[p];
+            h == null || h === !1
+                ? l.removeAttribute(p)
+                : h === !0
+                  ? l.setAttribute(p, "")
+                  : l.setAttribute(p, String(h));
+        }
+        m.length > 0 ? l.setAttribute(o, m.join(",")) : l.removeAttribute(o);
+    },
+    wc = () => {
+        const n = {},
+            a = {};
+        for (const l of Hl) {
+            const { htmlAttributes: o, bodyAttributes: u } = l.props;
+            o && Object.assign(n, xm(o)), u && Object.assign(a, xm(u));
+        }
+        gm("html", n), gm("body", a);
+    },
+    N0 = class extends g.Component {
+        componentDidMount() {
+            Hl.push(this), wc();
+        }
+        componentDidUpdate() {
+            wc();
+        }
+        componentWillUnmount() {
+            const n = Hl.indexOf(this);
+            n !== -1 && Hl.splice(n, 1), wc();
+        }
+        resolveTitle() {
+            const { title: n, titleTemplate: a, defaultTitle: l } = this.props;
+            return n && a ? a.replace(/%s/g, () => (Array.isArray(n) ? n.join("") : n)) : n || l || void 0;
+        }
+        renderTitle() {
+            const n = this.resolveTitle();
+            if (n === void 0) return null;
+            const a = this.props.titleAttributes || {};
+            return Me.createElement("title", Pr(a), n);
+        }
+        renderBase() {
+            const { base: n } = this.props;
+            return n ? Me.createElement("base", Pr(n)) : null;
+        }
+        renderMeta() {
+            const { meta: n } = this.props;
+            return !n || !Array.isArray(n) ? null : n.map((a, l) => Me.createElement("meta", { key: l, ...Pr(a) }));
+        }
+        renderLink() {
+            const { link: n } = this.props;
+            return !n || !Array.isArray(n) ? null : n.map((a, l) => Me.createElement("link", { key: l, ...Pr(a) }));
+        }
+        renderScript() {
+            const { script: n } = this.props;
+            return !n || !Array.isArray(n)
+                ? null
+                : n.map((a, l) => {
+                      const { innerHTML: o, ...u } = a,
+                          f = Pr(u);
+                      return (
+                          o && (f.dangerouslySetInnerHTML = { __html: o }), Me.createElement("script", { key: l, ...f })
+                      );
+                  });
+        }
+        renderStyle() {
+            const { style: n } = this.props;
+            return !n || !Array.isArray(n)
+                ? null
+                : n.map((a, l) => {
+                      const { cssText: o, ...u } = a,
+                          f = Pr(u);
+                      return (
+                          o && (f.dangerouslySetInnerHTML = { __html: o }), Me.createElement("style", { key: l, ...f })
+                      );
+                  });
+        }
+        renderNoscript() {
+            const { noscript: n } = this.props;
+            return !n || !Array.isArray(n)
+                ? null
+                : n.map((a, l) => {
+                      const { innerHTML: o, ...u } = a,
+                          f = Pr(u);
+                      return (
+                          o && (f.dangerouslySetInnerHTML = { __html: o }),
+                          Me.createElement("noscript", { key: l, ...f })
+                      );
+                  });
+        }
+        render() {
+            return Me.createElement(
+                Me.Fragment,
+                null,
+                this.renderTitle(),
+                this.renderBase(),
+                this.renderMeta(),
+                this.renderLink(),
+                this.renderScript(),
+                this.renderStyle(),
+                this.renderNoscript()
+            );
+        }
+    },
+    Rc,
+    S0 =
+        ((Rc = class extends g.Component {
+            shouldComponentUpdate(n) {
+                return !e0(mm(this.props, "helmetData"), mm(n, "helmetData"));
+            }
+            mapNestedChildrenToProps(n, a) {
+                if (!a) return null;
+                switch (n.type) {
+                    case "script":
+                    case "noscript":
+                        return { innerHTML: a };
+                    case "style":
+                        return { cssText: a };
+                    default:
+                        throw new Error(
+                            `<${n.type} /> elements are self-closing and can not contain children. Refer to our API for more information.`
+                        );
+                }
+            }
+            flattenArrayTypeChildren(n, a, l, o) {
+                return { ...a, [n.type]: [...(a[n.type] || []), { ...l, ...this.mapNestedChildrenToProps(n, o) }] };
+            }
+            mapObjectTypeChildren(n, a, l, o) {
+                switch (n.type) {
+                    case "title":
+                        return { ...a, [n.type]: o, titleAttributes: { ...l } };
+                    case "body":
+                        return { ...a, bodyAttributes: { ...l } };
+                    case "html":
+                        return { ...a, htmlAttributes: { ...l } };
+                    default:
+                        return { ...a, [n.type]: { ...l } };
+                }
+            }
+            mapArrayTypeChildrenToProps(n, a) {
+                let l = { ...a };
+                return (
+                    Object.keys(n).forEach((o) => {
+                        l = { ...l, [o]: n[o] };
+                    }),
+                    l
+                );
+            }
+            warnOnInvalidChildren(n, a) {
+                return (
+                    um(
+                        fm.some((l) => n.type === l),
+                        typeof n.type == "function"
+                            ? "You may be attempting to nest <Helmet> components within each other, which is not allowed. Refer to our API for more information."
+                            : `Only elements types ${fm.join(", ")} are allowed. Helmet does not support rendering <${n.type}> elements. Refer to our API for more information.`
+                    ),
+                    um(
+                        !a || typeof a == "string" || (Array.isArray(a) && !a.some((l) => typeof l != "string")),
+                        `Helmet expects a string as a child of <${n.type}>. Did you forget to wrap your children in braces? ( <${n.type}>{\`\`}</${n.type}> ) Refer to our API for more information.`
+                    ),
+                    !0
+                );
+            }
+            mapChildrenToProps(n, a) {
+                let l = {};
+                return (
+                    Me.Children.forEach(n, (o) => {
+                        if (!o || !o.props) return;
+                        const { children: u, ...f } = o.props,
+                            m = Object.keys(f).reduce((h, v) => ((h[Pp[v] || v] = f[v]), h), {});
+                        let { type: p } = o;
+                        switch ((typeof p == "symbol" ? (p = p.toString()) : this.warnOnInvalidChildren(o, u), p)) {
+                            case "Symbol(react.fragment)":
+                                a = this.mapChildrenToProps(u, a);
+                                break;
+                            case "link":
+                            case "meta":
+                            case "noscript":
+                            case "script":
+                            case "style":
+                                l = this.flattenArrayTypeChildren(o, l, m, u);
+                                break;
+                            default:
+                                a = this.mapObjectTypeChildren(o, a, m, u);
+                                break;
+                        }
+                    }),
+                    this.mapArrayTypeChildrenToProps(l, a)
+                );
+            }
+            render() {
+                const { children: n, ...a } = this.props;
+                let l = { ...a },
+                    { helmetData: o } = a;
+                if ((n && (l = this.mapChildrenToProps(n, l)), o && !(o instanceof Mc))) {
+                    const u = o;
+                    (o = new Mc(u.context, !0)), delete l.helmetData;
+                }
+                return Dc
+                    ? Me.createElement(N0, { ...l })
+                    : o
+                      ? Me.createElement(hm, { ...l, context: o.value })
+                      : Me.createElement(Lp.Consumer, null, (u) => Me.createElement(hm, { ...l, context: u }));
+            }
+        }),
+        Ln(Rc, "defaultProps", { defer: !0, encodeSpecialCharacters: !0, prioritizeSeoTags: !1 }),
+        Rc),
+    Fp = { color: void 0, size: void 0, className: void 0, style: void 0, attr: void 0 },
+    ym = Me.createContext && Me.createContext(Fp),
+    C0 = ["attr", "size", "title"];
+function T0(n, a) {
+    if (n == null) return {};
+    var l,
+        o,
+        u = E0(n, a);
+    if (Object.getOwnPropertySymbols) {
+        var f = Object.getOwnPropertySymbols(n);
+        for (o = 0; o < f.length; o++)
+            (l = f[o]), a.indexOf(l) === -1 && {}.propertyIsEnumerable.call(n, l) && (u[l] = n[l]);
+    }
+    return u;
+}
+function E0(n, a) {
+    if (n == null) return {};
+    var l = {};
+    for (var o in n)
+        if ({}.hasOwnProperty.call(n, o)) {
+            if (a.indexOf(o) !== -1) continue;
+            l[o] = n[o];
+        }
+    return l;
+}
+function Gl() {
+    return (
+        (Gl = Object.assign
+            ? Object.assign.bind()
+            : function (n) {
+                  for (var a = 1; a < arguments.length; a++) {
+                      var l = arguments[a];
+                      for (var o in l) ({}).hasOwnProperty.call(l, o) && (n[o] = l[o]);
+                  }
+                  return n;
+              }),
+        Gl.apply(null, arguments)
+    );
+}
+function vm(n, a) {
+    var l = Object.keys(n);
+    if (Object.getOwnPropertySymbols) {
+        var o = Object.getOwnPropertySymbols(n);
+        a &&
+            (o = o.filter(function (u) {
+                return Object.getOwnPropertyDescriptor(n, u).enumerable;
+            })),
+            l.push.apply(l, o);
+    }
+    return l;
+}
+function Jl(n) {
+    for (var a = 1; a < arguments.length; a++) {
+        var l = arguments[a] != null ? arguments[a] : {};
+        a % 2
+            ? vm(Object(l), !0).forEach(function (o) {
+                  P0(n, o, l[o]);
+              })
+            : Object.getOwnPropertyDescriptors
+              ? Object.defineProperties(n, Object.getOwnPropertyDescriptors(l))
+              : vm(Object(l)).forEach(function (o) {
+                    Object.defineProperty(n, o, Object.getOwnPropertyDescriptor(l, o));
+                });
+    }
+    return n;
+}
+function P0(n, a, l) {
+    return (
+        (a = R0(a)) in n
+            ? Object.defineProperty(n, a, { value: l, enumerable: !0, configurable: !0, writable: !0 })
+            : (n[a] = l),
+        n
+    );
+}
+function R0(n) {
+    var a = _0(n, "string");
+    return typeof a == "symbol" ? a : a + "";
+}
+function _0(n, a) {
+    if (typeof n != "object" || !n) return n;
+    var l = n[Symbol.toPrimitive];
+    if (l !== void 0) {
+        var o = l.call(n, a);
+        if (typeof o != "object") return o;
+        throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (a === "string" ? String : Number)(n);
+}
+function Op(n) {
+    return n && n.map((a, l) => Me.createElement(a.tag, Jl({ key: l }, a.attr), Op(a.child)));
+}
+function _e(n) {
+    return (a) => Me.createElement(A0, Gl({ attr: Jl({}, n.attr) }, a), Op(n.child));
+}
+function A0(n) {
+    var a = (l) => {
+        var { attr: o, size: u, title: f } = n,
+            m = T0(n, C0),
+            p = u || l.size || "1em",
+            h;
+        return (
+            l.className && (h = l.className),
+            n.className && (h = (h ? h + " " : "") + n.className),
+            Me.createElement(
+                "svg",
+                Gl({ stroke: "currentColor", fill: "currentColor", strokeWidth: "0" }, l.attr, o, m, {
+                    className: h,
+                    style: Jl(Jl({ color: n.color || l.color }, l.style), n.style),
+                    height: p,
+                    width: p,
+                    xmlns: "http://www.w3.org/2000/svg",
+                }),
+                f && Me.createElement("title", null, f),
+                n.children
+            )
+        );
+    };
+    return ym !== void 0 ? Me.createElement(ym.Consumer, null, (l) => a(l)) : a(Fp);
+}
+function Ip(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M12.97 2.59a1.5 1.5 0 0 0-1.94 0l-7.5 6.363A1.5 1.5 0 0 0 3 10.097V19.5A1.5 1.5 0 0 0 4.5 21h4.75a.75.75 0 0 0 .75-.75V14h4v6.25c0 .414.336.75.75.75h4.75a1.5 1.5 0 0 0 1.5-1.5v-9.403a1.5 1.5 0 0 0-.53-1.144l-7.5-6.363Z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Mp(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M11.03 2.59a1.501 1.501 0 0 1 1.94 0l7.5 6.363a1.5 1.5 0 0 1 .53 1.144V19.5a1.5 1.5 0 0 1-1.5 1.5h-5.75a.75.75 0 0 1-.75-.75V14h-2v6.25a.75.75 0 0 1-.75.75H4.5A1.5 1.5 0 0 1 3 19.5v-9.403c0-.44.194-.859.53-1.144ZM12 3.734l-7.5 6.363V19.5h5v-6.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v6.25h5v-9.403Z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Xl(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "path", attr: { d: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" }, child: [] },
+            { tag: "circle", attr: { cx: "12", cy: "7", r: "4" }, child: [] },
+        ],
+    })(n);
+}
+function wm(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "polyline", attr: { points: "3 6 5 6 21 6" }, child: [] },
+            {
+                tag: "path",
+                attr: { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" },
+                child: [],
+            },
+            { tag: "line", attr: { x1: "10", y1: "11", x2: "10", y2: "17" }, child: [] },
+            { tag: "line", attr: { x1: "14", y1: "11", x2: "14", y2: "17" }, child: [] },
+        ],
+    })(n);
+}
+function L0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "circle", attr: { cx: "12", cy: "12", r: "5" }, child: [] },
+            { tag: "line", attr: { x1: "12", y1: "1", x2: "12", y2: "3" }, child: [] },
+            { tag: "line", attr: { x1: "12", y1: "21", x2: "12", y2: "23" }, child: [] },
+            { tag: "line", attr: { x1: "4.22", y1: "4.22", x2: "5.64", y2: "5.64" }, child: [] },
+            { tag: "line", attr: { x1: "18.36", y1: "18.36", x2: "19.78", y2: "19.78" }, child: [] },
+            { tag: "line", attr: { x1: "1", y1: "12", x2: "3", y2: "12" }, child: [] },
+            { tag: "line", attr: { x1: "21", y1: "12", x2: "23", y2: "12" }, child: [] },
+            { tag: "line", attr: { x1: "4.22", y1: "19.78", x2: "5.64", y2: "18.36" }, child: [] },
+            { tag: "line", attr: { x1: "18.36", y1: "5.64", x2: "19.78", y2: "4.22" }, child: [] },
+        ],
+    })(n);
+}
+function Zl(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "circle", attr: { cx: "11", cy: "11", r: "8" }, child: [] },
+            { tag: "line", attr: { x1: "21", y1: "21", x2: "16.65", y2: "16.65" }, child: [] },
+        ],
+    })(n);
+}
+function z0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "path", attr: { d: "M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" }, child: [] },
+            { tag: "polyline", attr: { points: "17 21 17 13 7 13 7 21" }, child: [] },
+            { tag: "polyline", attr: { points: "7 3 7 8 15 8" }, child: [] },
+        ],
+    })(n);
+}
+function ei(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "line", attr: { x1: "12", y1: "5", x2: "12", y2: "19" }, child: [] },
+            { tag: "line", attr: { x1: "5", y1: "12", x2: "19", y2: "12" }, child: [] },
+        ],
+    })(n);
+}
+function ma(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "path", attr: { d: "M9 18V5l12-2v13" }, child: [] },
+            { tag: "circle", attr: { cx: "6", cy: "18", r: "3" }, child: [] },
+            { tag: "circle", attr: { cx: "18", cy: "16", r: "3" }, child: [] },
+        ],
+    })(n);
+}
+function F0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [{ tag: "path", attr: { d: "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" }, child: [] }],
+    })(n);
+}
+function bm(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "path", attr: { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" }, child: [] },
+        ],
+    })(n);
+}
+function O0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            {
+                tag: "path",
+                attr: { d: "M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" },
+                child: [],
+            },
+            { tag: "polyline", attr: { points: "22,6 12,13 2,6" }, child: [] },
+        ],
+    })(n);
+}
+function I0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "path", attr: { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" }, child: [] },
+            { tag: "polyline", attr: { points: "16 17 21 12 16 7" }, child: [] },
+            { tag: "line", attr: { x1: "21", y1: "12", x2: "9", y2: "12" }, child: [] },
+        ],
+    })(n);
+}
+function M0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "path", attr: { d: "M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" }, child: [] },
+            { tag: "polyline", attr: { points: "10 17 15 12 10 7" }, child: [] },
+            { tag: "line", attr: { x1: "15", y1: "12", x2: "3", y2: "12" }, child: [] },
+        ],
+    })(n);
+}
+function fn(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function D0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [
+            { tag: "circle", attr: { cx: "12", cy: "12", r: "10" }, child: [] },
+            { tag: "line", attr: { x1: "2", y1: "12", x2: "22", y2: "12" }, child: [] },
+            {
+                tag: "path",
+                attr: {
+                    d: "M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function U0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [{ tag: "path", attr: { d: "M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" }, child: [] }],
+    })(n);
+}
+function B0(n) {
+    return _e({
+        attr: {
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+        },
+        child: [{ tag: "polyline", attr: { points: "20 6 9 17 4 12" }, child: [] }],
+    })(n);
+}
+function $0(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0V0z" }, child: [] },
+            {
+                tag: "path",
+                attr: {
+                    d: "M21 3H3c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5a2 2 0 0 0-2-2zm0 14H3V5h18v12zm-5-6-7 4V7z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function lr(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0z" }, child: [] },
+            {
+                tag: "path",
+                attr: {
+                    d: "M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function bn(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0z" }, child: [] },
+            {
+                tag: "path",
+                attr: { d: "M14 10H3v2h11v-2zm0-4H3v2h11V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM3 16h7v-2H3v2z" },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function ua(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0z" }, child: [] },
+            {
+                tag: "path",
+                attr: {
+                    d: "M14 9c0-2.04 1.24-3.79 3-4.57V4c0-1.1-.9-2-2-2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h9c1.1 0 2-.9 2-2v-2.42c-1.76-.78-3-2.53-3-4.58zm-4 5H6v-2h4v2zm3-3H6V9h7v2zm0-3H6V6h7v2z",
+                },
+                child: [],
+            },
+            {
+                tag: "path",
+                attr: { d: "M20 6.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V3h2V1h-4v5.18z" },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Dp(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0z" }, child: [] },
+            {
+                tag: "path",
+                attr: {
+                    d: "M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 5h-3v5.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 2.5-2.5c.57 0 1.08.19 1.5.51V5h4v2zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function bc(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0z" }, child: [] },
+            { tag: "path", attr: { d: "M21 11V3h-8l3.29 3.29-10 10L3 13v8h8l-3.29-3.29 10-10z" }, child: [] },
+        ],
+    })(n);
+}
+function H0(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            { tag: "path", attr: { fill: "none", d: "M0 0h24v24H0V0z" }, child: [] },
+            {
+                tag: "path",
+                attr: {
+                    d: "m23 12-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-4.51 2.11.26 2.79-2.74.62-1.43 2.41L12 18.82l-2.58 1.11-1.43-2.41-2.74-.62.26-2.8L3.66 12l1.85-2.12-.26-2.78 2.74-.61 1.43-2.41L12 5.18l2.58-1.11 1.43 2.41 2.74.62-.26 2.79L20.34 12l-1.85 2.11zM11 15h2v2h-2zm0-8h2v6h-2z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function ht(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function q0(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function nu(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function ti(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function pa(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function ir(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fillRule: "evenodd",
+                    d: "M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5",
+                },
+                child: [],
+            },
+            {
+                tag: "path",
+                attr: {
+                    d: "M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Bc(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function $c(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M11 4v1.466a.25.25 0 0 0 .41.192l2.36-1.966a.25.25 0 0 0 0-.384l-2.36-1.966a.25.25 0 0 0-.41.192V3H5a5 5 0 0 0-4.48 7.223.5.5 0 0 0 .896-.446A4 4 0 0 1 5 4zm4.48 1.777a.5.5 0 0 0-.896.446A4 4 0 0 1 11 12H5.001v-1.466a.25.25 0 0 0-.41-.192l-2.36 1.966a.25.25 0 0 0 0 .384l2.36 1.966a.25.25 0 0 0 .41-.192V13h6a5 5 0 0 0 4.48-7.223Z",
+                },
+                child: [],
+            },
+            {
+                tag: "path",
+                attr: { d: "M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z" },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function xs(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146m.122 2.112v-.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a5 5 0 0 0-.288-.076 5 5 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a5 5 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034q.172.002.343-.04L9.927 2.028q-.042.172-.04.343a1.8 1.8 0 0 0 .062.46z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Fr(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function or(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5m5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function W0(n) {
+    return _e({
+        attr: { fill: "currentColor", viewBox: "0 0 16 16" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fillRule: "evenodd",
+                    d: "M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function jm(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeMiterlimit: "10",
+                    strokeWidth: "32",
+                    d: "M256 64C150 64 64 150 64 256s86 192 192 192 192-86 192-192S362 64 256 64z",
+                },
+                child: [],
+            },
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32",
+                    d: "M256 128v144h96",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function V0(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32",
+                    d: "M192 218v-6c0-14.84 10-27 24.24-30.59l174.59-46.68A20 20 0 0 1 416 154v22",
+                },
+                child: [],
+            },
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "32",
+                    d: "M416 295.94v80c0 13.91-8.93 25.59-22 30l-22 8c-25.9 8.72-52-10.42-52-38h0a33.37 33.37 0 0 1 23-32l51-18.15c13.07-4.4 22-15.94 22-29.85V58a10 10 0 0 0-12.6-9.61L204 102a16.48 16.48 0 0 0-12 16v226c0 13.91-8.93 25.6-22 30l-52 18c-13.88 4.68-22 17.22-22 32h0c0 27.58 26.52 46.55 52 38l22-8c13.07-4.4 22-16.08 22-30v-80",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function en(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "m289.94 256 95-95A24 24 0 0 0 351 127l-95 95-95-95a24 24 0 0 0-34 34l95 95-95 95a24 24 0 1 0 34 34l95-95 95 95a24 24 0 0 0 34-34z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Q0(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "48",
+                    d: "m184 112 144 144-144 144",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function K0(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "48",
+                    d: "m112 184 144 144 144-144",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function mn(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fill: "none",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    strokeWidth: "48",
+                    d: "M328 112 184 256l144 144",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+const km = 3,
+    Nm = 50,
+    Y0 = 150,
+    Up = 150,
+    Bp = g.createContext();
+function fr() {
+    return g.useContext(Bp);
+}
+const $p = "tunefree_library_pins";
+function G0() {
+    try {
+        const n = localStorage.getItem($p);
+        return n ? JSON.parse(n).slice(0, Up) : [];
+    } catch {
+        return [];
+    }
+}
+function J0(n) {
+    try {
+        localStorage.setItem($p, JSON.stringify(n));
+    } catch {}
+}
+function X0({ children: n }) {
+    const [a, l] = g.useState(G0);
+    g.useEffect(() => {
+        J0(a);
+    }, [a]);
+    const o = g.useCallback((h) => {
+            l((v) => {
+                var w, T, b;
+                return v.some((j) => j.id === h.id)
+                    ? v
+                    : [
+                          {
+                              id: h.id,
+                              name: h.name,
+                              type: h.type || h.model_type || "track",
+                              image:
+                                  h.image ||
+                                  ((b = (T = (w = h.album) == null ? void 0 : w.images) == null ? void 0 : T[0]) == null
+                                      ? void 0
+                                      : b.url) ||
+                                  null,
+                              artists: h.artists || [],
+                              album: h.album ? { name: h.album.name, images: h.album.images } : null,
+                              duration_ms: h.duration_ms || h.duration || null,
+                              subtitle: h.subtitle || null,
+                              pinnedAt: Date.now(),
+                          },
+                          ...v,
+                      ].slice(0, Up);
+            });
+        }, []),
+        u = g.useCallback((h) => {
+            l((v) => v.filter((y) => y.id !== h));
+        }, []),
+        f = g.useCallback((h) => a.some((v) => v.id === h), [a]),
+        m = g.useCallback(
+            (h) => {
+                a.some((v) => v.id === h.id) ? u(h.id) : o(h);
+            },
+            [a, o, u]
+        ),
+        p = g.useCallback((h) => a.filter((v) => v.type === h), [a]);
+    return r.jsx(Bp.Provider, {
+        value: { pins: a, pin: o, unpin: u, isPinned: f, togglePin: m, getPinsByType: p },
+        children: n,
+    });
+}
+function Hp(n, a) {
+    return function () {
+        return n.apply(a, arguments);
+    };
+}
+const { toString: Z0 } = Object.prototype,
+    { getPrototypeOf: ru } = Object,
+    { iterator: pi, toStringTag: qp } = Symbol,
+    hi = ((n) => (a) => {
+        const l = Z0.call(a);
+        return n[l] || (n[l] = l.slice(8, -1).toLowerCase());
+    })(Object.create(null)),
+    pn = (n) => ((n = n.toLowerCase()), (a) => hi(a) === n),
+    xi = (n) => (a) => typeof a === n,
+    { isArray: gs } = Array,
+    ps = xi("undefined");
+function ya(n) {
+    return (
+        n !== null &&
+        !ps(n) &&
+        n.constructor !== null &&
+        !ps(n.constructor) &&
+        Ot(n.constructor.isBuffer) &&
+        n.constructor.isBuffer(n)
+    );
+}
+const Wp = pn("ArrayBuffer");
+function ev(n) {
+    let a;
+    return (
+        typeof ArrayBuffer < "u" && ArrayBuffer.isView
+            ? (a = ArrayBuffer.isView(n))
+            : (a = n && n.buffer && Wp(n.buffer)),
+        a
+    );
+}
+const tv = xi("string"),
+    Ot = xi("function"),
+    Vp = xi("number"),
+    va = (n) => n !== null && typeof n == "object",
+    nv = (n) => n === !0 || n === !1,
+    ql = (n) => {
+        if (hi(n) !== "object") return !1;
+        const a = ru(n);
+        return (a === null || a === Object.prototype || Object.getPrototypeOf(a) === null) && !(qp in n) && !(pi in n);
+    },
+    rv = (n) => {
+        if (!va(n) || ya(n)) return !1;
+        try {
+            return Object.keys(n).length === 0 && Object.getPrototypeOf(n) === Object.prototype;
+        } catch {
+            return !1;
+        }
+    },
+    sv = pn("Date"),
+    av = pn("File"),
+    lv = (n) => !!(n && typeof n.uri < "u"),
+    iv = (n) => n && typeof n.getParts < "u",
+    ov = pn("Blob"),
+    cv = pn("FileList"),
+    uv = (n) => va(n) && Ot(n.pipe);
+function dv() {
+    return typeof globalThis < "u"
+        ? globalThis
+        : typeof self < "u"
+          ? self
+          : typeof window < "u"
+            ? window
+            : typeof global < "u"
+              ? global
+              : {};
+}
+const Sm = dv(),
+    Cm = typeof Sm.FormData < "u" ? Sm.FormData : void 0,
+    fv = (n) => {
+        let a;
+        return (
+            n &&
+            ((Cm && n instanceof Cm) ||
+                (Ot(n.append) &&
+                    ((a = hi(n)) === "formdata" ||
+                        (a === "object" && Ot(n.toString) && n.toString() === "[object FormData]"))))
+        );
+    },
+    mv = pn("URLSearchParams"),
+    [pv, hv, xv, gv] = ["ReadableStream", "Request", "Response", "Headers"].map(pn),
+    yv = (n) => (n.trim ? n.trim() : n.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""));
+function wa(n, a, { allOwnKeys: l = !1 } = {}) {
+    if (n === null || typeof n > "u") return;
+    let o, u;
+    if ((typeof n != "object" && (n = [n]), gs(n))) for (o = 0, u = n.length; o < u; o++) a.call(null, n[o], o, n);
+    else {
+        if (ya(n)) return;
+        const f = l ? Object.getOwnPropertyNames(n) : Object.keys(n),
+            m = f.length;
+        let p;
+        for (o = 0; o < m; o++) (p = f[o]), a.call(null, n[p], p, n);
+    }
+}
+function Qp(n, a) {
+    if (ya(n)) return null;
+    a = a.toLowerCase();
+    const l = Object.keys(n);
+    let o = l.length,
+        u;
+    for (; o-- > 0; ) if (((u = l[o]), a === u.toLowerCase())) return u;
+    return null;
+}
+const Rr = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : global,
+    Kp = (n) => !ps(n) && n !== Rr;
+function Hc() {
+    const { caseless: n, skipUndefined: a } = (Kp(this) && this) || {},
+        l = {},
+        o = (u, f) => {
+            if (f === "__proto__" || f === "constructor" || f === "prototype") return;
+            const m = (n && Qp(l, f)) || f;
+            ql(l[m]) && ql(u)
+                ? (l[m] = Hc(l[m], u))
+                : ql(u)
+                  ? (l[m] = Hc({}, u))
+                  : gs(u)
+                    ? (l[m] = u.slice())
+                    : (!a || !ps(u)) && (l[m] = u);
+        };
+    for (let u = 0, f = arguments.length; u < f; u++) arguments[u] && wa(arguments[u], o);
+    return l;
+}
+const vv = (n, a, l, { allOwnKeys: o } = {}) => (
+        wa(
+            a,
+            (u, f) => {
+                l && Ot(u)
+                    ? Object.defineProperty(n, f, { value: Hp(u, l), writable: !0, enumerable: !0, configurable: !0 })
+                    : Object.defineProperty(n, f, { value: u, writable: !0, enumerable: !0, configurable: !0 });
+            },
+            { allOwnKeys: o }
+        ),
+        n
+    ),
+    wv = (n) => (n.charCodeAt(0) === 65279 && (n = n.slice(1)), n),
+    bv = (n, a, l, o) => {
+        (n.prototype = Object.create(a.prototype, o)),
+            Object.defineProperty(n.prototype, "constructor", {
+                value: n,
+                writable: !0,
+                enumerable: !1,
+                configurable: !0,
+            }),
+            Object.defineProperty(n, "super", { value: a.prototype }),
+            l && Object.assign(n.prototype, l);
+    },
+    jv = (n, a, l, o) => {
+        let u, f, m;
+        const p = {};
+        if (((a = a || {}), n == null)) return a;
+        do {
+            for (u = Object.getOwnPropertyNames(n), f = u.length; f-- > 0; )
+                (m = u[f]), (!o || o(m, n, a)) && !p[m] && ((a[m] = n[m]), (p[m] = !0));
+            n = l !== !1 && ru(n);
+        } while (n && (!l || l(n, a)) && n !== Object.prototype);
+        return a;
+    },
+    kv = (n, a, l) => {
+        (n = String(n)), (l === void 0 || l > n.length) && (l = n.length), (l -= a.length);
+        const o = n.indexOf(a, l);
+        return o !== -1 && o === l;
+    },
+    Nv = (n) => {
+        if (!n) return null;
+        if (gs(n)) return n;
+        let a = n.length;
+        if (!Vp(a)) return null;
+        const l = new Array(a);
+        for (; a-- > 0; ) l[a] = n[a];
+        return l;
+    },
+    Sv = (
+        (n) => (a) =>
+            n && a instanceof n
+    )(typeof Uint8Array < "u" && ru(Uint8Array)),
+    Cv = (n, a) => {
+        const o = (n && n[pi]).call(n);
+        let u;
+        for (; (u = o.next()) && !u.done; ) {
+            const f = u.value;
+            a.call(n, f[0], f[1]);
+        }
+    },
+    Tv = (n, a) => {
+        let l;
+        const o = [];
+        for (; (l = n.exec(a)) !== null; ) o.push(l);
+        return o;
+    },
+    Ev = pn("HTMLFormElement"),
+    Pv = (n) =>
+        n.toLowerCase().replace(/[-_\s]([a-z\d])(\w*)/g, function (l, o, u) {
+            return o.toUpperCase() + u;
+        }),
+    Tm = (
+        ({ hasOwnProperty: n }) =>
+        (a, l) =>
+            n.call(a, l)
+    )(Object.prototype),
+    Rv = pn("RegExp"),
+    Yp = (n, a) => {
+        const l = Object.getOwnPropertyDescriptors(n),
+            o = {};
+        wa(l, (u, f) => {
+            let m;
+            (m = a(u, f, n)) !== !1 && (o[f] = m || u);
+        }),
+            Object.defineProperties(n, o);
+    },
+    _v = (n) => {
+        Yp(n, (a, l) => {
+            if (Ot(n) && ["arguments", "caller", "callee"].indexOf(l) !== -1) return !1;
+            const o = n[l];
+            if (Ot(o)) {
+                if (((a.enumerable = !1), "writable" in a)) {
+                    a.writable = !1;
+                    return;
+                }
+                a.set ||
+                    (a.set = () => {
+                        throw Error("Can not rewrite read-only method '" + l + "'");
+                    });
+            }
+        });
+    },
+    Av = (n, a) => {
+        const l = {},
+            o = (u) => {
+                u.forEach((f) => {
+                    l[f] = !0;
+                });
+            };
+        return gs(n) ? o(n) : o(String(n).split(a)), l;
+    },
+    Lv = () => {},
+    zv = (n, a) => (n != null && Number.isFinite((n = +n)) ? n : a);
+function Fv(n) {
+    return !!(n && Ot(n.append) && n[qp] === "FormData" && n[pi]);
+}
+const Ov = (n) => {
+        const a = new Array(10),
+            l = (o, u) => {
+                if (va(o)) {
+                    if (a.indexOf(o) >= 0) return;
+                    if (ya(o)) return o;
+                    if (!("toJSON" in o)) {
+                        a[u] = o;
+                        const f = gs(o) ? [] : {};
+                        return (
+                            wa(o, (m, p) => {
+                                const h = l(m, u + 1);
+                                !ps(h) && (f[p] = h);
+                            }),
+                            (a[u] = void 0),
+                            f
+                        );
+                    }
+                }
+                return o;
+            };
+        return l(n, 0);
+    },
+    Iv = pn("AsyncFunction"),
+    Mv = (n) => n && (va(n) || Ot(n)) && Ot(n.then) && Ot(n.catch),
+    Gp = ((n, a) =>
+        n
+            ? setImmediate
+            : a
+              ? ((l, o) => (
+                    Rr.addEventListener(
+                        "message",
+                        ({ source: u, data: f }) => {
+                            u === Rr && f === l && o.length && o.shift()();
+                        },
+                        !1
+                    ),
+                    (u) => {
+                        o.push(u), Rr.postMessage(l, "*");
+                    }
+                ))(`axios@${Math.random()}`, [])
+              : (l) => setTimeout(l))(typeof setImmediate == "function", Ot(Rr.postMessage)),
+    Dv = typeof queueMicrotask < "u" ? queueMicrotask.bind(Rr) : (typeof process < "u" && process.nextTick) || Gp,
+    Uv = (n) => n != null && Ot(n[pi]),
+    z = {
+        isArray: gs,
+        isArrayBuffer: Wp,
+        isBuffer: ya,
+        isFormData: fv,
+        isArrayBufferView: ev,
+        isString: tv,
+        isNumber: Vp,
+        isBoolean: nv,
+        isObject: va,
+        isPlainObject: ql,
+        isEmptyObject: rv,
+        isReadableStream: pv,
+        isRequest: hv,
+        isResponse: xv,
+        isHeaders: gv,
+        isUndefined: ps,
+        isDate: sv,
+        isFile: av,
+        isReactNativeBlob: lv,
+        isReactNative: iv,
+        isBlob: ov,
+        isRegExp: Rv,
+        isFunction: Ot,
+        isStream: uv,
+        isURLSearchParams: mv,
+        isTypedArray: Sv,
+        isFileList: cv,
+        forEach: wa,
+        merge: Hc,
+        extend: vv,
+        trim: yv,
+        stripBOM: wv,
+        inherits: bv,
+        toFlatObject: jv,
+        kindOf: hi,
+        kindOfTest: pn,
+        endsWith: kv,
+        toArray: Nv,
+        forEachEntry: Cv,
+        matchAll: Tv,
+        isHTMLForm: Ev,
+        hasOwnProperty: Tm,
+        hasOwnProp: Tm,
+        reduceDescriptors: Yp,
+        freezeMethods: _v,
+        toObjectSet: Av,
+        toCamelCase: Pv,
+        noop: Lv,
+        toFiniteNumber: zv,
+        findKey: Qp,
+        global: Rr,
+        isContextDefined: Kp,
+        isSpecCompliantForm: Fv,
+        toJSONObject: Ov,
+        isAsyncFn: Iv,
+        isThenable: Mv,
+        setImmediate: Gp,
+        asap: Dv,
+        isIterable: Uv,
+    };
+let Pe = class Jp extends Error {
+    static from(a, l, o, u, f, m) {
+        const p = new Jp(a.message, l || a.code, o, u, f);
+        return (
+            (p.cause = a),
+            (p.name = a.name),
+            a.status != null && p.status == null && (p.status = a.status),
+            m && Object.assign(p, m),
+            p
+        );
+    }
+    constructor(a, l, o, u, f) {
+        super(a),
+            Object.defineProperty(this, "message", { value: a, enumerable: !0, writable: !0, configurable: !0 }),
+            (this.name = "AxiosError"),
+            (this.isAxiosError = !0),
+            l && (this.code = l),
+            o && (this.config = o),
+            u && (this.request = u),
+            f && ((this.response = f), (this.status = f.status));
+    }
+    toJSON() {
+        return {
+            message: this.message,
+            name: this.name,
+            description: this.description,
+            number: this.number,
+            fileName: this.fileName,
+            lineNumber: this.lineNumber,
+            columnNumber: this.columnNumber,
+            stack: this.stack,
+            config: z.toJSONObject(this.config),
+            code: this.code,
+            status: this.status,
+        };
+    }
+};
+Pe.ERR_BAD_OPTION_VALUE = "ERR_BAD_OPTION_VALUE";
+Pe.ERR_BAD_OPTION = "ERR_BAD_OPTION";
+Pe.ECONNABORTED = "ECONNABORTED";
+Pe.ETIMEDOUT = "ETIMEDOUT";
+Pe.ERR_NETWORK = "ERR_NETWORK";
+Pe.ERR_FR_TOO_MANY_REDIRECTS = "ERR_FR_TOO_MANY_REDIRECTS";
+Pe.ERR_DEPRECATED = "ERR_DEPRECATED";
+Pe.ERR_BAD_RESPONSE = "ERR_BAD_RESPONSE";
+Pe.ERR_BAD_REQUEST = "ERR_BAD_REQUEST";
+Pe.ERR_CANCELED = "ERR_CANCELED";
+Pe.ERR_NOT_SUPPORT = "ERR_NOT_SUPPORT";
+Pe.ERR_INVALID_URL = "ERR_INVALID_URL";
+const Bv = null;
+function qc(n) {
+    return z.isPlainObject(n) || z.isArray(n);
+}
+function Xp(n) {
+    return z.endsWith(n, "[]") ? n.slice(0, -2) : n;
+}
+function jc(n, a, l) {
+    return n
+        ? n
+              .concat(a)
+              .map(function (u, f) {
+                  return (u = Xp(u)), !l && f ? "[" + u + "]" : u;
+              })
+              .join(l ? "." : "")
+        : a;
+}
+function $v(n) {
+    return z.isArray(n) && !n.some(qc);
+}
+const Hv = z.toFlatObject(z, {}, null, function (a) {
+    return /^is[A-Z]/.test(a);
+});
+function gi(n, a, l) {
+    if (!z.isObject(n)) throw new TypeError("target must be an object");
+    (a = a || new FormData()),
+        (l = z.toFlatObject(l, { metaTokens: !0, dots: !1, indexes: !1 }, !1, function (S, k) {
+            return !z.isUndefined(k[S]);
+        }));
+    const o = l.metaTokens,
+        u = l.visitor || y,
+        f = l.dots,
+        m = l.indexes,
+        h = (l.Blob || (typeof Blob < "u" && Blob)) && z.isSpecCompliantForm(a);
+    if (!z.isFunction(u)) throw new TypeError("visitor must be a function");
+    function v(j) {
+        if (j === null) return "";
+        if (z.isDate(j)) return j.toISOString();
+        if (z.isBoolean(j)) return j.toString();
+        if (!h && z.isBlob(j)) throw new Pe("Blob is not supported. Use a Buffer instead.");
+        return z.isArrayBuffer(j) || z.isTypedArray(j)
+            ? h && typeof Blob == "function"
+                ? new Blob([j])
+                : Buffer.from(j)
+            : j;
+    }
+    function y(j, S, k) {
+        let I = j;
+        if (z.isReactNative(a) && z.isReactNativeBlob(j)) return a.append(jc(k, S, f), v(j)), !1;
+        if (j && !k && typeof j == "object") {
+            if (z.endsWith(S, "{}")) (S = o ? S : S.slice(0, -2)), (j = JSON.stringify(j));
+            else if ((z.isArray(j) && $v(j)) || ((z.isFileList(j) || z.endsWith(S, "[]")) && (I = z.toArray(j))))
+                return (
+                    (S = Xp(S)),
+                    I.forEach(function (A, B) {
+                        !(z.isUndefined(A) || A === null) &&
+                            a.append(m === !0 ? jc([S], B, f) : m === null ? S : S + "[]", v(A));
+                    }),
+                    !1
+                );
+        }
+        return qc(j) ? !0 : (a.append(jc(k, S, f), v(j)), !1);
+    }
+    const w = [],
+        T = Object.assign(Hv, { defaultVisitor: y, convertValue: v, isVisitable: qc });
+    function b(j, S) {
+        if (!z.isUndefined(j)) {
+            if (w.indexOf(j) !== -1) throw Error("Circular reference detected in " + S.join("."));
+            w.push(j),
+                z.forEach(j, function (I, $) {
+                    (!(z.isUndefined(I) || I === null) && u.call(a, I, z.isString($) ? $.trim() : $, S, T)) === !0 &&
+                        b(I, S ? S.concat($) : [$]);
+                }),
+                w.pop();
+        }
+    }
+    if (!z.isObject(n)) throw new TypeError("data must be an object");
+    return b(n), a;
+}
+function Em(n) {
+    const a = { "!": "%21", "'": "%27", "(": "%28", ")": "%29", "~": "%7E", "%20": "+", "%00": "\0" };
+    return encodeURIComponent(n).replace(/[!'()~]|%20|%00/g, function (o) {
+        return a[o];
+    });
+}
+function su(n, a) {
+    (this._pairs = []), n && gi(n, this, a);
+}
+const Zp = su.prototype;
+Zp.append = function (a, l) {
+    this._pairs.push([a, l]);
+};
+Zp.toString = function (a) {
+    const l = a
+        ? function (o) {
+              return a.call(this, o, Em);
+          }
+        : Em;
+    return this._pairs
+        .map(function (u) {
+            return l(u[0]) + "=" + l(u[1]);
+        }, "")
+        .join("&");
+};
+function qv(n) {
+    return encodeURIComponent(n).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+");
+}
+function eh(n, a, l) {
+    if (!a) return n;
+    const o = (l && l.encode) || qv,
+        u = z.isFunction(l) ? { serialize: l } : l,
+        f = u && u.serialize;
+    let m;
+    if ((f ? (m = f(a, u)) : (m = z.isURLSearchParams(a) ? a.toString() : new su(a, u).toString(o)), m)) {
+        const p = n.indexOf("#");
+        p !== -1 && (n = n.slice(0, p)), (n += (n.indexOf("?") === -1 ? "?" : "&") + m);
+    }
+    return n;
+}
+class Pm {
+    constructor() {
+        this.handlers = [];
+    }
+    use(a, l, o) {
+        return (
+            this.handlers.push({
+                fulfilled: a,
+                rejected: l,
+                synchronous: o ? o.synchronous : !1,
+                runWhen: o ? o.runWhen : null,
+            }),
+            this.handlers.length - 1
+        );
+    }
+    eject(a) {
+        this.handlers[a] && (this.handlers[a] = null);
+    }
+    clear() {
+        this.handlers && (this.handlers = []);
+    }
+    forEach(a) {
+        z.forEach(this.handlers, function (o) {
+            o !== null && a(o);
+        });
+    }
+}
+const au = {
+        silentJSONParsing: !0,
+        forcedJSONParsing: !0,
+        clarifyTimeoutError: !1,
+        legacyInterceptorReqResOrdering: !0,
+    },
+    Wv = typeof URLSearchParams < "u" ? URLSearchParams : su,
+    Vv = typeof FormData < "u" ? FormData : null,
+    Qv = typeof Blob < "u" ? Blob : null,
+    Kv = {
+        isBrowser: !0,
+        classes: { URLSearchParams: Wv, FormData: Vv, Blob: Qv },
+        protocols: ["http", "https", "file", "blob", "url", "data"],
+    },
+    lu = typeof window < "u" && typeof document < "u",
+    Wc = (typeof navigator == "object" && navigator) || void 0,
+    Yv = lu && (!Wc || ["ReactNative", "NativeScript", "NS"].indexOf(Wc.product) < 0),
+    Gv = typeof WorkerGlobalScope < "u" && self instanceof WorkerGlobalScope && typeof self.importScripts == "function",
+    Jv = (lu && window.location.href) || "http://localhost",
+    Xv = Object.freeze(
+        Object.defineProperty(
+            {
+                __proto__: null,
+                hasBrowserEnv: lu,
+                hasStandardBrowserEnv: Yv,
+                hasStandardBrowserWebWorkerEnv: Gv,
+                navigator: Wc,
+                origin: Jv,
+            },
+            Symbol.toStringTag,
+            { value: "Module" }
+        )
+    ),
+    jt = { ...Xv, ...Kv };
+function Zv(n, a) {
+    return gi(n, new jt.classes.URLSearchParams(), {
+        visitor: function (l, o, u, f) {
+            return jt.isNode && z.isBuffer(l)
+                ? (this.append(o, l.toString("base64")), !1)
+                : f.defaultVisitor.apply(this, arguments);
+        },
+        ...a,
+    });
+}
+function e1(n) {
+    return z.matchAll(/\w+|\[(\w*)]/g, n).map((a) => (a[0] === "[]" ? "" : a[1] || a[0]));
+}
+function t1(n) {
+    const a = {},
+        l = Object.keys(n);
+    let o;
+    const u = l.length;
+    let f;
+    for (o = 0; o < u; o++) (f = l[o]), (a[f] = n[f]);
+    return a;
+}
+function th(n) {
+    function a(l, o, u, f) {
+        let m = l[f++];
+        if (m === "__proto__") return !0;
+        const p = Number.isFinite(+m),
+            h = f >= l.length;
+        return (
+            (m = !m && z.isArray(u) ? u.length : m),
+            h
+                ? (z.hasOwnProp(u, m) ? (u[m] = [u[m], o]) : (u[m] = o), !p)
+                : ((!u[m] || !z.isObject(u[m])) && (u[m] = []),
+                  a(l, o, u[m], f) && z.isArray(u[m]) && (u[m] = t1(u[m])),
+                  !p)
+        );
+    }
+    if (z.isFormData(n) && z.isFunction(n.entries)) {
+        const l = {};
+        return (
+            z.forEachEntry(n, (o, u) => {
+                a(e1(o), u, l, 0);
+            }),
+            l
+        );
+    }
+    return null;
+}
+function n1(n, a, l) {
+    if (z.isString(n))
+        try {
+            return (a || JSON.parse)(n), z.trim(n);
+        } catch (o) {
+            if (o.name !== "SyntaxError") throw o;
+        }
+    return (l || JSON.stringify)(n);
+}
+const ba = {
+    transitional: au,
+    adapter: ["xhr", "http", "fetch"],
+    transformRequest: [
+        function (a, l) {
+            const o = l.getContentType() || "",
+                u = o.indexOf("application/json") > -1,
+                f = z.isObject(a);
+            if ((f && z.isHTMLForm(a) && (a = new FormData(a)), z.isFormData(a))) return u ? JSON.stringify(th(a)) : a;
+            if (
+                z.isArrayBuffer(a) ||
+                z.isBuffer(a) ||
+                z.isStream(a) ||
+                z.isFile(a) ||
+                z.isBlob(a) ||
+                z.isReadableStream(a)
+            )
+                return a;
+            if (z.isArrayBufferView(a)) return a.buffer;
+            if (z.isURLSearchParams(a))
+                return l.setContentType("application/x-www-form-urlencoded;charset=utf-8", !1), a.toString();
+            let p;
+            if (f) {
+                if (o.indexOf("application/x-www-form-urlencoded") > -1) return Zv(a, this.formSerializer).toString();
+                if ((p = z.isFileList(a)) || o.indexOf("multipart/form-data") > -1) {
+                    const h = this.env && this.env.FormData;
+                    return gi(p ? { "files[]": a } : a, h && new h(), this.formSerializer);
+                }
+            }
+            return f || u ? (l.setContentType("application/json", !1), n1(a)) : a;
+        },
+    ],
+    transformResponse: [
+        function (a) {
+            const l = this.transitional || ba.transitional,
+                o = l && l.forcedJSONParsing,
+                u = this.responseType === "json";
+            if (z.isResponse(a) || z.isReadableStream(a)) return a;
+            if (a && z.isString(a) && ((o && !this.responseType) || u)) {
+                const m = !(l && l.silentJSONParsing) && u;
+                try {
+                    return JSON.parse(a, this.parseReviver);
+                } catch (p) {
+                    if (m)
+                        throw p.name === "SyntaxError" ? Pe.from(p, Pe.ERR_BAD_RESPONSE, this, null, this.response) : p;
+                }
+            }
+            return a;
+        },
+    ],
+    timeout: 0,
+    xsrfCookieName: "XSRF-TOKEN",
+    xsrfHeaderName: "X-XSRF-TOKEN",
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: jt.classes.FormData, Blob: jt.classes.Blob },
+    validateStatus: function (a) {
+        return a >= 200 && a < 300;
+    },
+    headers: { common: { Accept: "application/json, text/plain, */*", "Content-Type": void 0 } },
+};
+z.forEach(["delete", "get", "head", "post", "put", "patch"], (n) => {
+    ba.headers[n] = {};
+});
+const r1 = z.toObjectSet([
+        "age",
+        "authorization",
+        "content-length",
+        "content-type",
+        "etag",
+        "expires",
+        "from",
+        "host",
+        "if-modified-since",
+        "if-unmodified-since",
+        "last-modified",
+        "location",
+        "max-forwards",
+        "proxy-authorization",
+        "referer",
+        "retry-after",
+        "user-agent",
+    ]),
+    s1 = (n) => {
+        const a = {};
+        let l, o, u;
+        return (
+            n &&
+                n
+                    .split(
+                        `
+`
+                    )
+                    .forEach(function (m) {
+                        (u = m.indexOf(":")),
+                            (l = m.substring(0, u).trim().toLowerCase()),
+                            (o = m.substring(u + 1).trim()),
+                            !(!l || (a[l] && r1[l])) &&
+                                (l === "set-cookie"
+                                    ? a[l]
+                                        ? a[l].push(o)
+                                        : (a[l] = [o])
+                                    : (a[l] = a[l] ? a[l] + ", " + o : o));
+                    }),
+            a
+        );
+    },
+    Rm = Symbol("internals");
+function oa(n) {
+    return n && String(n).trim().toLowerCase();
+}
+function Wl(n) {
+    return n === !1 || n == null ? n : z.isArray(n) ? n.map(Wl) : String(n);
+}
+function a1(n) {
+    const a = Object.create(null),
+        l = /([^\s,;=]+)\s*(?:=\s*([^,;]+))?/g;
+    let o;
+    for (; (o = l.exec(n)); ) a[o[1]] = o[2];
+    return a;
+}
+const l1 = (n) => /^[-_a-zA-Z0-9^`|~,!#$%&'*+.]+$/.test(n.trim());
+function kc(n, a, l, o, u) {
+    if (z.isFunction(o)) return o.call(this, a, l);
+    if ((u && (a = l), !!z.isString(a))) {
+        if (z.isString(o)) return a.indexOf(o) !== -1;
+        if (z.isRegExp(o)) return o.test(a);
+    }
+}
+function i1(n) {
+    return n
+        .trim()
+        .toLowerCase()
+        .replace(/([a-z\d])(\w*)/g, (a, l, o) => l.toUpperCase() + o);
+}
+function o1(n, a) {
+    const l = z.toCamelCase(" " + a);
+    ["get", "set", "has"].forEach((o) => {
+        Object.defineProperty(n, o + l, {
+            value: function (u, f, m) {
+                return this[o].call(this, a, u, f, m);
+            },
+            configurable: !0,
+        });
+    });
+}
+let It = class {
+    constructor(a) {
+        a && this.set(a);
+    }
+    set(a, l, o) {
+        const u = this;
+        function f(p, h, v) {
+            const y = oa(h);
+            if (!y) throw new Error("header name must be a non-empty string");
+            const w = z.findKey(u, y);
+            (!w || u[w] === void 0 || v === !0 || (v === void 0 && u[w] !== !1)) && (u[w || h] = Wl(p));
+        }
+        const m = (p, h) => z.forEach(p, (v, y) => f(v, y, h));
+        if (z.isPlainObject(a) || a instanceof this.constructor) m(a, l);
+        else if (z.isString(a) && (a = a.trim()) && !l1(a)) m(s1(a), l);
+        else if (z.isObject(a) && z.isIterable(a)) {
+            let p = {},
+                h,
+                v;
+            for (const y of a) {
+                if (!z.isArray(y)) throw TypeError("Object iterator must return a key-value pair");
+                p[(v = y[0])] = (h = p[v]) ? (z.isArray(h) ? [...h, y[1]] : [h, y[1]]) : y[1];
+            }
+            m(p, l);
+        } else a != null && f(l, a, o);
+        return this;
+    }
+    get(a, l) {
+        if (((a = oa(a)), a)) {
+            const o = z.findKey(this, a);
+            if (o) {
+                const u = this[o];
+                if (!l) return u;
+                if (l === !0) return a1(u);
+                if (z.isFunction(l)) return l.call(this, u, o);
+                if (z.isRegExp(l)) return l.exec(u);
+                throw new TypeError("parser must be boolean|regexp|function");
+            }
+        }
+    }
+    has(a, l) {
+        if (((a = oa(a)), a)) {
+            const o = z.findKey(this, a);
+            return !!(o && this[o] !== void 0 && (!l || kc(this, this[o], o, l)));
+        }
+        return !1;
+    }
+    delete(a, l) {
+        const o = this;
+        let u = !1;
+        function f(m) {
+            if (((m = oa(m)), m)) {
+                const p = z.findKey(o, m);
+                p && (!l || kc(o, o[p], p, l)) && (delete o[p], (u = !0));
+            }
+        }
+        return z.isArray(a) ? a.forEach(f) : f(a), u;
+    }
+    clear(a) {
+        const l = Object.keys(this);
+        let o = l.length,
+            u = !1;
+        for (; o--; ) {
+            const f = l[o];
+            (!a || kc(this, this[f], f, a, !0)) && (delete this[f], (u = !0));
+        }
+        return u;
+    }
+    normalize(a) {
+        const l = this,
+            o = {};
+        return (
+            z.forEach(this, (u, f) => {
+                const m = z.findKey(o, f);
+                if (m) {
+                    (l[m] = Wl(u)), delete l[f];
+                    return;
+                }
+                const p = a ? i1(f) : String(f).trim();
+                p !== f && delete l[f], (l[p] = Wl(u)), (o[p] = !0);
+            }),
+            this
+        );
+    }
+    concat(...a) {
+        return this.constructor.concat(this, ...a);
+    }
+    toJSON(a) {
+        const l = Object.create(null);
+        return (
+            z.forEach(this, (o, u) => {
+                o != null && o !== !1 && (l[u] = a && z.isArray(o) ? o.join(", ") : o);
+            }),
+            l
+        );
+    }
+    [Symbol.iterator]() {
+        return Object.entries(this.toJSON())[Symbol.iterator]();
+    }
+    toString() {
+        return Object.entries(this.toJSON()).map(([a, l]) => a + ": " + l).join(`
+`);
+    }
+    getSetCookie() {
+        return this.get("set-cookie") || [];
+    }
+    get [Symbol.toStringTag]() {
+        return "AxiosHeaders";
+    }
+    static from(a) {
+        return a instanceof this ? a : new this(a);
+    }
+    static concat(a, ...l) {
+        const o = new this(a);
+        return l.forEach((u) => o.set(u)), o;
+    }
+    static accessor(a) {
+        const o = (this[Rm] = this[Rm] = { accessors: {} }).accessors,
+            u = this.prototype;
+        function f(m) {
+            const p = oa(m);
+            o[p] || (o1(u, m), (o[p] = !0));
+        }
+        return z.isArray(a) ? a.forEach(f) : f(a), this;
+    }
+};
+It.accessor(["Content-Type", "Content-Length", "Accept", "Accept-Encoding", "User-Agent", "Authorization"]);
+z.reduceDescriptors(It.prototype, ({ value: n }, a) => {
+    let l = a[0].toUpperCase() + a.slice(1);
+    return {
+        get: () => n,
+        set(o) {
+            this[l] = o;
+        },
+    };
+});
+z.freezeMethods(It);
+function Nc(n, a) {
+    const l = this || ba,
+        o = a || l,
+        u = It.from(o.headers);
+    let f = o.data;
+    return (
+        z.forEach(n, function (p) {
+            f = p.call(l, f, u.normalize(), a ? a.status : void 0);
+        }),
+        u.normalize(),
+        f
+    );
+}
+function nh(n) {
+    return !!(n && n.__CANCEL__);
+}
+let ja = class extends Pe {
+    constructor(a, l, o) {
+        super(a ?? "canceled", Pe.ERR_CANCELED, l, o), (this.name = "CanceledError"), (this.__CANCEL__ = !0);
+    }
+};
+function rh(n, a, l) {
+    const o = l.config.validateStatus;
+    !l.status || !o || o(l.status)
+        ? n(l)
+        : a(
+              new Pe(
+                  "Request failed with status code " + l.status,
+                  [Pe.ERR_BAD_REQUEST, Pe.ERR_BAD_RESPONSE][Math.floor(l.status / 100) - 4],
+                  l.config,
+                  l.request,
+                  l
+              )
+          );
+}
+function c1(n) {
+    const a = /^([-+\w]{1,25})(:?\/\/|:)/.exec(n);
+    return (a && a[1]) || "";
+}
+function u1(n, a) {
+    n = n || 10;
+    const l = new Array(n),
+        o = new Array(n);
+    let u = 0,
+        f = 0,
+        m;
+    return (
+        (a = a !== void 0 ? a : 1e3),
+        function (h) {
+            const v = Date.now(),
+                y = o[f];
+            m || (m = v), (l[u] = h), (o[u] = v);
+            let w = f,
+                T = 0;
+            for (; w !== u; ) (T += l[w++]), (w = w % n);
+            if (((u = (u + 1) % n), u === f && (f = (f + 1) % n), v - m < a)) return;
+            const b = y && v - y;
+            return b ? Math.round((T * 1e3) / b) : void 0;
+        }
+    );
+}
+function d1(n, a) {
+    let l = 0,
+        o = 1e3 / a,
+        u,
+        f;
+    const m = (v, y = Date.now()) => {
+        (l = y), (u = null), f && (clearTimeout(f), (f = null)), n(...v);
+    };
+    return [
+        (...v) => {
+            const y = Date.now(),
+                w = y - l;
+            w >= o
+                ? m(v, y)
+                : ((u = v),
+                  f ||
+                      (f = setTimeout(() => {
+                          (f = null), m(u);
+                      }, o - w)));
+        },
+        () => u && m(u),
+    ];
+}
+const ni = (n, a, l = 3) => {
+        let o = 0;
+        const u = u1(50, 250);
+        return d1((f) => {
+            const m = f.loaded,
+                p = f.lengthComputable ? f.total : void 0,
+                h = m - o,
+                v = u(h),
+                y = m <= p;
+            o = m;
+            const w = {
+                loaded: m,
+                total: p,
+                progress: p ? m / p : void 0,
+                bytes: h,
+                rate: v || void 0,
+                estimated: v && p && y ? (p - m) / v : void 0,
+                event: f,
+                lengthComputable: p != null,
+                [a ? "download" : "upload"]: !0,
+            };
+            n(w);
+        }, l);
+    },
+    _m = (n, a) => {
+        const l = n != null;
+        return [(o) => a[0]({ lengthComputable: l, total: n, loaded: o }), a[1]];
+    },
+    Am =
+        (n) =>
+        (...a) =>
+            z.asap(() => n(...a)),
+    f1 = jt.hasStandardBrowserEnv
+        ? ((n, a) => (l) => (
+              (l = new URL(l, jt.origin)), n.protocol === l.protocol && n.host === l.host && (a || n.port === l.port)
+          ))(new URL(jt.origin), jt.navigator && /(msie|trident)/i.test(jt.navigator.userAgent))
+        : () => !0,
+    m1 = jt.hasStandardBrowserEnv
+        ? {
+              write(n, a, l, o, u, f, m) {
+                  if (typeof document > "u") return;
+                  const p = [`${n}=${encodeURIComponent(a)}`];
+                  z.isNumber(l) && p.push(`expires=${new Date(l).toUTCString()}`),
+                      z.isString(o) && p.push(`path=${o}`),
+                      z.isString(u) && p.push(`domain=${u}`),
+                      f === !0 && p.push("secure"),
+                      z.isString(m) && p.push(`SameSite=${m}`),
+                      (document.cookie = p.join("; "));
+              },
+              read(n) {
+                  if (typeof document > "u") return null;
+                  const a = document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)"));
+                  return a ? decodeURIComponent(a[1]) : null;
+              },
+              remove(n) {
+                  this.write(n, "", Date.now() - 864e5, "/");
+              },
+          }
+        : {
+              write() {},
+              read() {
+                  return null;
+              },
+              remove() {},
+          };
+function p1(n) {
+    return typeof n != "string" ? !1 : /^([a-z][a-z\d+\-.]*:)?\/\//i.test(n);
+}
+function h1(n, a) {
+    return a ? n.replace(/\/?\/$/, "") + "/" + a.replace(/^\/+/, "") : n;
+}
+function sh(n, a, l) {
+    let o = !p1(a);
+    return n && (o || l == !1) ? h1(n, a) : a;
+}
+const Lm = (n) => (n instanceof It ? { ...n } : n);
+function zr(n, a) {
+    a = a || {};
+    const l = {};
+    function o(v, y, w, T) {
+        return z.isPlainObject(v) && z.isPlainObject(y)
+            ? z.merge.call({ caseless: T }, v, y)
+            : z.isPlainObject(y)
+              ? z.merge({}, y)
+              : z.isArray(y)
+                ? y.slice()
+                : y;
+    }
+    function u(v, y, w, T) {
+        if (z.isUndefined(y)) {
+            if (!z.isUndefined(v)) return o(void 0, v, w, T);
+        } else return o(v, y, w, T);
+    }
+    function f(v, y) {
+        if (!z.isUndefined(y)) return o(void 0, y);
+    }
+    function m(v, y) {
+        if (z.isUndefined(y)) {
+            if (!z.isUndefined(v)) return o(void 0, v);
+        } else return o(void 0, y);
+    }
+    function p(v, y, w) {
+        if (w in a) return o(v, y);
+        if (w in n) return o(void 0, v);
+    }
+    const h = {
+        url: f,
+        method: f,
+        data: f,
+        baseURL: m,
+        transformRequest: m,
+        transformResponse: m,
+        paramsSerializer: m,
+        timeout: m,
+        timeoutMessage: m,
+        withCredentials: m,
+        withXSRFToken: m,
+        adapter: m,
+        responseType: m,
+        xsrfCookieName: m,
+        xsrfHeaderName: m,
+        onUploadProgress: m,
+        onDownloadProgress: m,
+        decompress: m,
+        maxContentLength: m,
+        maxBodyLength: m,
+        beforeRedirect: m,
+        transport: m,
+        httpAgent: m,
+        httpsAgent: m,
+        cancelToken: m,
+        socketPath: m,
+        responseEncoding: m,
+        validateStatus: p,
+        headers: (v, y, w) => u(Lm(v), Lm(y), w, !0),
+    };
+    return (
+        z.forEach(Object.keys({ ...n, ...a }), function (y) {
+            if (y === "__proto__" || y === "constructor" || y === "prototype") return;
+            const w = z.hasOwnProp(h, y) ? h[y] : u,
+                T = w(n[y], a[y], y);
+            (z.isUndefined(T) && w !== p) || (l[y] = T);
+        }),
+        l
+    );
+}
+const ah = (n) => {
+        const a = zr({}, n);
+        let { data: l, withXSRFToken: o, xsrfHeaderName: u, xsrfCookieName: f, headers: m, auth: p } = a;
+        if (
+            ((a.headers = m = It.from(m)),
+            (a.url = eh(sh(a.baseURL, a.url, a.allowAbsoluteUrls), n.params, n.paramsSerializer)),
+            p &&
+                m.set(
+                    "Authorization",
+                    "Basic " +
+                        btoa((p.username || "") + ":" + (p.password ? unescape(encodeURIComponent(p.password)) : ""))
+                ),
+            z.isFormData(l))
+        ) {
+            if (jt.hasStandardBrowserEnv || jt.hasStandardBrowserWebWorkerEnv) m.setContentType(void 0);
+            else if (z.isFunction(l.getHeaders)) {
+                const h = l.getHeaders(),
+                    v = ["content-type", "content-length"];
+                Object.entries(h).forEach(([y, w]) => {
+                    v.includes(y.toLowerCase()) && m.set(y, w);
+                });
+            }
+        }
+        if (jt.hasStandardBrowserEnv && (o && z.isFunction(o) && (o = o(a)), o || (o !== !1 && f1(a.url)))) {
+            const h = u && f && m1.read(f);
+            h && m.set(u, h);
+        }
+        return a;
+    },
+    x1 = typeof XMLHttpRequest < "u",
+    g1 =
+        x1 &&
+        function (n) {
+            return new Promise(function (l, o) {
+                const u = ah(n);
+                let f = u.data;
+                const m = It.from(u.headers).normalize();
+                let { responseType: p, onUploadProgress: h, onDownloadProgress: v } = u,
+                    y,
+                    w,
+                    T,
+                    b,
+                    j;
+                function S() {
+                    b && b(),
+                        j && j(),
+                        u.cancelToken && u.cancelToken.unsubscribe(y),
+                        u.signal && u.signal.removeEventListener("abort", y);
+                }
+                let k = new XMLHttpRequest();
+                k.open(u.method.toUpperCase(), u.url, !0), (k.timeout = u.timeout);
+                function I() {
+                    if (!k) return;
+                    const A = It.from("getAllResponseHeaders" in k && k.getAllResponseHeaders()),
+                        Y = {
+                            data: !p || p === "text" || p === "json" ? k.responseText : k.response,
+                            status: k.status,
+                            statusText: k.statusText,
+                            headers: A,
+                            config: n,
+                            request: k,
+                        };
+                    rh(
+                        function (K) {
+                            l(K), S();
+                        },
+                        function (K) {
+                            o(K), S();
+                        },
+                        Y
+                    ),
+                        (k = null);
+                }
+                "onloadend" in k
+                    ? (k.onloadend = I)
+                    : (k.onreadystatechange = function () {
+                          !k ||
+                              k.readyState !== 4 ||
+                              (k.status === 0 && !(k.responseURL && k.responseURL.indexOf("file:") === 0)) ||
+                              setTimeout(I);
+                      }),
+                    (k.onabort = function () {
+                        k && (o(new Pe("Request aborted", Pe.ECONNABORTED, n, k)), (k = null));
+                    }),
+                    (k.onerror = function (B) {
+                        const Y = B && B.message ? B.message : "Network Error",
+                            ne = new Pe(Y, Pe.ERR_NETWORK, n, k);
+                        (ne.event = B || null), o(ne), (k = null);
+                    }),
+                    (k.ontimeout = function () {
+                        let B = u.timeout ? "timeout of " + u.timeout + "ms exceeded" : "timeout exceeded";
+                        const Y = u.transitional || au;
+                        u.timeoutErrorMessage && (B = u.timeoutErrorMessage),
+                            o(new Pe(B, Y.clarifyTimeoutError ? Pe.ETIMEDOUT : Pe.ECONNABORTED, n, k)),
+                            (k = null);
+                    }),
+                    f === void 0 && m.setContentType(null),
+                    "setRequestHeader" in k &&
+                        z.forEach(m.toJSON(), function (B, Y) {
+                            k.setRequestHeader(Y, B);
+                        }),
+                    z.isUndefined(u.withCredentials) || (k.withCredentials = !!u.withCredentials),
+                    p && p !== "json" && (k.responseType = u.responseType),
+                    v && (([T, j] = ni(v, !0)), k.addEventListener("progress", T)),
+                    h &&
+                        k.upload &&
+                        (([w, b] = ni(h)),
+                        k.upload.addEventListener("progress", w),
+                        k.upload.addEventListener("loadend", b)),
+                    (u.cancelToken || u.signal) &&
+                        ((y = (A) => {
+                            k && (o(!A || A.type ? new ja(null, n, k) : A), k.abort(), (k = null));
+                        }),
+                        u.cancelToken && u.cancelToken.subscribe(y),
+                        u.signal && (u.signal.aborted ? y() : u.signal.addEventListener("abort", y)));
+                const $ = c1(u.url);
+                if ($ && jt.protocols.indexOf($) === -1) {
+                    o(new Pe("Unsupported protocol " + $ + ":", Pe.ERR_BAD_REQUEST, n));
+                    return;
+                }
+                k.send(f || null);
+            });
+        },
+    y1 = (n, a) => {
+        const { length: l } = (n = n ? n.filter(Boolean) : []);
+        if (a || l) {
+            let o = new AbortController(),
+                u;
+            const f = function (v) {
+                if (!u) {
+                    (u = !0), p();
+                    const y = v instanceof Error ? v : this.reason;
+                    o.abort(y instanceof Pe ? y : new ja(y instanceof Error ? y.message : y));
+                }
+            };
+            let m =
+                a &&
+                setTimeout(() => {
+                    (m = null), f(new Pe(`timeout of ${a}ms exceeded`, Pe.ETIMEDOUT));
+                }, a);
+            const p = () => {
+                n &&
+                    (m && clearTimeout(m),
+                    (m = null),
+                    n.forEach((v) => {
+                        v.unsubscribe ? v.unsubscribe(f) : v.removeEventListener("abort", f);
+                    }),
+                    (n = null));
+            };
+            n.forEach((v) => v.addEventListener("abort", f));
+            const { signal: h } = o;
+            return (h.unsubscribe = () => z.asap(p)), h;
+        }
+    },
+    v1 = function* (n, a) {
+        let l = n.byteLength;
+        if (l < a) {
+            yield n;
+            return;
+        }
+        let o = 0,
+            u;
+        for (; o < l; ) (u = o + a), yield n.slice(o, u), (o = u);
+    },
+    w1 = async function* (n, a) {
+        for await (const l of b1(n)) yield* v1(l, a);
+    },
+    b1 = async function* (n) {
+        if (n[Symbol.asyncIterator]) {
+            yield* n;
+            return;
+        }
+        const a = n.getReader();
+        try {
+            for (;;) {
+                const { done: l, value: o } = await a.read();
+                if (l) break;
+                yield o;
+            }
+        } finally {
+            await a.cancel();
+        }
+    },
+    zm = (n, a, l, o) => {
+        const u = w1(n, a);
+        let f = 0,
+            m,
+            p = (h) => {
+                m || ((m = !0), o && o(h));
+            };
+        return new ReadableStream(
+            {
+                async pull(h) {
+                    try {
+                        const { done: v, value: y } = await u.next();
+                        if (v) {
+                            p(), h.close();
+                            return;
+                        }
+                        let w = y.byteLength;
+                        if (l) {
+                            let T = (f += w);
+                            l(T);
+                        }
+                        h.enqueue(new Uint8Array(y));
+                    } catch (v) {
+                        throw (p(v), v);
+                    }
+                },
+                cancel(h) {
+                    return p(h), u.return();
+                },
+            },
+            { highWaterMark: 2 }
+        );
+    },
+    Fm = 64 * 1024,
+    { isFunction: zl } = z,
+    j1 = (({ Request: n, Response: a }) => ({ Request: n, Response: a }))(z.global),
+    { ReadableStream: Om, TextEncoder: Im } = z.global,
+    Mm = (n, ...a) => {
+        try {
+            return !!n(...a);
+        } catch {
+            return !1;
+        }
+    },
+    k1 = (n) => {
+        n = z.merge.call({ skipUndefined: !0 }, j1, n);
+        const { fetch: a, Request: l, Response: o } = n,
+            u = a ? zl(a) : typeof fetch == "function",
+            f = zl(l),
+            m = zl(o);
+        if (!u) return !1;
+        const p = u && zl(Om),
+            h =
+                u &&
+                (typeof Im == "function"
+                    ? (
+                          (j) => (S) =>
+                              j.encode(S)
+                      )(new Im())
+                    : async (j) => new Uint8Array(await new l(j).arrayBuffer())),
+            v =
+                f &&
+                p &&
+                Mm(() => {
+                    let j = !1;
+                    const S = new l(jt.origin, {
+                        body: new Om(),
+                        method: "POST",
+                        get duplex() {
+                            return (j = !0), "half";
+                        },
+                    }).headers.has("Content-Type");
+                    return j && !S;
+                }),
+            y = m && p && Mm(() => z.isReadableStream(new o("").body)),
+            w = { stream: y && ((j) => j.body) };
+        u &&
+            ["text", "arrayBuffer", "blob", "formData", "stream"].forEach((j) => {
+                !w[j] &&
+                    (w[j] = (S, k) => {
+                        let I = S && S[j];
+                        if (I) return I.call(S);
+                        throw new Pe(`Response type '${j}' is not supported`, Pe.ERR_NOT_SUPPORT, k);
+                    });
+            });
+        const T = async (j) => {
+                if (j == null) return 0;
+                if (z.isBlob(j)) return j.size;
+                if (z.isSpecCompliantForm(j))
+                    return (await new l(jt.origin, { method: "POST", body: j }).arrayBuffer()).byteLength;
+                if (z.isArrayBufferView(j) || z.isArrayBuffer(j)) return j.byteLength;
+                if ((z.isURLSearchParams(j) && (j = j + ""), z.isString(j))) return (await h(j)).byteLength;
+            },
+            b = async (j, S) => {
+                const k = z.toFiniteNumber(j.getContentLength());
+                return k ?? T(S);
+            };
+        return async (j) => {
+            let {
+                    url: S,
+                    method: k,
+                    data: I,
+                    signal: $,
+                    cancelToken: A,
+                    timeout: B,
+                    onDownloadProgress: Y,
+                    onUploadProgress: ne,
+                    responseType: K,
+                    headers: le,
+                    withCredentials: ee = "same-origin",
+                    fetchOptions: re,
+                } = ah(j),
+                xe = a || fetch;
+            K = K ? (K + "").toLowerCase() : "text";
+            let q = y1([$, A && A.toAbortSignal()], B),
+                te = null;
+            const F =
+                q &&
+                q.unsubscribe &&
+                (() => {
+                    q.unsubscribe();
+                });
+            let ge;
+            try {
+                if (ne && v && k !== "get" && k !== "head" && (ge = await b(le, I)) !== 0) {
+                    let E = new l(S, { method: "POST", body: I, duplex: "half" }),
+                        U;
+                    if ((z.isFormData(I) && (U = E.headers.get("content-type")) && le.setContentType(U), E.body)) {
+                        const [Z, ae] = _m(ge, ni(Am(ne)));
+                        I = zm(E.body, Fm, Z, ae);
+                    }
+                }
+                z.isString(ee) || (ee = ee ? "include" : "omit");
+                const O = f && "credentials" in l.prototype,
+                    X = {
+                        ...re,
+                        signal: q,
+                        method: k.toUpperCase(),
+                        headers: le.normalize().toJSON(),
+                        body: I,
+                        duplex: "half",
+                        credentials: O ? ee : void 0,
+                    };
+                te = f && new l(S, X);
+                let M = await (f ? xe(te, re) : xe(S, X));
+                const se = y && (K === "stream" || K === "response");
+                if (y && (Y || (se && F))) {
+                    const E = {};
+                    ["status", "statusText", "headers"].forEach((ue) => {
+                        E[ue] = M[ue];
+                    });
+                    const U = z.toFiniteNumber(M.headers.get("content-length")),
+                        [Z, ae] = (Y && _m(U, ni(Am(Y), !0))) || [];
+                    M = new o(
+                        zm(M.body, Fm, Z, () => {
+                            ae && ae(), F && F();
+                        }),
+                        E
+                    );
+                }
+                K = K || "text";
+                let G = await w[z.findKey(w, K) || "text"](M, j);
+                return (
+                    !se && F && F(),
+                    await new Promise((E, U) => {
+                        rh(E, U, {
+                            data: G,
+                            headers: It.from(M.headers),
+                            status: M.status,
+                            statusText: M.statusText,
+                            config: j,
+                            request: te,
+                        });
+                    })
+                );
+            } catch (O) {
+                throw (
+                    (F && F(),
+                    O && O.name === "TypeError" && /Load failed|fetch/i.test(O.message)
+                        ? Object.assign(new Pe("Network Error", Pe.ERR_NETWORK, j, te, O && O.response), {
+                              cause: O.cause || O,
+                          })
+                        : Pe.from(O, O && O.code, j, te, O && O.response))
+                );
+            }
+        };
+    },
+    N1 = new Map(),
+    lh = (n) => {
+        let a = (n && n.env) || {};
+        const { fetch: l, Request: o, Response: u } = a,
+            f = [o, u, l];
+        let m = f.length,
+            p = m,
+            h,
+            v,
+            y = N1;
+        for (; p--; ) (h = f[p]), (v = y.get(h)), v === void 0 && y.set(h, (v = p ? new Map() : k1(a))), (y = v);
+        return v;
+    };
+lh();
+const iu = { http: Bv, xhr: g1, fetch: { get: lh } };
+z.forEach(iu, (n, a) => {
+    if (n) {
+        try {
+            Object.defineProperty(n, "name", { value: a });
+        } catch {}
+        Object.defineProperty(n, "adapterName", { value: a });
+    }
+});
+const Dm = (n) => `- ${n}`,
+    S1 = (n) => z.isFunction(n) || n === null || n === !1;
+function C1(n, a) {
+    n = z.isArray(n) ? n : [n];
+    const { length: l } = n;
+    let o, u;
+    const f = {};
+    for (let m = 0; m < l; m++) {
+        o = n[m];
+        let p;
+        if (((u = o), !S1(o) && ((u = iu[(p = String(o)).toLowerCase()]), u === void 0)))
+            throw new Pe(`Unknown adapter '${p}'`);
+        if (u && (z.isFunction(u) || (u = u.get(a)))) break;
+        f[p || "#" + m] = u;
+    }
+    if (!u) {
+        const m = Object.entries(f).map(
+            ([h, v]) =>
+                `adapter ${h} ` + (v === !1 ? "is not supported by the environment" : "is not available in the build")
+        );
+        let p = l
+            ? m.length > 1
+                ? `since :
+` +
+                  m.map(Dm).join(`
+`)
+                : " " + Dm(m[0])
+            : "as no adapter specified";
+        throw new Pe("There is no suitable adapter to dispatch the request " + p, "ERR_NOT_SUPPORT");
+    }
+    return u;
+}
+const ih = { getAdapter: C1, adapters: iu };
+function Sc(n) {
+    if ((n.cancelToken && n.cancelToken.throwIfRequested(), n.signal && n.signal.aborted)) throw new ja(null, n);
+}
+function Um(n) {
+    return (
+        Sc(n),
+        (n.headers = It.from(n.headers)),
+        (n.data = Nc.call(n, n.transformRequest)),
+        ["post", "put", "patch"].indexOf(n.method) !== -1 &&
+            n.headers.setContentType("application/x-www-form-urlencoded", !1),
+        ih
+            .getAdapter(
+                n.adapter || ba.adapter,
+                n
+            )(n)
+            .then(
+                function (o) {
+                    return Sc(n), (o.data = Nc.call(n, n.transformResponse, o)), (o.headers = It.from(o.headers)), o;
+                },
+                function (o) {
+                    return (
+                        nh(o) ||
+                            (Sc(n),
+                            o &&
+                                o.response &&
+                                ((o.response.data = Nc.call(n, n.transformResponse, o.response)),
+                                (o.response.headers = It.from(o.response.headers)))),
+                        Promise.reject(o)
+                    );
+                }
+            )
+    );
+}
+const oh = "1.13.6",
+    yi = {};
+["object", "boolean", "number", "function", "string", "symbol"].forEach((n, a) => {
+    yi[n] = function (o) {
+        return typeof o === n || "a" + (a < 1 ? "n " : " ") + n;
+    };
+});
+const Bm = {};
+yi.transitional = function (a, l, o) {
+    function u(f, m) {
+        return "[Axios v" + oh + "] Transitional option '" + f + "'" + m + (o ? ". " + o : "");
+    }
+    return (f, m, p) => {
+        if (a === !1) throw new Pe(u(m, " has been removed" + (l ? " in " + l : "")), Pe.ERR_DEPRECATED);
+        return (
+            l &&
+                !Bm[m] &&
+                ((Bm[m] = !0),
+                console.warn(u(m, " has been deprecated since v" + l + " and will be removed in the near future"))),
+            a ? a(f, m, p) : !0
+        );
+    };
+};
+yi.spelling = function (a) {
+    return (l, o) => (console.warn(`${o} is likely a misspelling of ${a}`), !0);
+};
+function T1(n, a, l) {
+    if (typeof n != "object") throw new Pe("options must be an object", Pe.ERR_BAD_OPTION_VALUE);
+    const o = Object.keys(n);
+    let u = o.length;
+    for (; u-- > 0; ) {
+        const f = o[u],
+            m = a[f];
+        if (m) {
+            const p = n[f],
+                h = p === void 0 || m(p, f, n);
+            if (h !== !0) throw new Pe("option " + f + " must be " + h, Pe.ERR_BAD_OPTION_VALUE);
+            continue;
+        }
+        if (l !== !0) throw new Pe("Unknown option " + f, Pe.ERR_BAD_OPTION);
+    }
+}
+const Vl = { assertOptions: T1, validators: yi },
+    Xt = Vl.validators;
+let Lr = class {
+    constructor(a) {
+        (this.defaults = a || {}), (this.interceptors = { request: new Pm(), response: new Pm() });
+    }
+    async request(a, l) {
+        try {
+            return await this._request(a, l);
+        } catch (o) {
+            if (o instanceof Error) {
+                let u = {};
+                Error.captureStackTrace ? Error.captureStackTrace(u) : (u = new Error());
+                const f = u.stack ? u.stack.replace(/^.+\n/, "") : "";
+                try {
+                    o.stack
+                        ? f &&
+                          !String(o.stack).endsWith(f.replace(/^.+\n.+\n/, "")) &&
+                          (o.stack +=
+                              `
+` + f)
+                        : (o.stack = f);
+                } catch {}
+            }
+            throw o;
+        }
+    }
+    _request(a, l) {
+        typeof a == "string" ? ((l = l || {}), (l.url = a)) : (l = a || {}), (l = zr(this.defaults, l));
+        const { transitional: o, paramsSerializer: u, headers: f } = l;
+        o !== void 0 &&
+            Vl.assertOptions(
+                o,
+                {
+                    silentJSONParsing: Xt.transitional(Xt.boolean),
+                    forcedJSONParsing: Xt.transitional(Xt.boolean),
+                    clarifyTimeoutError: Xt.transitional(Xt.boolean),
+                    legacyInterceptorReqResOrdering: Xt.transitional(Xt.boolean),
+                },
+                !1
+            ),
+            u != null &&
+                (z.isFunction(u)
+                    ? (l.paramsSerializer = { serialize: u })
+                    : Vl.assertOptions(u, { encode: Xt.function, serialize: Xt.function }, !0)),
+            l.allowAbsoluteUrls !== void 0 ||
+                (this.defaults.allowAbsoluteUrls !== void 0
+                    ? (l.allowAbsoluteUrls = this.defaults.allowAbsoluteUrls)
+                    : (l.allowAbsoluteUrls = !0)),
+            Vl.assertOptions(l, { baseUrl: Xt.spelling("baseURL"), withXsrfToken: Xt.spelling("withXSRFToken") }, !0),
+            (l.method = (l.method || this.defaults.method || "get").toLowerCase());
+        let m = f && z.merge(f.common, f[l.method]);
+        f &&
+            z.forEach(["delete", "get", "head", "post", "put", "patch", "common"], (j) => {
+                delete f[j];
+            }),
+            (l.headers = It.concat(m, f));
+        const p = [];
+        let h = !0;
+        this.interceptors.request.forEach(function (S) {
+            if (typeof S.runWhen == "function" && S.runWhen(l) === !1) return;
+            h = h && S.synchronous;
+            const k = l.transitional || au;
+            k && k.legacyInterceptorReqResOrdering
+                ? p.unshift(S.fulfilled, S.rejected)
+                : p.push(S.fulfilled, S.rejected);
+        });
+        const v = [];
+        this.interceptors.response.forEach(function (S) {
+            v.push(S.fulfilled, S.rejected);
+        });
+        let y,
+            w = 0,
+            T;
+        if (!h) {
+            const j = [Um.bind(this), void 0];
+            for (j.unshift(...p), j.push(...v), T = j.length, y = Promise.resolve(l); w < T; )
+                y = y.then(j[w++], j[w++]);
+            return y;
+        }
+        T = p.length;
+        let b = l;
+        for (; w < T; ) {
+            const j = p[w++],
+                S = p[w++];
+            try {
+                b = j(b);
+            } catch (k) {
+                S.call(this, k);
+                break;
+            }
+        }
+        try {
+            y = Um.call(this, b);
+        } catch (j) {
+            return Promise.reject(j);
+        }
+        for (w = 0, T = v.length; w < T; ) y = y.then(v[w++], v[w++]);
+        return y;
+    }
+    getUri(a) {
+        a = zr(this.defaults, a);
+        const l = sh(a.baseURL, a.url, a.allowAbsoluteUrls);
+        return eh(l, a.params, a.paramsSerializer);
+    }
+};
+z.forEach(["delete", "get", "head", "options"], function (a) {
+    Lr.prototype[a] = function (l, o) {
+        return this.request(zr(o || {}, { method: a, url: l, data: (o || {}).data }));
+    };
+});
+z.forEach(["post", "put", "patch"], function (a) {
+    function l(o) {
+        return function (f, m, p) {
+            return this.request(
+                zr(p || {}, { method: a, headers: o ? { "Content-Type": "multipart/form-data" } : {}, url: f, data: m })
+            );
+        };
+    }
+    (Lr.prototype[a] = l()), (Lr.prototype[a + "Form"] = l(!0));
+});
+let E1 = class ch {
+    constructor(a) {
+        if (typeof a != "function") throw new TypeError("executor must be a function.");
+        let l;
+        this.promise = new Promise(function (f) {
+            l = f;
+        });
+        const o = this;
+        this.promise.then((u) => {
+            if (!o._listeners) return;
+            let f = o._listeners.length;
+            for (; f-- > 0; ) o._listeners[f](u);
+            o._listeners = null;
+        }),
+            (this.promise.then = (u) => {
+                let f;
+                const m = new Promise((p) => {
+                    o.subscribe(p), (f = p);
+                }).then(u);
+                return (
+                    (m.cancel = function () {
+                        o.unsubscribe(f);
+                    }),
+                    m
+                );
+            }),
+            a(function (f, m, p) {
+                o.reason || ((o.reason = new ja(f, m, p)), l(o.reason));
+            });
+    }
+    throwIfRequested() {
+        if (this.reason) throw this.reason;
+    }
+    subscribe(a) {
+        if (this.reason) {
+            a(this.reason);
+            return;
+        }
+        this._listeners ? this._listeners.push(a) : (this._listeners = [a]);
+    }
+    unsubscribe(a) {
+        if (!this._listeners) return;
+        const l = this._listeners.indexOf(a);
+        l !== -1 && this._listeners.splice(l, 1);
+    }
+    toAbortSignal() {
+        const a = new AbortController(),
+            l = (o) => {
+                a.abort(o);
+            };
+        return this.subscribe(l), (a.signal.unsubscribe = () => this.unsubscribe(l)), a.signal;
+    }
+    static source() {
+        let a;
+        return {
+            token: new ch(function (u) {
+                a = u;
+            }),
+            cancel: a,
+        };
+    }
+};
+function P1(n) {
+    return function (l) {
+        return n.apply(null, l);
+    };
+}
+function R1(n) {
+    return z.isObject(n) && n.isAxiosError === !0;
+}
+const Vc = {
+    Continue: 100,
+    SwitchingProtocols: 101,
+    Processing: 102,
+    EarlyHints: 103,
+    Ok: 200,
+    Created: 201,
+    Accepted: 202,
+    NonAuthoritativeInformation: 203,
+    NoContent: 204,
+    ResetContent: 205,
+    PartialContent: 206,
+    MultiStatus: 207,
+    AlreadyReported: 208,
+    ImUsed: 226,
+    MultipleChoices: 300,
+    MovedPermanently: 301,
+    Found: 302,
+    SeeOther: 303,
+    NotModified: 304,
+    UseProxy: 305,
+    Unused: 306,
+    TemporaryRedirect: 307,
+    PermanentRedirect: 308,
+    BadRequest: 400,
+    Unauthorized: 401,
+    PaymentRequired: 402,
+    Forbidden: 403,
+    NotFound: 404,
+    MethodNotAllowed: 405,
+    NotAcceptable: 406,
+    ProxyAuthenticationRequired: 407,
+    RequestTimeout: 408,
+    Conflict: 409,
+    Gone: 410,
+    LengthRequired: 411,
+    PreconditionFailed: 412,
+    PayloadTooLarge: 413,
+    UriTooLong: 414,
+    UnsupportedMediaType: 415,
+    RangeNotSatisfiable: 416,
+    ExpectationFailed: 417,
+    ImATeapot: 418,
+    MisdirectedRequest: 421,
+    UnprocessableEntity: 422,
+    Locked: 423,
+    FailedDependency: 424,
+    TooEarly: 425,
+    UpgradeRequired: 426,
+    PreconditionRequired: 428,
+    TooManyRequests: 429,
+    RequestHeaderFieldsTooLarge: 431,
+    UnavailableForLegalReasons: 451,
+    InternalServerError: 500,
+    NotImplemented: 501,
+    BadGateway: 502,
+    ServiceUnavailable: 503,
+    GatewayTimeout: 504,
+    HttpVersionNotSupported: 505,
+    VariantAlsoNegotiates: 506,
+    InsufficientStorage: 507,
+    LoopDetected: 508,
+    NotExtended: 510,
+    NetworkAuthenticationRequired: 511,
+    WebServerIsDown: 521,
+    ConnectionTimedOut: 522,
+    OriginIsUnreachable: 523,
+    TimeoutOccurred: 524,
+    SslHandshakeFailed: 525,
+    InvalidSslCertificate: 526,
+};
+Object.entries(Vc).forEach(([n, a]) => {
+    Vc[a] = n;
+});
+function uh(n) {
+    const a = new Lr(n),
+        l = Hp(Lr.prototype.request, a);
+    return (
+        z.extend(l, Lr.prototype, a, { allOwnKeys: !0 }),
+        z.extend(l, a, null, { allOwnKeys: !0 }),
+        (l.create = function (u) {
+            return uh(zr(n, u));
+        }),
+        l
+    );
+}
+const Ze = uh(ba);
+Ze.Axios = Lr;
+Ze.CanceledError = ja;
+Ze.CancelToken = E1;
+Ze.isCancel = nh;
+Ze.VERSION = oh;
+Ze.toFormData = gi;
+Ze.AxiosError = Pe;
+Ze.Cancel = Ze.CanceledError;
+Ze.all = function (a) {
+    return Promise.all(a);
+};
+Ze.spread = P1;
+Ze.isAxiosError = R1;
+Ze.mergeConfig = zr;
+Ze.AxiosHeaders = It;
+Ze.formToJSON = (n) => th(z.isHTMLForm(n) ? new FormData(n) : n);
+Ze.getAdapter = ih.getAdapter;
+Ze.HttpStatusCode = Vc;
+Ze.default = Ze;
+const {
+        Axios: M2,
+        AxiosError: D2,
+        CanceledError: U2,
+        isCancel: B2,
+        CancelToken: $2,
+        VERSION: H2,
+        all: q2,
+        Cancel: W2,
+        isAxiosError: V2,
+        spread: Q2,
+        toFormData: K2,
+        AxiosHeaders: Y2,
+        HttpStatusCode: G2,
+        formToJSON: J2,
+        getAdapter: X2,
+        mergeConfig: Z2,
+    } = Ze,
+    dh = "https://freefyclone-api.albatross0071.workers.dev/api",
+    Ct = Ze.create({ baseURL: dh });
+Ct.interceptors.request.use((n) => {
+    const a = localStorage.getItem("tunefree_token");
+    return a && (n.headers.Authorization = `Bearer ${a}`), n;
+});
+async function _1(n) {
+    const { data: a } = await Ct.post("/auth/google", { credential: n });
+    return a;
+}
+async function $m() {
+    const { data: n } = await Ct.get("/auth/me");
+    return n;
+}
+async function A1(n) {
+    const { data: a } = await Ct.put("/auth/me", n);
+    return a;
+}
+async function L1(n) {
+    const { data: a } = await Ct.post("/feedback", n);
+    return a;
+}
+async function Hm() {
+    const { data: n } = await Ct.get("/playlists", { params: { _ts: Date.now() } });
+    return n.playlists;
+}
+async function z1(n, a) {
+    const { data: l } = await Ct.post("/playlists", { name: n, description: a });
+    return l.playlist;
+}
+async function fh(n) {
+    const { data: a } = await Ct.get(`/playlists/${n}`, { params: { _ts: Date.now() } });
+    return a;
+}
+async function F1(n, a) {
+    const { data: l } = await Ct.put(`/playlists/${n}`, a);
+    return l;
+}
+async function O1(n) {
+    const { data: a } = await Ct.delete(`/playlists/${n}`);
+    return a;
+}
+async function I1(n, a) {
+    var o, u, f, m;
+    const { data: l } = await Ct.post(`/playlists/${n}/tracks`, {
+        track_id: a.id,
+        track_data: {
+            id: a.id,
+            name: a.name,
+            src: a.src,
+            image:
+                a.image ||
+                ((f = (u = (o = a.album) == null ? void 0 : o.images) == null ? void 0 : u[0]) == null
+                    ? void 0
+                    : f.url),
+            duration_ms: a.duration_ms || a.duration,
+            album: a.album ? { id: a.album.id, name: a.album.name, images: a.album.images } : void 0,
+            artists:
+                (m = a.artists) == null ? void 0 : m.map((p) => ({ id: p.id, name: p.name, model_type: "artist" })),
+            model_type: "track",
+        },
+    });
+    return l;
+}
+async function M1(n, a) {
+    const { data: l } = await Ct.delete(`/playlists/${n}/tracks`, { data: { track_id: a } });
+    return l;
+}
+async function qm() {
+    const { data: n } = await Ct.get("/favorites", { params: { _ts: Date.now() } });
+    return n.favorites;
+}
+async function D1(n) {
+    var l, o, u, f;
+    const { data: a } = await Ct.post("/favorites", {
+        track_id: n.id,
+        track_data: {
+            id: n.id,
+            name: n.name,
+            src: n.src,
+            image:
+                n.image ||
+                ((u = (o = (l = n.album) == null ? void 0 : l.images) == null ? void 0 : o[0]) == null
+                    ? void 0
+                    : u.url),
+            duration_ms: n.duration_ms || n.duration,
+            album: n.album ? { id: n.album.id, name: n.album.name, images: n.album.images } : void 0,
+            artists:
+                (f = n.artists) == null ? void 0 : f.map((m) => ({ id: m.id, name: m.name, model_type: "artist" })),
+            model_type: "track",
+        },
+    });
+    return a;
+}
+async function U1(n) {
+    const { data: a } = await Ct.delete("/favorites", { data: { track_id: n } });
+    return a;
+}
+const mh = g.createContext(),
+    ou = "tunefree_user_cache",
+    B1 = 1440 * 60 * 1e3;
+function Wm() {
+    try {
+        const n = localStorage.getItem(ou);
+        if (!n) return null;
+        const a = JSON.parse(n);
+        return !(a != null && a.user) || !(a != null && a.ts) || Date.now() - a.ts > B1 ? null : a.user;
+    } catch {
+        return null;
+    }
+}
+function Fl(n) {
+    try {
+        localStorage.setItem(ou, JSON.stringify({ user: n, ts: Date.now() }));
+    } catch {}
+}
+function Cc() {
+    try {
+        localStorage.removeItem(ou);
+    } catch {}
+}
+function gt() {
+    return g.useContext(mh);
+}
+function $1({ children: n }) {
+    const [a, l] = g.useState(() => Wm()),
+        [o, u] = g.useState(() => localStorage.getItem("tunefree_token")),
+        [f, m] = g.useState(!0),
+        [p, h] = g.useState(!1);
+    g.useEffect(() => {
+        if (!o) {
+            Cc(), l(null), m(!1);
+            return;
+        }
+        const k = Wm();
+        if (k) {
+            l(k), m(!1);
+            return;
+        }
+        m(!0),
+            $m()
+                .then((I) => {
+                    l(I.user), Fl(I.user);
+                })
+                .catch(() => {
+                    localStorage.removeItem("tunefree_token"), Cc(), u(null), l(null);
+                })
+                .finally(() => m(!1));
+    }, [o]);
+    const v = g.useCallback((k) => {
+            localStorage.setItem("tunefree_token", k.token), u(k.token), l(k.user), Fl(k.user);
+        }, []),
+        y = g.useCallback(
+            async (k) => {
+                const I = await _1(k);
+                return v(I), I.user;
+            },
+            [v]
+        ),
+        w = g.useCallback(() => {
+            localStorage.removeItem("tunefree_token"), Cc(), u(null), l(null);
+        }, []),
+        T = g.useCallback(async () => {
+            const k = await $m();
+            return l(k.user), Fl(k.user), k.user;
+        }, []),
+        b = g.useCallback(async (k) => {
+            const I = await A1(k);
+            return (
+                I.token && (localStorage.setItem("tunefree_token", I.token), u(I.token)), l(I.user), Fl(I.user), I.user
+            );
+        }, []),
+        j = g.useCallback(() => h(!0), []),
+        S = g.useCallback(() => h(!1), []);
+    return r.jsx(mh.Provider, {
+        value: {
+            user: a,
+            token: o,
+            loading: f,
+            isAuthenticated: !!a,
+            googleLogin: y,
+            logout: w,
+            refreshUser: T,
+            updateProfile: b,
+            authModal: p,
+            openAuthModal: j,
+            closeAuthModal: S,
+        },
+        children: n,
+    });
+}
+const ph = g.createContext(),
+    ri = "tunefree_playlists_cache",
+    H1 = "tunefree_playlist_detail_",
+    hh = "tunefree-playlist-detail-updated",
+    xh = 4320 * 60 * 1e3;
+function vi() {
+    return g.useContext(ph);
+}
+function q1() {
+    try {
+        const n = localStorage.getItem(ri);
+        if (!n) return null;
+        const { playlists: a, ts: l } = JSON.parse(n);
+        return Date.now() - l > xh ? (localStorage.removeItem(ri), null) : a;
+    } catch {
+        return null;
+    }
+}
+function Ol(n) {
+    try {
+        localStorage.setItem(ri, JSON.stringify({ playlists: n, ts: Date.now() }));
+    } catch {}
+}
+function W1() {
+    try {
+        localStorage.removeItem(ri);
+    } catch {}
+}
+function si(n) {
+    return `${H1}${n}`;
+}
+function gh(n, a) {
+    typeof window > "u" || window.dispatchEvent(new CustomEvent(hh, { detail: { playlistId: n, data: a } }));
+}
+function V1() {
+    return hh;
+}
+function Q1(n) {
+    try {
+        const a = localStorage.getItem(si(n));
+        if (!a) return null;
+        const { data: l, ts: o } = JSON.parse(a);
+        return Date.now() - o > xh ? (localStorage.removeItem(si(n)), null) : l;
+    } catch {
+        return null;
+    }
+}
+function yh(n, a) {
+    try {
+        localStorage.setItem(si(n), JSON.stringify({ data: a, ts: Date.now() }));
+    } catch {}
+    gh(n, a);
+}
+function vh(n) {
+    try {
+        localStorage.removeItem(si(n));
+    } catch {}
+    gh(n, null);
+}
+function K1({ children: n }) {
+    const [a, l] = g.useState([]),
+        [o, u] = g.useState(!1),
+        { isAuthenticated: f, loading: m } = gt();
+    g.useEffect(() => {
+        if (m) return;
+        if (!f) {
+            l([]), u(!1), W1();
+            return;
+        }
+        const j = q1();
+        j && (l(j), u(!0)),
+            Hm()
+                .then((S) => {
+                    l(S), Ol(S), u(!0);
+                })
+                .catch(() => {
+                    j || u(!0);
+                });
+    }, [f, m]);
+    const p = g.useCallback(async () => {
+            try {
+                const j = await Hm();
+                l(j), Ol(j);
+            } catch {}
+        }, []),
+        h = g.useCallback(async (j) => {
+            try {
+                const S = await fh(j);
+                return yh(j, { playlist: S.playlist, tracks: S.tracks }), S;
+            } catch {
+                return null;
+            }
+        }, []),
+        v = g.useCallback(
+            async (j, S) => {
+                if (a.length >= km) throw new Error(`You can create up to ${km} playlists.`);
+                const k = await z1(j, S);
+                return (
+                    l((I) => {
+                        const $ = [k, ...I];
+                        return Ol($), $;
+                    }),
+                    k
+                );
+            },
+            [a]
+        ),
+        y = g.useCallback(
+            async (j) => {
+                l((S) => {
+                    const k = S.filter((I) => I.id !== j);
+                    return Ol(k), k;
+                }),
+                    vh(j);
+                try {
+                    await O1(j);
+                } catch {
+                    p();
+                }
+            },
+            [p]
+        ),
+        w = g.useCallback(
+            async (j, S) => {
+                try {
+                    await F1(j, S), await Promise.all([p(), h(j)]);
+                } catch {
+                    throw (p(), h(j), new Error("Failed to update playlist."));
+                }
+            },
+            [p, h]
+        ),
+        T = g.useCallback(
+            async (j, S) => {
+                const k = a.find((I) => I.id === j);
+                if (((k == null ? void 0 : k.track_count) || 0) >= Nm)
+                    throw new Error(`Playlists can only have up to ${Nm} songs.`);
+                try {
+                    await I1(j, S), await Promise.all([p(), h(j)]);
+                } catch (I) {
+                    throw (p(), h(j), I);
+                }
+            },
+            [a, p, h]
+        ),
+        b = g.useCallback(
+            async (j, S) => {
+                try {
+                    await M1(j, S), await Promise.all([p(), h(j)]);
+                } catch (k) {
+                    throw (p(), h(j), k);
+                }
+            },
+            [p, h]
+        );
+    return r.jsx(ph.Provider, {
+        value: {
+            playlists: a,
+            loaded: o,
+            refresh: p,
+            createPlaylist: v,
+            deletePlaylist: y,
+            updatePlaylist: w,
+            addTrackToPlaylist: T,
+            removeTrackFromPlaylist: b,
+        },
+        children: n,
+    });
+}
+const wh = g.createContext(null),
+    bh = "tunefree_theme_mode";
+function Y1() {
+    try {
+        const n = localStorage.getItem(bh);
+        if (n === "light" || n === "dark") return n;
+    } catch {}
+    return "dark";
+}
+function G1({ children: n }) {
+    const [a, l] = g.useState(Y1);
+    g.useEffect(() => {
+        document.documentElement.setAttribute("data-theme", a);
+        try {
+            localStorage.setItem(bh, a);
+        } catch {}
+    }, [a]);
+    const o = g.useMemo(
+        () => ({
+            theme: a,
+            isDark: a === "dark",
+            setTheme: l,
+            toggleTheme: () => l((u) => (u === "dark" ? "light" : "dark")),
+        }),
+        [a]
+    );
+    return r.jsx(wh.Provider, { value: o, children: n });
+}
+function J1() {
+    const n = g.useContext(wh);
+    if (!n) throw new Error("useTheme must be used within ThemeProvider");
+    return n;
+}
+const X1 =
+        "data:image/svg+xml," +
+        encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#f5f5f7"/><text x="100" y="108" text-anchor="middle" font-family="system-ui" font-size="48" fill="#afafb2">♪</text></svg>'
+        ),
+    Z1 =
+        "data:image/svg+xml," +
+        encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#000000"/><text x="100" y="108" text-anchor="middle" font-family="system-ui" font-size="48" fill="#9ca3af">♪</text></svg>'
+        );
+function jh() {
+    return typeof document > "u" ? !1 : document.documentElement.getAttribute("data-theme") === "dark";
+}
+function Vm() {
+    return jh() ? "#000000" : "#f5f5f7";
+}
+function ew() {
+    return jh() ? Z1 : X1;
+}
+const Tc = new Set();
+let ca = null;
+const ai = new WeakMap();
+function tw() {
+    return (
+        ca ||
+        ((ca = new IntersectionObserver(
+            (n) => {
+                for (const a of n)
+                    if (a.isIntersecting) {
+                        const l = ai.get(a.target);
+                        l && l(), ca.unobserve(a.target), ai.delete(a.target);
+                    }
+            },
+            { rootMargin: "200px 0px" }
+        )),
+        ca)
+    );
+}
+function nw({ src: n, alt: a = "", className: l = "", ...o }) {
+    const u = n && Tc.has(n),
+        [f, m] = g.useState(u),
+        [p, h] = g.useState(u),
+        [v, y] = g.useState(!1),
+        w = g.useRef(null);
+    return (
+        g.useEffect(() => {
+            if (!n || u || f) return;
+            const T = w.current;
+            if (!T) return;
+            const b = tw();
+            return (
+                ai.set(T, () => m(!0)),
+                b.observe(T),
+                () => {
+                    b.unobserve(T), ai.delete(T);
+                }
+            );
+        }, [n, u, f]),
+        g.useEffect(() => {
+            n && (Tc.has(n) ? (m(!0), h(!0), y(!1)) : (h(!1), y(!1)));
+        }, [n]),
+        g.useEffect(() => {
+            if (!f || !n || p || v) return;
+            let T = !1;
+            const b = new window.Image();
+            (b.decoding = "async"), (b.src = n);
+            const j = async () => {
+                try {
+                    typeof b.decode == "function" && (await b.decode());
+                } catch {}
+                T || (Tc.add(n), h(!0));
+            };
+            return (
+                (b.onload = () => {
+                    j();
+                }),
+                (b.onerror = () => {
+                    T || y(!0);
+                }),
+                b.complete && j(),
+                () => {
+                    (T = !0), (b.onload = null), (b.onerror = null);
+                }
+            );
+        }, [f, n, p, v]),
+        !n || v
+            ? r.jsx("img", { src: ew(), alt: a, className: l, ...o })
+            : f
+              ? p
+                  ? r.jsx("img", {
+                        src: n,
+                        alt: a,
+                        className: l,
+                        loading: "lazy",
+                        decoding: "async",
+                        onError: () => y(!0),
+                        ...o,
+                    })
+                  : r.jsx("div", { ref: w, className: l, style: { background: Vm(), contentVisibility: "auto" }, ...o })
+              : r.jsx("div", { ref: w, className: l, style: { background: Vm(), contentVisibility: "auto" }, ...o })
+    );
+}
+const $e = g.memo(nw),
+    kh = g.createContext();
+function cu() {
+    return g.useContext(kh);
+}
+function rw({ children: n }) {
+    const [a, l] = g.useState(null),
+        o = g.useRef(null),
+        u = g.useCallback((m, p, h = 4e3) => {
+            clearTimeout(o.current),
+                l({ message: m, action: p, id: Date.now() }),
+                (o.current = setTimeout(() => l(null), h));
+        }, []),
+        f = g.useCallback(() => {
+            clearTimeout(o.current), l(null);
+        }, []);
+    return r.jsxs(kh.Provider, {
+        value: { showToast: u, dismiss: f },
+        children: [
+            n,
+            a &&
+                r.jsx("div", {
+                    className: "fixed bottom-24 md:bottom-20 left-1/2 -translate-x-1/2 z-[90] animate-slide-up",
+                    children: r.jsxs("div", {
+                        className:
+                            "bg-gray-900 text-white text-sm rounded-lg shadow-2xl px-4 py-2.5 flex items-center gap-3 max-w-sm",
+                        children: [
+                            r.jsx("span", { className: "flex-1", children: a.message }),
+                            a.action &&
+                                r.jsx("button", {
+                                    onClick: () => {
+                                        a.action.onClick(), f();
+                                    },
+                                    className:
+                                        "text-am-red font-semibold uppercase text-xs tracking-wide flex-shrink-0 hover:text-red-400",
+                                    children: a.action.label,
+                                }),
+                        ],
+                    }),
+                }),
+        ],
+    });
+}
+function sw() {
+    var Y, ne;
+    const n = xt(),
+        a = jn(),
+        { pins: l, getPinsByType: o } = fr(),
+        { user: u, isAuthenticated: f, openAuthModal: m, logout: p } = gt(),
+        { isDark: h, toggleTheme: v } = J1(),
+        { playlists: y, createPlaylist: w } = vi(),
+        { showToast: T } = cu(),
+        [b, j] = g.useState(!1),
+        [S, k] = g.useState(""),
+        I = a.pathname === "/library" && a.search.includes("tab=track"),
+        $ = a.pathname === "/library" && a.search.includes("tab=artist"),
+        A = (K, le = "text-am-dark") =>
+            `sidebar-nav-row flex items-center gap-3.5 rounded-[18px] px-4 py-2.5 text-[15px] transition-colors ${K ? "sidebar-nav-row-active text-am-red font-medium" : le}`,
+        B = async (K) => {
+            var le, ee;
+            if ((K.preventDefault(), !!S.trim()))
+                try {
+                    await w(S.trim()), k(""), j(!1);
+                } catch (re) {
+                    T(
+                        ((ee = (le = re == null ? void 0 : re.response) == null ? void 0 : le.data) == null
+                            ? void 0
+                            : ee.error) ||
+                            (re == null ? void 0 : re.message) ||
+                            "Failed to create playlist."
+                    );
+                }
+        };
+    return r.jsxs("aside", {
+        className:
+            "am-sidebar-panel sidebar-scroll pointer-events-auto relative flex h-full w-full flex-col overflow-y-auto rounded-[32px] backdrop-blur-2xl",
+        children: [
+            r.jsx("div", { className: "am-sidebar-sheen pointer-events-none absolute inset-0" }),
+            r.jsx("div", { className: "pointer-events-none absolute inset-y-4 right-0 w-px bg-white/20" }),
+            r.jsx("div", {
+                className: "relative px-5 pt-5 pb-2",
+                children: r.jsxs("div", {
+                    className: "flex items-center gap-2 px-1",
+                    children: [
+                        r.jsx("img", { src: "/icon-192.svg", alt: "TuneFree", className: "h-6 w-6" }),
+                        r.jsx("h1", {
+                            className: "text-[15px] font-semibold text-am-dark tracking-tight",
+                            children: "TuneFree",
+                        }),
+                    ],
+                }),
+            }),
+            r.jsx("div", {
+                className: "relative px-4 mb-1",
+                children: r.jsxs($t, {
+                    to: "/search",
+                    className: ({ isActive: K }) => `${A(K, "text-am-dark")} font-medium`,
+                    children: [r.jsx(Zl, { size: 18 }), "Search"],
+                }),
+            }),
+            r.jsxs("nav", {
+                className: "relative px-4 mb-2",
+                children: [
+                    r.jsx($t, {
+                        to: "/",
+                        end: !0,
+                        className: ({ isActive: K }) => `mb-0.5 ${A(K)} font-medium`,
+                        children: ({ isActive: K }) =>
+                            r.jsxs(r.Fragment, {
+                                children: [
+                                    K ? r.jsx(Ip, { size: 18, className: "text-am-red" }) : r.jsx(Mp, { size: 18 }),
+                                    "Home",
+                                ],
+                            }),
+                    }),
+                    r.jsxs($t, {
+                        to: "/new",
+                        className: ({ isActive: K }) => `mb-0.5 ${A(K)} font-medium`,
+                        children: [r.jsx(H0, { size: 18 }), "New"],
+                    }),
+                ],
+            }),
+            r.jsx("div", { className: "mx-4 mt-0.5 border-t border-transparent" }),
+            r.jsx("div", {
+                className: "relative px-5 pt-2.5 pb-1.5",
+                children: r.jsx($t, {
+                    to: "/library",
+                    className: ({ isActive: K }) =>
+                        `text-[11px] font-semibold uppercase tracking-[0.12em] ${K ? "text-am-red" : "text-am-muted hover:text-am-dark"}`,
+                    children: "Library",
+                }),
+            }),
+            r.jsxs("nav", {
+                className: "relative px-4",
+                children: [
+                    r.jsx($t, {
+                        to: "/library",
+                        end: !0,
+                        className: ({ isActive: K }) => `mb-0.5 ${A(K)}`,
+                        children: ({ isActive: K }) =>
+                            r.jsxs(r.Fragment, {
+                                children: [
+                                    K ? r.jsx(Fr, { size: 16 }) : r.jsx(xs, { size: 16 }),
+                                    "Pins",
+                                    l.length > 0 &&
+                                        r.jsx("span", {
+                                            className: "text-[10px] text-am-muted ml-auto",
+                                            children: l.length,
+                                        }),
+                                ],
+                            }),
+                    }),
+                    r.jsxs($t, {
+                        to: "/library?tab=track",
+                        className: `mb-0.5 ${A(I)}`,
+                        children: [
+                            r.jsx(V0, { size: 16 }),
+                            "Songs",
+                            o("track").length > 0 &&
+                                r.jsx("span", {
+                                    className: "text-[10px] text-am-muted ml-auto",
+                                    children: o("track").length,
+                                }),
+                        ],
+                    }),
+                    r.jsxs($t, {
+                        to: "/library?tab=artist",
+                        className: `mb-0.5 ${A($)}`,
+                        children: [
+                            r.jsx(Dp, { size: 16 }),
+                            "Artists",
+                            o("artist").length > 0 &&
+                                r.jsx("span", {
+                                    className: "text-[10px] text-am-muted ml-auto",
+                                    children: o("artist").length,
+                                }),
+                        ],
+                    }),
+                    f &&
+                        r.jsxs($t, {
+                            to: "/favorites",
+                            className: ({ isActive: K }) => A(K),
+                            children: [r.jsx(fn, { size: 16 }), "Favorites"],
+                        }),
+                ],
+            }),
+            f &&
+                r.jsxs(r.Fragment, {
+                    children: [
+                        r.jsx("div", { className: "mx-4 mt-1.5 border-t border-transparent" }),
+                        r.jsxs("div", {
+                            className: "px-5 pt-2.5 pb-1.5 flex items-center justify-between",
+                            children: [
+                                r.jsx("span", {
+                                    className: "text-[11px] font-semibold uppercase tracking-[0.18em] text-am-muted",
+                                    children: "Playlists",
+                                }),
+                                r.jsx("button", {
+                                    onClick: () => j((K) => !K),
+                                    className: "rounded-full p-1.5 text-am-muted hover:bg-white/28 hover:text-am-dark",
+                                    title: "New playlist",
+                                    children: r.jsx(ei, { size: 14 }),
+                                }),
+                            ],
+                        }),
+                        b &&
+                            r.jsx("form", {
+                                onSubmit: B,
+                                className: "px-4 mb-1.5",
+                                children: r.jsx("input", {
+                                    type: "text",
+                                    placeholder: "Playlist name...",
+                                    value: S,
+                                    onChange: (K) => k(K.target.value),
+                                    autoFocus: !0,
+                                    onBlur: () => {
+                                        S.trim() || j(!1);
+                                    },
+                                    className:
+                                        "w-full rounded-[16px] border border-white/55 bg-white/48 py-2.5 px-4 text-sm text-am-dark outline-none focus:ring-1 focus:ring-am-red/30",
+                                }),
+                            }),
+                        r.jsxs("nav", {
+                            className: "px-4",
+                            children: [
+                                y.map((K) =>
+                                    r.jsxs(
+                                        $t,
+                                        {
+                                            to: `/my/playlist/${K.id}`,
+                                            className: ({ isActive: le }) =>
+                                                `mb-0.5 flex items-center gap-3.5 rounded-[18px] px-4 py-2.5 text-[15px] font-medium transition-colors ${le ? "bg-white/36 text-am-red font-medium" : "text-am-dark hover:bg-white/26"}`,
+                                            children: [
+                                                K.image
+                                                    ? r.jsx($e, {
+                                                          src: K.image,
+                                                          alt: "",
+                                                          className: "w-5 h-5 rounded object-cover flex-shrink-0",
+                                                      })
+                                                    : r.jsx(ma, { size: 14, className: "text-am-muted flex-shrink-0" }),
+                                                r.jsx("span", { className: "truncate", children: K.name }),
+                                            ],
+                                        },
+                                        K.id
+                                    )
+                                ),
+                                y.length === 0 &&
+                                    !b &&
+                                    r.jsx("p", {
+                                        className: "px-4 py-2 text-xs text-am-muted",
+                                        children: "No playlists yet",
+                                    }),
+                            ],
+                        }),
+                    ],
+                }),
+            r.jsxs("div", {
+                className: "mt-auto px-4 pb-4 pt-2.5",
+                children: [
+                    r.jsxs("button", {
+                        onClick: v,
+                        className:
+                            "mb-2.5 w-full flex items-center gap-3 rounded-[18px] px-4 py-2.5 text-sm text-am-gray hover:bg-white/26 hover:text-am-dark transition-colors",
+                        title: h ? "Switch to light mode" : "Switch to dark mode",
+                        children: [
+                            h ? r.jsx(L0, { size: 15 }) : r.jsx(F0, { size: 15 }),
+                            h ? "Light Appearance" : "Dark Appearance",
+                        ],
+                    }),
+                    f
+                        ? r.jsxs("div", {
+                              className: "space-y-2",
+                              children: [
+                                  r.jsxs("button", {
+                                      onClick: () => n("/profile"),
+                                      className:
+                                          "w-full flex items-center gap-3.5 rounded-[18px] px-4 py-2.5 text-left hover:bg-white/26",
+                                      children: [
+                                          r.jsx("div", {
+                                              className:
+                                                  "w-7 h-7 rounded-full bg-am-red text-white flex items-center justify-center text-xs font-bold flex-shrink-0 overflow-hidden shadow-[0_6px_20px_rgba(252,60,68,0.22)]",
+                                              children:
+                                                  u != null && u.avatar
+                                                      ? r.jsx("img", {
+                                                            src: u.avatar,
+                                                            alt: "",
+                                                            className: "w-full h-full rounded-full object-cover",
+                                                        })
+                                                      : (ne =
+                                                              (Y = u == null ? void 0 : u.name) == null
+                                                                  ? void 0
+                                                                  : Y[0]) == null
+                                                        ? void 0
+                                                        : ne.toUpperCase(),
+                                          }),
+                                          r.jsxs("div", {
+                                              className: "min-w-0 flex-1",
+                                              children: [
+                                                  r.jsx("p", {
+                                                      className: "text-sm font-medium text-am-dark truncate",
+                                                      children: u == null ? void 0 : u.name,
+                                                  }),
+                                                  r.jsx("p", {
+                                                      className: "text-[11px] text-am-dark truncate",
+                                                      children: "View profile",
+                                                  }),
+                                              ],
+                                          }),
+                                          r.jsx(Xl, { size: 14, className: "text-am-muted flex-shrink-0" }),
+                                      ],
+                                  }),
+                                  r.jsxs("button", {
+                                      onClick: () => n("/contact"),
+                                      className:
+                                          "w-full flex items-center gap-3 rounded-[18px] px-4 py-2.5 text-sm text-am-gray hover:bg-white/26 hover:text-am-dark transition-colors",
+                                      children: [r.jsx(bm, { size: 14 }), "Feedback"],
+                                  }),
+                                  r.jsxs("button", {
+                                      onClick: p,
+                                      className:
+                                          "w-full flex items-center gap-3 rounded-[18px] px-4 py-2.5 text-sm text-am-gray hover:bg-white/26 hover:text-am-red transition-colors",
+                                      children: [r.jsx(I0, { size: 14 }), "Sign Out"],
+                                  }),
+                              ],
+                          })
+                        : r.jsxs("div", {
+                              className: "space-y-2",
+                              children: [
+                                  r.jsxs("button", {
+                                      onClick: () => n("/contact"),
+                                      className:
+                                          "flex items-center gap-3 px-4 py-2.5 text-sm text-am-gray hover:text-am-dark w-full rounded-[18px] hover:bg-white/26 transition-colors",
+                                      children: [r.jsx(bm, { size: 16 }), "Feedback"],
+                                  }),
+                                  r.jsxs("button", {
+                                      onClick: m,
+                                      className:
+                                          "flex items-center gap-3 px-4 py-2.5 text-sm text-am-gray hover:text-am-red w-full rounded-[18px] hover:bg-white/26 transition-colors",
+                                      children: [r.jsx(M0, { size: 16 }), "Sign In"],
+                                  }),
+                              ],
+                          }),
+                ],
+            }),
+        ],
+    });
+}
+const Qm = [
+        { code: "IN", name: "India", flag: "🇮🇳" },
+        { code: "US", name: "United States", flag: "🇺🇸" },
+        { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+        { code: "CA", name: "Canada", flag: "🇨🇦" },
+        { code: "AU", name: "Australia", flag: "🇦🇺" },
+        { code: "DE", name: "Germany", flag: "🇩🇪" },
+        { code: "FR", name: "France", flag: "🇫🇷" },
+        { code: "JP", name: "Japan", flag: "🇯🇵" },
+        { code: "KR", name: "South Korea", flag: "🇰🇷" },
+        { code: "BR", name: "Brazil", flag: "🇧🇷" },
+        { code: "MX", name: "Mexico", flag: "🇲🇽" },
+        { code: "ES", name: "Spain", flag: "🇪🇸" },
+        { code: "IT", name: "Italy", flag: "🇮🇹" },
+        { code: "NL", name: "Netherlands", flag: "🇳🇱" },
+        { code: "SE", name: "Sweden", flag: "🇸🇪" },
+        { code: "RU", name: "Russia", flag: "🇷🇺" },
+        { code: "PK", name: "Pakistan", flag: "🇵🇰" },
+        { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
+        { code: "NG", name: "Nigeria", flag: "🇳🇬" },
+        { code: "ZA", name: "South Africa", flag: "🇿🇦" },
+        { code: "PH", name: "Philippines", flag: "🇵🇭" },
+        { code: "ID", name: "Indonesia", flag: "🇮🇩" },
+        { code: "TH", name: "Thailand", flag: "🇹🇭" },
+        { code: "AE", name: "UAE", flag: "🇦🇪" },
+        { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
+        { code: "TR", name: "Turkey", flag: "🇹🇷" },
+        { code: "EG", name: "Egypt", flag: "🇪🇬" },
+        { code: "AR", name: "Argentina", flag: "🇦🇷" },
+        { code: "CL", name: "Chile", flag: "🇨🇱" },
+        { code: "CO", name: "Colombia", flag: "🇨🇴" },
+    ],
+    Nh = "tunefree_country";
+function zn() {
+    return localStorage.getItem(Nh) || null;
+}
+function Sh(n) {
+    localStorage.setItem(Nh, n);
+}
+function aw() {
+    const [n, a] = g.useState(!1),
+        [l, o] = g.useState(""),
+        [u, f] = g.useState("");
+    if (
+        (g.useEffect(() => {
+            zn() || a(!0);
+        }, []),
+        !n)
+    )
+        return null;
+    const m = u
+            ? Qm.filter(
+                  (h) =>
+                      h.name.toLowerCase().includes(u.toLowerCase()) || h.code.toLowerCase().includes(u.toLowerCase())
+              )
+            : Qm,
+        p = () => {
+            l && (Sh(l), a(!1), window.location.reload());
+        };
+    return r.jsx("div", {
+        style: {
+            position: "fixed",
+            inset: 0,
+            zIndex: 100,
+            background: "var(--overlay-backdrop)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 16,
+        },
+        children: r.jsxs("div", {
+            style: {
+                background: "var(--surface-elevated)",
+                borderRadius: 16,
+                width: "100%",
+                maxWidth: 420,
+                overflow: "hidden",
+                boxShadow: "0 25px 50px rgba(0,0,0,0.35)",
+                border: "1px solid var(--am-line)",
+            },
+            children: [
+                r.jsxs("div", {
+                    style: { padding: "24px 24px 16px" },
+                    children: [
+                        r.jsx("h2", {
+                            style: { fontSize: 20, fontWeight: 700, color: "var(--text-primary)", margin: "0 0 4px" },
+                            children: "Choose your country or region",
+                        }),
+                        r.jsx("p", {
+                            style: { fontSize: 14, color: "var(--text-secondary)", margin: 0 },
+                            children: "We'll show you content specific to your location",
+                        }),
+                    ],
+                }),
+                r.jsx("div", {
+                    style: { padding: "0 24px 12px" },
+                    children: r.jsx("input", {
+                        type: "text",
+                        placeholder: "Search countries...",
+                        value: u,
+                        onChange: (h) => f(h.target.value),
+                        style: {
+                            width: "100%",
+                            padding: "8px 12px",
+                            background: "var(--surface-1)",
+                            border: "1px solid var(--am-line)",
+                            borderRadius: 8,
+                            fontSize: 14,
+                            color: "var(--text-primary)",
+                            outline: "none",
+                        },
+                    }),
+                }),
+                r.jsx("div", {
+                    style: { padding: "0 24px 16px", maxHeight: 300, overflowY: "auto" },
+                    children: r.jsx("div", {
+                        style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 },
+                        children: m.map((h) =>
+                            r.jsxs(
+                                "button",
+                                {
+                                    onClick: () => o(h.code),
+                                    style: {
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 8,
+                                        padding: "10px 12px",
+                                        borderRadius: 8,
+                                        border: "none",
+                                        cursor: "pointer",
+                                        textAlign: "left",
+                                        fontSize: 14,
+                                        fontWeight: 500,
+                                        background: l === h.code ? "var(--am-red)" : "var(--surface-1)",
+                                        color: l === h.code ? "#fff" : "var(--text-primary)",
+                                        transition: "all 0.15s",
+                                    },
+                                    children: [
+                                        r.jsx("span", { style: { fontSize: 16 }, children: h.flag }),
+                                        r.jsx("span", {
+                                            style: {
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                            },
+                                            children: h.name,
+                                        }),
+                                    ],
+                                },
+                                h.code
+                            )
+                        ),
+                    }),
+                }),
+                r.jsx("div", {
+                    style: { padding: "8px 24px 24px" },
+                    children: r.jsx("button", {
+                        onClick: p,
+                        disabled: !l,
+                        style: {
+                            width: "100%",
+                            padding: "10px 0",
+                            border: "none",
+                            borderRadius: 8,
+                            cursor: l ? "pointer" : "not-allowed",
+                            background: "var(--am-red)",
+                            color: "#fff",
+                            fontSize: 14,
+                            fontWeight: 600,
+                            opacity: l ? 1 : 0.4,
+                            transition: "opacity 0.15s",
+                        },
+                        children: "Continue",
+                    }),
+                }),
+            ],
+        }),
+    });
+}
+const kn = Ze.create({ baseURL: dh }),
+    Km = 17,
+    un = "tunefree_",
+    Ym = 10080 * 60 * 1e3,
+    Nn = {
+        home: Ym,
+        search: 900 * 1e3,
+        suggest: 300 * 1e3,
+        playlist: 7200 * 1e3,
+        album: 7200 * 1e3,
+        artist: 3600 * 1e3,
+        upnext: 900 * 1e3,
+        resolve: 1440 * 60 * 1e3,
+        new: Ym,
+        thumbs: 3600 * 1e3,
+    },
+    us = new Map(),
+    lw = 500;
+(() => {
+    try {
+        localStorage.getItem(`${un}cache_version`) !== String(Km) &&
+            (Object.keys(localStorage)
+                .filter(
+                    (a) =>
+                        a.startsWith(un) &&
+                        a !== `${un}country` &&
+                        a !== `${un}volume` &&
+                        a !== `${un}cache_version` &&
+                        a !== `${un}library_pins`
+                )
+                .forEach((a) => localStorage.removeItem(a)),
+            localStorage.setItem(`${un}cache_version`, String(Km)));
+    } catch {}
+})();
+function iw(n, a) {
+    const l = us.get(n);
+    if (l && Date.now() - l.ts < a) return l.data;
+    try {
+        const o = localStorage.getItem(`${un}${n}`);
+        if (o) {
+            const { data: u, ts: f } = JSON.parse(o);
+            if (Date.now() - f < a) return uu(n, u, f), u;
+            localStorage.removeItem(`${un}${n}`);
+        }
+    } catch {}
+}
+function uu(n, a, l) {
+    if (us.size >= lw) {
+        const o = us.keys().next().value;
+        us.delete(o);
+    }
+    us.set(n, { data: a, ts: l || Date.now() });
+}
+function ow(n, a) {
+    const l = Date.now();
+    uu(n, a, l);
+    try {
+        localStorage.setItem(`${un}${n}`, JSON.stringify({ data: a, ts: l }));
+    } catch {
+        try {
+            const o = Object.keys(localStorage).filter((u) => u.startsWith(un));
+            o.sort(), o.slice(0, Math.ceil(o.length / 2)).forEach((u) => localStorage.removeItem(u));
+        } catch {}
+    }
+}
+const Il = new Map();
+function On(n, a, l) {
+    const o = iw(n, a);
+    if (o !== void 0) return Promise.resolve(o);
+    if (Il.has(n)) return Il.get(n);
+    const u = l()
+        .then((f) => (ow(n, f), f))
+        .finally(() => {
+            Il.delete(n);
+        });
+    return Il.set(n, u), u;
+}
+function wi() {
+    const n = zn();
+    return n ? { country: n } : {};
+}
+async function Ch(n, a = "song") {
+    const l = `search_${a}_${n.toLowerCase().trim()}`;
+    return On(l, Nn.search, async () => {
+        var u;
+        const { data: o } = await kn.get("/search", { params: { q: n, type: a, ...wi() } });
+        return ((u = o.result) == null ? void 0 : u.items) || [];
+    });
+}
+async function cw() {
+    const a = `home_sections_${zn() || "default"}`;
+    return On(a, Nn.home, async () => {
+        const { data: l } = await kn.get("/browse/sections", { params: wi() });
+        return {
+            homeSections: l.homeSections || l.sections || [],
+            exploreSections: l.exploreSections || [],
+            popularArtists: l.popularArtists || [],
+        };
+    });
+}
+async function uw(n) {
+    const a = `upnext_${n}`;
+    return On(a, Nn.upnext, async () => {
+        const { data: l } = await kn.get(`/upnext/${n}`, { params: wi() });
+        return l.tracks;
+    });
+}
+async function dw(n) {
+    const a = `suggest_${n.toLowerCase().trim()}`,
+        l = us.get(a);
+    if (l && Date.now() - l.ts < Nn.suggest) return l.data;
+    const { data: o } = await kn.get("/search/suggestions", { params: { q: n } }),
+        u = o.suggestions || [];
+    return uu(a, u), u;
+}
+async function fw(n, a) {
+    const l = `src_${n}_${a}`.toLowerCase();
+    return On(l, Nn.resolve, async () => {
+        const { data: o } = await kn.get("/resolve", { params: { track: n, artist: a } });
+        return o.src || null;
+    });
+}
+async function mw(n) {
+    const a = `artist_${n.toLowerCase()}`;
+    return On(a, Nn.artist, async () => {
+        const { data: l } = await kn.get(`/artist/${encodeURIComponent(n)}`);
+        return l;
+    });
+}
+async function pw() {
+    const a = `new_releases_${zn() || "default"}`;
+    return On(a, Nn.new, async () => {
+        const { data: l } = await kn.get("/browse/new", { params: wi() });
+        return l.sections;
+    });
+}
+async function hw(n) {
+    const a = `artist_thumbs_${n.sort().join(",").substring(0, 50)}`;
+    return On(a, Nn.thumbs, async () => {
+        const { data: l } = await kn.post("/artist-thumbnails", { names: n });
+        return l.thumbnails || {};
+    });
+}
+async function xw(n) {
+    const a = `playlist_${n}`;
+    return On(a, Nn.playlist, async () => {
+        const { data: l } = await kn.get(`/playlist/${encodeURIComponent(n)}`);
+        return l;
+    });
+}
+async function gw(n) {
+    const a = `album_${n}`;
+    return On(a, Nn.album, async () => {
+        const { data: l } = await kn.get(`/album/${encodeURIComponent(n)}`);
+        return l;
+    });
+}
+function li(n) {
+    if (!n) return "0:00";
+    const a = Math.floor(n / 6e4),
+        l = Math.floor((n % 6e4) / 1e3);
+    return `${a}:${l.toString().padStart(2, "0")}`;
+}
+function _r(n) {
+    var a;
+    return !n || n.length === 0 ? null : ((a = n[0]) == null ? void 0 : a.url) || null;
+}
+const Th = g.createContext();
+function Tt() {
+    return g.useContext(Th);
+}
+const Ec = "yt-player",
+    Eh = "tunefree_recent_played",
+    yw = 30,
+    Ph = "tunefree_player_session";
+function Rh() {
+    try {
+        return JSON.parse(localStorage.getItem(Eh)) || [];
+    } catch {
+        return [];
+    }
+}
+function vw(n) {
+    try {
+        localStorage.setItem(Eh, JSON.stringify(n));
+    } catch {}
+}
+function ww(n) {
+    var o, u, f, m;
+    if (!(n != null && n.id) || !(n != null && n.name)) return;
+    const a = Rh().filter((p) => p.id !== n.id),
+        l = {
+            id: n.id,
+            name: n.name,
+            src: n.src,
+            image:
+                n.image ||
+                ((f = (u = (o = n.album) == null ? void 0 : o.images) == null ? void 0 : u[0]) == null
+                    ? void 0
+                    : f.url),
+            duration_ms: n.duration_ms || n.duration,
+            model_type: "track",
+            album: n.album ? { id: n.album.id, name: n.album.name, images: n.album.images } : void 0,
+            artists:
+                (m = n.artists) == null
+                    ? void 0
+                    : m.map((p) => ({ id: p.id, name: p.name, image_small: p.image_small, model_type: "artist" })),
+        };
+    a.unshift(l), vw(a.slice(0, yw));
+}
+function bw() {
+    return Rh();
+}
+function jw() {
+    try {
+        const n = sessionStorage.getItem(Ph);
+        if (!n) return null;
+        const a = JSON.parse(n),
+            l = Kc((a == null ? void 0 : a.queue) || [], (a == null ? void 0 : a.currentTrack) || null),
+            o = Qc(a == null ? void 0 : a.currentTrack) ? a.currentTrack : null,
+            u = Number.isInteger(a == null ? void 0 : a.queueIndex) ? a.queueIndex : -1;
+        return { currentTrack: o, queue: l, queueIndex: l.length > 0 ? Math.min(Math.max(u, 0), l.length - 1) : -1 };
+    } catch {
+        return null;
+    }
+}
+function kw(n) {
+    try {
+        sessionStorage.setItem(Ph, JSON.stringify(n));
+    } catch {}
+}
+function Qc(n) {
+    return !(n != null && n.id) || (n.model_type && n.model_type !== "track")
+        ? !1
+        : !!(
+              n.name &&
+              (n.src ||
+                  n.duration_ms != null ||
+                  n.duration != null ||
+                  (Array.isArray(n.artists) && n.artists.length > 0))
+          );
+}
+function Kc(n = [], a = null) {
+    const l = new Set(),
+        o = n.filter((u) => (!Qc(u) || l.has(u.id) ? !1 : (l.add(u.id), !0)));
+    return a && Qc(a) && !l.has(a.id) && o.unshift(a), o;
+}
+function Nw(n = []) {
+    const a = [...n];
+    for (let l = a.length - 1; l > 0; l -= 1) {
+        const o = Math.floor(Math.random() * (l + 1));
+        [a[l], a[o]] = [a[o], a[l]];
+    }
+    return a;
+}
+function Sw(n = 6) {
+    const f = Math.max(1, Math.floor(8e3 * n)) * 1,
+        m = new ArrayBuffer(44 + f),
+        p = new DataView(m),
+        h = (v, y) => {
+            for (let w = 0; w < y.length; w += 1) p.setUint8(v + w, y.charCodeAt(w));
+        };
+    h(0, "RIFF"),
+        p.setUint32(4, 36 + f, !0),
+        h(8, "WAVE"),
+        h(12, "fmt "),
+        p.setUint32(16, 16, !0),
+        p.setUint16(20, 1, !0),
+        p.setUint16(22, 1, !0),
+        p.setUint32(24, 8e3, !0),
+        p.setUint32(28, 8e3 * 1 * (8 / 8), !0),
+        p.setUint16(32, 1 * (8 / 8), !0),
+        p.setUint16(34, 8, !0),
+        h(36, "data"),
+        p.setUint32(40, f, !0);
+    for (let v = 44; v < 44 + f; v += 1) p.setUint8(v, 128);
+    return URL.createObjectURL(new Blob([m], { type: "audio/wav" }));
+}
+function Cw({ children: n }) {
+    const a = jw(),
+        [l, o] = g.useState((a == null ? void 0 : a.currentTrack) || null),
+        [u, f] = g.useState((a == null ? void 0 : a.queue) || []),
+        [m, p] = g.useState((a == null ? void 0 : a.queueIndex) ?? -1),
+        [h, v] = g.useState(!1),
+        [y, w] = g.useState(0),
+        [T, b] = g.useState(0),
+        [j, S] = g.useState(() => {
+            const H = localStorage.getItem("tunefree_volume");
+            return H ? parseInt(H) : 80;
+        }),
+        [k, I] = g.useState(!1),
+        [$, A] = g.useState(!1),
+        [B, Y] = g.useState("hidden"),
+        [ne, K] = g.useState(!1),
+        [le, ee] = g.useState("off"),
+        [re, xe] = g.useState(!1),
+        q = g.useRef(null),
+        te = g.useRef(null),
+        F = g.useRef(null),
+        ge = g.useRef(new Map()),
+        O = g.useRef(null),
+        X = g.useRef(0),
+        M = 2,
+        se = 5e3,
+        G = g.useRef(null),
+        E = g.useRef(!1),
+        U = g.useRef(null),
+        Z = g.useRef(null),
+        ae = g.useRef(u),
+        ue = g.useRef(m),
+        ye = g.useRef(ne),
+        Ee = g.useRef(le),
+        Se = g.useRef(j),
+        D = g.useRef(h),
+        oe = g.useRef(y);
+    g.useEffect(() => {
+        ae.current = u;
+    }, [u]),
+        g.useEffect(() => {
+            ue.current = m;
+        }, [m]),
+        g.useEffect(() => {
+            ye.current = ne;
+        }, [ne]),
+        g.useEffect(() => {
+            Ee.current = le;
+        }, [le]),
+        g.useEffect(() => {
+            Se.current = j;
+        }, [j]),
+        g.useEffect(() => {
+            D.current = h;
+        }, [h]),
+        g.useEffect(() => {
+            oe.current = y;
+        }, [y]);
+    const je = g.useRef(() => {}),
+        ke = g.useRef(() => {}),
+        De = g.useRef(() => {}),
+        Ke = g.useRef(() => {}),
+        de = g.useRef(() => {}),
+        Ne = T || ((l == null ? void 0 : l.duration_ms) || 0) / 1e3 || (l == null ? void 0 : l.duration) || 0;
+    g.useEffect(
+        () => (
+            (Z.current = Sw(6)),
+            () => {
+                Z.current && URL.revokeObjectURL(Z.current);
+            }
+        ),
+        []
+    );
+    const Ie = g.useCallback((H) => {
+        var pe, fe;
+        const ie = U.current;
+        if (ie) {
+            if ((Z.current && ie.src !== Z.current && (ie.src = Z.current), H)) {
+                const ve = (pe = ie.play) == null ? void 0 : pe.call(ie);
+                ve != null && ve.catch && ve.catch(() => {});
+                return;
+            }
+            (fe = ie.pause) == null || fe.call(ie);
+            try {
+                ie.currentTime = 0;
+            } catch {}
+        }
+    }, []);
+    g.useEffect(() => {
+        localStorage.setItem("tunefree_volume", String(j));
+    }, [j]),
+        g.useEffect(() => {
+            kw({ currentTrack: l, queue: u, queueIndex: m });
+        }, [l, u, m]),
+        g.useEffect(() => {
+            var ie;
+            if (!l) {
+                document.title = "TuneFree - Free Music Streaming";
+                return;
+            }
+            const H =
+                ((ie = l.artists) == null
+                    ? void 0
+                    : ie
+                          .filter((pe) => pe.name && pe.name !== "Unknown")
+                          .map((pe) => pe.name)
+                          .join(", ")) || "";
+            document.title = H ? `${l.name} · ${H} | TuneFree` : `${l.name} | TuneFree`;
+        }, [l]),
+        g.useEffect(() => {
+            const H = () => {
+                document.hidden
+                    ? (D.current = h)
+                    : D.current &&
+                      q.current &&
+                      setTimeout(() => {
+                          var ie, pe;
+                          try {
+                              ((pe = (ie = q.current).getPlayerState) == null ? void 0 : pe.call(ie)) === 2 &&
+                                  q.current.playVideo();
+                          } catch {}
+                      }, 300);
+            };
+            return (
+                document.addEventListener("visibilitychange", H),
+                () => document.removeEventListener("visibilitychange", H)
+            );
+        }, [h]),
+        g.useEffect(() => {
+            var pe, fe, ve;
+            if (!("mediaSession" in navigator)) return;
+            if (!l) {
+                Ie(!1), (navigator.mediaSession.metadata = null), (navigator.mediaSession.playbackState = "none");
+                return;
+            }
+            const H = _r((pe = l.album) == null ? void 0 : pe.images) || l.image,
+                ie =
+                    ((fe = l.artists) == null
+                        ? void 0
+                        : fe
+                              .filter((Be) => Be.name && Be.name !== "Unknown")
+                              .map((Be) => Be.name)
+                              .join(", ")) || "";
+            if (
+                ((navigator.mediaSession.metadata = new MediaMetadata({
+                    title: l.name || "Unknown",
+                    artist: ie,
+                    album: ((ve = l.album) == null ? void 0 : ve.name) || "",
+                    artwork: H
+                        ? [
+                              { src: H, sizes: "96x96", type: "image/jpeg" },
+                              { src: H, sizes: "128x128", type: "image/jpeg" },
+                              { src: H, sizes: "192x192", type: "image/jpeg" },
+                              { src: H, sizes: "256x256", type: "image/jpeg" },
+                              { src: H, sizes: "384x384", type: "image/jpeg" },
+                              { src: H, sizes: "512x512", type: "image/jpeg" },
+                          ]
+                        : [],
+                })),
+                (navigator.mediaSession.playbackState = h ? "playing" : "paused"),
+                Ne > 0)
+            )
+                try {
+                    navigator.mediaSession.setPositionState({
+                        duration: Ne,
+                        playbackRate: 1,
+                        position: Math.min(y, Ne) || 0,
+                    });
+                } catch {}
+        }, [l, h, y, Ne, Ie]),
+        g.useEffect(() => {
+            if (window.YT && window.YT.Player) return;
+            const H = document.createElement("script");
+            (H.src = "https://www.youtube.com/iframe_api"),
+                document.head.appendChild(H),
+                (window.onYouTubeIframeAPIReady = () => {
+                    F.current && (tn(F.current), (F.current = null));
+                });
+        }, []);
+    const Et = g.useRef(null);
+    function Ht() {
+        G.current && (clearTimeout(G.current), (G.current = null));
+    }
+    function hn(H) {
+        Ht(),
+            (G.current = setTimeout(() => {
+                if (!D.current && O.current === H)
+                    if (X.current < M) {
+                        if ((X.current++, q.current)) {
+                            try {
+                                q.current.destroy();
+                            } catch {}
+                            q.current = null;
+                        }
+                        tn(H);
+                    } else {
+                        (X.current = 0), I(!1);
+                        const ie = ae.current,
+                            pe = ue.current;
+                        if (ie.length > 1) {
+                            const fe = (pe + 1) % ie.length;
+                            p(fe), He(ie[fe]);
+                        }
+                    }
+            }, se));
+    }
+    const He = g.useCallback(async (H) => {
+        var ie, pe;
+        o(H), ww(H), I(!0), w(0), b(0), Ht();
+        try {
+            let fe = H.src;
+            if ((fe || (fe = ge.current.get(H.id)), !fe)) {
+                const ve = ((pe = (ie = H.artists) == null ? void 0 : ie[0]) == null ? void 0 : pe.name) || "";
+                (fe = await fw(H.name, ve)), fe && ge.current.set(H.id, fe);
+            }
+            if (!fe) {
+                I(!1);
+                return;
+            }
+            (X.current = 0), tn(fe);
+        } catch {
+            I(!1);
+        }
+    }, []);
+    g.useEffect(() => {
+        E.current || !l || ((E.current = !0), He(l));
+    }, [l, He]),
+        g.useEffect(() => {
+            Et.current = () => {
+                const H = ae.current,
+                    ie = ue.current,
+                    pe = Ee.current,
+                    fe = ye.current;
+                if (pe === "one") {
+                    const Be = O.current;
+                    Be && q.current && q.current.loadVideoById(Be);
+                    return;
+                }
+                if (H.length === 0) return;
+                if (fe) {
+                    let Be;
+                    do Be = Math.floor(Math.random() * H.length);
+                    while (Be === ie && H.length > 1);
+                    p(Be), He(H[Be]);
+                    return;
+                }
+                const ve = ie + 1;
+                if (ve >= H.length) {
+                    pe === "all" && (p(0), He(H[0]));
+                    return;
+                }
+                p(ve), He(H[ve]);
+            };
+        });
+    function tn(H) {
+        var pe;
+        if (((O.current = H), hn(H), !((pe = window.YT) != null && pe.Player))) {
+            F.current = H;
+            return;
+        }
+        if (q.current && typeof q.current.loadVideoById == "function") {
+            q.current.loadVideoById(H), q.current.unMute(), q.current.setVolume(Se.current);
+            return;
+        }
+        if (q.current) {
+            try {
+                q.current.destroy();
+            } catch {}
+            q.current = null;
+        }
+        document.getElementById(Ec) &&
+            (q.current = new window.YT.Player(Ec, {
+                width: "100%",
+                height: "100%",
+                videoId: H,
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                    origin: window.location.origin,
+                },
+                events: {
+                    onReady: (fe) => {
+                        fe.target.unMute(), fe.target.setVolume(Se.current), fe.target.playVideo();
+                    },
+                    onStateChange: (fe) => {
+                        var ve;
+                        fe.data === window.YT.PlayerState.PLAYING
+                            ? ((X.current = 0),
+                              Ht(),
+                              fe.target.unMute(),
+                              fe.target.setVolume(Se.current),
+                              Ie(!0),
+                              v(!0),
+                              I(!1),
+                              b(fe.target.getDuration()),
+                              clearInterval(te.current),
+                              (te.current = setInterval(() => {
+                                  fe.target.getCurrentTime && w(fe.target.getCurrentTime());
+                              }, 500)))
+                            : fe.data === window.YT.PlayerState.PAUSED
+                              ? (Ie(!1), v(!1), clearInterval(te.current))
+                              : fe.data === window.YT.PlayerState.ENDED
+                                ? (Ie(!1), v(!1), clearInterval(te.current), (ve = Et.current) == null || ve.call(Et))
+                                : fe.data === window.YT.PlayerState.BUFFERING && I(!0);
+                    },
+                    onError: (fe) => {
+                        if ((Ie(!1), I(!1), v(!1), fe.data === 101 || fe.data === 150)) {
+                            X.current = 0;
+                            const ve = ae.current,
+                                Be = ue.current;
+                            if (ve.length > 0) {
+                                const Pt = (Be + 1) % ve.length;
+                                p(Pt), He(ve[Pt]);
+                            }
+                            return;
+                        }
+                        if (X.current < M) {
+                            X.current++;
+                            const ve = O.current;
+                            ve && setTimeout(() => tn(ve), 1500 * X.current);
+                        } else {
+                            X.current = 0;
+                            const ve = ae.current,
+                                Be = ue.current;
+                            if (ve.length > 0) {
+                                const Pt = (Be + 1) % ve.length;
+                                p(Pt), He(ve[Pt]);
+                            }
+                        }
+                    },
+                },
+            }));
+    }
+    g.useEffect(() => {
+        var H;
+        (H = q.current) != null && H.setVolume && q.current.setVolume(j);
+    }, [j]),
+        g.useEffect(() => {
+            je.current = () => {
+                const H = q.current;
+                "mediaSession" in navigator && (navigator.mediaSession.playbackState = "playing"),
+                    Ie(!0),
+                    H != null && H.playVideo && H.playVideo();
+            };
+        }, [Ie]),
+        g.useEffect(() => {
+            ke.current = () => {
+                const H = q.current;
+                "mediaSession" in navigator && (navigator.mediaSession.playbackState = "paused"),
+                    Ie(!1),
+                    H != null && H.pauseVideo && H.pauseVideo();
+            };
+        }, [Ie]),
+        g.useEffect(() => {
+            De.current = (H) => {
+                if (!Number.isFinite(H) || H < 0) return;
+                const ie = q.current;
+                if (ie != null && ie.seekTo) {
+                    const pe = Ne > 0 ? Math.min(H, Ne) : H;
+                    if ((ie.seekTo(pe, !0), w(pe), "mediaSession" in navigator && Ne > 0))
+                        try {
+                            navigator.mediaSession.setPositionState({ duration: Ne, playbackRate: 1, position: pe });
+                        } catch {}
+                }
+            };
+        }, [Ne]),
+        g.useEffect(() => {
+            Ke.current = () => {
+                const H = ae.current,
+                    ie = ue.current;
+                if (H.length === 0) return;
+                if (ye.current) {
+                    let fe;
+                    do fe = Math.floor(Math.random() * H.length);
+                    while (fe === ie && H.length > 1);
+                    p(fe), He(H[fe]);
+                    return;
+                }
+                const pe = (ie + 1) % H.length;
+                p(pe), He(H[pe]);
+            };
+        }, [He]),
+        g.useEffect(() => {
+            de.current = () => {
+                const H = ae.current,
+                    ie = ue.current;
+                if (H.length === 0) return;
+                if (y > 3) {
+                    De.current(0);
+                    return;
+                }
+                const pe = (ie - 1 + H.length) % H.length;
+                p(pe), He(H[pe]);
+            };
+        }, [He, y]);
+    const pr = g.useCallback(
+            (H, ie = []) => {
+                const pe = Kc(ie, H);
+                if (pe.length > 0) {
+                    f(pe);
+                    const fe = pe.findIndex((ve) => ve.id === H.id);
+                    p(fe >= 0 ? fe : 0);
+                } else {
+                    const fe = ae.current.findIndex((ve) => ve.id === H.id);
+                    fe >= 0 ? p(fe) : (f([H]), p(0));
+                }
+                He(H);
+            },
+            [He]
+        ),
+        hr = g.useCallback(
+            (H = []) => {
+                const ie = Kc(H);
+                if (ie.length === 0) return;
+                const pe = Nw(ie),
+                    fe = pe[0];
+                K(!0), f(pe), p(0), He(fe);
+            },
+            [He]
+        ),
+        Ae = g.useCallback(() => {
+            q.current && (h ? ke.current() : je.current());
+        }, [h]),
+        Le = g.useCallback(() => {
+            Ke.current();
+        }, []),
+        at = g.useCallback(() => {
+            de.current();
+        }, []),
+        kt = g.useCallback((H) => {
+            De.current(H);
+        }, []);
+    g.useEffect(() => {
+        if (!("mediaSession" in navigator)) return;
+        const H = !!l,
+            ie = u.length > 1,
+            pe = Ne > 0,
+            fe = {
+                play: () => {
+                    D.current || Ae();
+                },
+                pause: () => {
+                    D.current && Ae();
+                },
+                stop: () => {
+                    D.current && Ae();
+                },
+                previoustrack: ie ? at : null,
+                nexttrack: ie ? Le : null,
+                seekbackward: (ve) => {
+                    const Be = ve.seekOffset ?? 10;
+                    kt(oe.current - Be);
+                },
+                seekforward: (ve) => {
+                    const Be = ve.seekOffset ?? 10;
+                    kt(oe.current + Be);
+                },
+                seekto: (ve) => {
+                    ve.seekTime != null && kt(ve.seekTime);
+                },
+            };
+        for (const [ve, Be] of Object.entries(fe)) {
+            const Pt =
+                H &&
+                (ve === "play" ||
+                    ve === "pause" ||
+                    ve === "stop" ||
+                    (ie && (ve === "previoustrack" || ve === "nexttrack")) ||
+                    (pe && (ve === "seekbackward" || ve === "seekforward" || ve === "seekto")));
+            try {
+                navigator.mediaSession.setActionHandler(ve, Pt ? Be : null);
+            } catch {}
+        }
+        return () => {
+            for (const ve of Object.keys(fe))
+                try {
+                    navigator.mediaSession.setActionHandler(ve, null);
+                } catch {}
+        };
+    }, [l, u.length, Ne, Le, at, kt, Ae]);
+    const Or = g.useCallback((H) => {
+            f((ie) => [...ie, H]);
+        }, []),
+        qt = g.useCallback((H) => {
+            f((ie) => {
+                const pe = [...ie];
+                return pe.splice(ue.current + 1, 0, H), pe;
+            });
+        }, []),
+        Wt = g.useCallback((H) => {
+            f((ie) => {
+                const pe = [...ie];
+                return pe.splice(H, 1), pe;
+            }),
+                p((ie) => (H < ie ? ie - 1 : ie));
+        }, []),
+        ji = g.useCallback(() => {
+            f([]), p(-1);
+        }, []),
+        ka = g.useCallback((H, ie) => {
+            f((pe) => {
+                const fe = [...pe],
+                    [ve] = fe.splice(H, 1);
+                return fe.splice(ie, 0, ve), fe;
+            }),
+                p((pe) => (pe === H ? ie : H < pe && ie >= pe ? pe - 1 : H > pe && ie <= pe ? pe + 1 : pe));
+        }, []),
+        Ir = g.useRef(!1);
+    g.useEffect(() => {
+        var ve, Be;
+        const H = u,
+            ie = m;
+        if (H.length === 0 || ie < 0 || H.length - 1 - ie > 2 || Ir.current) return;
+        const fe = ((ve = H[ie]) == null ? void 0 : ve.src) || ((Be = H[ie]) == null ? void 0 : Be.id);
+        fe &&
+            ((Ir.current = !0),
+            uw(fe)
+                .then((Pt) => {
+                    if (!Pt || Pt.length === 0) return;
+                    const Na = new Set(H.map((In) => In.id)),
+                        js = Pt.filter((In) => !Na.has(In.id));
+                    js.length > 0 && f((In) => [...In, ...js.slice(0, 15)]);
+                })
+                .catch(() => {})
+                .finally(() => {
+                    Ir.current = !1;
+                }));
+    }, [m, u]);
+    const ki = g.useCallback(() => K((H) => !H), []),
+        ws = g.useCallback(() => {
+            ee((H) => (H === "off" ? "all" : H === "all" ? "one" : "off"));
+        }, []),
+        bs =
+            B === "fullscreen"
+                ? "yt-wrapper-fullscreen"
+                : l && $ && B === "pip"
+                  ? "yt-wrapper-pip"
+                  : "yt-wrapper-hidden";
+    return r.jsxs(Th.Provider, {
+        value: {
+            currentTrack: l,
+            isPlaying: h,
+            isLoading: k,
+            progress: y,
+            duration: T,
+            volume: j,
+            queue: u,
+            queueIndex: m,
+            showVideo: $,
+            playerMode: B,
+            shuffle: ne,
+            repeat: le,
+            showQueue: re,
+            playTrack: pr,
+            playTracksShuffled: hr,
+            togglePlay: Ae,
+            playNext: Le,
+            playPrev: at,
+            seekTo: kt,
+            setVolume: S,
+            setShowVideo: A,
+            setPlayerMode: Y,
+            toggleShuffle: ki,
+            toggleRepeat: ws,
+            setShowQueue: xe,
+            addToQueue: Or,
+            playNextInQueue: qt,
+            removeFromQueue: Wt,
+            clearQueue: ji,
+            moveInQueue: ka,
+        },
+        children: [
+            n,
+            r.jsx("audio", {
+                ref: U,
+                preload: "auto",
+                loop: !0,
+                playsInline: !0,
+                "aria-hidden": "true",
+                className: "hidden",
+            }),
+            r.jsx("div", { id: "yt-wrapper", className: bs, children: r.jsx("div", { id: Ec }) }),
+        ],
+    });
+}
+const _h = g.createContext(),
+    ii = "tunefree_favorites_cache",
+    Tw = 4320 * 60 * 1e3;
+function mr() {
+    return g.useContext(_h);
+}
+function Ew() {
+    try {
+        const n = localStorage.getItem(ii);
+        if (!n) return null;
+        const { tracks: a, ts: l } = JSON.parse(n);
+        return Date.now() - l > Tw ? (localStorage.removeItem(ii), null) : a;
+    } catch {
+        return null;
+    }
+}
+function Ml(n) {
+    try {
+        localStorage.setItem(ii, JSON.stringify({ tracks: n, ts: Date.now() }));
+    } catch {}
+}
+function Pw() {
+    try {
+        localStorage.removeItem(ii);
+    } catch {}
+}
+function Rw({ children: n }) {
+    const [a, l] = g.useState([]),
+        o = g.useRef(new Set()),
+        [u, f] = g.useState(!1),
+        { isAuthenticated: m, loading: p } = gt(),
+        h = g.useRef(new Set());
+    (h.current = new Set(a.map((w) => w.id))),
+        g.useEffect(() => {
+            if (p) return;
+            if (!m) {
+                l([]), f(!1), Pw();
+                return;
+            }
+            const w = Ew();
+            w && (l(w), f(!0)),
+                qm()
+                    .then((T) => {
+                        l(T), Ml(T), f(!0);
+                    })
+                    .catch(() => {
+                        w || f(!0);
+                    });
+        }, [m, p]);
+    const v = g.useCallback((w) => h.current.has(w), [a]),
+        y = g.useCallback(
+            async (w) => {
+                if (!(w != null && w.id)) return;
+                const T = w.id;
+                if (o.current.has(T)) return;
+                o.current.add(T);
+                const b = h.current.has(T);
+                if (!b && a.length >= Y0) {
+                    o.current.delete(T);
+                    return;
+                }
+                l((j) => {
+                    var k, I, $, A;
+                    let S;
+                    return (
+                        b
+                            ? (S = j.filter((B) => B.id !== T))
+                            : (S = [
+                                  {
+                                      id: w.id,
+                                      name: w.name,
+                                      src: w.src,
+                                      image:
+                                          w.image ||
+                                          (($ =
+                                              (I = (k = w.album) == null ? void 0 : k.images) == null
+                                                  ? void 0
+                                                  : I[0]) == null
+                                              ? void 0
+                                              : $.url),
+                                      duration_ms: w.duration_ms || w.duration,
+                                      model_type: "track",
+                                      album: w.album
+                                          ? { id: w.album.id, name: w.album.name, images: w.album.images }
+                                          : void 0,
+                                      artists:
+                                          (A = w.artists) == null
+                                              ? void 0
+                                              : A.map((Y) => ({ id: Y.id, name: Y.name, model_type: "artist" })),
+                                      added_at: new Date().toISOString(),
+                                  },
+                                  ...j,
+                              ]),
+                        Ml(S),
+                        S
+                    );
+                });
+                try {
+                    b ? await U1(T) : await D1(w);
+                } catch {
+                    l((j) => {
+                        let S;
+                        return b ? (S = j) : (S = j.filter((k) => k.id !== T)), Ml(S), S;
+                    }),
+                        b &&
+                            qm()
+                                .then((j) => {
+                                    l(j), Ml(j);
+                                })
+                                .catch(() => {});
+                } finally {
+                    o.current.delete(T);
+                }
+            },
+            [a]
+        );
+    return r.jsx(_h.Provider, {
+        value: { favorites: a, favIds: h.current, isFavorited: v, toggleFavorite: y, loaded: u },
+        children: n,
+    });
+}
+let oi = null;
+function Gm(n, a) {
+    var l, o;
+    return (
+        ((o = (l = n == null ? void 0 : n.response) == null ? void 0 : l.data) == null ? void 0 : o.error) ||
+        (n == null ? void 0 : n.message) ||
+        a
+    );
+}
+function ys(n) {
+    oi && oi(n);
+}
+function _w() {
+    var Y, ne, K, le;
+    const { isAuthenticated: n, openAuthModal: a } = gt(),
+        {
+            playlists: l,
+            createPlaylist: o,
+            addTrackToPlaylist: u,
+            deletePlaylist: f,
+            removeTrackFromPlaylist: m,
+        } = vi(),
+        { showToast: p } = cu(),
+        [h, v] = g.useState(null),
+        [y, w] = g.useState(!1),
+        [T, b] = g.useState(""),
+        [j, S] = g.useState(new Set()),
+        k = g.useRef(new Set());
+    if (
+        (g.useEffect(
+            () => (
+                (oi = (ee) => {
+                    if (!n) {
+                        a();
+                        return;
+                    }
+                    v(ee), S(new Set()), w(!1), b("");
+                }),
+                () => {
+                    oi = null;
+                }
+            ),
+            [n, a]
+        ),
+        !h)
+    )
+        return null;
+    const I = () => v(null),
+        $ = async (ee) => {
+            if (k.current.has(ee.id)) return;
+            k.current.add(ee.id), S((xe) => new Set([...xe, ee.id]));
+            const re = h;
+            try {
+                await u(ee.id, re),
+                    p(
+                        `Added to ${ee.name}`,
+                        {
+                            label: "Undo",
+                            onClick: async () => {
+                                try {
+                                    await m(ee.id, re.id),
+                                        S((xe) => {
+                                            const q = new Set(xe);
+                                            return q.delete(ee.id), q;
+                                        });
+                                } catch {}
+                            },
+                        },
+                        5e3
+                    );
+            } catch (xe) {
+                S((q) => {
+                    const te = new Set(q);
+                    return te.delete(ee.id), te;
+                }),
+                    p(Gm(xe, "Failed to add. Try again."));
+            } finally {
+                k.current.delete(ee.id);
+            }
+        },
+        A = async (ee) => {
+            if ((ee.preventDefault(), !T.trim() || k.current.has("new"))) return;
+            k.current.add("new");
+            const re = T.trim(),
+                xe = h;
+            try {
+                const q = await o(re);
+                await u(q.id, xe),
+                    S((te) => new Set([...te, q.id])),
+                    w(!1),
+                    b(""),
+                    p(
+                        `Created "${re}" and added song`,
+                        {
+                            label: "Undo",
+                            onClick: async () => {
+                                try {
+                                    await f(q.id);
+                                } catch {}
+                            },
+                        },
+                        5e3
+                    );
+            } catch (q) {
+                p(Gm(q, "Failed to create playlist. Try again."));
+            } finally {
+                k.current.delete("new");
+            }
+        },
+        B =
+            h.image ||
+            ((K = (ne = (Y = h.album) == null ? void 0 : Y.images) == null ? void 0 : ne[0]) == null ? void 0 : K.url);
+    return r.jsx("div", {
+        className: "fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4",
+        onClick: I,
+        children: r.jsxs("div", {
+            className: "bg-white rounded-2xl w-full max-w-sm shadow-2xl max-h-[80vh] flex flex-col",
+            onClick: (ee) => ee.stopPropagation(),
+            children: [
+                r.jsxs("div", {
+                    className: "flex items-center justify-between p-4 pb-3 border-b border-am-line",
+                    children: [
+                        r.jsx("h2", { className: "text-base font-bold text-am-dark", children: "Add to Playlist" }),
+                        r.jsx("button", {
+                            onClick: I,
+                            className: "text-am-gray hover:text-am-dark p-1",
+                            children: r.jsx(en, { size: 20 }),
+                        }),
+                    ],
+                }),
+                r.jsxs("div", {
+                    className: "flex items-center gap-3 px-4 py-3 bg-am-bg border-b border-am-line",
+                    children: [
+                        r.jsx($e, { src: B, alt: "", className: "w-10 h-10 rounded object-cover flex-shrink-0" }),
+                        r.jsxs("div", {
+                            className: "min-w-0 flex-1",
+                            children: [
+                                r.jsx("p", {
+                                    className: "text-sm font-medium text-am-dark truncate",
+                                    children: h.name,
+                                }),
+                                r.jsx("p", {
+                                    className: "text-xs text-am-gray truncate",
+                                    children:
+                                        (le = h.artists) == null
+                                            ? void 0
+                                            : le
+                                                  .filter((ee) => ee.name && ee.name !== "Unknown")
+                                                  .map((ee) => ee.name)
+                                                  .join(", "),
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+                r.jsx("div", {
+                    className: "px-4 pt-3",
+                    children: y
+                        ? r.jsxs("form", {
+                              onSubmit: A,
+                              className: "flex items-center gap-2 mb-3",
+                              children: [
+                                  r.jsx("input", {
+                                      type: "text",
+                                      placeholder: "Playlist name",
+                                      value: T,
+                                      onChange: (ee) => b(ee.target.value),
+                                      autoFocus: !0,
+                                      className:
+                                          "flex-1 bg-am-bg border border-am-line rounded-lg py-2 px-3 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/30 focus:border-am-red",
+                                  }),
+                                  r.jsx("button", {
+                                      type: "submit",
+                                      disabled: !T.trim(),
+                                      className:
+                                          "px-3 py-2 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h disabled:opacity-50 flex-shrink-0",
+                                      children: "Create",
+                                  }),
+                                  r.jsx("button", {
+                                      type: "button",
+                                      onClick: () => w(!1),
+                                      className: "text-am-gray hover:text-am-dark p-1 flex-shrink-0",
+                                      children: r.jsx(en, { size: 18 }),
+                                  }),
+                              ],
+                          })
+                        : r.jsxs("button", {
+                              onClick: () => w(!0),
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-am-dark hover:bg-am-hover rounded-lg transition-colors mb-2",
+                              children: [
+                                  r.jsx("div", {
+                                      className:
+                                          "w-10 h-10 bg-am-bg border-2 border-dashed border-am-line rounded-lg flex items-center justify-center flex-shrink-0",
+                                      children: r.jsx(ei, { size: 18, className: "text-am-muted" }),
+                                  }),
+                                  "New Playlist",
+                              ],
+                          }),
+                }),
+                r.jsx("div", {
+                    className: "flex-1 overflow-y-auto px-4 pb-4",
+                    children:
+                        l.length === 0
+                            ? r.jsx("p", {
+                                  className: "text-sm text-am-muted text-center py-6",
+                                  children: "No playlists yet. Create one above!",
+                              })
+                            : r.jsx("div", {
+                                  className: "space-y-1",
+                                  children: l.map((ee) => {
+                                      const re = j.has(ee.id);
+                                      return r.jsxs(
+                                          "button",
+                                          {
+                                              onClick: () => !re && $(ee),
+                                              disabled: re,
+                                              className: `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${re ? "bg-green-50" : "hover:bg-am-hover"}`,
+                                              children: [
+                                                  ee.image
+                                                      ? r.jsx($e, {
+                                                            src: ee.image,
+                                                            alt: "",
+                                                            className:
+                                                                "w-10 h-10 rounded-lg object-cover flex-shrink-0",
+                                                        })
+                                                      : r.jsx("div", {
+                                                            className:
+                                                                "w-10 h-10 bg-am-bg rounded-lg flex items-center justify-center flex-shrink-0",
+                                                            children: r.jsx(ma, {
+                                                                size: 16,
+                                                                className: "text-am-muted",
+                                                            }),
+                                                        }),
+                                                  r.jsxs("div", {
+                                                      className: "min-w-0 flex-1",
+                                                      children: [
+                                                          r.jsx("p", {
+                                                              className: "text-sm font-medium text-am-dark truncate",
+                                                              children: ee.name,
+                                                          }),
+                                                          r.jsxs("p", {
+                                                              className: "text-xs text-am-gray",
+                                                              children: [
+                                                                  ee.track_count || 0,
+                                                                  " song",
+                                                                  ee.track_count !== 1 ? "s" : "",
+                                                              ],
+                                                          }),
+                                                      ],
+                                                  }),
+                                                  r.jsx("div", {
+                                                      className: "flex-shrink-0",
+                                                      children: re
+                                                          ? r.jsx(B0, { size: 18, className: "text-green-600" })
+                                                          : r.jsx(ei, { size: 18, className: "text-am-muted" }),
+                                                  }),
+                                              ],
+                                          },
+                                          ee.id
+                                      );
+                                  }),
+                              }),
+                }),
+            ],
+        }),
+    });
+}
+function cr(n) {
+    return _e({
+        attr: { viewBox: "0 0 512 512" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Yc({ track: n, index: a, actualIdx: l, variant: o = "light", onRemove: u }) {
+    var le, ee;
+    const { playTrack: f, playNextInQueue: m, queue: p } = Tt(),
+        { isAuthenticated: h, openAuthModal: v } = gt(),
+        { isFavorited: y, toggleFavorite: w } = mr(),
+        [T, b] = g.useState(!1),
+        j = g.useRef(null),
+        S = g.useRef(null),
+        [k, I] = g.useState({ top: 0, left: 0 }),
+        $ =
+            ((le = n.artists) == null
+                ? void 0
+                : le
+                      .filter((re) => re.name && re.name !== "Unknown")
+                      .map((re) => re.name)
+                      .join(", ")) || "",
+        A = _r((ee = n.album) == null ? void 0 : ee.images) || n.image,
+        B = y(n.id),
+        Y = o === "dark";
+    g.useEffect(() => {
+        if (!T) return;
+        if (j.current) {
+            const xe = j.current.getBoundingClientRect(),
+                q = 200,
+                te = window.innerHeight - xe.bottom,
+                F = xe.top;
+            te >= q
+                ? I({ top: xe.bottom + 4, left: xe.right - 192 })
+                : F >= q
+                  ? I({ top: xe.top - q - 4, left: xe.right - 192 })
+                  : I({ top: Math.max(8, xe.top - q / 2), left: xe.right - 192 });
+        }
+        const re = (xe) => {
+            var q;
+            S.current && !S.current.contains(xe.target) && !((q = j.current) != null && q.contains(xe.target)) && b(!1);
+        };
+        return document.addEventListener("mousedown", re), () => document.removeEventListener("mousedown", re);
+    }, [T]);
+    const ne = () => {
+            if (!h) {
+                v(), b(!1);
+                return;
+            }
+            w(n), b(!1);
+        },
+        K = T
+            ? Zc.createPortal(
+                  r.jsxs("div", {
+                      ref: S,
+                      className: "fixed bg-white border border-am-line rounded-lg shadow-2xl py-1 w-48",
+                      style: { top: k.top, left: Math.max(8, k.left), zIndex: 9999 },
+                      children: [
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  m(n), b(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(lr, { size: 16 }), " Play next"],
+                          }),
+                          r.jsxs("button", {
+                              onClick: ne,
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [
+                                  B ? r.jsx(cr, { size: 14, className: "text-am-red" }) : r.jsx(fn, { size: 14 }),
+                                  B ? "Remove from Favorites" : "Add to Favorites",
+                              ],
+                          }),
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  ys(n), b(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(bn, { size: 16 }), " Add to Playlist"],
+                          }),
+                      ],
+                  }),
+                  document.body
+              )
+            : null;
+    return r.jsxs("div", {
+        className: `flex items-center gap-3 py-2 px-1 rounded-lg group transition-colors ${Y ? "active:bg-white/10" : "hover:bg-am-hover"}`,
+        children: [
+            r.jsxs("button", {
+                onClick: () => f(n, p),
+                className: "flex items-center gap-3 min-w-0 flex-1 text-left",
+                children: [
+                    r.jsx("span", {
+                        className: `text-xs w-5 text-right flex-shrink-0 ${Y ? "text-white/30" : "text-am-muted"}`,
+                        children: a + 1,
+                    }),
+                    r.jsx($e, {
+                        src: A,
+                        alt: "",
+                        className: `rounded object-cover flex-shrink-0 ${Y ? "w-10 h-10 rounded-lg" : "w-8 h-8"}`,
+                    }),
+                    r.jsxs("div", {
+                        className: "min-w-0 flex-1",
+                        children: [
+                            r.jsx("p", {
+                                className: `text-sm truncate ${Y ? "text-white" : "text-am-dark"}`,
+                                children: n.name,
+                            }),
+                            r.jsx("p", {
+                                className: `text-xs truncate ${Y ? "text-white/50" : "text-am-gray"}`,
+                                children: $,
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            r.jsx("button", {
+                type: "button",
+                onClick: (re) => {
+                    re.stopPropagation(), u == null || u(l);
+                },
+                "aria-label": `Remove ${n.name} from queue`,
+                className: `p-1 rounded flex-shrink-0 transition-all ${u ? (Y ? "text-white/30 hover:text-white opacity-0 group-hover:opacity-100 focus-visible:opacity-100" : "text-am-muted hover:text-red-500 opacity-0 group-hover:opacity-100 focus-visible:opacity-100") : "hidden"}`,
+                children: r.jsx(en, { size: 16 }),
+            }),
+            r.jsx("button", {
+                ref: j,
+                onClick: (re) => {
+                    re.stopPropagation(), b(!T);
+                },
+                className: `p-1 rounded flex-shrink-0 transition-opacity ${Y ? "text-white/30 active:text-white" : "text-am-muted hover:text-am-dark opacity-0 group-hover:opacity-100"}`,
+                children: r.jsx(nu, { size: 14 }),
+            }),
+            K,
+        ],
+    });
+}
+function ha(n) {
+    return _e({
+        attr: { viewBox: "0 0 24 24" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    d: "M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+const Jm = "https://lrclib.net";
+function Aw(n) {
+    if (!n) return [];
+    const a = String(n).split(/\r?\n/),
+        l = [],
+        o = /\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g;
+    for (const u of a) {
+        const f = u.replace(o, "").trim();
+        o.lastIndex = 0;
+        let m;
+        for (; (m = o.exec(u)) !== null; ) {
+            const p = Number(m[1] || 0),
+                h = Number(m[2] || 0),
+                v = Number((m[3] || "0").padEnd(3, "0")),
+                y = p * 60 + h + v / 1e3;
+            l.push({ time: y, text: f });
+        }
+    }
+    return l.sort((u, f) => u.time - f.time);
+}
+function Lw(n, a) {
+    if (!n.length) return 0;
+    let l = 0;
+    for (let o = 0; o < n.length && a >= n[o].time; o += 1) l = o;
+    return l;
+}
+function Xm(n) {
+    if (!Number.isFinite(n) || n < 0) return "0:00";
+    const a = Math.floor(n / 60),
+        l = Math.floor(n % 60);
+    return `${a}:${String(l).padStart(2, "0")}`;
+}
+function zw(n) {
+    const a = new URLSearchParams();
+    return (
+        a.set("track_name", n.trackName),
+        n.artistName && a.set("artist_name", n.artistName),
+        n.albumName && a.set("album_name", n.albumName),
+        n.duration && Number.isFinite(n.duration) && a.set("duration", String(Math.round(n.duration))),
+        a.toString()
+    );
+}
+async function Fw(n) {
+    try {
+        const a = zw(n),
+            l = await fetch(`${Jm}/api/get?${a}`);
+        if (l.ok) {
+            const f = await l.json();
+            if ((f != null && f.syncedLyrics) || (f != null && f.plainLyrics)) return f;
+        }
+        const o = await fetch(`${Jm}/api/search?${a}`);
+        if (!o.ok) return null;
+        const u = await o.json();
+        return !Array.isArray(u) || !u.length
+            ? null
+            : u.find((f) => !!(f != null && f.syncedLyrics)) || u.find((f) => !!(f != null && f.plainLyrics)) || null;
+    } catch {
+        return null;
+    }
+}
+async function Ow(n, a) {
+    var l;
+    try {
+        const u = await (await fetch(`${n.replace(/\/$/, "")}/songs/${a}/lyrics`)).json();
+        return u != null && u.success && (l = u == null ? void 0 : u.data) != null && l.lyrics
+            ? String(u.data.lyrics)
+            : u != null && u.lyrics
+              ? String(u.lyrics)
+              : null;
+    } catch {
+        return null;
+    }
+}
+function Gc({
+    trackName: n,
+    artistName: a,
+    albumName: l,
+    trackImage: o,
+    duration: u,
+    songId: f,
+    currentTime: m,
+    onSeek: p,
+    fallbackLyricsEndpoint: h,
+    className: v,
+    isOpen: y,
+    onOpenChange: w,
+    mobileOptimized: T = !1,
+    showToggleButton: b = !0,
+    hideTopBar: j = !1,
+    autoEnterFullscreen: S = !1,
+    onAutoEnterFullscreenHandled: k,
+    onPrev: I,
+    onNext: $,
+    onTogglePlay: A,
+    isPlaying: B = !1,
+    isLoading: Y = !1,
+}) {
+    const [ne, K] = g.useState(!1),
+        [le, ee] = g.useState(!1),
+        [re, xe] = g.useState([]),
+        [q, te] = g.useState(null),
+        [F, ge] = g.useState(!1),
+        [O, X] = g.useState(null),
+        [M, se] = g.useState(0),
+        G = g.useRef(null),
+        E = g.useRef(null),
+        U = g.useRef(0),
+        Z = g.useRef(!1),
+        ae = !!n,
+        ue = typeof y == "boolean" ? y : ne,
+        ye = g.useCallback(
+            (de) => {
+                w && w(de), typeof y != "boolean" && K(de);
+            },
+            [y, w]
+        ),
+        Ee = g.useCallback(async () => {
+            if (!ae || !n) return;
+            const de = ++U.current;
+            ge(!0), X(null), xe([]), te(null);
+            try {
+                const Ne = await Fw({ trackName: n, artistName: a, albumName: l, duration: u });
+                if (U.current !== de) return;
+                const Ie = Aw(Ne == null ? void 0 : Ne.syncedLyrics);
+                if (Ie.length > 0) {
+                    xe(Ie), te((Ne == null ? void 0 : Ne.plainLyrics) ?? null);
+                    return;
+                }
+                if (Ne != null && Ne.plainLyrics) {
+                    te(Ne.plainLyrics);
+                    return;
+                }
+                if (h && f) {
+                    const Et = await Ow(h, f);
+                    if (U.current !== de) return;
+                    if (Et) {
+                        const Ht = Et.replace(
+                            /<br\s*\/?>/gi,
+                            `
+`
+                        ).replace(/<[^>]+>/g, "");
+                        te(Ht || Et);
+                        return;
+                    }
+                }
+                X("No lyrics found");
+            } catch {
+                if (U.current !== de) return;
+                X("Failed to load lyrics");
+            } finally {
+                U.current === de && ge(!1);
+            }
+        }, [ae, n, a, l, u, h, f]);
+    g.useEffect(() => {
+        se(0), xe([]), te(null), X(null), ae && Ee();
+    }, [n, a, l, u, f, ae, Ee]),
+        g.useEffect(() => {
+            re.length && se(Lw(re, Number(m || 0)));
+        }, [m, re]),
+        g.useEffect(() => {
+            if (!ue || !re.length) return;
+            const de = E.current;
+            if (!de) return;
+            const Ne = de.querySelector(`[data-lyric-index="${M}"]`);
+            Ne && Ne.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, [ue, re, M]),
+        g.useEffect(() => {
+            const de = () => ee(!!document.fullscreenElement);
+            return (
+                document.addEventListener("fullscreenchange", de),
+                () => document.removeEventListener("fullscreenchange", de)
+            );
+        }, []);
+    const Se = g.useCallback(async () => {
+        var de;
+        try {
+            document.fullscreenElement
+                ? await document.exitFullscreen()
+                : (de = G.current) != null && de.requestFullscreen && (await G.current.requestFullscreen());
+        } catch {}
+    }, []);
+    g.useEffect(() => {
+        if (!S) {
+            Z.current = !1;
+            return;
+        }
+        if (!ue || le || Z.current) return;
+        (Z.current = !0),
+            (async () => {
+                var Ne;
+                try {
+                    (Ne = G.current) != null && Ne.requestFullscreen && (await G.current.requestFullscreen());
+                } catch {
+                } finally {
+                    k && k();
+                }
+            })();
+    }, [S, ue, le, k]);
+    const D = g.useCallback(
+            (de) => {
+                typeof p == "function" && p(de);
+            },
+            [p]
+        ),
+        oe = re.length,
+        je = g.useMemo(() => [a, l].filter(Boolean).join(" - "), [a, l]),
+        ke = Number(m || 0),
+        De = Number(u || 0),
+        Ke = De > 0 ? Math.min(100, Math.max(0, (ke / De) * 100)) : 0;
+    return r.jsxs("div", {
+        ref: G,
+        className: `${v || ""} ${T ? "lf-mobile-opt" : ""}`,
+        children: [
+            r.jsx("style", {
+                children: `
+        .lf-shell {
+          --lf-active: #fc3c44;
+          --lf-active-hi: #ff6b72;
+          --lf-active-deep: #c9182f;
+          --lf-inactive: #a2a7b2;
+          --lf-bg-1: rgba(14,14,16,0.95);
+          --lf-bg-2: rgba(10,10,12,0.98);
+          --lf-border: rgba(255,255,255,0.12);
+          --lf-glass: blur(42px) saturate(1.8);
+          --lf-font: "Golos Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .lf-panel {
+          border: 1px solid var(--lf-border);
+          border-radius: 18px;
+          background: linear-gradient(180deg, var(--lf-bg-1) 0%, var(--lf-bg-2) 100%);
+          color: white;
+          overflow: hidden;
+          box-shadow: 0 24px 70px rgba(0,0,0,0.48);
+          backdrop-filter: var(--lf-glass);
+        }
+
+        .lf-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 12px 14px;
+          border-bottom: 1px solid var(--lf-border);
+          background: rgba(255,255,255,0.03);
+        }
+
+        .lf-controls {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .lf-meta {
+          margin-left: auto;
+          min-width: 0;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          text-align: right;
+        }
+
+        .lf-meta-copy {
+          min-width: 0;
+        }
+
+        .lf-art {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          object-fit: cover;
+          box-shadow: 0 10px 24px rgba(0,0,0,0.34);
+          border: 1px solid rgba(255,255,255,0.14);
+          flex-shrink: 0;
+        }
+
+        .lf-btn {
+          border: 1px solid var(--lf-border);
+          background: rgba(255,255,255,0.05);
+          color: white;
+          border-radius: 999px;
+          padding: 8px 12px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+        }
+
+        .lf-btn:hover {
+          background: rgba(255,255,255,0.12);
+        }
+
+        .lf-content {
+          position: relative;
+        }
+
+        .lf-list {
+          height: min(70vh, 640px);
+          overflow: auto;
+          padding: 18px 16px 16vh 16px;
+          scrollbar-width: thin;
+        }
+
+        .lf-side {
+          display: none;
+        }
+
+        .lf-side-card {
+          border: none;
+          background: rgba(255,255,255,0.03);
+          border-radius: 18px;
+          padding: 16px;
+          backdrop-filter: blur(28px);
+        }
+
+        .lf-side-art {
+          width: 100%;
+          aspect-ratio: 1 / 1;
+          object-fit: cover;
+          border-radius: 14px;
+          border: none;
+          box-shadow: 0 22px 48px rgba(0,0,0,0.34);
+          margin-bottom: 14px;
+        }
+
+        .lf-side-title {
+          margin: 0;
+          font-size: 1.05rem;
+          line-height: 1.2;
+          font-weight: 700;
+          color: rgba(255,255,255,0.96);
+          letter-spacing: -0.01em;
+        }
+
+        .lf-side-subtitle {
+          margin: 6px 0 0;
+          font-size: 0.86rem;
+          line-height: 1.35;
+          color: rgba(255,255,255,0.64);
+          font-weight: 600;
+        }
+
+        .lf-side-progress {
+          margin-top: 14px;
+        }
+
+        .lf-side-bottom {
+          margin-top: 9px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        }
+
+        .lf-side-bar {
+          height: 4px;
+          border-radius: 999px;
+          overflow: hidden;
+          background: rgba(252, 60, 68, 0.22);
+        }
+
+        .lf-side-bar-fill {
+          height: 100%;
+          background: linear-gradient(
+            180deg,
+            var(--lf-active-hi) 0%,
+            var(--lf-active) 56%,
+            var(--lf-active-deep) 100%
+          );
+          border-radius: inherit;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.25),
+            0 0 18px rgba(252, 60, 68, 0.38);
+          transition: width 220ms ease;
+        }
+
+        .lf-side-controls {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-left: auto;
+          gap: 8px;
+        }
+
+        .lf-control-btn {
+          width: 40px;
+          height: 40px;
+          border-radius: 999px;
+          border: none;
+          background: rgba(255,255,255,0.08);
+          color: rgba(255,255,255,0.96);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: transform 140ms ease, background 160ms ease;
+        }
+
+        .lf-control-btn:hover {
+          background: rgba(255,255,255,0.14);
+        }
+
+        .lf-control-btn:active {
+          transform: scale(0.96);
+        }
+
+        .lf-control-btn-main {
+          width: 46px;
+          height: 46px;
+          background: linear-gradient(
+            180deg,
+            var(--lf-active-hi) 0%,
+            var(--lf-active) 58%,
+            var(--lf-active-deep) 100%
+          );
+          color: #fff;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.25),
+            0 8px 22px rgba(252, 60, 68, 0.34);
+        }
+
+        .lf-control-btn-main:hover {
+          background: var(--lf-active);
+          filter: brightness(1.06);
+        }
+
+        .lf-side-times {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.78rem;
+          color: rgba(255,255,255,0.58);
+          font-weight: 600;
+        }
+
+        .lf-line {
+          display: block;
+          width: 100%;
+          text-align: left;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
+          font-family: var(--lf-font);
+          font-size: clamp(1.6rem, 2.2vw, 2.8rem);
+          line-height: 1.08;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          color: var(--lf-inactive);
+          opacity: 0.72;
+          padding: 4px 0;
+          transition: transform 280ms cubic-bezier(0.22,1,0.36,1), opacity 280ms ease, color 280ms ease;
+        }
+
+        .lf-line[data-active="true"] {
+          color: var(--lf-active);
+          background: linear-gradient(
+            180deg,
+            var(--lf-active-hi) 0%,
+            var(--lf-active) 58%,
+            var(--lf-active-deep) 100%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          opacity: 1;
+          transform: scale(1.012) translateZ(0);
+          text-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.16),
+            0 0 20px rgba(252, 60, 68, 0.45),
+            0 10px 20px rgba(0, 0, 0, 0.42);
+        }
+
+        .lf-plain {
+          white-space: pre-wrap;
+          margin: 0;
+          font-family: var(--lf-font);
+          font-size: clamp(1.2rem, 1.8vw, 2rem);
+          font-weight: 600;
+          line-height: 1.5;
+          color: rgba(245,245,247,0.92);
+        }
+
+        .lf-muted {
+          color: rgba(255,255,255,0.62);
+          font-size: 13px;
+          font-weight: 600;
+        }
+
+        .lf-title {
+          font-size: 14px;
+          font-weight: 700;
+          color: rgba(255,255,255,0.95);
+          line-height: 1.2;
+        }
+
+        .lf-inline {
+          max-width: 900px;
+        }
+
+        :fullscreen .lf-panel {
+          border-radius: 0;
+          height: 100vh;
+          width: 100vw;
+          border: 0;
+          box-shadow: none;
+          background: linear-gradient(180deg, rgba(10,10,12,0.96) 0%, rgba(8,8,10,0.99) 100%);
+        }
+
+        :fullscreen .lf-top {
+          padding: 10px 14px;
+          gap: 10px;
+          border-bottom: none;
+          background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+        }
+
+        :fullscreen .lf-controls {
+          gap: 6px;
+        }
+
+        :fullscreen .lf-btn {
+          padding: 6px 10px;
+          font-size: 11px;
+          font-weight: 600;
+          background: rgba(255,255,255,0.02);
+          border-color: transparent;
+        }
+
+        :fullscreen .lf-btn-back {
+          background: rgba(255,255,255,0.08);
+          font-size: 12px;
+          padding: 7px 12px;
+        }
+
+        :fullscreen .lf-meta {
+          gap: 8px;
+        }
+
+        :fullscreen .lf-list {
+          height: calc(100vh - 52px);
+          padding: 9vh max(4vw, 16px) 16vh max(4vw, 16px);
+        }
+
+        :fullscreen .lf-content {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(260px, 24vw);
+          gap: 16px;
+          align-items: stretch;
+          height: calc(100vh - 52px);
+          padding-right: max(2vw, 16px);
+        }
+
+        :fullscreen .lf-side {
+          display: block;
+          padding: max(3.2vh, 20px) 0 max(3.2vh, 20px) 0;
+        }
+
+        :fullscreen .lf-art {
+          width: 56px;
+          height: 56px;
+          border-radius: 14px;
+        }
+
+        :fullscreen .lf-line {
+          font-size: clamp(1.8rem, 2.2vw, 3.2rem);
+          line-height: 1.05;
+        }
+
+        @media (max-width: 767px) {
+          .lf-mobile-opt .lf-panel {
+            border-radius: 14px;
+          }
+
+          .lf-mobile-opt .lf-top {
+            padding: 10px 10px;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .lf-mobile-opt .lf-controls {
+            width: 100%;
+          }
+
+          .lf-mobile-opt .lf-meta {
+            margin-left: 0;
+            width: 100%;
+            justify-content: space-between;
+            text-align: left;
+          }
+
+          .lf-mobile-opt .lf-list {
+            height: min(58vh, 520px);
+            padding: 12px 12px 12vh 12px;
+          }
+
+          .lf-mobile-opt .lf-line {
+            font-size: clamp(1.2rem, 6.3vw, 2rem);
+            line-height: 1.12;
+            letter-spacing: -0.01em;
+            padding: 5px 0;
+          }
+
+          .lf-mobile-opt .lf-plain {
+            font-size: clamp(1rem, 4.6vw, 1.3rem);
+            line-height: 1.45;
+          }
+        }
+      `,
+            }),
+            r.jsx("div", {
+                className: "lf-shell lf-inline",
+                children: r.jsxs("div", {
+                    className: "lf-panel",
+                    children: [
+                        !j &&
+                            r.jsx("div", {
+                                className: "lf-top",
+                                children: le
+                                    ? r.jsx("button", {
+                                          className: "lf-btn lf-btn-back",
+                                          type: "button",
+                                          onClick: Se,
+                                          children: "Back",
+                                      })
+                                    : r.jsxs(r.Fragment, {
+                                          children: [
+                                              r.jsxs("div", {
+                                                  className: "lf-controls",
+                                                  children: [
+                                                      b &&
+                                                          r.jsx("button", {
+                                                              className: "lf-btn",
+                                                              type: "button",
+                                                              onClick: () => ye(!ue),
+                                                              children: ue ? "Hide Lyrics" : "Show Lyrics",
+                                                          }),
+                                                      ue &&
+                                                          r.jsx("button", {
+                                                              className: "lf-btn",
+                                                              type: "button",
+                                                              onClick: Se,
+                                                              children: "Fullscreen",
+                                                          }),
+                                                      !F &&
+                                                          r.jsx("button", {
+                                                              className: "lf-btn",
+                                                              type: "button",
+                                                              onClick: () => void Ee(),
+                                                              children: "Refresh",
+                                                          }),
+                                                  ],
+                                              }),
+                                              r.jsxs("div", {
+                                                  className: "lf-meta",
+                                                  children: [
+                                                      o &&
+                                                          r.jsx("img", {
+                                                              src: o,
+                                                              alt: "Track artwork",
+                                                              className: "lf-art",
+                                                          }),
+                                                      r.jsxs("div", {
+                                                          className: "lf-meta-copy",
+                                                          children: [
+                                                              r.jsx("div", {
+                                                                  className: "lf-title",
+                                                                  children: n || "No track selected",
+                                                              }),
+                                                              r.jsx("div", {
+                                                                  className: "lf-muted",
+                                                                  children: je || "Lyrics",
+                                                              }),
+                                                          ],
+                                                      }),
+                                                  ],
+                                              }),
+                                          ],
+                                      }),
+                            }),
+                        ue &&
+                            r.jsxs("div", {
+                                className: "lf-content",
+                                children: [
+                                    r.jsx("div", {
+                                        ref: E,
+                                        className: "lf-list",
+                                        children: F
+                                            ? r.jsx("div", { className: "lf-muted", children: "Loading lyrics..." })
+                                            : O
+                                              ? r.jsx("div", { className: "lf-muted", children: O })
+                                              : oe > 0
+                                                ? r.jsx("div", {
+                                                      children: re.map((de, Ne) =>
+                                                          r.jsx(
+                                                              "button",
+                                                              {
+                                                                  "data-lyric-index": Ne,
+                                                                  "data-active": Ne === M,
+                                                                  className: "lf-line",
+                                                                  type: "button",
+                                                                  onClick: () => D(de.time),
+                                                                  title: `Seek to ${Math.floor(de.time)}s`,
+                                                                  children: de.text || "♪",
+                                                              },
+                                                              `${de.time}-${Ne}`
+                                                          )
+                                                      ),
+                                                  })
+                                                : q
+                                                  ? r.jsx("pre", { className: "lf-plain", children: q })
+                                                  : r.jsx("div", {
+                                                        className: "lf-muted",
+                                                        children: "No lyrics found",
+                                                    }),
+                                    }),
+                                    r.jsx("aside", {
+                                        className: "lf-side",
+                                        "aria-hidden": !le,
+                                        children: r.jsxs("div", {
+                                            className: "lf-side-card",
+                                            children: [
+                                                o &&
+                                                    r.jsx("img", {
+                                                        src: o,
+                                                        alt: "Track artwork",
+                                                        className: "lf-side-art",
+                                                    }),
+                                                r.jsx("h3", {
+                                                    className: "lf-side-title",
+                                                    children: n || "No track selected",
+                                                }),
+                                                r.jsx("p", { className: "lf-side-subtitle", children: je || "Lyrics" }),
+                                                r.jsxs("div", {
+                                                    className: "lf-side-progress",
+                                                    children: [
+                                                        r.jsx("div", {
+                                                            className: "lf-side-bar",
+                                                            role: "progressbar",
+                                                            "aria-valuemin": 0,
+                                                            "aria-valuemax": 100,
+                                                            "aria-valuenow": Math.round(Ke),
+                                                            children: r.jsx("div", {
+                                                                className: "lf-side-bar-fill",
+                                                                style: { width: `${Ke}%` },
+                                                            }),
+                                                        }),
+                                                        r.jsxs("div", {
+                                                            className: "lf-side-bottom",
+                                                            children: [
+                                                                r.jsxs("div", {
+                                                                    className: "lf-side-times",
+                                                                    children: [
+                                                                        r.jsx("span", { children: Xm(ke) }),
+                                                                        r.jsx("span", { children: Xm(De) }),
+                                                                    ],
+                                                                }),
+                                                                r.jsxs("div", {
+                                                                    className: "lf-side-controls",
+                                                                    children: [
+                                                                        r.jsx("button", {
+                                                                            type: "button",
+                                                                            className: "lf-control-btn",
+                                                                            onClick: I,
+                                                                            title: "Previous",
+                                                                            children: r.jsx(ti, { size: 19 }),
+                                                                        }),
+                                                                        r.jsx("button", {
+                                                                            type: "button",
+                                                                            className:
+                                                                                "lf-control-btn lf-control-btn-main",
+                                                                            onClick: A,
+                                                                            title: B ? "Pause" : "Play",
+                                                                            children: Y
+                                                                                ? r.jsx(ha, {
+                                                                                      size: 18,
+                                                                                      className: "animate-spin",
+                                                                                  })
+                                                                                : B
+                                                                                  ? r.jsx(or, { size: 18 })
+                                                                                  : r.jsx(ht, {
+                                                                                        size: 18,
+                                                                                        style: { marginLeft: 2 },
+                                                                                    }),
+                                                                        }),
+                                                                        r.jsx("button", {
+                                                                            type: "button",
+                                                                            className: "lf-control-btn",
+                                                                            onClick: $,
+                                                                            title: "Next",
+                                                                            children: r.jsx(pa, { size: 19 }),
+                                                                        }),
+                                                                    ],
+                                                                }),
+                                                            ],
+                                                        }),
+                                                    ],
+                                                }),
+                                            ],
+                                        }),
+                                    }),
+                                ],
+                            }),
+                    ],
+                }),
+            }),
+        ],
+    });
+}
+function Ah(n) {
+    return _e({
+        attr: { viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fillRule: "evenodd",
+                    d: "M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z",
+                    clipRule: "evenodd",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Lh(n) {
+    return _e({
+        attr: { viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true" },
+        child: [
+            {
+                tag: "path",
+                attr: {
+                    fillRule: "evenodd",
+                    d: "M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z",
+                    clipRule: "evenodd",
+                },
+                child: [],
+            },
+        ],
+    })(n);
+}
+function Zm(n) {
+    if (!n || isNaN(n)) return "0:00";
+    const a = Math.floor(n / 60),
+        l = Math.floor(n % 60);
+    return `${a}:${l.toString().padStart(2, "0")}`;
+}
+function Iw() {
+    var Ee, Se, D, oe, je, ke, De, Ke;
+    const n = xt(),
+        l = jn().pathname === "/player",
+        {
+            currentTrack: o,
+            isPlaying: u,
+            isLoading: f,
+            progress: m,
+            duration: p,
+            volume: h,
+            showVideo: v,
+            shuffle: y,
+            repeat: w,
+            showQueue: T,
+            queue: b,
+            queueIndex: j,
+            togglePlay: S,
+            playNext: k,
+            playPrev: I,
+            playTrack: $,
+            seekTo: A,
+            setVolume: B,
+            setShowVideo: Y,
+            setPlayerMode: ne,
+            toggleShuffle: K,
+            toggleRepeat: le,
+            setShowQueue: ee,
+            removeFromQueue: re,
+            clearQueue: xe,
+        } = Tt(),
+        { isPinned: q, togglePin: te } = fr(),
+        { isAuthenticated: F, openAuthModal: ge } = gt(),
+        { isFavorited: O, toggleFavorite: X } = mr(),
+        [M, se] = g.useState(!1),
+        [G, E] = g.useState(!1),
+        U = o ? O(o.id) : !1,
+        Z = () => {
+            if (!F) {
+                ge();
+                return;
+            }
+            o && (U || (se(!0), setTimeout(() => se(!1), 300)), X(o));
+        },
+        ae = p > 0 ? (m / p) * 100 : 0;
+    if (l || !o) return null;
+    const ue =
+            ((Ee = o.artists) == null
+                ? void 0
+                : Ee.filter((de) => de.name && de.name !== "Unknown")
+                      .map((de) => de.name)
+                      .join(", ")) || "",
+        ye = b.length > 0 ? b.slice(j + 1).concat(b.slice(0, j)) : [];
+    return r.jsxs(r.Fragment, {
+        children: [
+            v &&
+                r.jsx("div", {
+                    className: "fixed right-4 bottom-24 w-[320px] z-[70] hidden lg:block pointer-events-none",
+                    children: r.jsx("div", {
+                        className: "relative h-[180px] group pointer-events-auto",
+                        children: r.jsxs("div", {
+                            className:
+                                "absolute inset-0 z-10 flex items-start justify-between px-2 py-1 bg-gradient-to-b from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl",
+                            children: [
+                                r.jsx("span", {
+                                    className: "text-[10px] text-white/80 truncate max-w-[200px] mt-0.5",
+                                    children: o.name,
+                                }),
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-1.5 ml-2",
+                                    children: [
+                                        r.jsx("button", {
+                                            onClick: () => n("/player"),
+                                            className: "text-white/80 hover:text-white",
+                                            children: r.jsx(bc, { size: 14 }),
+                                        }),
+                                        r.jsx("button", {
+                                            onClick: () => {
+                                                Y(!1), ne("hidden");
+                                            },
+                                            className: "text-white/80 hover:text-white",
+                                            children: r.jsx(en, { size: 16 }),
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }),
+                    }),
+                }),
+            T &&
+                r.jsxs("div", {
+                    className:
+                        "am-player-surface fixed right-0 bottom-20 w-80 max-h-[60vh] border rounded-tl-xl shadow-2xl z-[80] flex flex-col overflow-hidden",
+                    children: [
+                        r.jsxs("div", {
+                            className: "flex items-center justify-between p-4 border-b border-am-line",
+                            children: [
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-2",
+                                    children: [
+                                        r.jsx(lr, { size: 20, className: "text-am-dark" }),
+                                        r.jsx("h3", { className: "font-bold text-am-dark text-sm", children: "Queue" }),
+                                        r.jsxs("span", {
+                                            className: "text-xs text-am-gray",
+                                            children: ["(", b.length, ")"],
+                                        }),
+                                    ],
+                                }),
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-2",
+                                    children: [
+                                        ye.length > 0 &&
+                                            r.jsx("button", {
+                                                onClick: xe,
+                                                className: "text-xs text-am-gray hover:text-am-red",
+                                                children: "Clear",
+                                            }),
+                                        r.jsx("button", {
+                                            onClick: () => ee(!1),
+                                            className: "text-am-gray hover:text-am-dark",
+                                            children: r.jsx(en, { size: 18 }),
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }),
+                        r.jsxs("div", {
+                            className: "p-3 bg-am-bg",
+                            children: [
+                                r.jsx("p", {
+                                    className: "text-[10px] uppercase tracking-wider text-am-muted mb-2",
+                                    children: "Now playing",
+                                }),
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-3",
+                                    children: [
+                                        r.jsx($e, {
+                                            src: _r((Se = o.album) == null ? void 0 : Se.images) || o.image,
+                                            alt: "",
+                                            className: "w-9 h-9 rounded object-cover",
+                                        }),
+                                        r.jsxs("div", {
+                                            className: "min-w-0 flex-1",
+                                            children: [
+                                                r.jsx("p", {
+                                                    className: "text-sm text-am-red font-medium truncate",
+                                                    children: o.name,
+                                                }),
+                                                r.jsx("p", {
+                                                    className: "text-xs text-am-gray truncate",
+                                                    children: ue,
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }),
+                        r.jsx("div", {
+                            className: "flex-1 overflow-y-auto",
+                            children:
+                                ye.length > 0
+                                    ? r.jsxs(r.Fragment, {
+                                          children: [
+                                              r.jsxs("p", {
+                                                  className:
+                                                      "text-[10px] uppercase tracking-wider text-am-muted px-3 pt-3 pb-1",
+                                                  children: ["Next up (", ye.length, ")"],
+                                              }),
+                                              ye.map((de, Ne) => {
+                                                  const Ie = (j + 1 + Ne) % b.length;
+                                                  return r.jsx(
+                                                      "div",
+                                                      {
+                                                          className: "px-2",
+                                                          children: r.jsx(Yc, {
+                                                              track: de,
+                                                              index: Ne,
+                                                              actualIdx: Ie,
+                                                              onRemove: re,
+                                                          }),
+                                                      },
+                                                      `${de.id}-${Ne}`
+                                                  );
+                                              }),
+                                          ],
+                                      })
+                                    : r.jsx("p", {
+                                          className: "text-sm text-am-muted text-center py-8",
+                                          children: "Queue is empty",
+                                      }),
+                        }),
+                    ],
+                }),
+            G &&
+                r.jsxs("div", {
+                    className: `am-player-surface fixed bottom-20 w-[360px] max-h-[68vh] border rounded-tl-xl shadow-2xl z-[80] hidden md:flex flex-col overflow-hidden ${T ? "right-80" : "right-0"}`,
+                    children: [
+                        r.jsxs("div", {
+                            className: "flex items-center justify-between px-4 py-3 border-b border-am-line",
+                            children: [
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-2 min-w-0",
+                                    children: [
+                                        r.jsx(ua, { size: 18, className: "text-am-red" }),
+                                        r.jsx("h3", {
+                                            className: "font-bold text-am-dark text-sm",
+                                            children: "Lyrics",
+                                        }),
+                                        r.jsx("span", {
+                                            className: "text-xs text-am-muted truncate",
+                                            children: o.name,
+                                        }),
+                                    ],
+                                }),
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-2",
+                                    children: [
+                                        r.jsx("button", {
+                                            onClick: () => {
+                                                E(!1), n("/player", { state: { openLyricsFullscreen: !0 } });
+                                            },
+                                            className: "text-am-gray hover:text-am-dark",
+                                            title: "Open lyrics in fullscreen",
+                                            children: r.jsx(bc, { size: 18 }),
+                                        }),
+                                        r.jsx("button", {
+                                            onClick: () => E(!1),
+                                            className: "text-am-gray hover:text-am-dark",
+                                            children: r.jsx(en, { size: 18 }),
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }),
+                        r.jsx("div", {
+                            className: "flex-1 min-h-0",
+                            children: r.jsx(Gc, {
+                                trackName: o == null ? void 0 : o.name,
+                                artistName:
+                                    (oe = (D = o == null ? void 0 : o.artists) == null ? void 0 : D[0]) == null
+                                        ? void 0
+                                        : oe.name,
+                                albumName: (je = o == null ? void 0 : o.album) == null ? void 0 : je.name,
+                                trackImage:
+                                    _r((ke = o == null ? void 0 : o.album) == null ? void 0 : ke.images) ||
+                                    (o == null ? void 0 : o.image),
+                                duration: Number(
+                                    p ||
+                                        ((o == null ? void 0 : o.duration_ms) || 0) / 1e3 ||
+                                        (o == null ? void 0 : o.duration) ||
+                                        0
+                                ),
+                                songId: o == null ? void 0 : o.id,
+                                currentTime: m,
+                                onSeek: A,
+                                fallbackLyricsEndpoint: void 0,
+                                isOpen: !0,
+                                className: "w-full h-full",
+                                showToggleButton: !1,
+                                hideTopBar: !0,
+                                onPrev: I,
+                                onNext: k,
+                                onTogglePlay: S,
+                                isPlaying: u,
+                                isLoading: f,
+                            }),
+                        }),
+                    ],
+                }),
+            r.jsxs("footer", {
+                className: "am-player-surface md:hidden h-[64px] border-t flex flex-col relative z-50",
+                children: [
+                    r.jsxs("div", {
+                        className: "flex items-center w-full px-3 py-2 flex-1",
+                        onClick: () => n("/player"),
+                        children: [
+                            r.jsx($e, {
+                                src: _r((De = o.album) == null ? void 0 : De.images) || o.image,
+                                alt: "",
+                                className: "w-10 h-10 rounded-md object-cover flex-shrink-0",
+                            }),
+                            r.jsxs("div", {
+                                className: "min-w-0 flex-1 mx-3",
+                                children: [
+                                    r.jsx("p", {
+                                        className: "text-sm text-am-dark font-medium truncate",
+                                        children: o.name,
+                                    }),
+                                    r.jsx("p", { className: "text-xs text-am-gray truncate", children: ue }),
+                                ],
+                            }),
+                            r.jsx("button", {
+                                onClick: (de) => {
+                                    de.stopPropagation(), S();
+                                },
+                                className: "w-8 h-8 flex items-center justify-center flex-shrink-0",
+                                children: f
+                                    ? r.jsx(ha, { size: 20, className: "text-am-dark animate-spin" })
+                                    : u
+                                      ? r.jsx(or, { size: 20, className: "text-am-dark" })
+                                      : r.jsx(ht, { size: 20, className: "text-am-dark" }),
+                            }),
+                            r.jsx("button", {
+                                onClick: (de) => {
+                                    de.stopPropagation(), k();
+                                },
+                                className: "w-8 h-8 flex items-center justify-center text-am-gray flex-shrink-0",
+                                children: r.jsx(pa, { size: 18 }),
+                            }),
+                        ],
+                    }),
+                    r.jsx("div", {
+                        className: "w-full px-3 -mt-1",
+                        children: r.jsx("div", {
+                            className: "w-full h-0.5 bg-am-line rounded-full",
+                            onClick: (de) => {
+                                de.stopPropagation();
+                                const Ne = de.currentTarget.getBoundingClientRect();
+                                A(((de.clientX - Ne.left) / Ne.width) * p);
+                            },
+                            children: r.jsx("div", {
+                                className: "h-full bg-am-red rounded-full",
+                                style: { width: `${ae}%` },
+                            }),
+                        }),
+                    }),
+                ],
+            }),
+            r.jsxs("footer", {
+                className: "am-player-surface hidden md:flex h-16 border-t items-center px-4 relative z-50",
+                children: [
+                    r.jsxs("div", {
+                        className:
+                            "flex items-center gap-3 w-[280px] min-w-[200px] flex-shrink-0 cursor-pointer group/info",
+                        onClick: () => n("/player"),
+                        children: [
+                            r.jsx($e, {
+                                src: _r((Ke = o.album) == null ? void 0 : Ke.images) || o.image,
+                                alt: "",
+                                className: "w-11 h-11 rounded-md object-cover flex-shrink-0",
+                            }),
+                            r.jsxs("div", {
+                                className: "min-w-0",
+                                children: [
+                                    r.jsx("p", {
+                                        className:
+                                            "text-sm text-am-dark font-medium truncate group-hover/info:underline",
+                                        children: o.name,
+                                    }),
+                                    r.jsx("p", { className: "text-xs text-am-gray truncate", children: ue }),
+                                ],
+                            }),
+                            r.jsx("button", {
+                                onClick: (de) => {
+                                    de.stopPropagation(), Z();
+                                },
+                                className: "ml-1 flex-shrink-0 p-1",
+                                children: U
+                                    ? r.jsx(cr, { size: 14, className: `text-am-red ${M ? "animate-heart-pop" : ""}` })
+                                    : r.jsx(fn, { size: 14, className: "text-am-muted hover:text-am-red" }),
+                            }),
+                        ],
+                    }),
+                    r.jsxs("div", {
+                        className: "flex-1 flex flex-col items-center gap-1 max-w-xl mx-auto",
+                        children: [
+                            r.jsxs("div", {
+                                className: "flex items-center gap-5",
+                                children: [
+                                    r.jsx("button", {
+                                        onClick: K,
+                                        className: y ? "text-am-red" : "text-am-muted hover:text-am-dark",
+                                        children: r.jsx(ir, { size: 14 }),
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: I,
+                                        className: "text-am-gray hover:text-am-dark",
+                                        children: r.jsx(ti, { size: 20 }),
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: S,
+                                        className:
+                                            "w-8 h-8 bg-am-dark rounded-full flex items-center justify-center hover:scale-105 transition-transform",
+                                        children: f
+                                            ? r.jsx(ha, { size: 18, className: "text-white animate-spin" })
+                                            : u
+                                              ? r.jsx(or, { size: 18, className: "text-white" })
+                                              : r.jsx(ht, { size: 18, className: "text-white ml-0.5" }),
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: k,
+                                        className: "text-am-gray hover:text-am-dark",
+                                        children: r.jsx(pa, { size: 20 }),
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: le,
+                                        className: w !== "off" ? "text-am-red" : "text-am-muted hover:text-am-dark",
+                                        children: w === "one" ? r.jsx($c, { size: 14 }) : r.jsx(Bc, { size: 14 }),
+                                    }),
+                                ],
+                            }),
+                            r.jsxs("div", {
+                                className: "w-full flex items-center gap-2",
+                                children: [
+                                    r.jsx("span", {
+                                        className: "text-[11px] text-am-muted w-10 text-right",
+                                        children: Zm(m),
+                                    }),
+                                    r.jsx("div", {
+                                        className: "flex-1 h-1 bg-am-line rounded-full cursor-pointer group relative",
+                                        onClick: (de) => {
+                                            const Ne = de.currentTarget.getBoundingClientRect();
+                                            A(((de.clientX - Ne.left) / Ne.width) * p);
+                                        },
+                                        children: r.jsx("div", {
+                                            className: "h-full bg-am-red rounded-full relative",
+                                            style: { width: `${ae}%` },
+                                            children: r.jsx("div", {
+                                                className:
+                                                    "absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-am-red rounded-full opacity-0 group-hover:opacity-100",
+                                            }),
+                                        }),
+                                    }),
+                                    r.jsx("span", { className: "text-[11px] text-am-muted w-10", children: Zm(p) }),
+                                ],
+                            }),
+                        ],
+                    }),
+                    r.jsxs("div", {
+                        className: "flex items-center gap-3 w-[280px] min-w-[200px] justify-end flex-shrink-0",
+                        children: [
+                            r.jsx("button", {
+                                onClick: () => o && ys(o),
+                                className: "text-am-muted hover:text-am-dark",
+                                title: "Add to Playlist",
+                                children: r.jsx(bn, { size: 18 }),
+                            }),
+                            r.jsx("button", {
+                                onClick: () => n("/player"),
+                                className: "text-am-muted hover:text-am-dark",
+                                children: r.jsx(bc, { size: 18 }),
+                            }),
+                            r.jsxs("button", {
+                                onClick: () => ee(!T),
+                                className: `relative ${T ? "text-am-red" : "text-am-muted hover:text-am-dark"}`,
+                                children: [
+                                    r.jsx(lr, { size: 18 }),
+                                    b.length > 0 &&
+                                        r.jsx("span", {
+                                            className:
+                                                "absolute -top-1.5 -right-1.5 bg-am-red text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center",
+                                            children: b.length > 99 ? "99" : b.length,
+                                        }),
+                                ],
+                            }),
+                            r.jsx("button", {
+                                onClick: () => {
+                                    E((de) => {
+                                        const Ne = !de;
+                                        return Ne && ee(!1), Ne;
+                                    });
+                                },
+                                className: G ? "text-am-red" : "text-am-muted hover:text-am-dark",
+                                title: "Lyrics",
+                                children: r.jsx(ua, { size: 18 }),
+                            }),
+                            r.jsx("button", {
+                                onClick: () => {
+                                    v ? (Y(!1), ne("hidden")) : (Y(!0), ne("pip"));
+                                },
+                                className: v ? "text-am-red" : "text-am-muted hover:text-am-dark",
+                                children: r.jsx($0, { size: 18 }),
+                            }),
+                            r.jsx("button", {
+                                onClick: () => B(h === 0 ? 80 : 0),
+                                className: "text-am-muted hover:text-am-dark",
+                                children: h === 0 ? r.jsx(Lh, { size: 18 }) : r.jsx(Ah, { size: 18 }),
+                            }),
+                            r.jsx("div", {
+                                className: "w-24 h-1 bg-am-line rounded-full cursor-pointer group",
+                                onClick: (de) => {
+                                    const Ne = de.currentTarget.getBoundingClientRect();
+                                    B(
+                                        Math.max(
+                                            0,
+                                            Math.min(100, Math.round(((de.clientX - Ne.left) / Ne.width) * 100))
+                                        )
+                                    );
+                                },
+                                children: r.jsx("div", {
+                                    className: "h-full bg-am-red rounded-full",
+                                    style: { width: `${h}%` },
+                                }),
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function Mw() {
+    const { isAuthenticated: n } = gt();
+    return r.jsxs("nav", {
+        className:
+            "md:hidden flex items-center justify-around bg-white border-t border-am-line py-2 px-4 flex-shrink-0",
+        children: [
+            r.jsx($t, {
+                to: "/",
+                end: !0,
+                className: ({ isActive: a }) =>
+                    `flex flex-col items-center gap-0.5 text-[10px] font-medium ${a ? "text-am-red" : "text-am-gray"}`,
+                children: ({ isActive: a }) =>
+                    r.jsxs(r.Fragment, { children: [a ? r.jsx(Ip, { size: 22 }) : r.jsx(Mp, { size: 22 }), "Home"] }),
+            }),
+            r.jsxs($t, {
+                to: "/search",
+                className: ({ isActive: a }) =>
+                    `flex flex-col items-center gap-0.5 text-[10px] font-medium ${a ? "text-am-red" : "text-am-gray"}`,
+                children: [r.jsx(Zl, { size: 22 }), "Search"],
+            }),
+            r.jsxs($t, {
+                to: n ? "/profile" : "/library?tab=favorites",
+                className: ({ isActive: a }) =>
+                    `flex flex-col items-center gap-0.5 text-[10px] font-medium ${a ? "text-am-red" : "text-am-gray"}`,
+                children: [r.jsx(Xl, { size: 22 }), n ? "Profile" : "Saved"],
+            }),
+            r.jsxs($t, {
+                to: "/library",
+                className: ({ isActive: a }) =>
+                    `flex flex-col items-center gap-0.5 text-[10px] font-medium ${a ? "text-am-red" : "text-am-gray"}`,
+                children: [r.jsx(Dp, { size: 22 }), "Library"],
+            }),
+        ],
+    });
+}
+function Dw() {
+    const n = new Date().getFullYear();
+    return r.jsx("footer", {
+        className: "border-t border-am-line mt-10 pt-8 pb-6",
+        children: r.jsxs("div", {
+            className: "max-w-6xl mx-auto",
+            children: [
+                r.jsxs("div", {
+                    className: "flex flex-col md:flex-row gap-8 md:gap-16 mb-8",
+                    children: [
+                        r.jsxs("div", {
+                            className: "md:max-w-[200px] flex-shrink-0",
+                            children: [
+                                r.jsxs("div", {
+                                    className: "flex items-center gap-1.5 mb-2",
+                                    children: [
+                                        r.jsx("img", { src: "/icon-192.svg", alt: "TuneFree", className: "w-4 h-4" }),
+                                        r.jsx("span", {
+                                            className: "text-sm font-bold text-am-dark",
+                                            children: "TuneFree",
+                                        }),
+                                    ],
+                                }),
+                                r.jsx("p", {
+                                    className: "text-xs text-am-gray leading-relaxed",
+                                    children: "Free music streaming. Millions of songs, zero cost.",
+                                }),
+                            ],
+                        }),
+                        r.jsxs("div", {
+                            className: "grid grid-cols-3 gap-8 flex-1",
+                            children: [
+                                r.jsxs("div", {
+                                    children: [
+                                        r.jsx("h4", {
+                                            className:
+                                                "text-xs font-semibold text-am-dark uppercase tracking-wider mb-2.5",
+                                            children: "Discover",
+                                        }),
+                                        r.jsxs("ul", {
+                                            className: "space-y-1.5",
+                                            children: [
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Home",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/new",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "New Releases",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/search",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Search",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/search?q=trending+songs",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Trending",
+                                                    }),
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                }),
+                                r.jsxs("div", {
+                                    children: [
+                                        r.jsx("h4", {
+                                            className:
+                                                "text-xs font-semibold text-am-dark uppercase tracking-wider mb-2.5",
+                                            children: "Genres",
+                                        }),
+                                        r.jsxs("ul", {
+                                            className: "space-y-1.5",
+                                            children: [
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/search?q=pop+hits",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Pop",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/search?q=hip+hop+hits",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Hip-Hop",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/search?q=rock+hits",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Rock",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/search?q=jazz+music",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Jazz",
+                                                    }),
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                }),
+                                r.jsxs("div", {
+                                    children: [
+                                        r.jsx("h4", {
+                                            className:
+                                                "text-xs font-semibold text-am-dark uppercase tracking-wider mb-2.5",
+                                            children: "Company",
+                                        }),
+                                        r.jsxs("ul", {
+                                            className: "space-y-1.5",
+                                            children: [
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/about",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "About",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/contact",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Contact",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/privacy",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Privacy",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/terms",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Terms",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/dmca",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "DMCA",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/faq",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "FAQ",
+                                                    }),
+                                                }),
+                                                r.jsx("li", {
+                                                    children: r.jsx(st, {
+                                                        to: "/editorial-policy",
+                                                        className:
+                                                            "text-xs text-am-gray hover:text-am-red transition-colors",
+                                                        children: "Editorial Policy",
+                                                    }),
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+                r.jsxs("div", {
+                    className:
+                        "border-t border-am-line pt-4 flex flex-col md:flex-row items-center justify-between gap-2",
+                    children: [
+                        r.jsxs("p", { className: "text-[11px] text-am-muted", children: ["© ", n, " TuneFree."] }),
+                        r.jsxs("div", {
+                            className: "flex items-center gap-3",
+                            children: [
+                                r.jsx(st, {
+                                    to: "/privacy",
+                                    className: "text-[11px] text-am-muted hover:text-am-gray transition-colors",
+                                    children: "Privacy",
+                                }),
+                                r.jsx("span", { className: "text-am-line", children: "·" }),
+                                r.jsx(st, {
+                                    to: "/terms",
+                                    className: "text-[11px] text-am-muted hover:text-am-gray transition-colors",
+                                    children: "Terms",
+                                }),
+                                r.jsx("span", { className: "text-am-line", children: "·" }),
+                                r.jsx(st, {
+                                    to: "/dmca",
+                                    className: "text-[11px] text-am-muted hover:text-am-gray transition-colors",
+                                    children: "DMCA",
+                                }),
+                                r.jsx("span", { className: "text-am-line", children: "·" }),
+                                r.jsx(st, {
+                                    to: "/faq",
+                                    className: "text-[11px] text-am-muted hover:text-am-gray transition-colors",
+                                    children: "FAQ",
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+                r.jsx("div", {
+                    className: "border-t border-am-line mt-4 pt-3",
+                    children: r.jsx("p", {
+                        className: "text-[11px] text-am-muted leading-relaxed",
+                        children:
+                            "TuneFree is built for ads free music discovery, online music streaming, and free music listening with a fast online music player. Explore playlists, artists, albums, trending songs, and new releases, then preview tracks with video previews and open synced lyrics. Personalization by country improves recommendations, while smart queue, favorites, and user playlists create a smooth, great user experience across desktop and mobile.",
+                    }),
+                }),
+                r.jsx("div", {
+                    className: "md:hidden border-t border-am-line mt-4 pt-3",
+                    children: r.jsx("p", {
+                        className: "text-xs text-am-gray leading-relaxed",
+                        children:
+                            "Tip: TuneFree works on mobile, but the best experience is on desktop with larger lyrics view, easier queue control, and faster multitasking.",
+                    }),
+                }),
+            ],
+        }),
+    });
+}
+const Uw = "613684382600-c0rjoakqb58tp9heqo1f1a2fvq8vh64t.apps.googleusercontent.com";
+function Bw({ onSuccess: n, onError: a }) {
+    const l = g.useRef(null),
+        o = g.useRef(!1);
+    return (
+        g.useEffect(() => {
+            var m, p;
+            if (o.current) return;
+            const u = () => {
+                var h, v;
+                !((v = (h = window.google) == null ? void 0 : h.accounts) != null && v.id) ||
+                    !l.current ||
+                    ((o.current = !0),
+                    window.google.accounts.id.initialize({
+                        client_id: Uw,
+                        callback: (y) => {
+                            y.credential ? n(y.credential) : a == null || a("No credential returned");
+                        },
+                    }),
+                    window.google.accounts.id.renderButton(l.current, {
+                        type: "standard",
+                        theme: "outline",
+                        size: "large",
+                        width: l.current.offsetWidth,
+                        text: "continue_with",
+                        shape: "rectangular",
+                        logo_alignment: "center",
+                    }));
+            };
+            if ((p = (m = window.google) == null ? void 0 : m.accounts) != null && p.id) {
+                u();
+                return;
+            }
+            const f = document.createElement("script");
+            return (
+                (f.src = "https://accounts.google.com/gsi/client"),
+                (f.async = !0),
+                (f.defer = !0),
+                (f.onload = u),
+                document.head.appendChild(f),
+                () => {
+                    o.current = !1;
+                }
+            );
+        }, [n, a]),
+        r.jsx("div", { ref: l, className: "w-full" })
+    );
+}
+function $w() {
+    const { authModal: n, closeAuthModal: a, googleLogin: l } = gt(),
+        [o, u] = g.useState(""),
+        [f, m] = g.useState(!1),
+        p = g.useCallback(
+            async (h) => {
+                var v, y;
+                u(""), m(!0);
+                try {
+                    await l(h), a();
+                } catch (w) {
+                    u(
+                        ((y = (v = w.response) == null ? void 0 : v.data) == null ? void 0 : y.error) ||
+                            "Google sign-in failed"
+                    );
+                } finally {
+                    m(!1);
+                }
+            },
+            [l, a]
+        );
+    return n
+        ? r.jsx("div", {
+              className: "fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4",
+              onClick: a,
+              children: r.jsxs("div", {
+                  className: "bg-white rounded-2xl w-full max-w-sm shadow-2xl",
+                  onClick: (h) => h.stopPropagation(),
+                  children: [
+                      r.jsxs("div", {
+                          className: "flex items-center justify-between p-5 pb-0",
+                          children: [
+                              r.jsxs("div", {
+                                  className: "flex items-center gap-2",
+                                  children: [
+                                      r.jsx("img", { src: "/icon-192.svg", alt: "TuneFree", className: "w-6 h-6" }),
+                                      r.jsx("span", {
+                                          className: "text-lg font-bold text-am-dark",
+                                          children: "TuneFree",
+                                      }),
+                                  ],
+                              }),
+                              r.jsx("button", {
+                                  onClick: a,
+                                  className: "text-am-gray hover:text-am-dark p-1",
+                                  children: r.jsx(en, { size: 20 }),
+                              }),
+                          ],
+                      }),
+                      r.jsxs("div", {
+                          className: "p-5",
+                          children: [
+                              r.jsx("h2", {
+                                  className: "text-xl font-bold text-am-dark mb-1",
+                                  children: "Continue with Google",
+                              }),
+                              r.jsx("p", {
+                                  className: "text-sm text-am-gray mb-5",
+                                  children: "Sign in to sync your playlists, favorites, and feedback across devices.",
+                              }),
+                              o &&
+                                  r.jsx("div", {
+                                      className: "bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg mb-4",
+                                      children: o,
+                                  }),
+                              r.jsx(Bw, { onSuccess: p, onError: (h) => u(h) }),
+                              f &&
+                                  r.jsx("p", {
+                                      className: "mt-4 text-sm text-am-gray text-center",
+                                      children: "Please wait...",
+                                  }),
+                          ],
+                      }),
+                  ],
+              }),
+          })
+        : null;
+}
+function Hw() {
+    if (typeof window > "u") return !1;
+    const n = window.navigator.userAgent,
+        a = /iPad|iPhone|iPod/.test(n),
+        l = /WebKit/.test(n),
+        o = /CriOS/.test(n);
+    return a && l && !o;
+}
+function ep() {
+    return typeof window > "u"
+        ? !1
+        : window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === !0;
+}
+function qw() {
+    const [n, a] = g.useState(null),
+        [l, o] = g.useState(() => {
+            try {
+                return sessionStorage.getItem("tunefree_install_banner_dismissed") === "1";
+            } catch {
+                return !1;
+            }
+        }),
+        u = g.useMemo(() => Hw() && !ep(), []);
+    if (
+        (g.useEffect(() => {
+            const p = (v) => {
+                    v.preventDefault(), a(v);
+                },
+                h = () => {
+                    a(null), o(!0);
+                };
+            return (
+                window.addEventListener("beforeinstallprompt", p),
+                window.addEventListener("appinstalled", h),
+                () => {
+                    window.removeEventListener("beforeinstallprompt", p), window.removeEventListener("appinstalled", h);
+                }
+            );
+        }, []),
+        l || ep() || (!n && !u))
+    )
+        return null;
+    const f = () => {
+            o(!0);
+            try {
+                sessionStorage.setItem("tunefree_install_banner_dismissed", "1");
+            } catch {}
+        },
+        m = async () => {
+            if (n) {
+                n.prompt();
+                try {
+                    await n.userChoice;
+                } catch {}
+                a(null);
+            }
+        };
+    return r.jsx("div", {
+        className:
+            "mb-4 rounded-2xl border border-am-line bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75 px-4 py-3 shadow-sm",
+        children: r.jsxs("div", {
+            className: "flex items-center gap-3",
+            children: [
+                r.jsx("div", {
+                    className: "w-9 h-9 rounded-xl bg-am-bg flex items-center justify-center flex-shrink-0",
+                    children: r.jsx("img", { src: "/icon-192.svg", alt: "TuneFree", className: "w-5 h-5" }),
+                }),
+                r.jsxs("div", {
+                    className: "min-w-0 flex-1",
+                    children: [
+                        r.jsx("p", { className: "text-sm font-semibold text-am-dark", children: "Install TuneFree" }),
+                        r.jsx("p", {
+                            className: "text-xs text-am-gray",
+                            children: n
+                                ? "A lighter, app-like listening experience with faster relaunch."
+                                : "For the best experience, use Share > Add to Home Screen.",
+                        }),
+                    ],
+                }),
+                n &&
+                    r.jsx("button", {
+                        onClick: m,
+                        className:
+                            "px-3 py-1.5 rounded-full bg-am-dark text-white text-xs font-semibold hover:opacity-90 flex-shrink-0",
+                        children: "Install",
+                    }),
+                r.jsx("button", {
+                    onClick: f,
+                    className: "text-am-muted hover:text-am-dark text-xs flex-shrink-0",
+                    children: "Not now",
+                }),
+            ],
+        }),
+    });
+}
+function Ww() {
+    const { user: n, isAuthenticated: a, openAuthModal: l } = gt(),
+        [o, u] = g.useState(""),
+        [f, m] = g.useState(!1),
+        [p, h] = g.useState(""),
+        [v, y] = g.useState(""),
+        w = async (T) => {
+            var b, j;
+            if ((T.preventDefault(), !!o.trim())) {
+                m(!0), h(""), y("");
+                try {
+                    await L1({ message: o.trim() }), u(""), h("Thanks for the feedback. We saved it successfully.");
+                } catch (S) {
+                    y(
+                        ((j = (b = S == null ? void 0 : S.response) == null ? void 0 : b.data) == null
+                            ? void 0
+                            : j.error) || "Could not send feedback right now."
+                    );
+                } finally {
+                    m(!1);
+                }
+            }
+        };
+    return r.jsxs("div", {
+        className: "mt-10 rounded-3xl border border-am-line bg-[var(--surface-elevated)] shadow-sm overflow-hidden",
+        children: [
+            r.jsxs("div", {
+                className: "px-6 py-6 border-b border-am-line bg-[var(--surface-1)]",
+                children: [
+                    r.jsx("p", {
+                        className: "text-xs font-semibold uppercase tracking-[0.2em] text-am-muted mb-2",
+                        children: "Feedback",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-2xl font-bold text-am-dark",
+                        children: "Tell us what would make TuneFree better",
+                    }),
+                    r.jsx("p", {
+                        className: "text-sm text-am-gray mt-2",
+                        children:
+                            "A short note is enough. We store your signed-in name with the feedback so we can review it later.",
+                    }),
+                ],
+            }),
+            r.jsx("div", {
+                className: "px-6 py-6",
+                children: a
+                    ? r.jsxs("form", {
+                          onSubmit: w,
+                          className: "space-y-4",
+                          children: [
+                              r.jsxs("div", {
+                                  className: "rounded-2xl border border-am-line bg-[var(--surface-1)] px-4 py-3",
+                                  children: [
+                                      r.jsx("p", {
+                                          className: "text-xs uppercase tracking-[0.18em] text-am-muted mb-1",
+                                          children: "Signed in as",
+                                      }),
+                                      r.jsx("p", {
+                                          className: "text-sm font-medium text-am-dark",
+                                          children: n == null ? void 0 : n.name,
+                                      }),
+                                  ],
+                              }),
+                              r.jsx("textarea", {
+                                  value: o,
+                                  onChange: (T) => u(T.target.value),
+                                  rows: 5,
+                                  maxLength: 1e3,
+                                  placeholder: "Share a bug, feature request, or something you want improved...",
+                                  className:
+                                      "w-full rounded-2xl border border-am-line bg-[var(--surface-elevated)] px-4 py-3 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/20 focus:border-am-red resize-y",
+                              }),
+                              r.jsxs("div", {
+                                  className: "flex items-center justify-between gap-4",
+                                  children: [
+                                      r.jsxs("p", {
+                                          className: "text-xs text-am-muted",
+                                          children: [o.length, "/1000"],
+                                      }),
+                                      r.jsx("button", {
+                                          type: "submit",
+                                          disabled: f || !o.trim(),
+                                          className:
+                                              "px-5 py-2.5 rounded-full bg-am-red text-white text-sm font-semibold hover:bg-am-red-h disabled:opacity-60",
+                                          children: f ? "Sending..." : "Send Feedback",
+                                      }),
+                                  ],
+                              }),
+                              p && r.jsx("p", { className: "text-sm text-green-600", children: p }),
+                              v && r.jsx("p", { className: "text-sm text-red-500", children: v }),
+                          ],
+                      })
+                    : r.jsxs("div", {
+                          className: "rounded-2xl border border-am-line bg-[var(--surface-1)] px-5 py-5",
+                          children: [
+                              r.jsx("p", {
+                                  className: "text-sm text-am-gray mb-4",
+                                  children: "Sign in with Google to leave feedback and have it saved to your account.",
+                              }),
+                              r.jsx("button", {
+                                  onClick: l,
+                                  className:
+                                      "px-5 py-2.5 rounded-full bg-am-red text-white text-sm font-semibold hover:bg-am-red-h transition-colors",
+                                  children: "Sign In with Google",
+                              }),
+                          ],
+                      }),
+            }),
+        ],
+    });
+}
+const Dl = 252,
+    Vw = 220,
+    Qw = 360,
+    Kw = 44,
+    tp = "tunefree_sidebar_width";
+function np(n) {
+    return Math.min(Qw, Math.max(Vw, n));
+}
+function Yw() {
+    const n = jn(),
+        a = g.useRef(null),
+        l = "rgba(255, 79, 91, 0.26)",
+        o = g.useRef(!1),
+        u = g.useRef(0),
+        f = g.useRef(Dl),
+        [m, p] = g.useState(() => {
+            try {
+                const A = Number(localStorage.getItem(tp));
+                return Number.isFinite(A) ? np(A) : Dl;
+            } catch {
+                return Dl;
+            }
+        }),
+        [h, v] = g.useState("transparent"),
+        [y, w] = g.useState("50%"),
+        T = n.pathname === "/player",
+        b = m + Kw,
+        j = (A) => {
+            const Y = 50 + (Math.max(0, Math.min(1, A / window.innerWidth)) - 0.5) * 38;
+            w(`${Math.max(31, Math.min(69, Y)).toFixed(2)}%`);
+        },
+        S = (A) => {
+            j(A.clientX), h === "transparent" && v(l);
+        },
+        k = (A) => {
+            const B = A.target.closest("[data-arc-color], button, a, [role='button'], .group");
+            if (!B) return;
+            const Y = B.getAttribute("data-arc-color") || l;
+            v(Y);
+        },
+        I = () => {
+            v("transparent"), w("50%");
+        };
+    g.useEffect(() => {
+        try {
+            localStorage.setItem(tp, String(m));
+        } catch {}
+    }, [m]),
+        g.useEffect(() => {
+            const A = (Y) => {
+                    if (!o.current) return;
+                    const ne = Y.clientX - u.current,
+                        K = np(f.current + ne);
+                    p(K);
+                },
+                B = () => {
+                    o.current &&
+                        ((o.current = !1), (document.body.style.cursor = ""), (document.body.style.userSelect = ""));
+                };
+            return (
+                window.addEventListener("mousemove", A),
+                window.addEventListener("mouseup", B),
+                () => {
+                    window.removeEventListener("mousemove", A),
+                        window.removeEventListener("mouseup", B),
+                        (document.body.style.cursor = ""),
+                        (document.body.style.userSelect = "");
+                }
+            );
+        }, []);
+    const $ = (A) => {
+        (o.current = !0),
+            (u.current = A.clientX),
+            (f.current = m),
+            (document.body.style.cursor = "col-resize"),
+            (document.body.style.userSelect = "none");
+    };
+    return (
+        g.useEffect(() => {
+            a.current && (a.current.scrollTop = 0);
+        }, [n.pathname]),
+        r.jsxs("div", {
+            className: "h-screen flex flex-col bg-[var(--surface-0)] text-[var(--text-primary)]",
+            style: { "--desktop-sidebar-width": `${m}px`, "--desktop-sidebar-offset": `${b}px` },
+            children: [
+                r.jsx(aw, {}),
+                r.jsxs("div", {
+                    className: "flex flex-1 overflow-hidden relative",
+                    children: [
+                        r.jsx("div", {
+                            className:
+                                "hidden md:block fixed left-4 top-4 bottom-24 z-40 pointer-events-none transition-[width] duration-200 ease-out",
+                            style: { width: "var(--desktop-sidebar-width)" },
+                            children: r.jsx(sw, {}),
+                        }),
+                        r.jsx("button", {
+                            type: "button",
+                            "aria-label": "Resize sidebar",
+                            title: "Drag to resize sidebar",
+                            onMouseDown: $,
+                            onDoubleClick: () => p(Dl),
+                            className:
+                                "hidden md:block fixed top-4 bottom-24 z-50 w-3 -ml-1 cursor-col-resize bg-transparent hover:bg-black/10 active:bg-black/20",
+                            style: { left: "calc(var(--desktop-sidebar-width) + 1rem)" },
+                        }),
+                        r.jsxs("main", {
+                            ref: a,
+                            onMouseMove: S,
+                            onMouseOver: k,
+                            onMouseLeave: I,
+                            className: `am-main-surface relative z-10 flex-1 overflow-y-auto ${T ? "p-0 pb-0" : "p-4 md:p-6 pb-32 md:pb-6"}`,
+                            children: [
+                                r.jsx("div", {
+                                    className: "global-hover-arc-main",
+                                    "aria-hidden": "true",
+                                    style: { "--global-arc-color": h, "--global-arc-x": y },
+                                }),
+                                r.jsxs("div", {
+                                    className:
+                                        "relative z-[12] min-h-[80vh] md:pr-2 md:ml-[var(--desktop-sidebar-offset)] transition-[margin] duration-200 ease-out",
+                                    children: [
+                                        !T && r.jsx(qw, {}),
+                                        r.jsx(Fy, {}),
+                                        !T && r.jsx(Ww, {}),
+                                        !T && r.jsx(Dw, {}),
+                                    ],
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+                r.jsx(Iw, {}),
+                !T && r.jsx(Mw, {}),
+                r.jsx($w, {}),
+                r.jsx(_w, {}),
+            ],
+        })
+    );
+}
+function bi({ track: n, buttonClassName: a = "", iconSize: l = 14 }) {
+    if (!(n != null && n.id) || (n.model_type && n.model_type !== "track")) return null;
+    const { addToQueue: o, playNextInQueue: u } = Tt(),
+        { isAuthenticated: f, openAuthModal: m } = gt(),
+        { isFavorited: p, toggleFavorite: h } = mr(),
+        [v, y] = g.useState(!1),
+        [w, T] = g.useState({ top: 0, left: 0 }),
+        b = g.useRef(null),
+        j = g.useRef(null),
+        S = p(n.id);
+    g.useEffect(() => {
+        if (!v) return;
+        if (b.current) {
+            const A = b.current.getBoundingClientRect(),
+                B = 180,
+                ne = window.innerHeight - A.bottom >= B ? A.bottom + 6 : Math.max(8, A.top - B - 6);
+            T({ top: ne, left: Math.max(8, A.right - 192) });
+        }
+        const $ = (A) => {
+            var B;
+            j.current && !j.current.contains(A.target) && !((B = b.current) != null && B.contains(A.target)) && y(!1);
+        };
+        return document.addEventListener("mousedown", $), () => document.removeEventListener("mousedown", $);
+    }, [v]);
+    const k = () => {
+            if (!f) {
+                m(), y(!1);
+                return;
+            }
+            h(n), y(!1);
+        },
+        I = v
+            ? Zc.createPortal(
+                  r.jsxs("div", {
+                      ref: j,
+                      className: "fixed bg-white border border-am-line rounded-lg shadow-2xl py-1 w-48",
+                      style: { top: w.top, left: w.left, zIndex: 9999 },
+                      children: [
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  u(n), y(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(lr, { size: 16 }), " Play next"],
+                          }),
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  o(n), y(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(bn, { size: 16 }), " Add to queue"],
+                          }),
+                          r.jsxs("button", {
+                              onClick: k,
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [
+                                  S ? r.jsx(cr, { size: 14, className: "text-am-red" }) : r.jsx(fn, { size: 14 }),
+                                  S ? "Remove from Favorites" : "Add to Favorites",
+                              ],
+                          }),
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  ys(n), y(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(bn, { size: 16 }), " Add to Playlist"],
+                          }),
+                      ],
+                  }),
+                  document.body
+              )
+            : null;
+    return r.jsxs(r.Fragment, {
+        children: [
+            r.jsx("button", {
+                ref: b,
+                type: "button",
+                onClick: ($) => {
+                    $.stopPropagation(), y((A) => !A);
+                },
+                className: a,
+                children: r.jsx(nu, { size: l }),
+            }),
+            I,
+        ],
+    });
+}
+const Ul = "TuneFree, from the makers of ListenFree",
+    Gw = "TuneFree | Free music streaming, online music player and instant music listening",
+    Jw =
+        "Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, build smart queues, explore new releases and listen instantly from any device.",
+    Xw =
+        "free music, online music, music listening, free music streaming, online music player, listen to music online, free songs, music playlists, discover music, streaming music app, TuneFree, TuneFree",
+    Zw = "/icon-512.svg";
+function Jc() {
+    var n;
+    return typeof window < "u" && (n = window.location) != null && n.origin
+        ? window.location.origin
+        : "https://tunefree-org.pages.dev";
+}
+function rp(n) {
+    return n ? (/^https?:\/\//i.test(n) ? n : `${Jc()}${n.startsWith("/") ? n : `/${n}`}`) : null;
+}
+function ot({
+    title: n = Gw,
+    description: a = Jw,
+    keywords: l = Xw,
+    path: o = "/",
+    image: u = Zw,
+    type: f = "website",
+    noindex: m = !1,
+    structuredData: p,
+}) {
+    const h = rp(o),
+        v = rp(u),
+        y = m ? "noindex, nofollow" : "index, follow, max-image-preview:large",
+        w = p || {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: Ul,
+            alternateName: "TuneFree",
+            url: Jc(),
+            description: a,
+            potentialAction: {
+                "@type": "SearchAction",
+                target: `${Jc()}/search?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+            },
+        };
+    return r.jsxs(S0, {
+        prioritizeSeoTags: !0,
+        children: [
+            r.jsx("title", { children: n }),
+            r.jsx("meta", { name: "description", content: a }),
+            r.jsx("meta", { name: "keywords", content: l }),
+            r.jsx("meta", { name: "robots", content: y }),
+            r.jsx("meta", { name: "author", content: "TuneFree" }),
+            r.jsx("meta", { name: "application-name", content: Ul }),
+            r.jsx("meta", { name: "apple-mobile-web-app-title", content: Ul }),
+            r.jsx("link", { rel: "canonical", href: h }),
+            r.jsx("meta", { property: "og:site_name", content: Ul }),
+            r.jsx("meta", { property: "og:title", content: n }),
+            r.jsx("meta", { property: "og:description", content: a }),
+            r.jsx("meta", { property: "og:type", content: f }),
+            r.jsx("meta", { property: "og:url", content: h }),
+            v && r.jsx("meta", { property: "og:image", content: v }),
+            r.jsx("meta", { name: "twitter:card", content: "summary_large_image" }),
+            r.jsx("meta", { name: "twitter:title", content: n }),
+            r.jsx("meta", { name: "twitter:description", content: a }),
+            v && r.jsx("meta", { name: "twitter:image", content: v }),
+            r.jsx("script", { type: "application/ld+json", children: JSON.stringify(w) }),
+        ],
+    });
+}
+const zh = 8,
+    is = 10,
+    e2 = 10080 * 60 * 1e3,
+    t2 = "tunefree_home_sections_v3_",
+    sp = [
+        "from-rose-600 to-rose-900",
+        "from-pink-500 to-fuchsia-700",
+        "from-emerald-500 to-teal-700",
+        "from-amber-500 to-orange-700",
+        "from-violet-500 to-purple-800",
+        "from-sky-500 to-blue-700",
+        "from-red-500 to-red-800",
+        "from-lime-500 to-green-700",
+        "from-cyan-500 to-indigo-700",
+        "from-yellow-500 to-amber-700",
+        "from-teal-500 to-cyan-700",
+        "from-fuchsia-500 to-pink-700",
+    ],
+    ft = [
+        "rgba(244, 63, 94, 0.26)",
+        "rgba(236, 72, 153, 0.24)",
+        "rgba(16, 185, 129, 0.23)",
+        "rgba(245, 158, 11, 0.24)",
+        "rgba(139, 92, 246, 0.24)",
+        "rgba(59, 130, 246, 0.24)",
+        "rgba(239, 68, 68, 0.24)",
+        "rgba(132, 204, 22, 0.23)",
+        "rgba(6, 182, 212, 0.23)",
+        "rgba(234, 179, 8, 0.24)",
+        "rgba(20, 184, 166, 0.23)",
+        "rgba(217, 70, 239, 0.24)",
+    ],
+    ur = "rgba(255, 79, 91, 0.2)",
+    ap = [
+        "New Release",
+        "Made for You",
+        "Listen Again",
+        "Trending Now",
+        "Must Listen",
+        "Staff Pick",
+        "Hot Right Now",
+        "Discover",
+        "Editor's Choice",
+        "Top Charts",
+        "Viral Hit",
+        "Fan Favorite",
+    ],
+    n2 = [
+        "Taylor Swift",
+        "Drake",
+        "The Weeknd",
+        "Billie Eilish",
+        "Dua Lipa",
+        "Ed Sheeran",
+        "Sabrina Carpenter",
+        "Kendrick Lamar",
+        "Olivia Rodrigo",
+        "Bruno Mars",
+        "Doja Cat",
+        "Bad Bunny",
+        "Ariana Grande",
+        "SZA",
+    ],
+    lp = [
+        { title: "Today's Top Hits", query: "Top hits 2025 English songs", layout: "default" },
+        { title: "Hot New Singles", query: "New singles 2025 popular", layout: "landscape" },
+        { title: "Pop Essentials", query: "Best pop songs playlist 2025", layout: "default" },
+        { title: "Hip-Hop & Rap", query: "Top hip hop rap songs 2025", layout: "default" },
+        { title: "R&B & Soul", query: "Best R&B soul songs playlist", layout: "default" },
+        { title: "Chill Vibes", query: "Chill lofi study beats playlist", layout: "landscape" },
+        { title: "Rock Anthems", query: "Best rock songs classic rock anthems", layout: "default" },
+        { title: "Country Favorites", query: "Top country songs 2025 hits", layout: "default" },
+        { title: "Indie & Alternative", query: "Best indie alternative songs 2025", layout: "default" },
+        { title: "EDM & Dance", query: "Top EDM dance songs 2025 playlist", layout: "landscape" },
+        { title: "Latin Hits", query: "Top latin reggaeton songs 2025", layout: "default" },
+        { title: "Throwback Classics", query: "90s 2000s throwback hits playlist", layout: "default" },
+        { title: "Workout Energy", query: "Workout gym motivation songs playlist", layout: "default" },
+        { title: "Acoustic & Unplugged", query: "Acoustic unplugged covers playlist", layout: "default" },
+        { title: "Sad Songs & Heartbreak", query: "Sad songs heartbreak playlist", layout: "default" },
+        { title: "Feel Good Anthems", query: "Feel good happy songs playlist 2025", layout: "landscape" },
+        { title: "K-Pop Essentials", query: "Best kpop songs playlist 2025", layout: "default" },
+        { title: "Afrobeats & Amapiano", query: "Top afrobeats amapiano songs 2025", layout: "default" },
+        { title: "Jazz & Blues", query: "Best jazz blues songs smooth playlist", layout: "default" },
+        { title: "Classical Crossover", query: "Classical crossover piano covers playlist", layout: "landscape" },
+        { title: "Viral & TikTok Hits", query: "Viral tiktok songs 2025 trending", layout: "default" },
+        { title: "Summer Anthems", query: "Summer songs beach vibes playlist 2025", layout: "landscape" },
+        { title: "Late Night Vibes", query: "Late night chill r&b songs playlist", layout: "default" },
+        { title: "Road Trip Bangers", query: "Road trip driving songs playlist", layout: "default" },
+        { title: "Reggaeton & Latin Urban", query: "Best reggaeton latin urban 2025", layout: "default" },
+        { title: "Metal & Hard Rock", query: "Best metal hard rock songs playlist", layout: "default" },
+    ].slice(0, zh);
+function Bl({ title: n, children: a }) {
+    const l = g.useRef(null),
+        [o, u] = g.useState(!1),
+        [f, m] = g.useState(!0),
+        p = () => {
+            const v = l.current;
+            v && (u(v.scrollLeft > 0), m(v.scrollLeft < v.scrollWidth - v.clientWidth - 10));
+        },
+        h = (v) => {
+            const y = l.current;
+            y && y.scrollBy({ left: v === "right" ? y.clientWidth * 0.8 : -y.clientWidth * 0.8, behavior: "smooth" });
+        };
+    return (
+        g.useEffect(() => {
+            p();
+        }, [a]),
+        r.jsxs("section", {
+            className: "mb-8",
+            children: [
+                r.jsxs("div", {
+                    className: "flex items-center justify-between mb-3",
+                    children: [
+                        r.jsx("h2", { className: "text-[22px] font-bold text-am-dark", children: n }),
+                        r.jsxs("div", {
+                            className: "flex items-center gap-1",
+                            children: [
+                                o &&
+                                    r.jsx("button", {
+                                        onClick: () => h("left"),
+                                        className:
+                                            "w-7 h-7 rounded-full border border-am-line hover:bg-am-bg flex items-center justify-center",
+                                        children: r.jsx(mn, { size: 14, className: "text-am-gray" }),
+                                    }),
+                                f &&
+                                    r.jsx("button", {
+                                        onClick: () => h("right"),
+                                        className:
+                                            "w-7 h-7 rounded-full border border-am-line hover:bg-am-bg flex items-center justify-center",
+                                        children: r.jsx(Q0, { size: 14, className: "text-am-gray" }),
+                                    }),
+                            ],
+                        }),
+                    ],
+                }),
+                r.jsx("div", {
+                    ref: l,
+                    onScroll: p,
+                    className:
+                        "flex gap-4 overflow-x-auto scroll-section pb-2 md:-ml-[var(--desktop-sidebar-offset)] md:pl-[var(--desktop-sidebar-offset)]",
+                    children: a,
+                }),
+            ],
+        })
+    );
+}
+function r2({
+    item: n,
+    colorClass: a,
+    label: l,
+    onClick: o,
+    glowColor: u,
+    onHoverStart: f,
+    onHoverMove: m,
+    onHoverEnd: p,
+}) {
+    var v, y, w, T;
+    const h =
+        n.image ||
+        ((w = (y = (v = n.album) == null ? void 0 : v.images) == null ? void 0 : y[0]) == null ? void 0 : w.url);
+    return r.jsx("div", {
+        "data-arc-color": u || ur,
+        className: "flex-shrink-0 w-[180px] md:w-[200px] group text-left",
+        onMouseEnter: () => (f == null ? void 0 : f(u || ur)),
+        onMouseMove: (b) => (m == null ? void 0 : m(b)),
+        onMouseLeave: () => (p == null ? void 0 : p()),
+        children: r.jsxs("div", {
+            className: `relative rounded-xl overflow-hidden aspect-[3/4] shadow-md group-hover:shadow-xl transition-shadow bg-gradient-to-b ${a}`,
+            children: [
+                r.jsx(bi, {
+                    track: n,
+                    buttonClassName:
+                        "absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/25 text-white/80 hover:text-white hover:bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity",
+                }),
+                h &&
+                    r.jsx($e, {
+                        src: h,
+                        alt: n.name,
+                        className: "absolute inset-0 w-full h-full object-cover opacity-95",
+                    }),
+                r.jsx("button", {
+                    onClick: o,
+                    className: "absolute inset-0",
+                    children: r.jsxs("span", { className: "sr-only", children: ["Play ", n.name] }),
+                }),
+                r.jsx("div", {
+                    className: "absolute top-3 left-3 right-12",
+                    children: r.jsx("span", {
+                        className: "text-[10px] font-semibold text-white/80 uppercase tracking-wider",
+                        children: l,
+                    }),
+                }),
+                r.jsxs("div", {
+                    className:
+                        "pointer-events-none absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent",
+                    children: [
+                        r.jsx("p", {
+                            className: "text-[13px] font-bold text-white leading-tight line-clamp-2",
+                            children: n.name,
+                        }),
+                        r.jsx("p", {
+                            className: "text-[11px] text-white/70 mt-0.5 truncate",
+                            children:
+                                ((T = n.artists) == null
+                                    ? void 0
+                                    : T.filter((b) => b.name && b.name !== "Unknown")
+                                          .map((b) => b.name)
+                                          .join(", ")) ||
+                                n.subtitle ||
+                                "",
+                        }),
+                    ],
+                }),
+            ],
+        }),
+    });
+}
+function s2({ item: n, onClick: a, glowColor: l, onHoverStart: o, onHoverMove: u, onHoverEnd: f }) {
+    var h, v, y, w;
+    const m =
+            n.image ||
+            ((y = (v = (h = n.album) == null ? void 0 : h.images) == null ? void 0 : v[0]) == null ? void 0 : y.url),
+        p =
+            ((w = n.artists) == null
+                ? void 0
+                : w
+                      .filter((T) => T.name && T.name !== "Unknown")
+                      .map((T) => T.name)
+                      .join(", ")) ||
+            n.subtitle ||
+            "";
+    return r.jsxs("div", {
+        "data-arc-color": l || ur,
+        className: "flex-shrink-0 w-64 md:w-72 group text-left",
+        onMouseEnter: () => (o == null ? void 0 : o(l || ur)),
+        onMouseMove: (T) => (u == null ? void 0 : u(T)),
+        onMouseLeave: () => (f == null ? void 0 : f()),
+        children: [
+            r.jsxs("div", {
+                className:
+                    "relative mb-2 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-shadow bg-am-bg",
+                children: [
+                    r.jsx(bi, {
+                        track: n,
+                        buttonClassName:
+                            "absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/25 text-white/80 hover:text-white hover:bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity",
+                    }),
+                    r.jsx("button", {
+                        onClick: a,
+                        className: "absolute inset-0 z-[1]",
+                        children: r.jsxs("span", { className: "sr-only", children: ["Play ", n.name] }),
+                    }),
+                    r.jsx($e, { src: m, alt: n.name, className: "w-full aspect-video object-cover" }),
+                    r.jsx("div", {
+                        className:
+                            "pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center",
+                        children: r.jsx("div", {
+                            className:
+                                "am-hover-play-chip w-11 h-11 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all",
+                            children: r.jsx(ht, { size: 24, className: "am-hover-play-icon ml-0.5" }),
+                        }),
+                    }),
+                ],
+            }),
+            r.jsx("p", { className: "text-[13px] font-medium text-am-dark truncate", children: n.name }),
+            p && r.jsx("p", { className: "text-[12px] text-am-gray mt-0.5 truncate", children: p }),
+        ],
+    });
+}
+function ip({ item: n, onClick: a, glowColor: l, onHoverStart: o, onHoverMove: u, onHoverEnd: f }) {
+    var p, h, v, y;
+    const m =
+        n.image ||
+        ((v = (h = (p = n.album) == null ? void 0 : p.images) == null ? void 0 : h[0]) == null ? void 0 : v.url);
+    return r.jsxs("div", {
+        "data-arc-color": l || ur,
+        className: "flex-shrink-0 w-44 md:w-48 group text-left",
+        onMouseEnter: () => (o == null ? void 0 : o(l || ur)),
+        onMouseMove: (w) => (u == null ? void 0 : u(w)),
+        onMouseLeave: () => (f == null ? void 0 : f()),
+        children: [
+            r.jsxs("div", {
+                className:
+                    "relative mb-2 rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow bg-am-bg",
+                children: [
+                    r.jsx(bi, {
+                        track: n,
+                        buttonClassName:
+                            "absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/25 text-white/80 hover:text-white hover:bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity",
+                    }),
+                    r.jsx("button", {
+                        onClick: a,
+                        className: "absolute inset-0 z-[1]",
+                        children: r.jsxs("span", { className: "sr-only", children: ["Play ", n.name] }),
+                    }),
+                    r.jsx($e, { src: m, alt: n.name, className: "w-full aspect-square object-cover" }),
+                    r.jsx("div", {
+                        className:
+                            "pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center",
+                        children: r.jsx("div", {
+                            className:
+                                "am-hover-play-chip w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all",
+                            children: r.jsx(ht, { size: 22, className: "am-hover-play-icon ml-0.5" }),
+                        }),
+                    }),
+                ],
+            }),
+            r.jsx("p", { className: "text-[13px] font-medium text-am-dark truncate", children: n.name }),
+            r.jsx("p", {
+                className: "text-[12px] text-am-gray mt-0.5 line-clamp-1",
+                children:
+                    ((y = n.artists) == null
+                        ? void 0
+                        : y
+                              .filter((w) => w.name && w.name !== "Unknown")
+                              .map((w) => w.name)
+                              .join(", ")) ||
+                    n.subtitle ||
+                    "",
+            }),
+        ],
+    });
+}
+function a2({ name: n, image: a, onClick: l, glowColor: o, onHoverStart: u, onHoverMove: f, onHoverEnd: m }) {
+    return r.jsxs("button", {
+        onClick: l,
+        "data-arc-color": o || ur,
+        onMouseEnter: () => (u == null ? void 0 : u(o || ur)),
+        onMouseMove: (p) => (f == null ? void 0 : f(p)),
+        onMouseLeave: () => (m == null ? void 0 : m()),
+        className: "flex-shrink-0 w-32 md:w-36 group text-center",
+        children: [
+            r.jsx("div", {
+                className:
+                    "relative mb-2 mx-auto rounded-full overflow-hidden shadow-sm group-hover:shadow-md transition-shadow aspect-square bg-am-bg",
+                children: r.jsx($e, { src: a, alt: n, className: "w-full h-full object-cover" }),
+            }),
+            r.jsx("p", { className: "text-[13px] font-medium text-am-dark truncate", children: n }),
+            r.jsx("p", { className: "text-[12px] text-am-gray", children: "Artist" }),
+        ],
+    });
+}
+function Pc(n, a, l, o) {
+    n.model_type === "artist"
+        ? a(`/artist/${encodeURIComponent(n.name)}`)
+        : n.model_type === "album" && n.id
+          ? a(`/album/${encodeURIComponent(n.id)}`)
+          : n.id && (n.id.startsWith("VL") || n.id.startsWith("RDCLAK") || n.id.startsWith("PL"))
+            ? a(`/playlist/${encodeURIComponent(n.id)}`)
+            : n.id && n.id.startsWith("MPRE")
+              ? a(`/album/${encodeURIComponent(n.id)}`)
+              : l(n, o || [n]);
+}
+function l2() {
+    const n = (() => {
+            try {
+                const D = zn(),
+                    oe = `${t2}${D || "default"}`,
+                    je = localStorage.getItem(oe);
+                if (!je) return null;
+                const ke = JSON.parse(je);
+                return ke && typeof ke == "object" && ke.data && ke.ts && Date.now() - ke.ts < e2 ? ke.data : null;
+            } catch {
+                return null;
+            }
+        })(),
+        [a, l] = g.useState(n),
+        [o, u] = g.useState(!n),
+        [f, m] = g.useState([]),
+        [p, h] = g.useState([]),
+        [v, y] = g.useState("transparent"),
+        [w, T] = g.useState("50%"),
+        { playTrack: b, currentTrack: j } = Tt(),
+        S = xt(),
+        k = zn() === "IN",
+        I = bw();
+    if (
+        (g.useEffect(() => {
+            if (
+                (cw()
+                    .then(async (je) => {
+                        l(je);
+                        const ke = Array.isArray(je == null ? void 0 : je.popularArtists)
+                            ? je.popularArtists.filter(Boolean)
+                            : [];
+                        if (ke.length >= is) {
+                            m(ke.slice(0, is));
+                            return;
+                        }
+                        const De = new Set(ke.map((Ie) => Ie.name).filter(Boolean)),
+                            Ke = n2.filter((Ie) => !De.has(Ie)).slice(0, is - ke.length);
+                        if (Ke.length === 0) {
+                            m(ke.slice(0, is));
+                            return;
+                        }
+                        const de = await hw(Ke).catch(() => ({})),
+                            Ne = Ke.map((Ie) => ({
+                                id: `fallback-${Ie}`,
+                                name: Ie,
+                                image: (de == null ? void 0 : de[Ie]) || "",
+                            }));
+                        m([...ke, ...Ne].slice(0, is));
+                    })
+                    .catch(console.error)
+                    .finally(() => u(!1)),
+                zn() === "IN")
+            )
+                return;
+            const D = async (je) => {
+                    try {
+                        const ke = await Ch(je.query, "song");
+                        return ke.length === 0 ? null : { title: je.title, items: ke.slice(0, 15), layout: je.layout };
+                    } catch {
+                        return null;
+                    }
+                },
+                oe = (je, ke) => Promise.all(lp.slice(je, ke).map(D)).then((De) => De.filter(Boolean));
+            oe(0, 3).then((je) => {
+                je.length > 0 && h(je),
+                    setTimeout(() => {
+                        oe(3, 7).then((ke) => {
+                            h((De) => [...De, ...ke]),
+                                setTimeout(() => {
+                                    oe(7, 11).then((De) => {
+                                        h((Ke) => [...Ke, ...De]),
+                                            setTimeout(() => {
+                                                oe(11, 16).then((Ke) => {
+                                                    h((de) => [...de, ...Ke]),
+                                                        setTimeout(() => {
+                                                            oe(16, lp.length).then((de) => {
+                                                                h((Ne) => [...Ne, ...de]);
+                                                            });
+                                                        }, 2e3);
+                                                });
+                                            }, 2e3);
+                                    });
+                                }, 1500);
+                        });
+                    }, 1500);
+            });
+        }, []),
+        o)
+    )
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[60vh]",
+            children: r.jsxs("div", {
+                className: "text-center max-w-xs",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-10 h-10 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-4",
+                    }),
+                    r.jsx("p", {
+                        className: "text-base font-medium text-am-dark mb-2",
+                        children: "Loading your music feed",
+                    }),
+                ],
+            }),
+        });
+    if (!a)
+        return r.jsxs("div", {
+            className: "text-center py-20",
+            children: [
+                r.jsx("p", { className: "text-am-gray text-lg", children: "Could not load home feed" }),
+                r.jsx("button", {
+                    onClick: () => window.location.reload(),
+                    className: "mt-4 text-am-red hover:underline text-sm",
+                    children: "Retry",
+                }),
+            ],
+        });
+    const { homeSections: $ = [], exploreSections: A = [] } = a,
+        B =
+            /[\u0900-\u097F\u0980-\u09FF\u0A00-\u0A7F\u0A80-\u0AFF\u0B00-\u0B7F\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F]/,
+        Y =
+            /bollywood|hindi|telugu|tamil|punjabi|bengali|kannada|malayalam|marathi|bhojpuri|devotional|bhajan|ghazal|qawwali|filmi|desi\b|t-series|zee music|saregama|tips official|yrf|sony music india|speed records|geet mp3|white hill music|anand audio|lahari music|aditya music|mango music|tollywood|kollywood|indian|india[n ]/i,
+        ne =
+            /arijit singh|shreya ghoshal|neha kakkar|jubin nautiyal|pritam|a\.?r\.? rahman|badshah|honey singh|ap dhillon|diljit dosanjh|guru randhawa|b praak|darshan raval|vishal mishra|sachet|armaan malik|sonu nigam|atif aslam|sid sriram|anirudh|sunidhi chauhan|udit narayan|kumar sanu|kailash kher|sukhwinder|shankar mahadevan|tanishk bagchi|rochak kohli|himesh reshammiya|jass manak|karan aujla|sidhu moose|raftaar|divine|emiway|mc stan|thaman|devi sri prasad|yuvan shankar|harris jayaraj|hiphop tamizha|ilaiyaraaja|s p balasubrahmanyam|dhvani bhanushali|kanika kapoor/i,
+        K =
+            /hindi|bollywood|telugu|tamil|punjabi|bengali|kannada|malayalam|marathi|devotional|indian|india|desi|bhojpuri|ghazal|qawwali|filmi|tollywood|kollywood/i,
+        le = (D) => {
+            var je, ke;
+            const oe = `${D.name || ""} ${((je = D.artists) == null ? void 0 : je.map((De) => De.name).join(" ")) || ""} ${((ke = D.album) == null ? void 0 : ke.name) || ""} ${D.subtitle || ""}`;
+            return B.test(oe) || Y.test(oe) || ne.test(oe);
+        },
+        ee = (D) => k || !le(D),
+        re = (D) => k || !K.test(D || ""),
+        xe = new Set(),
+        q = (D) => D.filter((oe) => (xe.has(oe.id) ? !1 : (xe.add(oe.id), !0))),
+        te = [],
+        F = [];
+    [...$, ...A].forEach((D) => {
+        if (!re(D.title)) return;
+        const oe = q((D.items || []).filter((ke) => ke.model_type !== "artist" && ee(ke))).slice(0, 20);
+        if (oe.length < 3) return;
+        const je = { title: D.title, items: oe, layout: D.layout || "default", source: D.source };
+        D.source === "country" ? te.push(je) : F.push(je);
+    });
+    const ge = [],
+        O = new Set(),
+        X = (D) => {
+            ge.length >= 8 ||
+                ((D.model_type === "track" || !D.model_type) && D.image && !O.has(D.id) && (ge.push(D), O.add(D.id)));
+        };
+    p.forEach((D) => D.items.forEach(X)), ge.length < 8 && F.forEach((D) => D.items.forEach(X));
+    const M = [],
+        se = new Set([...O]),
+        G = (D, oe) => {
+            for (const je of D)
+                if (je.layout !== "landscape")
+                    for (const ke of je.items) {
+                        if (M.length >= oe) return;
+                        !ke.image || se.has(ke.id) || (M.push(ke), se.add(ke.id));
+                    }
+        };
+    G(p, 12), G(F, 20);
+    const E = te
+            .map((D) => ({ ...D, items: D.items.filter((oe) => !se.has(oe.id)) }))
+            .filter((D) => D.items.length > 0),
+        U = E.slice(0, 3),
+        Z = E.slice(3, 6),
+        ae = E.slice(6),
+        ue = [
+            ...U,
+            ...p.slice(0, 3),
+            ...Z,
+            ...p.slice(3, 7),
+            ...F.slice(0, 2),
+            ...p.slice(7, 11),
+            ...ae,
+            ...p.slice(11, 16),
+            ...F.slice(2),
+            ...p.slice(16),
+        ].slice(0, zh),
+        ye = (D) => {
+            const je = 50 + (Math.max(0, Math.min(1, D.clientX / window.innerWidth)) - 0.5) * 34;
+            T(`${Math.max(33, Math.min(67, je)).toFixed(2)}%`);
+        },
+        Ee = () => {
+            y("transparent"), T("50%");
+        },
+        Se = (D, oe) =>
+            r.jsx(
+                Bl,
+                {
+                    title: D.title,
+                    children: D.items.map((je, ke) =>
+                        D.layout === "landscape"
+                            ? r.jsx(
+                                  s2,
+                                  {
+                                      item: je,
+                                      onClick: () => Pc(je, S, b, D.items),
+                                      glowColor: ft[ke % ft.length],
+                                      onHoverStart: y,
+                                      onHoverMove: ye,
+                                      onHoverEnd: Ee,
+                                  },
+                                  je.id
+                              )
+                            : r.jsx(
+                                  ip,
+                                  {
+                                      item: je,
+                                      onClick: () => Pc(je, S, b, D.items),
+                                      glowColor: ft[ke % ft.length],
+                                      onHoverStart: y,
+                                      onHoverMove: ye,
+                                      onHoverEnd: Ee,
+                                  },
+                                  je.id
+                              )
+                    ),
+                },
+                oe
+            );
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: "TuneFree | Free music streaming, online music player and smart music discovery",
+                description:
+                    "TuneFree helps you listen to free music online, discover songs, playlists, albums and artists, explore trending music, and stream instantly with smart queues and regional recommendations.",
+                keywords:
+                    "free music, online music, music listening, free music streaming, online music player, listen to music online, discover songs, trending music, music playlists, new music releases, TuneFree, TuneFree",
+                path: "/",
+            }),
+            r.jsx("section", {
+                className: "md:hidden mb-4 rounded-xl border border-am-line bg-[var(--surface-1)] px-3 py-2.5",
+                children: r.jsx("p", {
+                    className: "text-xs text-am-gray leading-relaxed",
+                    children:
+                        "Tip: TuneFree works on mobile, but the best experience is on desktop with larger lyrics view, easier queue control, and faster multitasking.",
+                }),
+            }),
+            M.length > 0 &&
+                r.jsx(Bl, {
+                    title: "Top Picks for You",
+                    children: M.map((D, oe) =>
+                        r.jsx(
+                            r2,
+                            {
+                                item: D,
+                                colorClass: sp[oe % sp.length],
+                                label: ap[oe % ap.length],
+                                onClick: () => Pc(D, S, b, M),
+                                glowColor: ft[oe % ft.length],
+                                onHoverStart: y,
+                                onHoverMove: ye,
+                                onHoverEnd: Ee,
+                            },
+                            D.id
+                        )
+                    ),
+                }),
+            f.length > 0 &&
+                r.jsx(Bl, {
+                    title: "Popular Artists",
+                    children: f.slice(0, is).map((D) => {
+                        var oe;
+                        return r.jsx(
+                            a2,
+                            {
+                                name: D.name,
+                                image: D.image,
+                                onClick: () => S(`/artist/${encodeURIComponent(D.name)}`),
+                                glowColor: ft[(((oe = D.name) == null ? void 0 : oe.length) || 0) % ft.length],
+                                onHoverStart: y,
+                                onHoverMove: ye,
+                                onHoverEnd: Ee,
+                            },
+                            D.id || D.name
+                        );
+                    }),
+                }),
+            I.length > 0 &&
+                r.jsx(Bl, {
+                    title: "Recently Played",
+                    children: I.map((D) => {
+                        var oe;
+                        return r.jsx(
+                            ip,
+                            {
+                                item: D,
+                                onClick: () => b(D, [D]),
+                                glowColor: ft[(((oe = D.name) == null ? void 0 : oe.length) || 0) % ft.length],
+                                onHoverStart: y,
+                                onHoverMove: ye,
+                                onHoverEnd: Ee,
+                            },
+                            D.id
+                        );
+                    }),
+                }),
+            ge.length > 0 &&
+                r.jsxs("section", {
+                    className: "mb-8",
+                    children: [
+                        r.jsx("h2", { className: "text-[22px] font-bold text-am-dark mb-3", children: "Quick Picks" }),
+                        r.jsx("div", {
+                            className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3",
+                            children: ge.map((D) => {
+                                var oe, je;
+                                return r.jsxs(
+                                    "div",
+                                    {
+                                        "data-arc-color":
+                                            ft[(((oe = D.name) == null ? void 0 : oe.length) || 0) % ft.length],
+                                        onMouseEnter: () => {
+                                            var ke;
+                                            return y(
+                                                ft[(((ke = D.name) == null ? void 0 : ke.length) || 0) % ft.length]
+                                            );
+                                        },
+                                        onMouseMove: ye,
+                                        onMouseLeave: Ee,
+                                        className:
+                                            "flex items-center bg-[var(--surface-1)] hover:bg-[var(--am-hover)] rounded-lg overflow-hidden transition-colors group text-left",
+                                        children: [
+                                            r.jsxs("button", {
+                                                onClick: () => b(D, ge),
+                                                className: "flex items-center min-w-0 flex-1 text-left",
+                                                children: [
+                                                    r.jsx($e, {
+                                                        src: D.image,
+                                                        alt: "",
+                                                        className:
+                                                            "w-12 h-12 md:w-14 md:h-14 object-cover flex-shrink-0",
+                                                    }),
+                                                    r.jsxs("div", {
+                                                        className: "min-w-0 flex-1 px-3",
+                                                        children: [
+                                                            r.jsx("p", {
+                                                                className: "text-sm font-medium text-am-dark truncate",
+                                                                children: D.name,
+                                                            }),
+                                                            r.jsx("p", {
+                                                                className: "text-xs text-am-gray truncate",
+                                                                children:
+                                                                    ((je = D.artists) == null
+                                                                        ? void 0
+                                                                        : je
+                                                                              .filter(
+                                                                                  (ke) =>
+                                                                                      ke.name && ke.name !== "Unknown"
+                                                                              )
+                                                                              .map((ke) => ke.name)
+                                                                              .join(", ")) || "",
+                                                            }),
+                                                        ],
+                                                    }),
+                                                ],
+                                            }),
+                                            r.jsx(bi, {
+                                                track: D,
+                                                buttonClassName:
+                                                    "p-2 mr-1 text-am-muted hover:text-am-dark opacity-0 group-hover:opacity-100 transition-opacity",
+                                            }),
+                                        ],
+                                    },
+                                    D.id
+                                );
+                            }),
+                        }),
+                    ],
+                }),
+            ue.map((D, oe) => Se(D, `dynamic-${oe}`)),
+            r.jsxs("section", {
+                className: "mb-8 mt-4",
+                children: [
+                    r.jsx("h2", { className: "text-[22px] font-bold text-am-dark mb-4", children: "Browse by Genre" }),
+                    r.jsx("div", {
+                        className: "flex flex-wrap gap-2",
+                        children: (k
+                            ? [
+                                  "Pop",
+                                  "Hip-Hop",
+                                  "R&B",
+                                  "Rock",
+                                  "Bollywood",
+                                  "Punjabi",
+                                  "Telugu",
+                                  "Tamil",
+                                  "Country",
+                                  "Latin",
+                                  "EDM",
+                                  "Indie",
+                                  "Alternative",
+                                  "Jazz",
+                                  "Classical",
+                                  "K-Pop",
+                                  "Reggaeton",
+                                  "Afrobeats",
+                                  "Metal",
+                                  "Folk",
+                                  "Blues",
+                                  "Soul",
+                                  "Funk",
+                                  "Lofi",
+                                  "Ambient",
+                                  "J-Pop",
+                                  "Anime",
+                                  "Devotional",
+                                  "Ghazal",
+                                  "Qawwali",
+                              ]
+                            : [
+                                  "Pop",
+                                  "Hip-Hop",
+                                  "R&B",
+                                  "Rock",
+                                  "Country",
+                                  "Latin",
+                                  "EDM",
+                                  "Indie",
+                                  "Alternative",
+                                  "Jazz",
+                                  "Classical",
+                                  "K-Pop",
+                                  "Reggaeton",
+                                  "Afrobeats",
+                                  "Metal",
+                                  "Folk",
+                                  "Blues",
+                                  "Soul",
+                                  "Funk",
+                                  "Lofi",
+                                  "Ambient",
+                                  "J-Pop",
+                                  "Anime",
+                              ]
+                        ).map((D) =>
+                            r.jsx(
+                                "button",
+                                {
+                                    onClick: () => S(`/search?q=${encodeURIComponent(D + " songs")}`),
+                                    className: "home-genre-chip px-4 py-2 text-sm rounded-full transition-colors",
+                                    "data-arc-color": ft[D.length % ft.length],
+                                    children: D,
+                                },
+                                D
+                            )
+                        ),
+                    }),
+                ],
+            }),
+            r.jsxs("section", {
+                className: "home-info-panel mb-8 rounded-2xl p-6 md:p-8",
+                children: [
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark mb-4", children: "Why TuneFree?" }),
+                    r.jsxs("div", {
+                        className: "grid md:grid-cols-3 gap-6",
+                        children: [
+                            r.jsxs("div", {
+                                children: [
+                                    r.jsx("h3", {
+                                        className: "text-sm font-semibold text-am-dark mb-1",
+                                        children: "Millions of Songs",
+                                    }),
+                                    r.jsx("p", {
+                                        className: "text-xs text-am-gray leading-relaxed",
+                                        children:
+                                            "Access an enormous library powered by YouTube Music. From the latest hits to timeless classics, every genre and language is at your fingertips.",
+                                    }),
+                                ],
+                            }),
+                            r.jsxs("div", {
+                                children: [
+                                    r.jsx("h3", {
+                                        className: "text-sm font-semibold text-am-dark mb-1",
+                                        children: "Personalized for You",
+                                    }),
+                                    r.jsx("p", {
+                                        className: "text-xs text-am-gray leading-relaxed",
+                                        children:
+                                            "Content tailored to your taste — pop, hip-hop, rock, country, R&B, Latin, K-Pop, and dozens more genres with curated playlists and charts.",
+                                    }),
+                                ],
+                            }),
+                            r.jsxs("div", {
+                                children: [
+                                    r.jsx("h3", {
+                                        className: "text-sm font-semibold text-am-dark mb-1",
+                                        children: "Completely Free",
+                                    }),
+                                    r.jsx("p", {
+                                        className: "text-xs text-am-gray leading-relaxed",
+                                        children:
+                                            "No subscriptions, no sign-ups, no limits. Just open TuneFree and start listening. Discover new music, build your queue, and enjoy endless streaming.",
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            r.jsxs("section", {
+                className: "mb-4",
+                children: [
+                    r.jsx("h2", { className: "text-[22px] font-bold text-am-dark mb-4", children: "Popular Searches" }),
+                    r.jsx("div", {
+                        className: "flex flex-wrap gap-2",
+                        children: (k
+                            ? [
+                                  "Arijit Singh",
+                                  "Shreya Ghoshal",
+                                  "Pritam",
+                                  "AP Dhillon",
+                                  "Diljit Dosanjh",
+                                  "Taylor Swift",
+                                  "Drake",
+                                  "The Weeknd",
+                                  "Ed Sheeran",
+                                  "BTS",
+                                  "New Bollywood Songs",
+                                  "Top Hindi Songs",
+                                  "Romantic Songs",
+                                  "Punjabi Hits",
+                                  "Party Mix",
+                              ]
+                            : [
+                                  "Taylor Swift",
+                                  "Drake",
+                                  "The Weeknd",
+                                  "Billie Eilish",
+                                  "Ed Sheeran",
+                                  "Dua Lipa",
+                                  "Post Malone",
+                                  "Ariana Grande",
+                                  "SZA",
+                                  "Kendrick Lamar",
+                                  "Olivia Rodrigo",
+                                  "Bruno Mars",
+                                  "Bad Bunny",
+                                  "Travis Scott",
+                                  "Harry Styles",
+                                  "Sabrina Carpenter",
+                                  "Beyonce",
+                                  "Doja Cat",
+                                  "BTS",
+                                  "Top Hits 2025",
+                                  "Workout Playlist",
+                                  "Chill Vibes",
+                                  "Party Mix",
+                                  "Lo-fi Study Beats",
+                                  "Road Trip Songs",
+                                  "Morning Coffee Playlist",
+                                  "90s Throwbacks",
+                              ]
+                        ).map((D) =>
+                            r.jsx(
+                                "button",
+                                {
+                                    onClick: () => S(`/search?q=${encodeURIComponent(D)}`),
+                                    className: "home-search-chip px-3 py-1.5 text-xs rounded-full transition-colors",
+                                    "data-arc-color": ft[D.length % ft.length],
+                                    children: D,
+                                },
+                                D
+                            )
+                        ),
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function Ql({ item: n, type: a = "track" }) {
+    var h, v, y, w, T, b, j;
+    const l = xt(),
+        { playTrack: o } = Tt(),
+        u =
+            n.image ||
+            ((v = (h = n.images) == null ? void 0 : h[0]) == null ? void 0 : v.url) ||
+            ((T = (w = (y = n.album) == null ? void 0 : y.images) == null ? void 0 : w[0]) == null ? void 0 : T.url) ||
+            ((b = n.album) == null ? void 0 : b.image) ||
+            n.image_small,
+        f = n.name,
+        m =
+            a === "artist"
+                ? "Artist"
+                : ((j = n.artists) == null
+                      ? void 0
+                      : j
+                            .filter((S) => S.name && S.name !== "Unknown")
+                            .map((S) => S.name)
+                            .join(", ")) ||
+                  n.subtitle ||
+                  "",
+        p = () => {
+            if (a === "artist") {
+                l(`/artist/${encodeURIComponent(n.name)}`);
+                return;
+            }
+            if (a === "album" && n.id) {
+                l(`/album/${encodeURIComponent(n.id)}`);
+                return;
+            }
+            if (a === "playlist" && n.id) {
+                l(`/playlist/${encodeURIComponent(n.id)}`);
+                return;
+            }
+            o(n);
+        };
+    return r.jsxs("button", {
+        onClick: p,
+        className: "group text-left w-full flex-shrink-0",
+        children: [
+            r.jsxs("div", {
+                className: "relative mb-2",
+                children: [
+                    r.jsx($e, {
+                        src: u,
+                        alt: f,
+                        className: `w-full aspect-square object-cover ${a === "artist" ? "rounded-full" : "rounded-lg"} shadow-sm group-hover:shadow-md transition-shadow`,
+                    }),
+                    r.jsx("div", {
+                        className:
+                            "absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-lg flex items-center justify-center",
+                        children: r.jsx("div", {
+                            className:
+                                "am-hover-play-chip w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all",
+                            children: r.jsx(ht, { size: 22, className: "am-hover-play-icon ml-0.5" }),
+                        }),
+                    }),
+                ],
+            }),
+            r.jsx("p", { className: "text-[13px] font-medium text-am-dark truncate", children: f }),
+            r.jsx("p", { className: "text-[12px] text-am-gray mt-0.5 line-clamp-1", children: m }),
+        ],
+    });
+}
+function i2({ item: n, onClick: a }) {
+    var u, f, m, p;
+    const l =
+            n.image ||
+            ((m = (f = (u = n.album) == null ? void 0 : u.images) == null ? void 0 : f[0]) == null ? void 0 : m.url),
+        o =
+            ((p = n.artists) == null
+                ? void 0
+                : p
+                      .filter((h) => h.name && h.name !== "Unknown")
+                      .map((h) => h.name)
+                      .join(", ")) ||
+            n.subtitle ||
+            "";
+    return r.jsxs("button", {
+        onClick: a,
+        className: "group text-left w-full",
+        children: [
+            r.jsxs("div", {
+                className:
+                    "relative rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-shadow bg-am-bg",
+                children: [
+                    r.jsx($e, { src: l, alt: n.name, className: "w-full aspect-video object-cover" }),
+                    r.jsx("div", {
+                        className:
+                            "absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center",
+                        children: r.jsx("div", {
+                            className:
+                                "w-11 h-11 bg-white/90 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all",
+                            children: r.jsx(ht, { size: 24, className: "text-gray-900 ml-0.5" }),
+                        }),
+                    }),
+                ],
+            }),
+            r.jsx("p", { className: "text-[13px] font-medium text-am-dark truncate mt-2", children: n.name }),
+            o && r.jsx("p", { className: "text-[12px] text-am-gray mt-0.5 truncate", children: o }),
+        ],
+    });
+}
+function o2({ track: n, index: a, tracks: l }) {
+    var ee, re, xe, q;
+    const { playTrack: o, currentTrack: u, isPlaying: f, togglePlay: m, addToQueue: p, playNextInQueue: h } = Tt(),
+        { isAuthenticated: v, openAuthModal: y } = gt(),
+        { isFavorited: w, toggleFavorite: T } = mr(),
+        b = (u == null ? void 0 : u.id) === n.id,
+        j =
+            n.image ||
+            ((xe = (re = (ee = n.album) == null ? void 0 : ee.images) == null ? void 0 : re[0]) == null
+                ? void 0
+                : xe.url),
+        S =
+            ((q = n.artists) == null
+                ? void 0
+                : q
+                      .filter((te) => te.name && te.name !== "Unknown")
+                      .map((te) => te.name)
+                      .join(", ")) || "",
+        k = w(n.id),
+        [I, $] = g.useState(!1),
+        [A, B] = g.useState({ top: 0, left: 0 }),
+        Y = g.useRef(null),
+        ne = g.useRef(null);
+    g.useEffect(() => {
+        if (!I) return;
+        if (Y.current) {
+            const F = Y.current.getBoundingClientRect(),
+                ge = 180,
+                O = 208,
+                X = window.innerHeight - F.bottom < ge && F.top > ge;
+            B({ top: X ? F.top - ge - 4 : F.bottom + 4, left: Math.max(8, F.right - O) });
+        }
+        const te = (F) => {
+            var ge;
+            ne.current &&
+                !ne.current.contains(F.target) &&
+                !((ge = Y.current) != null && ge.contains(F.target)) &&
+                $(!1);
+        };
+        return document.addEventListener("mousedown", te), () => document.removeEventListener("mousedown", te);
+    }, [I]);
+    const K = () => {
+            if (!v) {
+                y(), $(!1);
+                return;
+            }
+            T(n), $(!1);
+        },
+        le = I
+            ? Zc.createPortal(
+                  r.jsxs("div", {
+                      ref: ne,
+                      className: "fixed bg-white border border-am-line rounded-lg shadow-2xl py-1 w-52",
+                      style: { top: Math.max(8, A.top), left: A.left, zIndex: 9999 },
+                      children: [
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  h(n), $(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(lr, { size: 16 }), " Play next"],
+                          }),
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  p(n), $(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(bn, { size: 16 }), " Add to queue"],
+                          }),
+                          r.jsx("div", { className: "border-t border-am-line my-1" }),
+                          r.jsxs("button", {
+                              onClick: K,
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [
+                                  k ? r.jsx(cr, { size: 14, className: "text-am-red" }) : r.jsx(fn, { size: 14 }),
+                                  k ? "Remove from Favorites" : "Add to Favorites",
+                              ],
+                          }),
+                          r.jsxs("button", {
+                              onClick: () => {
+                                  ys(n), $(!1);
+                              },
+                              className:
+                                  "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                              children: [r.jsx(bn, { size: 16 }), " Add to Playlist"],
+                          }),
+                      ],
+                  }),
+                  document.body
+              )
+            : null;
+    return r.jsxs("div", {
+        className: "flex items-center gap-3 p-2 rounded-lg hover:bg-am-hover transition-colors text-left group",
+        children: [
+            r.jsxs("button", {
+                onClick: () => (b ? m() : o(n, l)),
+                className: "flex items-center gap-3 min-w-0 flex-1 text-left",
+                children: [
+                    r.jsx("span", {
+                        className: `text-sm w-5 text-right flex-shrink-0 ${b ? "text-am-red font-bold" : "text-am-muted"}`,
+                        children: a + 1,
+                    }),
+                    r.jsx($e, { src: j, alt: "", className: "w-12 h-12 rounded-lg object-cover flex-shrink-0" }),
+                    r.jsxs("div", {
+                        className: "min-w-0 flex-1",
+                        children: [
+                            r.jsx("p", {
+                                className: `text-sm font-medium truncate ${b ? "text-am-red" : "text-am-dark"}`,
+                                children: n.name,
+                            }),
+                            r.jsx("p", { className: "text-xs text-am-gray truncate", children: S }),
+                        ],
+                    }),
+                ],
+            }),
+            r.jsx("button", {
+                ref: Y,
+                type: "button",
+                onClick: (te) => {
+                    te.stopPropagation(), $((F) => !F);
+                },
+                className:
+                    "p-1 text-am-muted hover:text-am-dark opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0",
+                "aria-label": `More actions for ${n.name}`,
+                children: r.jsx(nu, { size: 16 }),
+            }),
+            le,
+        ],
+    });
+}
+function c2() {
+    const [n, a] = g.useState(null),
+        [l, o] = g.useState(!0),
+        { playTrack: u } = Tt(),
+        f = xt();
+    if (
+        (g.useEffect(() => {
+            pw()
+                .then(a)
+                .catch(console.error)
+                .finally(() => o(!1));
+        }, []),
+        l)
+    )
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[60vh]",
+            children: r.jsxs("div", {
+                className: "text-center",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-3",
+                    }),
+                    r.jsx("p", { className: "text-sm text-am-gray", children: "Loading new releases..." }),
+                ],
+            }),
+        });
+    if (!n || n.length === 0)
+        return r.jsxs("div", {
+            className: "text-center py-20",
+            children: [
+                r.jsx("p", { className: "text-am-gray text-lg", children: "Could not load new releases" }),
+                r.jsx("button", {
+                    onClick: () => window.location.reload(),
+                    className: "mt-4 text-am-red hover:underline text-sm",
+                    children: "Retry",
+                }),
+            ],
+        });
+    const m = (y, w) => {
+            y.id && (y.id.startsWith("VL") || y.id.startsWith("RDCLAK") || y.id.startsWith("PL"))
+                ? f(`/playlist/${encodeURIComponent(y.id)}`)
+                : y.model_type === "album" && y.id
+                  ? f(`/playlist/${encodeURIComponent(y.id)}`)
+                  : u(y, w);
+        },
+        p = n.filter((y) => y.source === "country"),
+        h = n.filter((y) => y.source !== "country"),
+        v = [...p, ...h];
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: "New music releases and trending songs | TuneFree",
+                description:
+                    "Explore new music releases, trending songs and fresh playlists on TuneFree. Listen to the latest tracks online for free and discover what is popular right now.",
+                keywords:
+                    "new music, new releases, trending songs, latest music, free music online, trending playlists, new albums, TuneFree new music, TuneFree new releases",
+                path: "/new",
+            }),
+            r.jsxs("button", {
+                onClick: () => f(-1),
+                className: "flex items-center gap-1 text-am-gray hover:text-am-dark mb-4 -ml-1",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsx("h1", { className: "text-[28px] font-extrabold text-am-dark mb-6", children: "New Music" }),
+            v.map((y, w) => {
+                const T = y.title.toLowerCase(),
+                    b = T.includes("video") || T.includes("shorts"),
+                    j = y.items.some((k) => k.model_type === "track"),
+                    S = y.items.some((k) => k.model_type === "album" || k.model_type === "playlist");
+                return r.jsxs(
+                    "section",
+                    {
+                        className: "mb-10",
+                        children: [
+                            r.jsx("h2", { className: "text-xl font-bold text-am-dark mb-4", children: y.title }),
+                            b
+                                ? r.jsx("div", {
+                                      className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                      children: y.items
+                                          .slice(0, 10)
+                                          .map((k) => r.jsx(i2, { item: k, onClick: () => m(k, y.items) }, k.id)),
+                                  })
+                                : j && !S
+                                  ? r.jsx("div", {
+                                        className: "grid grid-cols-1 md:grid-cols-2 gap-x-6",
+                                        children: y.items
+                                            .slice(0, 20)
+                                            .map((k, I) => r.jsx(o2, { track: k, index: I, tracks: y.items }, k.id)),
+                                    })
+                                  : r.jsx("div", {
+                                        className:
+                                            "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4",
+                                        children: y.items
+                                            .slice(0, 18)
+                                            .map((k) => r.jsx(Ql, { item: k, type: k.model_type || "track" }, k.id)),
+                                    }),
+                        ],
+                    },
+                    w
+                );
+            }),
+        ],
+    });
+}
+const Fh = g.createContext();
+function u2() {
+    return g.useContext(Fh);
+}
+function d2({ children: n }) {
+    const [a, l] = g.useState(""),
+        [o, u] = g.useState(null),
+        [f, m] = g.useState("all");
+    return r.jsx(Fh.Provider, {
+        value: { query: a, setQuery: l, results: o, setResults: u, activeTab: f, setActiveTab: m },
+        children: n,
+    });
+}
+function vs({ track: n, index: a, tracks: l = [], extraMenuItems: o = [], showAddToPlaylist: u = !0 }) {
+    var X, M, se, G, E, U;
+    const { playTrack: f, currentTrack: m, isPlaying: p, togglePlay: h, addToQueue: v, playNextInQueue: y } = Tt(),
+        { isPinned: w, togglePin: T } = fr(),
+        { isAuthenticated: b, openAuthModal: j } = gt(),
+        { isFavorited: S, toggleFavorite: k } = mr(),
+        I = xt(),
+        $ = (m == null ? void 0 : m.id) === n.id,
+        [A, B] = g.useState(!1),
+        [Y, ne] = g.useState("down"),
+        [K, le] = g.useState(!1),
+        ee = g.useRef(null),
+        re = g.useRef(null),
+        xe = g.useRef(null),
+        q = w(n.id),
+        te = S(n.id),
+        F =
+            n.image ||
+            ((se = (M = (X = n.album) == null ? void 0 : X.images) == null ? void 0 : M[0]) == null
+                ? void 0
+                : se.url) ||
+            ((G = n.album) == null ? void 0 : G.image);
+    g.useEffect(() => {
+        if (!A) return;
+        const Z = (ae) => {
+            ee.current && !ee.current.contains(ae.target) && B(!1);
+        };
+        return document.addEventListener("mousedown", Z), () => document.removeEventListener("mousedown", Z);
+    }, [A]),
+        g.useEffect(() => {
+            if (!A) return;
+            const Z = () => {
+                    var oe, je;
+                    const ue = (oe = re.current) == null ? void 0 : oe.getBoundingClientRect(),
+                        ye = ((je = xe.current) == null ? void 0 : je.offsetHeight) || 220;
+                    if (!ue) return;
+                    const Ee = window.innerHeight - ue.bottom,
+                        Se = ue.top,
+                        D = Ee < ye + 12 && Se > Ee;
+                    ne(D ? "up" : "down");
+                },
+                ae = window.requestAnimationFrame(Z);
+            return (
+                window.addEventListener("resize", Z),
+                window.addEventListener("scroll", Z, !0),
+                () => {
+                    window.cancelAnimationFrame(ae),
+                        window.removeEventListener("resize", Z),
+                        window.removeEventListener("scroll", Z, !0);
+                }
+            );
+        }, [A]);
+    const ge = () => {
+            $ ? h() : f(n, l);
+        },
+        O = () => {
+            if (!b) {
+                j(), B(!1);
+                return;
+            }
+            te || (le(!0), setTimeout(() => le(!1), 300)), k(n), B(!1);
+        };
+    return r.jsxs("div", {
+        className: `am-track-row grid grid-cols-[16px_1fr_minmax(60px,auto)_32px] md:grid-cols-[16px_4fr_3fr_minmax(60px,auto)_32px] gap-3 px-4 py-2 rounded-md group hover:bg-am-hover items-center border-b border-am-line/50 ${$ ? "text-am-red" : "text-am-gray"}`,
+        children: [
+            r.jsxs("div", {
+                className: "flex items-center justify-center",
+                children: [
+                    r.jsx("span", {
+                        className: "group-hover:hidden text-sm",
+                        children: $ && p ? r.jsx("span", { className: "text-am-red text-xs", children: "♫" }) : a + 1,
+                    }),
+                    r.jsx("button", {
+                        onClick: ge,
+                        className: "hidden group-hover:block",
+                        children:
+                            $ && p
+                                ? r.jsx(or, { size: 16, className: "text-am-dark" })
+                                : r.jsx(ht, { size: 16, className: "text-am-dark" }),
+                    }),
+                ],
+            }),
+            r.jsxs("div", {
+                className: "flex items-center gap-3 min-w-0",
+                children: [
+                    r.jsx($e, { src: F, alt: "", className: "w-10 h-10 rounded object-cover flex-shrink-0" }),
+                    r.jsxs("div", {
+                        className: "min-w-0 flex-1",
+                        children: [
+                            r.jsx("p", {
+                                className: `am-track-row-title text-sm truncate ${$ ? "text-am-red font-medium" : "text-am-dark"}`,
+                                children: n.name,
+                            }),
+                            r.jsx("p", {
+                                className: "am-track-row-subtitle text-xs text-am-gray truncate",
+                                children:
+                                    (E = n.artists) == null
+                                        ? void 0
+                                        : E.filter((Z) => Z.name && Z.name !== "Unknown").map((Z, ae) =>
+                                              r.jsxs(
+                                                  "span",
+                                                  {
+                                                      children: [
+                                                          ae > 0 && ", ",
+                                                          r.jsx("span", {
+                                                              onClick: (ue) => {
+                                                                  ue.stopPropagation(),
+                                                                      I(`/artist/${encodeURIComponent(Z.name)}`);
+                                                              },
+                                                              className:
+                                                                  "hover:underline cursor-pointer hover:text-am-red",
+                                                              children: Z.name,
+                                                          }),
+                                                      ],
+                                                  },
+                                                  Z.id || ae
+                                              )
+                                          ),
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            r.jsx("span", {
+                className: "am-track-row-meta text-sm truncate hidden md:block text-am-gray",
+                children: (U = n.album) == null ? void 0 : U.name,
+            }),
+            r.jsx("span", {
+                className: "am-track-row-meta text-sm text-right text-am-gray",
+                children: li(n.duration_ms || n.duration),
+            }),
+            r.jsxs("div", {
+                className: "relative flex-shrink-0 flex items-center justify-center",
+                ref: ee,
+                children: [
+                    r.jsx("button", {
+                        ref: re,
+                        onClick: (Z) => {
+                            Z.stopPropagation(), B(!A);
+                        },
+                        className:
+                            "opacity-100 md:opacity-0 md:group-hover:opacity-100 text-am-gray hover:text-am-dark p-1 transition-opacity",
+                        children: r.jsx(q0, { size: 16 }),
+                    }),
+                    A &&
+                        r.jsxs("div", {
+                            ref: xe,
+                            className: `absolute right-0 bg-white border border-am-line rounded-lg shadow-2xl py-1 z-50 w-52 ${Y === "up" ? "bottom-8" : "top-8"}`,
+                            children: [
+                                r.jsxs("button", {
+                                    onClick: () => {
+                                        y(n), B(!1);
+                                    },
+                                    className:
+                                        "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                                    children: [r.jsx(lr, { size: 16 }), " Play next"],
+                                }),
+                                r.jsxs("button", {
+                                    onClick: () => {
+                                        v(n), B(!1);
+                                    },
+                                    className:
+                                        "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                                    children: [r.jsx(bn, { size: 16 }), " Add to queue"],
+                                }),
+                                r.jsx("div", { className: "border-t border-am-line my-1" }),
+                                r.jsxs("button", {
+                                    onClick: O,
+                                    className:
+                                        "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                                    children: [
+                                        te
+                                            ? r.jsx(cr, {
+                                                  size: 14,
+                                                  className: `text-am-red ${K ? "animate-heart-pop" : ""}`,
+                                              })
+                                            : r.jsx(fn, { size: 14 }),
+                                        te ? "Remove from Favorites" : "Add to Favorites",
+                                    ],
+                                }),
+                                u &&
+                                    r.jsxs("button", {
+                                        onClick: () => {
+                                            ys(n), B(!1);
+                                        },
+                                        className:
+                                            "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                                        children: [r.jsx(bn, { size: 16 }), " Add to Playlist"],
+                                    }),
+                                r.jsx("div", { className: "border-t border-am-line my-1" }),
+                                r.jsxs("button", {
+                                    onClick: () => {
+                                        T({ ...n, type: "track" }), B(!1);
+                                    },
+                                    className:
+                                        "w-full flex items-center gap-3 px-3 py-2 text-sm text-am-dark hover:bg-am-hover text-left",
+                                    children: [
+                                        q ? r.jsx(Fr, { size: 16, className: "text-am-red" }) : r.jsx(xs, { size: 16 }),
+                                        q ? "Unpin" : "Pin to Library",
+                                    ],
+                                }),
+                                o.map((Z, ae) =>
+                                    r.jsxs(
+                                        "button",
+                                        {
+                                            onClick: () => {
+                                                Z.onClick(n), B(!1);
+                                            },
+                                            className: `w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-am-hover text-left ${Z.className || "text-am-dark"}`,
+                                            children: [Z.icon, Z.label],
+                                        },
+                                        Z.key || `${n.id}-extra-${ae}`
+                                    )
+                                ),
+                            ],
+                        }),
+                ],
+            }),
+        ],
+    });
+}
+const du = "tunefree_search_history",
+    f2 = 10;
+function op(n) {
+    var a, l, o, u, f, m;
+    return (
+        (n == null ? void 0 : n.image) ||
+        ((l = (a = n == null ? void 0 : n.images) == null ? void 0 : a[0]) == null ? void 0 : l.url) ||
+        ((f = (u = (o = n == null ? void 0 : n.album) == null ? void 0 : o.images) == null ? void 0 : u[0]) == null
+            ? void 0
+            : f.url) ||
+        ((m = n == null ? void 0 : n.album) == null ? void 0 : m.image) ||
+        (n == null ? void 0 : n.image_small) ||
+        ""
+    );
+}
+function cp(n, a) {
+    var l, o;
+    if (a.key === "tracks") {
+        const u =
+            (l = n == null ? void 0 : n.artists) == null
+                ? void 0
+                : l
+                      .map((f) => f.name)
+                      .filter(Boolean)
+                      .join(", ");
+        return u ? `Song • ${u}` : "Song";
+    }
+    if (a.key === "artists") return "Artist";
+    if (a.key === "albums") {
+        const u =
+            (o = n == null ? void 0 : n.artists) == null
+                ? void 0
+                : o
+                      .map((f) => f.name)
+                      .filter(Boolean)
+                      .join(", ");
+        return u ? `Album • ${u}` : "Album";
+    }
+    return "Playlist";
+}
+function Oh(n) {
+    return typeof n == "string"
+        ? { query: n, title: n, subtitle: "Recent search", image: "", type: "query" }
+        : {
+              query: (n == null ? void 0 : n.query) || (n == null ? void 0 : n.title) || "",
+              title: (n == null ? void 0 : n.title) || (n == null ? void 0 : n.query) || "",
+              subtitle: (n == null ? void 0 : n.subtitle) || "Recent search",
+              image: (n == null ? void 0 : n.image) || "",
+              type: (n == null ? void 0 : n.type) || "query",
+          };
+}
+function Ih(n) {
+    localStorage.setItem(du, JSON.stringify(n.slice(0, f2)));
+}
+function rr() {
+    try {
+        return (JSON.parse(localStorage.getItem(du)) || []).map(Oh).filter((a) => a.query);
+    } catch {
+        return [];
+    }
+}
+function up(n) {
+    const a = Oh(n),
+        l = rr().filter((o) => o.query.toLowerCase() !== a.query.toLowerCase());
+    l.unshift(a), Ih(l);
+}
+function dp(n) {
+    Ih(rr().filter((a) => a.query !== n));
+}
+function fp() {
+    localStorage.removeItem(du);
+}
+const m2 = [
+        {
+            name: "Pop",
+            color: "#fc3c44",
+            query: "top pop songs",
+            image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Hip-Hop",
+            color: "#4f7cff",
+            query: "top hip hop songs",
+            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Rock",
+            color: "#f35c35",
+            query: "top rock songs",
+            image: "https://images.unsplash.com/photo-1501612780327-45045538702b?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "R&B",
+            color: "#9b5de5",
+            query: "top r&b songs",
+            image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Country",
+            color: "#c08a2b",
+            query: "country music hits",
+            image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Latin",
+            color: "#ff3b7f",
+            query: "top latin songs",
+            image: "https://images.unsplash.com/photo-1516280030429-27679b3dc9cf?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "EDM",
+            color: "#0d73ec",
+            query: "top edm songs",
+            image: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Indie",
+            color: "#0f9d7a",
+            query: "indie music",
+            image: "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "K-Pop",
+            color: "#7f5cff",
+            query: "top kpop songs",
+            image: "https://images.unsplash.com/photo-1521337581100-8ca9a73a5f79?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Classical",
+            color: "#7d4b32",
+            query: "classical music",
+            image: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Jazz",
+            color: "#377d95",
+            query: "jazz music",
+            image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Lofi",
+            color: "#8c67ab",
+            query: "lofi beats",
+            image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80",
+        },
+    ],
+    p2 = [
+        {
+            name: "Bollywood",
+            color: "#fc3c44",
+            query: "bollywood hits",
+            image: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Punjabi",
+            color: "#8c5bd3",
+            query: "punjabi songs",
+            image: "https://images.unsplash.com/photo-1516280030429-27679b3dc9cf?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Tamil",
+            color: "#4c8bf5",
+            query: "tamil songs",
+            image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Telugu",
+            color: "#f59e0b",
+            query: "telugu songs",
+            image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Pop",
+            color: "#ff4d6d",
+            query: "top pop songs",
+            image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Hip-Hop",
+            color: "#537AA8",
+            query: "top hip hop songs",
+            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Rock",
+            color: "#a34f9e",
+            query: "top rock songs",
+            image: "https://images.unsplash.com/photo-1501612780327-45045538702b?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Indie",
+            color: "#148a7d",
+            query: "indian independent music",
+            image: "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Lofi",
+            color: "#7c6ee6",
+            query: "lofi beats india",
+            image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Devotional",
+            color: "#b45309",
+            query: "devotional songs hindi",
+            image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "K-Pop",
+            color: "#1fb973",
+            query: "top kpop songs",
+            image: "https://images.unsplash.com/photo-1521337581100-8ca9a73a5f79?auto=format&fit=crop&w=900&q=80",
+        },
+        {
+            name: "Jazz",
+            color: "#477d95",
+            query: "jazz music",
+            image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=900&q=80",
+        },
+    ],
+    os = [
+        { key: "tracks", label: "Songs", apiType: "song" },
+        { key: "artists", label: "Artists", apiType: "artist" },
+        { key: "albums", label: "Albums", apiType: "album" },
+        { key: "playlists", label: "Playlists", apiType: "playlist" },
+    ];
+function h2() {
+    var ge;
+    const n = xt(),
+        [a] = Tp(),
+        { query: l, setQuery: o, results: u, setResults: f, activeTab: m, setActiveTab: p } = u2(),
+        [h, v] = g.useState(!1),
+        [y, w] = g.useState([]),
+        [T, b] = g.useState(!1),
+        [j, S] = g.useState(rr),
+        k = g.useRef(null),
+        I = g.useRef(null),
+        $ = g.useRef(!1),
+        A = os.find((O) => O.key === m) || os[0],
+        B = zn() === "IN" ? p2 : m2,
+        Y = g.useCallback(
+            async (O, X) => {
+                if (O.trim()) {
+                    v(!0);
+                    try {
+                        const M = await Ch(O, X.apiType);
+                        return f((se) => ({ ...se, [X.key]: M })), M;
+                    } catch (M) {
+                        return console.error(M), [];
+                    } finally {
+                        v(!1);
+                    }
+                }
+            },
+            [f]
+        );
+    g.useEffect(() => {
+        const O = a.get("q");
+        O &&
+            O.trim() &&
+            (o(O),
+            (!$.current || O !== l) &&
+                (($.current = !0),
+                S(rr()),
+                f({}),
+                Y(O, A).then((X) => {
+                    const M = X == null ? void 0 : X[0];
+                    up({
+                        query: O.trim(),
+                        title: (M == null ? void 0 : M.name) || O.trim(),
+                        subtitle: M ? cp(M, A) : "Recent search",
+                        image: op(M),
+                        type: A.key,
+                    }),
+                        S(rr());
+                })));
+    }, [a]),
+        g.useEffect(() => {
+            l.trim() && u && !u[m] && Y(l, A);
+        }, [m]),
+        g.useEffect(() => {
+            if ((clearTimeout(k.current), !l.trim() || l.length < 2)) {
+                w([]);
+                return;
+            }
+            k.current = setTimeout(() => {
+                dw(l)
+                    .then(w)
+                    .catch(() => {});
+            }, 200);
+        }, [l]);
+    const ne = g.useCallback(
+            async (O) => {
+                if (!O.trim()) return;
+                b(!1), f({}), p("tracks");
+                const X = await Y(O, os[0]),
+                    M = X == null ? void 0 : X[0];
+                up({
+                    query: O.trim(),
+                    title: (M == null ? void 0 : M.name) || O.trim(),
+                    subtitle: M ? cp(M, os[0]) : "Recent search",
+                    image: op(M),
+                    type: os[0].key,
+                }),
+                    S(rr());
+            },
+            [f, p, Y]
+        ),
+        K = (O) => {
+            O.preventDefault(), ne(l);
+        },
+        le = (O) => {
+            o(O), ne(O);
+        },
+        ee = T && !h && l.trim().length > 0,
+        re = y.length > 0 ? y.map((O) => ({ text: O, type: "suggestion" })) : [],
+        xe = u && Object.keys(u).length > 0,
+        q = (u == null ? void 0 : u[m]) || [],
+        te = l.trim()
+            ? `${l} free music search | TuneFree song, album and artist results`
+            : "Search free music online | TuneFree music search",
+        F = l.trim()
+            ? `Search TuneFree for ${l}. Explore free songs, artists, albums and playlists on TuneFree and start listening instantly online.`
+            : "Search free music online with TuneFree. Find songs, albums, artists and playlists fast with a lightweight music search experience.";
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: te,
+                description: F,
+                keywords:
+                    "search free music, music search, find songs online, search artists, search playlists, online music player, free music online, TuneFree search, TuneFree search",
+                path: l.trim() ? `/search?q=${encodeURIComponent(l.trim())}` : "/search",
+            }),
+            r.jsxs("button", {
+                onClick: () => n(-1),
+                className: "flex items-center gap-1 text-am-gray mb-3 -ml-1 hover:text-am-dark",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsxs("form", {
+                onSubmit: K,
+                className: "relative w-full max-w-xl mb-6",
+                children: [
+                    r.jsxs("div", {
+                        className: "flex gap-2",
+                        children: [
+                            r.jsxs("div", {
+                                className: "relative flex-1",
+                                children: [
+                                    r.jsx(Zl, {
+                                        className: "absolute left-3 top-1/2 -translate-y-1/2 text-am-muted z-10",
+                                        size: 18,
+                                    }),
+                                    r.jsx("input", {
+                                        ref: I,
+                                        type: "text",
+                                        placeholder: "Search for songs, artists, playlists...",
+                                        value: l,
+                                        onChange: (O) => {
+                                            o(O.target.value), O.target.value.trim() ? b(!0) : b(!1);
+                                        },
+                                        onFocus: () => {
+                                            l.trim() && b(!0);
+                                        },
+                                        onBlur: () => setTimeout(() => b(!1), 200),
+                                        className:
+                                            "w-full rounded-full border border-am-line bg-[var(--surface-elevated)] text-am-dark text-base py-3.5 pl-12 pr-11 shadow-[0_18px_48px_rgba(15,23,42,0.06)] outline-none focus:ring-2 focus:ring-am-red/25 focus:border-am-red placeholder:text-am-muted",
+                                    }),
+                                    l &&
+                                        r.jsx("button", {
+                                            type: "button",
+                                            onClick: () => {
+                                                o(""), f(null), w([]);
+                                            },
+                                            className:
+                                                "absolute right-3 top-1/2 -translate-y-1/2 text-am-muted hover:text-am-dark z-10",
+                                            children: r.jsx(en, { size: 18 }),
+                                        }),
+                                ],
+                            }),
+                            r.jsx("button", {
+                                type: "submit",
+                                className:
+                                    "px-5 py-3.5 bg-am-red text-white text-sm font-semibold rounded-full hover:bg-am-red-h transition-colors flex-shrink-0",
+                                children: "Search",
+                            }),
+                        ],
+                    }),
+                    ee &&
+                        re.length > 0 &&
+                        r.jsxs("div", {
+                            className:
+                                "absolute top-full left-0 right-16 mt-1 bg-[var(--surface-elevated)] border border-am-line rounded-lg shadow-xl overflow-hidden z-50",
+                            children: [
+                                ((ge = re[0]) == null ? void 0 : ge.type) === "history" &&
+                                    r.jsxs("div", {
+                                        className:
+                                            "flex items-center justify-between px-4 py-2 border-b border-am-line",
+                                        children: [
+                                            r.jsx("span", {
+                                                className:
+                                                    "text-xs font-semibold text-am-gray uppercase tracking-wider",
+                                                children: "Recent Searches",
+                                            }),
+                                            r.jsx("button", {
+                                                onMouseDown: () => {
+                                                    fp(), S([]);
+                                                },
+                                                className: "text-xs text-am-red hover:underline",
+                                                children: "Clear All",
+                                            }),
+                                        ],
+                                    }),
+                                re.map((O, X) =>
+                                    r.jsxs(
+                                        "button",
+                                        {
+                                            onMouseDown: () => le(O.text),
+                                            className:
+                                                "w-full flex items-center gap-3 px-4 py-2.5 text-sm text-am-dark hover:bg-am-hover text-left group",
+                                            children: [
+                                                O.type === "history"
+                                                    ? r.jsx(jm, { size: 14, className: "text-am-muted flex-shrink-0" })
+                                                    : r.jsx(Zl, { size: 14, className: "text-am-muted flex-shrink-0" }),
+                                                r.jsx("span", { className: "flex-1 truncate", children: O.text }),
+                                                O.type === "history" &&
+                                                    r.jsx("span", {
+                                                        onMouseDown: (M) => {
+                                                            M.stopPropagation(), dp(O.text), S(rr());
+                                                        },
+                                                        className:
+                                                            "text-am-muted hover:text-am-red opacity-0 group-hover:opacity-100 flex-shrink-0",
+                                                        children: r.jsx(en, { size: 14 }),
+                                                    }),
+                                                O.type === "suggestion" &&
+                                                    r.jsx(W0, {
+                                                        size: 12,
+                                                        className:
+                                                            "text-am-muted opacity-0 group-hover:opacity-100 flex-shrink-0",
+                                                    }),
+                                            ],
+                                        },
+                                        X
+                                    )
+                                ),
+                            ],
+                        }),
+                ],
+            }),
+            xe
+                ? r.jsxs(r.Fragment, {
+                      children: [
+                          r.jsx("div", {
+                              className: "flex gap-2 mb-6 overflow-x-auto scroll-section",
+                              children: os.map((O) =>
+                                  r.jsx(
+                                      "button",
+                                      {
+                                          onClick: () => p(O.key),
+                                          className: `search-tab-chip px-4 py-1.5 rounded-full text-sm font-medium transition-colors flex-shrink-0 ${m === O.key ? "search-tab-chip-active" : ""}`,
+                                          children: O.label,
+                                      },
+                                      O.key
+                                  )
+                              ),
+                          }),
+                          h &&
+                              r.jsx("div", {
+                                  className: "flex items-center justify-center min-h-[30vh]",
+                                  children: r.jsxs("div", {
+                                      className: "text-center",
+                                      children: [
+                                          r.jsx("div", {
+                                              className:
+                                                  "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-3",
+                                          }),
+                                          r.jsxs("p", {
+                                              className: "text-sm text-am-gray",
+                                              children: ["Searching ", A.label.toLowerCase(), "..."],
+                                          }),
+                                      ],
+                                  }),
+                              }),
+                          !h &&
+                              m === "tracks" &&
+                              q.length > 0 &&
+                              r.jsx("section", {
+                                  children: r.jsx("div", {
+                                      className: "border-t border-am-line",
+                                      children: q
+                                          .slice(0, 20)
+                                          .map((O, X) => r.jsx(vs, { track: O, index: X, tracks: [O] }, O.id)),
+                                  }),
+                              }),
+                          !h &&
+                              m === "artists" &&
+                              q.length > 0 &&
+                              r.jsx("section", {
+                                  children: r.jsx("div", {
+                                      className:
+                                          "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4",
+                                      children: q.slice(0, 18).map((O) => r.jsx(Ql, { item: O, type: "artist" }, O.id)),
+                                  }),
+                              }),
+                          !h &&
+                              m === "albums" &&
+                              q.length > 0 &&
+                              r.jsx("section", {
+                                  children: r.jsx("div", {
+                                      className:
+                                          "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4",
+                                      children: q.slice(0, 18).map((O) => r.jsx(Ql, { item: O, type: "album" }, O.id)),
+                                  }),
+                              }),
+                          !h &&
+                              m === "playlists" &&
+                              q.length > 0 &&
+                              r.jsx("section", {
+                                  children: r.jsx("div", {
+                                      className:
+                                          "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4",
+                                      children: q
+                                          .slice(0, 18)
+                                          .map((O) => r.jsx(Ql, { item: O, type: "playlist" }, O.id)),
+                                  }),
+                              }),
+                          !h &&
+                              q.length === 0 &&
+                              r.jsx("div", {
+                                  className: "text-center py-12 text-am-gray",
+                                  children: r.jsxs("p", {
+                                      className: "text-sm",
+                                      children: ["No ", A.label.toLowerCase(), ' found for "', l, '"'],
+                                  }),
+                              }),
+                      ],
+                  })
+                : h
+                  ? r.jsx("div", {
+                        className: "flex items-center justify-center min-h-[40vh]",
+                        children: r.jsxs("div", {
+                            className: "text-center",
+                            children: [
+                                r.jsx("div", {
+                                    className:
+                                        "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-3",
+                                }),
+                                r.jsx("p", { className: "text-sm text-am-gray", children: "Searching..." }),
+                            ],
+                        }),
+                    })
+                  : r.jsxs("div", {
+                        children: [
+                            j.length > 0 &&
+                                !l &&
+                                r.jsxs("div", {
+                                    className: "mb-10",
+                                    children: [
+                                        r.jsxs("div", {
+                                            className: "flex items-center justify-between mb-4",
+                                            children: [
+                                                r.jsx("h2", {
+                                                    className: "text-[30px] font-bold tracking-tight text-am-dark",
+                                                    children: "Recently Searched",
+                                                }),
+                                                r.jsx("button", {
+                                                    onClick: () => {
+                                                        fp(), S([]);
+                                                    },
+                                                    className: "text-base font-medium text-am-red hover:underline",
+                                                    children: "Clear",
+                                                }),
+                                            ],
+                                        }),
+                                        r.jsx("div", {
+                                            className: "flex gap-3 overflow-x-auto scroll-section pb-2",
+                                            children: j.map((O, X) =>
+                                                r.jsxs(
+                                                    "button",
+                                                    {
+                                                        onClick: () => {
+                                                            o(O.query), ne(O.query);
+                                                        },
+                                                        className:
+                                                            "group flex min-w-[250px] max-w-[290px] items-center gap-3 rounded-[20px] border border-am-line bg-[var(--surface-elevated)] px-3.5 py-3 text-left shadow-[0_8px_20px_rgba(15,23,42,0.04)] transition hover:border-am-line hover:bg-[var(--surface-1)]",
+                                                        children: [
+                                                            r.jsx("div", {
+                                                                className:
+                                                                    "relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-[16px] bg-[var(--surface-1)]",
+                                                                children: O.image
+                                                                    ? r.jsx($e, {
+                                                                          src: O.image,
+                                                                          alt: O.title,
+                                                                          className: "h-full w-full object-cover",
+                                                                      })
+                                                                    : r.jsx("div", {
+                                                                          className:
+                                                                              "flex h-full w-full items-center justify-center bg-gradient-to-br from-[#ffd1d5] via-[#f9f0c6] to-[#d7ecff]",
+                                                                          children: r.jsx(jm, {
+                                                                              size: 24,
+                                                                              className: "text-am-dark/70",
+                                                                          }),
+                                                                      }),
+                                                            }),
+                                                            r.jsxs("div", {
+                                                                className: "min-w-0 flex-1",
+                                                                children: [
+                                                                    r.jsx("p", {
+                                                                        className:
+                                                                            "truncate text-[14px] font-semibold text-am-dark",
+                                                                        children: O.title,
+                                                                    }),
+                                                                    r.jsx("p", {
+                                                                        className: "truncate text-[13px] text-am-gray",
+                                                                        children: O.subtitle,
+                                                                    }),
+                                                                ],
+                                                            }),
+                                                            r.jsx("span", {
+                                                                onClick: (M) => {
+                                                                    M.stopPropagation(), dp(O.query), S(rr());
+                                                                },
+                                                                className:
+                                                                    "text-am-muted opacity-0 transition group-hover:opacity-100 hover:text-am-red",
+                                                                children: r.jsx(en, { size: 16 }),
+                                                            }),
+                                                        ],
+                                                    },
+                                                    `${O.query}-${X}`
+                                                )
+                                            ),
+                                        }),
+                                    ],
+                                }),
+                            r.jsx("h2", {
+                                className: "mb-5 text-[30px] font-bold tracking-tight text-am-dark",
+                                children: "Browse Categories",
+                            }),
+                            r.jsx("div", {
+                                className: "grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4",
+                                children: B.map((O) =>
+                                    r.jsxs(
+                                        "button",
+                                        {
+                                            onClick: () => {
+                                                o(O.query), ne(O.query);
+                                            },
+                                            className:
+                                                "group relative overflow-hidden rounded-[26px] aspect-[1.48] text-left shadow-[0_18px_36px_rgba(15,23,42,0.06)]",
+                                            style: { backgroundColor: O.color },
+                                            children: [
+                                                r.jsx($e, {
+                                                    src: O.image,
+                                                    alt: O.name,
+                                                    className:
+                                                        "absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105",
+                                                }),
+                                                r.jsx("div", {
+                                                    className: "absolute inset-0",
+                                                    style: {
+                                                        background: `linear-gradient(135deg, ${O.color}cc, ${O.color}88 55%, rgba(0,0,0,0.38))`,
+                                                    },
+                                                }),
+                                                r.jsx("div", {
+                                                    className:
+                                                        "absolute inset-0 bg-gradient-to-t from-black/28 via-transparent to-transparent",
+                                                }),
+                                                r.jsx("p", {
+                                                    className:
+                                                        "absolute bottom-4 left-4 right-4 text-[15px] font-semibold text-white sm:text-[17px]",
+                                                    children: O.name,
+                                                }),
+                                            ],
+                                        },
+                                        O.name
+                                    )
+                                ),
+                            }),
+                        ],
+                    }),
+        ],
+    });
+}
+function x2() {
+    var j, S;
+    const { id: n } = di(),
+        [a, l] = g.useState(null),
+        [o, u] = g.useState(!1),
+        f = xt(),
+        { playTrack: m, playTracksShuffled: p } = Tt(),
+        { isPinned: h, togglePin: v } = fr();
+    if (
+        (g.useEffect(() => {
+            l(null), u(!1), mw(decodeURIComponent(n)).then(l).catch(console.error);
+        }, [n]),
+        !a)
+    )
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[60vh]",
+            children: r.jsxs("div", {
+                className: "text-center",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-3",
+                    }),
+                    r.jsx("p", { className: "text-sm text-am-gray", children: "Loading artist..." }),
+                ],
+            }),
+        });
+    const { artist: y, topTracks: w } = a,
+        T = o ? w : w.slice(0, 10),
+        b = y.image_large || y.image_small || ((j = w[0]) == null ? void 0 : j.image);
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: `${y.name} songs and top tracks | TuneFree`,
+                description: `Listen to ${y.name} online for free with TuneFree. Explore top tracks, popular songs and artist music streaming in one fast music player.`,
+                keywords: `${y.name}, ${y.name} songs, ${y.name} music, listen to ${y.name}, artist top tracks, free music streaming, online music player, TuneFree`,
+                path: `/artist/${encodeURIComponent(n)}`,
+                image: b,
+                type: "music.artist",
+            }),
+            r.jsxs("button", {
+                onClick: () => f(-1),
+                className: "flex items-center gap-1 text-am-gray hover:text-am-dark mb-4 -ml-1",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsxs("div", {
+                className: "flex flex-col md:flex-row items-start gap-6 mb-8",
+                children: [
+                    r.jsx($e, {
+                        src: b,
+                        alt: y.name,
+                        className: "w-48 h-48 md:w-56 md:h-56 rounded-lg object-cover shadow-lg flex-shrink-0",
+                    }),
+                    r.jsxs("div", {
+                        className: "pt-2 md:pt-4 min-w-0 flex-1",
+                        children: [
+                            r.jsx("p", {
+                                className: "text-xs font-medium text-am-gray uppercase tracking-wider mb-1",
+                                children: "Artist",
+                            }),
+                            r.jsx("h1", {
+                                className: "text-3xl md:text-4xl font-bold text-am-dark mb-2",
+                                children: y.name,
+                            }),
+                            ((S = y.followers) == null ? void 0 : S.total) &&
+                                r.jsxs("p", {
+                                    className: "text-sm text-am-gray mb-4",
+                                    children: [y.followers.total.toLocaleString(), " followers"],
+                                }),
+                            r.jsxs("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    r.jsxs("button", {
+                                        onClick: () => w.length > 0 && m(w[0], w),
+                                        className:
+                                            "flex items-center gap-2 px-5 py-2.5 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h transition-colors",
+                                        children: [r.jsx(ht, { size: 18 }), " Play"],
+                                    }),
+                                    r.jsxs("button", {
+                                        onClick: () => p(w),
+                                        className:
+                                            "flex items-center gap-2 px-4 py-2.5 border border-am-line text-am-dark text-sm font-semibold rounded-lg hover:border-am-dark hover:bg-am-hover transition-colors",
+                                        children: [r.jsx(ir, { size: 15 }), " Shuffle"],
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: () => v({ id: y.name, name: y.name, type: "artist", image: b }),
+                                        className: `p-2 rounded-lg border transition-colors ${h(y.name) ? "border-am-red text-am-red" : "border-am-line text-am-gray hover:text-am-dark hover:border-am-dark"}`,
+                                        title: h(y.name) ? "Unpin" : "Pin to Library",
+                                        children: h(y.name) ? r.jsx(Fr, { size: 16 }) : r.jsx(xs, { size: 16 }),
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            w.length > 0 &&
+                r.jsxs("section", {
+                    className: "mb-8",
+                    children: [
+                        r.jsxs("div", {
+                            className:
+                                "grid grid-cols-[16px_4fr_3fr_minmax(80px,1fr)] gap-4 px-4 py-2 border-b border-am-line text-xs font-medium text-am-gray uppercase tracking-wider",
+                            children: [
+                                r.jsx("span", { children: "#" }),
+                                r.jsx("span", { children: "Song" }),
+                                r.jsx("span", { className: "hidden md:block", children: "Album" }),
+                                r.jsx("span", { className: "text-right", children: "Time" }),
+                            ],
+                        }),
+                        T.map((k, I) => r.jsx(vs, { track: k, index: I, tracks: w }, k.id)),
+                        w.length > 10 &&
+                            r.jsx("button", {
+                                onClick: () => u(!o),
+                                className: "mt-3 text-sm font-semibold text-am-red hover:underline",
+                                children: o ? "Show less" : "See more",
+                            }),
+                    ],
+                }),
+        ],
+    });
+}
+function g2() {
+    const { id: n } = di(),
+        [a, l] = g.useState(null),
+        [o, u] = g.useState(!0),
+        { playTrack: f, playTracksShuffled: m } = Tt(),
+        { isPinned: p, togglePin: h } = fr(),
+        v = xt();
+    if (
+        (g.useEffect(() => {
+            l(null),
+                u(!0),
+                xw(decodeURIComponent(n))
+                    .then(l)
+                    .catch(console.error)
+                    .finally(() => u(!1));
+        }, [n]),
+        o)
+    )
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[60vh]",
+            children: r.jsxs("div", {
+                className: "text-center",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-3",
+                    }),
+                    r.jsx("p", { className: "text-sm text-am-gray", children: "Loading playlist..." }),
+                ],
+            }),
+        });
+    if (!a)
+        return r.jsx("div", {
+            className: "text-center py-20",
+            children: r.jsx("p", { className: "text-am-gray text-lg", children: "Could not load playlist" }),
+        });
+    const { title: y, description: w, thumbnail: T, tracks: b } = a;
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: `${y} playlist | TuneFree free online music playlist`,
+                description: `${y} on TuneFree. Stream this playlist online for free, discover songs, build your queue and keep listening with a fast online music player.`,
+                keywords: `${y} playlist, free playlist, online music playlist, listen to playlist online, playlist songs, free music streaming, TuneFree playlist, TuneFree`,
+                path: `/playlist/${encodeURIComponent(n)}`,
+                image: T,
+                type: "music.playlist",
+            }),
+            r.jsxs("button", {
+                onClick: () => v(-1),
+                className: "flex items-center gap-1 text-am-gray hover:text-am-dark mb-4 -ml-1",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsxs("div", {
+                className: "flex flex-col md:flex-row items-start gap-6 mb-8",
+                children: [
+                    r.jsx($e, {
+                        src: T,
+                        alt: y,
+                        className: "w-48 h-48 md:w-56 md:h-56 rounded-lg object-cover shadow-lg flex-shrink-0",
+                    }),
+                    r.jsxs("div", {
+                        className: "pt-2 md:pt-4 min-w-0 flex-1",
+                        children: [
+                            r.jsx("p", {
+                                className: "text-xs font-medium text-am-gray uppercase tracking-wider mb-1",
+                                children: "Playlist",
+                            }),
+                            r.jsx("h1", { className: "text-2xl md:text-3xl font-bold text-am-dark mb-2", children: y }),
+                            w && r.jsx("p", { className: "text-sm text-am-gray mb-4 line-clamp-3", children: w }),
+                            r.jsxs("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    r.jsxs("button", {
+                                        onClick: () => b.length > 0 && f(b[0], b),
+                                        className:
+                                            "flex items-center gap-2 px-5 py-2.5 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h transition-colors",
+                                        children: [r.jsx(ht, { size: 18 }), " Play"],
+                                    }),
+                                    r.jsxs("button", {
+                                        onClick: () => m(b),
+                                        className:
+                                            "flex items-center gap-2 px-4 py-2.5 border border-am-line text-am-dark text-sm font-semibold rounded-lg hover:border-am-dark hover:bg-am-hover transition-colors",
+                                        children: [r.jsx(ir, { size: 15 }), " Shuffle"],
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: () =>
+                                            h({ id: decodeURIComponent(n), name: y, type: "playlist", image: T }),
+                                        className: `p-2 rounded-lg border transition-colors ${p(decodeURIComponent(n)) ? "border-am-red text-am-red" : "border-am-line text-am-gray hover:text-am-dark hover:border-am-dark"}`,
+                                        title: p(decodeURIComponent(n)) ? "Unpin" : "Pin to Library",
+                                        children: p(decodeURIComponent(n))
+                                            ? r.jsx(Fr, { size: 16 })
+                                            : r.jsx(xs, { size: 16 }),
+                                    }),
+                                    r.jsxs("span", {
+                                        className: "text-sm text-am-gray",
+                                        children: [b.length, " songs"],
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            b.length > 0 &&
+                r.jsxs("section", {
+                    children: [
+                        r.jsxs("div", {
+                            className:
+                                "grid grid-cols-[16px_4fr_3fr_minmax(80px,1fr)] gap-4 px-4 py-2 border-b border-am-line text-xs font-medium text-am-gray uppercase tracking-wider",
+                            children: [
+                                r.jsx("span", { children: "#" }),
+                                r.jsx("span", { children: "Song" }),
+                                r.jsx("span", { className: "hidden md:block", children: "Album" }),
+                                r.jsx("span", { className: "text-right", children: "Time" }),
+                            ],
+                        }),
+                        b.map((j, S) => r.jsx(vs, { track: j, index: S, tracks: b }, j.id || S)),
+                    ],
+                }),
+        ],
+    });
+}
+function y2() {
+    const { id: n } = di(),
+        [a, l] = g.useState(null),
+        [o, u] = g.useState(!0),
+        { playTrack: f, playTracksShuffled: m } = Tt(),
+        { isPinned: p, togglePin: h } = fr(),
+        v = xt();
+    if (
+        (g.useEffect(() => {
+            l(null),
+                u(!0),
+                gw(decodeURIComponent(n))
+                    .then(l)
+                    .catch(console.error)
+                    .finally(() => u(!1));
+        }, [n]),
+        o)
+    )
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[60vh]",
+            children: r.jsxs("div", {
+                className: "text-center",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin mx-auto mb-3",
+                    }),
+                    r.jsx("p", { className: "text-sm text-am-gray", children: "Loading album..." }),
+                ],
+            }),
+        });
+    if (!a)
+        return r.jsx("div", {
+            className: "text-center py-20",
+            children: r.jsx("p", { className: "text-am-gray text-lg", children: "Could not load album" }),
+        });
+    const { title: y, description: w, thumbnail: T, tracks: b } = a;
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: `${y} album | TuneFree free album streaming`,
+                description: `Listen to the album ${y} online for free with TuneFree. Explore album tracks, stream songs instantly and enjoy lightweight online music listening.`,
+                keywords: `${y} album, listen to album online, free album streaming, album songs, online music listening, TuneFree album, TuneFree`,
+                path: `/album/${encodeURIComponent(n)}`,
+                image: T,
+                type: "music.album",
+            }),
+            r.jsxs("button", {
+                onClick: () => v(-1),
+                className: "flex items-center gap-1 text-am-gray hover:text-am-dark mb-4 -ml-1",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsxs("div", {
+                className: "flex flex-col md:flex-row items-start gap-6 mb-8",
+                children: [
+                    r.jsx($e, {
+                        src: T,
+                        alt: y,
+                        className: "w-48 h-48 md:w-56 md:h-56 rounded-lg object-cover shadow-lg flex-shrink-0",
+                    }),
+                    r.jsxs("div", {
+                        className: "pt-2 md:pt-4 min-w-0 flex-1",
+                        children: [
+                            r.jsx("p", {
+                                className: "text-xs font-medium text-am-gray uppercase tracking-wider mb-1",
+                                children: "Album",
+                            }),
+                            r.jsx("h1", { className: "text-2xl md:text-3xl font-bold text-am-dark mb-2", children: y }),
+                            w && r.jsx("p", { className: "text-sm text-am-gray mb-4 line-clamp-3", children: w }),
+                            r.jsxs("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    r.jsxs("button", {
+                                        onClick: () => b.length > 0 && f(b[0], b),
+                                        className:
+                                            "flex items-center gap-2 px-5 py-2.5 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h transition-colors",
+                                        children: [r.jsx(ht, { size: 18 }), " Play"],
+                                    }),
+                                    r.jsxs("button", {
+                                        onClick: () => m(b),
+                                        className:
+                                            "flex items-center gap-2 px-4 py-2.5 border border-am-line text-am-dark text-sm font-semibold rounded-lg hover:border-am-dark hover:bg-am-hover transition-colors",
+                                        children: [r.jsx(ir, { size: 15 }), " Shuffle"],
+                                    }),
+                                    r.jsx("button", {
+                                        onClick: () =>
+                                            h({ id: decodeURIComponent(n), name: y, type: "album", image: T }),
+                                        className: `p-2 rounded-lg border transition-colors ${p(decodeURIComponent(n)) ? "border-am-red text-am-red" : "border-am-line text-am-gray hover:text-am-dark hover:border-am-dark"}`,
+                                        title: p(decodeURIComponent(n)) ? "Unpin" : "Pin to Library",
+                                        children: p(decodeURIComponent(n))
+                                            ? r.jsx(Fr, { size: 16 })
+                                            : r.jsx(xs, { size: 16 }),
+                                    }),
+                                    r.jsxs("span", {
+                                        className: "text-sm text-am-gray",
+                                        children: [b.length, " songs"],
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            b.length > 0 &&
+                r.jsxs("section", {
+                    children: [
+                        r.jsxs("div", {
+                            className:
+                                "grid grid-cols-[16px_4fr_3fr_minmax(80px,1fr)] gap-4 px-4 py-2 border-b border-am-line text-xs font-medium text-am-gray uppercase tracking-wider",
+                            children: [
+                                r.jsx("span", { children: "#" }),
+                                r.jsx("span", { children: "Song" }),
+                                r.jsx("span", { className: "hidden md:block", children: "Album" }),
+                                r.jsx("span", { className: "text-right", children: "Time" }),
+                            ],
+                        }),
+                        b.map((j, S) => r.jsx(vs, { track: j, index: S, tracks: b }, j.id || S)),
+                    ],
+                }),
+        ],
+    });
+}
+function cs(n) {
+    if (!n || isNaN(n)) return "0:00";
+    const a = Math.floor(n / 60),
+        l = Math.floor(n % 60);
+    return `${a}:${l.toString().padStart(2, "0")}`;
+}
+function v2() {
+    var Ie, Et, Ht, hn, He, tn, pr, hr;
+    const n = xt(),
+        a = jn(),
+        l = g.useRef(null),
+        o = g.useRef(null),
+        u = g.useRef(!1),
+        [f, m] = g.useState(!1),
+        [p, h] = g.useState(!1),
+        [v, y] = g.useState(!1),
+        [w, T] = g.useState(!1),
+        {
+            currentTrack: b,
+            isPlaying: j,
+            isLoading: S,
+            progress: k,
+            duration: I,
+            volume: $,
+            queue: A,
+            queueIndex: B,
+            shuffle: Y,
+            repeat: ne,
+            togglePlay: K,
+            playNext: le,
+            playPrev: ee,
+            playTrack: re,
+            seekTo: xe,
+            setVolume: q,
+            setPlayerMode: te,
+            setShowVideo: F,
+            toggleShuffle: ge,
+            toggleRepeat: O,
+            removeFromQueue: X,
+        } = Tt(),
+        { isPinned: M, togglePin: se } = fr(),
+        { isAuthenticated: G, openAuthModal: E } = gt(),
+        { isFavorited: U, toggleFavorite: Z } = mr(),
+        [ae, ue] = g.useState(!1),
+        ye = g.useCallback(() => {
+            const Ae = l.current,
+                Le = document.getElementById("yt-wrapper");
+            if (!Ae || !Le) return;
+            const at = Ae.getBoundingClientRect();
+            Le.style.setProperty("--yt-top", `${at.top}px`),
+                Le.style.setProperty("--yt-left", `${at.left}px`),
+                Le.style.setProperty("--yt-width", `${at.width}px`),
+                Le.style.setProperty("--yt-height", `${at.height}px`);
+        }, []);
+    g.useEffect(() => {
+        var at;
+        const Ae = window.innerWidth < 768;
+        if ((F(!0), te(Ae ? "hidden" : "fullscreen"), !Ae)) {
+            ye();
+            const kt = setTimeout(ye, 100),
+                Or = setTimeout(ye, 500),
+                qt = ((at = o.current) == null ? void 0 : at.closest("main")) || document.querySelector("main"),
+                Wt = () => ye();
+            return (
+                qt && qt.addEventListener("scroll", Wt, { passive: !0 }),
+                window.addEventListener("resize", Wt),
+                () => {
+                    clearTimeout(kt),
+                        clearTimeout(Or),
+                        qt && qt.removeEventListener("scroll", Wt),
+                        window.removeEventListener("resize", Wt),
+                        te("hidden"),
+                        F(!1);
+                }
+            );
+        }
+        const Le = () => {
+            const kt = window.innerWidth < 768;
+            te(kt ? "hidden" : "fullscreen"), kt || ye();
+        };
+        return (
+            window.addEventListener("resize", Le),
+            () => {
+                te("hidden"), F(!1), window.removeEventListener("resize", Le);
+            }
+        );
+    }, [te, F, ye]),
+        g.useEffect(() => {
+            if (window.innerWidth >= 768) {
+                ye();
+                const Ae = setTimeout(ye, 100);
+                return () => clearTimeout(Ae);
+            }
+        }, [b, ye]),
+        g.useEffect(() => {
+            var Ae;
+            u.current ||
+                ((Ae = a.state) != null &&
+                    Ae.openLyricsFullscreen &&
+                    ((u.current = !0), y(!0), T(!0), n(a.pathname, { replace: !0, state: null })));
+        }, [a.pathname, a.state, n]);
+    const Ee = I > 0 ? (k / I) * 100 : 0,
+        Se = _r((Ie = b == null ? void 0 : b.album) == null ? void 0 : Ie.images) || (b == null ? void 0 : b.image),
+        D =
+            ((Et = b == null ? void 0 : b.artists) == null
+                ? void 0
+                : Et.filter((Ae) => Ae.name && Ae.name !== "Unknown")
+                      .map((Ae) => Ae.name)
+                      .join(", ")) || "",
+        oe = A.length > 0 ? A.slice(B + 1).concat(A.slice(0, B)) : [],
+        je = b ? M(b.id) : !1,
+        ke = b ? U(b.id) : !1,
+        De = () => {
+            if (!G) {
+                E();
+                return;
+            }
+            b && (ke || (ue(!0), setTimeout(() => ue(!1), 300)), Z(b));
+        },
+        Ke = () => {
+            b && ys(b);
+        };
+    if (!b)
+        return r.jsx("div", {
+            className: "flex items-center justify-center",
+            style: { minHeight: "calc(100vh - 120px)" },
+            children: r.jsxs("div", {
+                className: "text-center",
+                children: [
+                    r.jsx("p", { className: "text-am-gray text-lg mb-2", children: "Nothing playing" }),
+                    r.jsx("button", {
+                        onClick: () => n("/"),
+                        className: "text-am-red hover:underline text-sm",
+                        children: "Go find something to play",
+                    }),
+                ],
+            }),
+        });
+    const de = r.jsxs("div", {
+            className: "md:hidden fixed inset-0 flex flex-col overflow-hidden z-[100] bg-black",
+            children: [
+                Se &&
+                    r.jsxs("div", {
+                        className: "absolute inset-0 z-0",
+                        children: [
+                            r.jsx("div", {
+                                className: "absolute inset-[-20%] bg-cover bg-center",
+                                style: {
+                                    backgroundImage: `url(${Se})`,
+                                    filter: "blur(80px) saturate(1.2) brightness(0.45)",
+                                },
+                            }),
+                            r.jsx("div", {
+                                className:
+                                    "absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60",
+                            }),
+                            r.jsx("div", {
+                                className:
+                                    "absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent",
+                            }),
+                        ],
+                    }),
+                r.jsxs("div", {
+                    className: "relative z-10 flex flex-col h-full",
+                    style: {
+                        paddingTop: "env(safe-area-inset-top, 0px)",
+                        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+                    },
+                    children: [
+                        r.jsx("div", {
+                            className: "flex flex-col items-center pt-2 flex-shrink-0",
+                            children: r.jsx("div", { className: "w-9 h-1 rounded-full bg-white/30 mb-2" }),
+                        }),
+                        r.jsxs("div", {
+                            className: "flex items-center justify-between px-5 pb-1 flex-shrink-0",
+                            children: [
+                                r.jsx("button", {
+                                    onClick: () => n(-1),
+                                    className: "text-white/60 active:text-white transition-colors p-1",
+                                    children: r.jsx(K0, { size: 28 }),
+                                }),
+                                r.jsx("div", {
+                                    className: "text-center",
+                                    children: r.jsx("p", {
+                                        className: "text-[10px] font-semibold uppercase tracking-widest text-white/40",
+                                        children: "Now Playing",
+                                    }),
+                                }),
+                                r.jsx("button", {
+                                    onClick: () => {
+                                        h((Ae) => {
+                                            const Le = !Ae;
+                                            return Le && m(!1), Le;
+                                        });
+                                    },
+                                    className: `p-1 ${p ? "text-am-red" : "text-white/60 active:text-white"}`,
+                                    children: r.jsx(ua, { size: 22 }),
+                                }),
+                                r.jsx("button", {
+                                    onClick: () => {
+                                        m((Ae) => {
+                                            const Le = !Ae;
+                                            return Le && h(!1), Le;
+                                        });
+                                    },
+                                    className: `p-1 ${f ? "text-am-red" : "text-white/60 active:text-white"}`,
+                                    children: r.jsx(lr, { size: 24 }),
+                                }),
+                            ],
+                        }),
+                        !f && !p
+                            ? r.jsxs("div", {
+                                  className: "flex-1 flex flex-col items-center justify-between px-7 pb-8",
+                                  children: [
+                                      r.jsx("div", {
+                                          className: "flex-1 flex items-center justify-center w-full py-2",
+                                          children: r.jsx("div", {
+                                              className: "w-full max-w-[340px] aspect-square relative",
+                                              children: Se
+                                                  ? r.jsx($e, {
+                                                        src: Se,
+                                                        alt: b.name,
+                                                        className:
+                                                            "w-full h-full rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.4)] object-cover",
+                                                    })
+                                                  : r.jsx("div", {
+                                                        className:
+                                                            "w-full h-full rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center",
+                                                        children: r.jsx("span", {
+                                                            className: "text-7xl text-white/30",
+                                                            children: "♫",
+                                                        }),
+                                                    }),
+                                          }),
+                                      }),
+                                      r.jsx("div", {
+                                          className: "w-full mb-5",
+                                          children: r.jsxs("div", {
+                                              className: "flex items-start justify-between gap-3",
+                                              children: [
+                                                  r.jsxs("div", {
+                                                      className: "min-w-0 flex-1",
+                                                      children: [
+                                                          r.jsx("h1", {
+                                                              className: "text-lg font-bold text-white truncate",
+                                                              children: b.name,
+                                                          }),
+                                                          r.jsx("p", {
+                                                              className: "text-sm text-white/60 truncate",
+                                                              children: D,
+                                                          }),
+                                                      ],
+                                                  }),
+                                                  r.jsxs("div", {
+                                                      className: "flex items-center gap-1 flex-shrink-0 mt-0.5",
+                                                      children: [
+                                                          r.jsx("button", {
+                                                              onClick: De,
+                                                              className: "p-1.5",
+                                                              children: ke
+                                                                  ? r.jsx(cr, {
+                                                                        size: 18,
+                                                                        className: `text-am-red ${ae ? "animate-heart-pop" : ""}`,
+                                                                    })
+                                                                  : r.jsx(fn, { size: 18, className: "text-white/40" }),
+                                                          }),
+                                                          r.jsx("button", {
+                                                              onClick: Ke,
+                                                              className: "p-1.5 text-white/40",
+                                                              children: r.jsx(bn, { size: 20 }),
+                                                          }),
+                                                      ],
+                                                  }),
+                                              ],
+                                          }),
+                                      }),
+                                      r.jsxs("div", {
+                                          className: "w-full mb-5",
+                                          children: [
+                                              r.jsx("div", {
+                                                  className:
+                                                      "w-full h-1 bg-white/20 rounded-full cursor-pointer relative",
+                                                  onClick: (Ae) => {
+                                                      const Le = Ae.currentTarget.getBoundingClientRect();
+                                                      xe(((Ae.clientX - Le.left) / Le.width) * I);
+                                                  },
+                                                  children: r.jsx("div", {
+                                                      className: "h-full bg-white rounded-full relative",
+                                                      style: { width: `${Ee}%` },
+                                                      children: r.jsx("div", {
+                                                          className:
+                                                              "absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow",
+                                                      }),
+                                                  }),
+                                              }),
+                                              r.jsxs("div", {
+                                                  className: "flex justify-between mt-1.5",
+                                                  children: [
+                                                      r.jsx("span", {
+                                                          className: "text-[11px] text-white/40",
+                                                          children: cs(k),
+                                                      }),
+                                                      r.jsx("span", {
+                                                          className: "text-[11px] text-white/40",
+                                                          children: cs(I),
+                                                      }),
+                                                  ],
+                                              }),
+                                          ],
+                                      }),
+                                      r.jsx("div", {
+                                          className: "w-full mb-4",
+                                          children: r.jsxs("button", {
+                                              onClick: () => h(!0),
+                                              className:
+                                                  "w-full rounded-full border border-white/20 bg-white/8 text-white font-semibold text-sm py-2.5 flex items-center justify-center gap-2",
+                                              children: [r.jsx(ua, { size: 18 }), "Lyrics"],
+                                          }),
+                                      }),
+                                      r.jsxs("div", {
+                                          className: "flex items-center justify-between w-full max-w-[320px] mb-2",
+                                          children: [
+                                              r.jsx("button", {
+                                                  onClick: ge,
+                                                  className: `transition-colors p-2 ${Y ? "text-am-red" : "text-white/50"}`,
+                                                  children: r.jsx(ir, { size: 22 }),
+                                              }),
+                                              r.jsx("button", {
+                                                  onClick: ee,
+                                                  className: "text-white active:scale-90 transition-transform p-2",
+                                                  children: r.jsx(ti, { size: 34 }),
+                                              }),
+                                              r.jsx("button", {
+                                                  onClick: K,
+                                                  className:
+                                                      "w-[68px] h-[68px] bg-white/15 rounded-full flex items-center justify-center active:scale-90 transition-transform",
+                                                  children: S
+                                                      ? r.jsx(ha, { size: 30, className: "text-white animate-spin" })
+                                                      : j
+                                                        ? r.jsx(or, { size: 32, className: "text-white" })
+                                                        : r.jsx(ht, { size: 32, className: "text-white ml-1" }),
+                                              }),
+                                              r.jsx("button", {
+                                                  onClick: le,
+                                                  className: "text-white active:scale-90 transition-transform p-2",
+                                                  children: r.jsx(pa, { size: 34 }),
+                                              }),
+                                              r.jsx("button", {
+                                                  onClick: O,
+                                                  className: `transition-colors p-2 ${ne !== "off" ? "text-am-red" : "text-white/50"}`,
+                                                  children:
+                                                      ne === "one" ? r.jsx($c, { size: 22 }) : r.jsx(Bc, { size: 22 }),
+                                              }),
+                                          ],
+                                      }),
+                                  ],
+                              })
+                            : p
+                              ? r.jsx("div", {
+                                    className: "flex-1 overflow-hidden px-4 pb-5",
+                                    children: r.jsx(Gc, {
+                                        trackName: b == null ? void 0 : b.name,
+                                        artistName:
+                                            (hn = (Ht = b == null ? void 0 : b.artists) == null ? void 0 : Ht[0]) ==
+                                            null
+                                                ? void 0
+                                                : hn.name,
+                                        albumName: (He = b == null ? void 0 : b.album) == null ? void 0 : He.name,
+                                        trackImage: Se,
+                                        duration: Number(
+                                            I ||
+                                                ((b == null ? void 0 : b.duration_ms) || 0) / 1e3 ||
+                                                (b == null ? void 0 : b.duration) ||
+                                                0
+                                        ),
+                                        songId: b == null ? void 0 : b.id,
+                                        currentTime: k,
+                                        onSeek: xe,
+                                        fallbackLyricsEndpoint: void 0,
+                                        isOpen: p,
+                                        onOpenChange: h,
+                                        className: "w-full h-full",
+                                        mobileOptimized: !0,
+                                        showToggleButton: !1,
+                                        onPrev: ee,
+                                        onNext: le,
+                                        onTogglePlay: K,
+                                        isPlaying: j,
+                                        isLoading: S,
+                                    }),
+                                })
+                              : r.jsxs("div", {
+                                    className: "flex-1 flex flex-col overflow-hidden px-5 pb-6",
+                                    children: [
+                                        r.jsxs("div", {
+                                            className:
+                                                "bg-white/10 backdrop-blur-sm rounded-xl p-3 mb-3 flex items-center gap-3 flex-shrink-0",
+                                            children: [
+                                                r.jsx($e, {
+                                                    src: Se,
+                                                    alt: "",
+                                                    className: "w-11 h-11 rounded-lg object-cover",
+                                                }),
+                                                r.jsxs("div", {
+                                                    className: "min-w-0 flex-1",
+                                                    children: [
+                                                        r.jsx("p", {
+                                                            className: "text-sm text-am-red font-semibold truncate",
+                                                            children: b.name,
+                                                        }),
+                                                        r.jsx("p", {
+                                                            className: "text-xs text-white/50 truncate",
+                                                            children: D,
+                                                        }),
+                                                    ],
+                                                }),
+                                                r.jsxs("span", {
+                                                    className: "text-xs text-white/40",
+                                                    children: [cs(k), " / ", cs(I)],
+                                                }),
+                                            ],
+                                        }),
+                                        r.jsx("div", {
+                                            className: "flex-1 overflow-y-auto",
+                                            children:
+                                                oe.length > 0
+                                                    ? r.jsxs(r.Fragment, {
+                                                          children: [
+                                                              r.jsxs("p", {
+                                                                  className:
+                                                                      "text-[10px] uppercase tracking-wider text-white/40 mb-2 px-1",
+                                                                  children: ["Next up (", oe.length, ")"],
+                                                              }),
+                                                              oe.slice(0, 50).map((Ae, Le) => {
+                                                                  const at = (B + 1 + Le) % A.length;
+                                                                  return r.jsx(
+                                                                      Yc,
+                                                                      {
+                                                                          track: Ae,
+                                                                          index: Le,
+                                                                          actualIdx: at,
+                                                                          variant: "dark",
+                                                                          onRemove: X,
+                                                                      },
+                                                                      `${Ae.id}-${Le}`
+                                                                  );
+                                                              }),
+                                                          ],
+                                                      })
+                                                    : r.jsx("p", {
+                                                          className: "text-sm text-white/40 text-center py-10",
+                                                          children: "Queue is empty",
+                                                      }),
+                                        }),
+                                    ],
+                                }),
+                    ],
+                }),
+            ],
+        }),
+        Ne = r.jsx("div", {
+            ref: o,
+            className: "hidden md:flex flex-col",
+            style: { height: "calc(100vh - 120px)" },
+            children: r.jsxs("div", {
+                className: "flex-1 flex gap-6 px-6 py-4 min-h-0",
+                children: [
+                    r.jsxs("div", {
+                        className: "flex-1 flex flex-col min-h-0 max-w-3xl",
+                        children: [
+                            r.jsxs("button", {
+                                onClick: () => n(-1),
+                                className: "inline-flex items-center gap-1 text-am-gray mb-4 -ml-1 hover:text-am-dark",
+                                children: [
+                                    r.jsx(mn, { size: 20 }),
+                                    r.jsx("span", { className: "text-sm", children: "Back" }),
+                                ],
+                            }),
+                            r.jsx("div", {
+                                ref: l,
+                                className:
+                                    "w-full aspect-video rounded-xl overflow-hidden bg-black relative flex-shrink-0",
+                                children:
+                                    Se &&
+                                    r.jsx("div", {
+                                        className:
+                                            "absolute inset-0 bg-cover bg-center blur-md opacity-40 pointer-events-none",
+                                        style: { backgroundImage: `url(${Se})` },
+                                    }),
+                            }),
+                            r.jsxs("div", {
+                                className: "mt-5 flex-shrink-0",
+                                children: [
+                                    r.jsxs("div", {
+                                        className: "flex items-center gap-4 mb-4",
+                                        children: [
+                                            r.jsxs("div", {
+                                                className: "min-w-0 flex-1",
+                                                children: [
+                                                    r.jsx("h1", {
+                                                        className: "text-xl font-bold text-am-dark truncate",
+                                                        children: b.name,
+                                                    }),
+                                                    r.jsx("p", {
+                                                        className: "text-sm text-am-gray mt-0.5 truncate",
+                                                        children: D,
+                                                    }),
+                                                ],
+                                            }),
+                                            r.jsxs("div", {
+                                                className: "flex items-center gap-1 flex-shrink-0",
+                                                children: [
+                                                    r.jsx("button", {
+                                                        onClick: De,
+                                                        className:
+                                                            "p-2 rounded-full hover:bg-am-hover transition-colors",
+                                                        title: ke ? "Remove from Favorites" : "Add to Favorites",
+                                                        children: ke
+                                                            ? r.jsx(cr, {
+                                                                  size: 18,
+                                                                  className: `text-am-red ${ae ? "animate-heart-pop" : ""}`,
+                                                              })
+                                                            : r.jsx(fn, {
+                                                                  size: 18,
+                                                                  className: "text-am-muted hover:text-am-dark",
+                                                              }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: Ke,
+                                                        className:
+                                                            "p-2 rounded-full hover:bg-am-hover transition-colors text-am-muted hover:text-am-dark",
+                                                        title: "Add to Playlist",
+                                                        children: r.jsx(bn, { size: 20 }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: () => se({ ...b, type: "track" }),
+                                                        className: `p-2 rounded-full hover:bg-am-hover transition-colors ${je ? "text-am-red" : "text-am-muted hover:text-am-dark"}`,
+                                                        title: je ? "Unpin" : "Pin to Library",
+                                                        children: je
+                                                            ? r.jsx(Fr, { size: 18 })
+                                                            : r.jsx(xs, { size: 18 }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: () => y((Ae) => !Ae),
+                                                        className: `p-2 rounded-full hover:bg-am-hover transition-colors ${v ? "text-am-red" : "text-am-muted hover:text-am-dark"}`,
+                                                        title: v ? "Hide Lyrics" : "Show Lyrics",
+                                                        children: r.jsx(ua, { size: 20 }),
+                                                    }),
+                                                ],
+                                            }),
+                                        ],
+                                    }),
+                                    r.jsxs("div", {
+                                        className: "mb-4",
+                                        children: [
+                                            r.jsx("div", {
+                                                className:
+                                                    "w-full h-1.5 bg-am-line rounded-full cursor-pointer group relative",
+                                                onClick: (Ae) => {
+                                                    const Le = Ae.currentTarget.getBoundingClientRect();
+                                                    xe(((Ae.clientX - Le.left) / Le.width) * I);
+                                                },
+                                                children: r.jsx("div", {
+                                                    className:
+                                                        "h-full bg-am-dark rounded-full group-hover:bg-am-red relative transition-colors",
+                                                    style: { width: `${Ee}%` },
+                                                    children: r.jsx("div", {
+                                                        className:
+                                                            "absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-am-dark rounded-full opacity-0 group-hover:opacity-100 shadow-md transition-opacity",
+                                                    }),
+                                                }),
+                                            }),
+                                            r.jsxs("div", {
+                                                className: "flex justify-between mt-1.5",
+                                                children: [
+                                                    r.jsx("span", {
+                                                        className: "text-xs text-am-muted",
+                                                        children: cs(k),
+                                                    }),
+                                                    r.jsx("span", {
+                                                        className: "text-xs text-am-muted",
+                                                        children: cs(I),
+                                                    }),
+                                                ],
+                                            }),
+                                        ],
+                                    }),
+                                    r.jsxs("div", {
+                                        className: "flex items-center justify-between",
+                                        children: [
+                                            r.jsxs("div", {
+                                                className: "flex items-center gap-6",
+                                                children: [
+                                                    r.jsx("button", {
+                                                        onClick: ge,
+                                                        className: `transition-colors ${Y ? "text-am-red" : "text-am-muted hover:text-am-dark"}`,
+                                                        children: r.jsx(ir, { size: 18 }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: ee,
+                                                        className: "text-am-gray hover:text-am-dark transition-colors",
+                                                        children: r.jsx(ti, { size: 28 }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: K,
+                                                        className:
+                                                            "w-12 h-12 bg-am-dark rounded-full flex items-center justify-center hover:scale-105 transition-transform",
+                                                        children: S
+                                                            ? r.jsx(ha, {
+                                                                  size: 24,
+                                                                  className: "text-white animate-spin",
+                                                              })
+                                                            : j
+                                                              ? r.jsx(or, { size: 24, className: "text-white" })
+                                                              : r.jsx(ht, { size: 24, className: "text-white ml-0.5" }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: le,
+                                                        className: "text-am-gray hover:text-am-dark transition-colors",
+                                                        children: r.jsx(pa, { size: 28 }),
+                                                    }),
+                                                    r.jsx("button", {
+                                                        onClick: O,
+                                                        className: `transition-colors ${ne !== "off" ? "text-am-red" : "text-am-muted hover:text-am-dark"}`,
+                                                        children:
+                                                            ne === "one"
+                                                                ? r.jsx($c, { size: 18 })
+                                                                : r.jsx(Bc, { size: 18 }),
+                                                    }),
+                                                ],
+                                            }),
+                                            r.jsxs("div", {
+                                                className: "flex items-center gap-2",
+                                                children: [
+                                                    r.jsx("button", {
+                                                        onClick: () => q($ === 0 ? 80 : 0),
+                                                        className: "text-am-muted hover:text-am-dark transition-colors",
+                                                        children:
+                                                            $ === 0 ? r.jsx(Lh, { size: 18 }) : r.jsx(Ah, { size: 18 }),
+                                                    }),
+                                                    r.jsx("div", {
+                                                        className:
+                                                            "w-24 h-1.5 bg-am-line rounded-full cursor-pointer group",
+                                                        onClick: (Ae) => {
+                                                            const Le = Ae.currentTarget.getBoundingClientRect();
+                                                            q(
+                                                                Math.max(
+                                                                    0,
+                                                                    Math.min(
+                                                                        100,
+                                                                        Math.round(
+                                                                            ((Ae.clientX - Le.left) / Le.width) * 100
+                                                                        )
+                                                                    )
+                                                                )
+                                                            );
+                                                        },
+                                                        children: r.jsx("div", {
+                                                            className:
+                                                                "h-full bg-am-dark rounded-full group-hover:bg-am-red transition-colors",
+                                                            style: { width: `${$}%` },
+                                                        }),
+                                                    }),
+                                                ],
+                                            }),
+                                        ],
+                                    }),
+                                    r.jsx("div", {
+                                        className: "mt-4",
+                                        children: r.jsx(Gc, {
+                                            trackName: b == null ? void 0 : b.name,
+                                            artistName:
+                                                (pr = (tn = b == null ? void 0 : b.artists) == null ? void 0 : tn[0]) ==
+                                                null
+                                                    ? void 0
+                                                    : pr.name,
+                                            albumName: (hr = b == null ? void 0 : b.album) == null ? void 0 : hr.name,
+                                            trackImage: Se,
+                                            duration: Number(
+                                                I ||
+                                                    ((b == null ? void 0 : b.duration_ms) || 0) / 1e3 ||
+                                                    (b == null ? void 0 : b.duration) ||
+                                                    0
+                                            ),
+                                            songId: b == null ? void 0 : b.id,
+                                            currentTime: k,
+                                            onSeek: xe,
+                                            fallbackLyricsEndpoint: void 0,
+                                            isOpen: v,
+                                            onOpenChange: y,
+                                            className: "w-full",
+                                            onPrev: ee,
+                                            onNext: le,
+                                            onTogglePlay: K,
+                                            isPlaying: j,
+                                            isLoading: S,
+                                            autoEnterFullscreen: w,
+                                            onAutoEnterFullscreenHandled: () => T(!1),
+                                        }),
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                    r.jsxs("div", {
+                        className: "w-80 flex-shrink-0 flex flex-col min-h-0",
+                        children: [
+                            r.jsxs("div", {
+                                className: "flex items-center gap-2 mb-3 px-1",
+                                children: [
+                                    r.jsx(lr, { size: 20, className: "text-am-dark" }),
+                                    r.jsx("h2", { className: "text-sm font-bold text-am-dark", children: "Queue" }),
+                                    r.jsxs("span", {
+                                        className: "text-xs text-am-muted ml-auto",
+                                        children: [A.length, " tracks"],
+                                    }),
+                                ],
+                            }),
+                            r.jsxs("div", {
+                                className: "bg-am-bg rounded-lg p-3 mb-2 flex items-center gap-3 flex-shrink-0",
+                                children: [
+                                    r.jsx($e, { src: Se, alt: "", className: "w-9 h-9 rounded object-cover" }),
+                                    r.jsxs("div", {
+                                        className: "min-w-0 flex-1",
+                                        children: [
+                                            r.jsx("p", {
+                                                className: "text-sm text-am-red font-medium truncate",
+                                                children: b.name,
+                                            }),
+                                            r.jsx("p", { className: "text-xs text-am-gray truncate", children: D }),
+                                        ],
+                                    }),
+                                    r.jsx("span", {
+                                        className: "text-xs text-am-muted",
+                                        children: li(b.duration_ms || b.duration),
+                                    }),
+                                ],
+                            }),
+                            r.jsx("div", {
+                                className: "flex-1 queue-scroll",
+                                children:
+                                    oe.length > 0
+                                        ? r.jsxs(r.Fragment, {
+                                              children: [
+                                                  r.jsx("p", {
+                                                      className:
+                                                          "text-[10px] uppercase tracking-wider text-am-muted mb-1 px-1",
+                                                      children: "Next up",
+                                                  }),
+                                                  oe.slice(0, 50).map((Ae, Le) => {
+                                                      const at = (B + 1 + Le) % A.length;
+                                                      return r.jsx(
+                                                          Yc,
+                                                          { track: Ae, index: Le, actualIdx: at, onRemove: X },
+                                                          `${Ae.id}-${Le}`
+                                                      );
+                                                  }),
+                                              ],
+                                          })
+                                        : r.jsx("p", {
+                                              className: "text-sm text-am-muted text-center py-6",
+                                              children: "Queue is empty",
+                                          }),
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        });
+    return r.jsxs(r.Fragment, {
+        children: [
+            r.jsx(ot, {
+                title: b ? `${b.name} | TuneFree now playing` : "Now playing | TuneFree",
+                description: b ? `Now playing ${b.name} on TuneFree.` : "Now playing on TuneFree.",
+                keywords:
+                    "music player, now playing, free music player, online music player, TuneFree player, TuneFree player",
+                path: "/player",
+                image: Se,
+                noindex: !0,
+            }),
+            de,
+            Ne,
+        ],
+    });
+}
+const mp = [
+    { key: "favorites", label: "Favorites", authOnly: !0 },
+    { key: "myplaylists", label: "My Playlists", authOnly: !0 },
+    { key: "pins", label: "Pins" },
+    { key: "track", label: "Songs" },
+    { key: "artist", label: "Artists" },
+    { key: "album", label: "Albums" },
+    { key: "playlist", label: "Playlists" },
+];
+function w2() {
+    const [n] = Tp(),
+        [a, l] = g.useState(n.get("tab") || "favorites"),
+        { pins: o, unpin: u, getPinsByType: f } = fr(),
+        { isAuthenticated: m, openAuthModal: p } = gt(),
+        { favorites: h, toggleFavorite: v, isFavorited: y } = mr(),
+        { playlists: w, createPlaylist: T } = vi(),
+        { playTrack: b, currentTrack: j, isPlaying: S, togglePlay: k } = Tt(),
+        { showToast: I } = cu(),
+        $ = xt(),
+        [A, B] = g.useState(!1),
+        [Y, ne] = g.useState("");
+    g.useEffect(() => {
+        const F = n.get("tab");
+        F && mp.some((ge) => ge.key === F) && l(F);
+    }, [n]);
+    const K = mp.filter((F) => !F.authOnly || m),
+        le = K.some((F) => F.key === a) ? a : "pins",
+        ee = le === "pins" ? o : f(le),
+        re = (F) => {
+            if (F.type === "artist" || F.model_type === "artist") $(`/artist/${encodeURIComponent(F.name)}`);
+            else if (F.type === "album" || F.model_type === "album") $(`/album/${encodeURIComponent(F.id)}`);
+            else if (F.type === "playlist" || F.model_type === "playlist") $(`/playlist/${encodeURIComponent(F.id)}`);
+            else {
+                const ge = le === "favorites" ? [F] : ee.filter((O) => O.type === "track");
+                b(F, ge);
+            }
+        },
+        xe = (F) => (j == null ? void 0 : j.id) === F.id,
+        q = async (F) => {
+            var ge, O;
+            if ((F.preventDefault(), !!Y.trim()))
+                try {
+                    await T(Y.trim()), ne(""), B(!1);
+                } catch (X) {
+                    I(
+                        ((O = (ge = X == null ? void 0 : X.response) == null ? void 0 : ge.data) == null
+                            ? void 0
+                            : O.error) ||
+                            (X == null ? void 0 : X.message) ||
+                            "Failed to create playlist."
+                    );
+                }
+        },
+        te = (F) =>
+            F === "favorites" ? h.length : F === "myplaylists" ? w.length : F === "pins" ? o.length : f(F).length;
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: "Your music library | TuneFree",
+                description: "Browse your saved songs, favorite tracks, playlists, albums and artists inside TuneFree.",
+                keywords:
+                    "music library, saved songs, favorite music, playlists library, TuneFree library, TuneFree library",
+                path: "/library",
+                noindex: !0,
+            }),
+            r.jsxs("button", {
+                onClick: () => $(-1),
+                className: "flex items-center gap-1 text-am-gray mb-3 -ml-1 hover:text-am-dark",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsx("h1", { className: "text-2xl md:text-3xl font-bold text-am-dark mb-1", children: "Library" }),
+            r.jsx("p", { className: "text-sm text-am-gray mb-5", children: "Your music collection" }),
+            r.jsxs("div", {
+                className: "flex gap-2 mb-6 overflow-x-auto scroll-section pb-1",
+                children: [
+                    K.map((F) =>
+                        r.jsxs(
+                            "button",
+                            {
+                                onClick: () => l(F.key),
+                                className: `px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap border transition-colors ${le === F.key ? "bg-[var(--surface-elevated)] border-am-line text-am-dark shadow-sm" : "bg-[var(--surface-1)] border-am-line text-am-gray hover:bg-[var(--am-hover)]"}`,
+                                children: [
+                                    F.label,
+                                    te(F.key) > 0 &&
+                                        r.jsx("span", { className: "ml-1.5 text-xs opacity-70", children: te(F.key) }),
+                                ],
+                            },
+                            F.key
+                        )
+                    ),
+                    !m &&
+                        r.jsx("button", {
+                            onClick: p,
+                            className:
+                                "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap border border-am-line bg-[var(--surface-1)] text-am-red hover:bg-[var(--am-hover)] transition-colors",
+                            children: "Sign in for more",
+                        }),
+                ],
+            }),
+            le === "favorites" &&
+                r.jsx("div", {
+                    children:
+                        h.length === 0
+                            ? r.jsxs("div", {
+                                  className: "text-center py-16",
+                                  children: [
+                                      r.jsx(fn, { size: 40, className: "text-am-line mx-auto mb-3" }),
+                                      r.jsx("p", {
+                                          className: "text-am-gray text-lg mb-1",
+                                          children: "No favorites yet",
+                                      }),
+                                      r.jsx("p", {
+                                          className: "text-am-muted text-sm",
+                                          children: "Tap the heart icon on any song to save it here",
+                                      }),
+                                  ],
+                              })
+                            : r.jsx("div", {
+                                  className: "flex flex-col",
+                                  children: h.map((F) => {
+                                      var X;
+                                      const ge =
+                                              ((X = F.artists) == null
+                                                  ? void 0
+                                                  : X.filter((M) => M.name && M.name !== "Unknown")
+                                                        .map((M) => M.name)
+                                                        .join(", ")) || "",
+                                          O = xe(F);
+                                      return r.jsxs(
+                                          "div",
+                                          {
+                                              className: `flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-am-hover transition-colors group ${O ? "bg-am-bg" : ""}`,
+                                              children: [
+                                                  r.jsxs("button", {
+                                                      onClick: () => b(F, [F]),
+                                                      className: "relative flex-shrink-0",
+                                                      children: [
+                                                          r.jsx($e, {
+                                                              src: F.image,
+                                                              alt: "",
+                                                              className:
+                                                                  "w-12 h-12 object-cover rounded-md flex-shrink-0",
+                                                          }),
+                                                          r.jsx("div", {
+                                                              className:
+                                                                  "absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center rounded-md",
+                                                              children: r.jsx("span", {
+                                                                  className:
+                                                                      "opacity-0 group-hover:opacity-100 text-white",
+                                                                  children:
+                                                                      O && S
+                                                                          ? r.jsx(or, { size: 18 })
+                                                                          : r.jsx(ht, { size: 18 }),
+                                                              }),
+                                                          }),
+                                                      ],
+                                                  }),
+                                                  r.jsxs("button", {
+                                                      onClick: () => b(F, [F]),
+                                                      className: "min-w-0 flex-1 text-left",
+                                                      children: [
+                                                          r.jsx("p", {
+                                                              className: `text-sm font-medium truncate ${O ? "text-am-red" : "text-am-dark"}`,
+                                                              children: F.name,
+                                                          }),
+                                                          r.jsx("p", {
+                                                              className: "text-xs text-am-gray truncate",
+                                                              children: ge,
+                                                          }),
+                                                      ],
+                                                  }),
+                                                  F.duration_ms &&
+                                                      r.jsx("span", {
+                                                          className: "text-xs text-am-muted hidden sm:block",
+                                                          children: li(F.duration_ms),
+                                                      }),
+                                                  r.jsx("button", {
+                                                      onClick: () => v(F),
+                                                      className:
+                                                          "text-am-red flex-shrink-0 p-1 hover:scale-110 transition-transform",
+                                                      title: "Remove from Favorites",
+                                                      children: r.jsx(cr, { size: 14 }),
+                                                  }),
+                                              ],
+                                          },
+                                          F.id
+                                      );
+                                  }),
+                              }),
+                }),
+            le === "myplaylists" &&
+                r.jsxs("div", {
+                    children: [
+                        r.jsx("div", {
+                            className: "mb-4",
+                            children: A
+                                ? r.jsxs("form", {
+                                      onSubmit: q,
+                                      className: "flex items-center gap-2",
+                                      children: [
+                                          r.jsx("input", {
+                                              type: "text",
+                                              placeholder: "Playlist name...",
+                                              value: Y,
+                                              onChange: (F) => ne(F.target.value),
+                                              autoFocus: !0,
+                                              className:
+                                                  "flex-1 bg-am-bg border border-am-line rounded-lg py-2 px-3 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/30",
+                                          }),
+                                          r.jsx("button", {
+                                              type: "submit",
+                                              disabled: !Y.trim(),
+                                              className:
+                                                  "px-4 py-2 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h disabled:opacity-50",
+                                              children: "Create",
+                                          }),
+                                          r.jsx("button", {
+                                              type: "button",
+                                              onClick: () => B(!1),
+                                              className: "text-am-gray hover:text-am-dark p-1",
+                                              children: r.jsx(en, { size: 18 }),
+                                          }),
+                                      ],
+                                  })
+                                : r.jsxs("button", {
+                                      onClick: () => B(!0),
+                                      className:
+                                          "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-am-hover transition-colors w-full text-left",
+                                      children: [
+                                          r.jsx("div", {
+                                              className:
+                                                  "w-12 h-12 bg-am-bg border-2 border-dashed border-am-line rounded-lg flex items-center justify-center flex-shrink-0",
+                                              children: r.jsx(ei, { size: 20, className: "text-am-muted" }),
+                                          }),
+                                          r.jsxs("div", {
+                                              children: [
+                                                  r.jsx("p", {
+                                                      className: "text-sm font-medium text-am-dark",
+                                                      children: "Create New Playlist",
+                                                  }),
+                                                  r.jsx("p", {
+                                                      className: "text-xs text-am-gray",
+                                                      children: "Start building your collection",
+                                                  }),
+                                              ],
+                                          }),
+                                      ],
+                                  }),
+                        }),
+                        w.length === 0 && !A
+                            ? r.jsxs("div", {
+                                  className: "text-center py-12",
+                                  children: [
+                                      r.jsx(ma, { size: 40, className: "text-am-line mx-auto mb-3" }),
+                                      r.jsx("p", {
+                                          className: "text-am-gray text-lg mb-1",
+                                          children: "No playlists yet",
+                                      }),
+                                      r.jsx("p", {
+                                          className: "text-am-muted text-sm",
+                                          children: "Create a playlist and add your favorite songs",
+                                      }),
+                                  ],
+                              })
+                            : r.jsx("div", {
+                                  className: "flex flex-col",
+                                  children: w.map((F) =>
+                                      r.jsxs(
+                                          "button",
+                                          {
+                                              onClick: () => $(`/my/playlist/${F.id}`),
+                                              className:
+                                                  "flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-am-hover transition-colors group text-left",
+                                              children: [
+                                                  F.image
+                                                      ? r.jsx($e, {
+                                                            src: F.image,
+                                                            alt: "",
+                                                            className:
+                                                                "w-12 h-12 object-cover rounded-lg flex-shrink-0",
+                                                        })
+                                                      : r.jsx("div", {
+                                                            className:
+                                                                "w-12 h-12 bg-am-bg rounded-lg flex items-center justify-center flex-shrink-0",
+                                                            children: r.jsx(ma, {
+                                                                size: 20,
+                                                                className: "text-am-muted",
+                                                            }),
+                                                        }),
+                                                  r.jsxs("div", {
+                                                      className: "min-w-0 flex-1",
+                                                      children: [
+                                                          r.jsx("p", {
+                                                              className: "text-sm font-medium text-am-dark truncate",
+                                                              children: F.name,
+                                                          }),
+                                                          r.jsxs("p", {
+                                                              className: "text-xs text-am-gray",
+                                                              children: [
+                                                                  F.track_count || 0,
+                                                                  " song",
+                                                                  F.track_count !== 1 ? "s" : "",
+                                                              ],
+                                                          }),
+                                                      ],
+                                                  }),
+                                              ],
+                                          },
+                                          F.id
+                                      )
+                                  ),
+                              }),
+                    ],
+                }),
+            !["favorites", "myplaylists"].includes(le) &&
+                r.jsx(r.Fragment, {
+                    children:
+                        ee.length === 0
+                            ? r.jsxs("div", {
+                                  className: "text-center py-16",
+                                  children: [
+                                      r.jsx(Fr, { size: 40, className: "text-am-line mx-auto mb-3" }),
+                                      r.jsxs("p", {
+                                          className: "text-am-gray text-lg mb-1",
+                                          children: ["No ", le === "pins" ? "pins" : le + "s", " yet"],
+                                      }),
+                                      r.jsx("p", {
+                                          className: "text-am-muted text-sm",
+                                          children: "Pin songs, albums, playlists, or artists to see them here",
+                                      }),
+                                  ],
+                              })
+                            : r.jsx("div", {
+                                  className: "flex flex-col",
+                                  children: ee.map((F) => {
+                                      var M;
+                                      const ge =
+                                              ((M = F.artists) == null
+                                                  ? void 0
+                                                  : M.filter((se) => se.name && se.name !== "Unknown")
+                                                        .map((se) => se.name)
+                                                        .join(", ")) ||
+                                              F.subtitle ||
+                                              "",
+                                          O = xe(F),
+                                          X =
+                                              F.type === "track"
+                                                  ? "Song"
+                                                  : F.type.charAt(0).toUpperCase() + F.type.slice(1);
+                                      return r.jsxs(
+                                          "div",
+                                          {
+                                              className: `flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-am-hover transition-colors group ${O ? "bg-am-bg" : ""}`,
+                                              children: [
+                                                  r.jsxs("button", {
+                                                      onClick: () => re(F),
+                                                      className: "relative flex-shrink-0",
+                                                      children: [
+                                                          r.jsx($e, {
+                                                              src: F.image,
+                                                              alt: "",
+                                                              className: `w-12 h-12 object-cover flex-shrink-0 ${F.type === "artist" ? "rounded-full" : "rounded-md"}`,
+                                                          }),
+                                                          F.type === "track" &&
+                                                              r.jsx("div", {
+                                                                  className:
+                                                                      "absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center rounded-md",
+                                                                  children: r.jsx("span", {
+                                                                      className:
+                                                                          "opacity-0 group-hover:opacity-100 text-white",
+                                                                      children:
+                                                                          O && S
+                                                                              ? r.jsx(or, { size: 18 })
+                                                                              : r.jsx(ht, { size: 18 }),
+                                                                  }),
+                                                              }),
+                                                      ],
+                                                  }),
+                                                  r.jsxs("button", {
+                                                      onClick: () => re(F),
+                                                      className: "min-w-0 flex-1 text-left",
+                                                      children: [
+                                                          r.jsx("p", {
+                                                              className: `text-sm font-medium truncate ${O ? "text-am-red" : "text-am-dark"}`,
+                                                              children: F.name,
+                                                          }),
+                                                          r.jsxs("p", {
+                                                              className: "text-xs text-am-gray truncate",
+                                                              children: [
+                                                                  le === "pins" &&
+                                                                      r.jsxs("span", {
+                                                                          className: "text-am-muted",
+                                                                          children: [X, " · "],
+                                                                      }),
+                                                                  ge,
+                                                              ],
+                                                          }),
+                                                      ],
+                                                  }),
+                                                  F.type === "track" &&
+                                                      F.duration_ms &&
+                                                      r.jsx("span", {
+                                                          className: "text-xs text-am-muted hidden sm:block",
+                                                          children: li(F.duration_ms),
+                                                      }),
+                                                  r.jsx("button", {
+                                                      onClick: () => u(F.id),
+                                                      className:
+                                                          "text-am-muted hover:text-am-red opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 p-1",
+                                                      title: "Unpin",
+                                                      children: r.jsx(en, { size: 16 }),
+                                                  }),
+                                              ],
+                                          },
+                                          F.id
+                                      );
+                                  }),
+                              }),
+                }),
+        ],
+    });
+}
+function b2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "About TuneFree free music streaming",
+                description:
+                    "Learn about TuneFree, a lightweight free music streaming experience built for fast online music listening and discovery.",
+                keywords: "about TuneFree, about TuneFree, free music streaming platform, online music listening",
+                path: "/about",
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-6", children: "About TuneFree" }),
+            r.jsxs("div", {
+                className: "space-y-4 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsx("p", {
+                        children:
+                            "TuneFree is a free music streaming platform designed to bring the world's music to everyone. We believe that music should be accessible to all, regardless of location or budget.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Our Mission" }),
+                    r.jsx("p", {
+                        children:
+                            "Our mission is to provide a seamless, ad-supported music streaming experience that connects listeners with millions of songs, albums, playlists, and artists from every corner of the globe. From the latest chart-toppers to hidden gems, from Bollywood blockbusters to K-Pop sensations, TuneFree is your gateway to unlimited music discovery.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "What We Offer" }),
+                    r.jsxs("ul", {
+                        className: "list-disc list-inside space-y-2",
+                        children: [
+                            r.jsx("li", { children: "Millions of songs across every genre and language" }),
+                            r.jsx("li", { children: "Curated playlists for every mood and occasion" }),
+                            r.jsx("li", {
+                                children: "Personalized recommendations based on your country and preferences",
+                            }),
+                            r.jsx("li", { children: "Artist pages with top tracks and discographies" }),
+                            r.jsx("li", { children: "New releases and trending charts updated daily" }),
+                            r.jsx("li", { children: "Smart queue with auto-suggestions for endless listening" }),
+                            r.jsx("li", {
+                                children:
+                                    "Region-specific content in Hindi, Telugu, Tamil, Punjabi, Bengali, and many more languages",
+                            }),
+                        ],
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "How It Works" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree sources its content from YouTube Music, one of the world's largest music libraries. When you search for a song, artist, or playlist, we fetch results from YouTube Music's catalog and stream them directly to you. This means you get access to an incredibly vast library of music without any downloads or subscriptions required.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "What Makes TuneFree Useful",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "We focus on making discovery simpler. Instead of throwing raw search results at listeners, TuneFree organizes music into easier browsing paths like favorites, user playlists, curated sections, genre clusters, regional home feeds, artist pages, album pages, queue tools and installable app support. We invest in product quality so repeat listeners can return to a familiar and lightweight music experience.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Country-Specific Content",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "When you first visit TuneFree, you select your country or region. This allows us to show you content that is most relevant to you — whether that's Bollywood hits for India, K-Pop for South Korea, Regional Mexicano for Mexico, or Top 40 for the United States. Our home page, new releases, and trending sections are all tailored to your region.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Free Forever" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree is and always will be free. We are supported by advertising, which allows us to keep the platform open and accessible to everyone. We are committed to maintaining a clean, user-friendly experience while ensuring the platform remains sustainable.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Transparency" }),
+                    r.jsx("p", {
+                        children:
+                            "We maintain public pages for contact, privacy, terms, DMCA, disclaimer, editorial policy and frequently asked questions so users and partners can understand how the service operates. We believe listener trust depends on clarity, not hidden policies or vague support channels.",
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function j2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "Contact TuneFree support",
+                description: "Contact TuneFree for support, feedback, partnerships and copyright requests.",
+                keywords: "contact TuneFree, TuneFree support, music app support, contact TuneFree",
+                path: "/contact",
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-6", children: "Contact Us" }),
+            r.jsxs("div", {
+                className: "space-y-4 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsx("p", {
+                        children:
+                            "We'd love to hear from you! Whether you have questions, feedback, suggestions, or need to report an issue, please don't hesitate to reach out.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "General Inquiries" }),
+                    r.jsx("p", {
+                        children: "For general questions about TuneFree, our features, or how the platform works:",
+                    }),
+                    r.jsx("p", { className: "text-am-dark font-medium", children: "Email: contact@tunefree.com" }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Technical Support" }),
+                    r.jsx("p", {
+                        children:
+                            "If you're experiencing technical issues with playback, loading, or any other functionality:",
+                    }),
+                    r.jsx("p", { className: "text-am-dark font-medium", children: "Email: support@tunefree.com" }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Copyright & DMCA" }),
+                    r.jsxs("p", {
+                        children: [
+                            "If you believe that content on TuneFree infringes your copyright, please see our",
+                            " ",
+                            r.jsx("a", {
+                                href: "/dmca",
+                                className: "text-am-red hover:underline",
+                                children: "DMCA page",
+                            }),
+                            " for information on how to submit a takedown request.",
+                        ],
+                    }),
+                    r.jsx("p", { className: "text-am-dark font-medium", children: "Email: dmca@tunefree.com" }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Advertising & Partnerships",
+                    }),
+                    r.jsx("p", { children: "Interested in advertising on TuneFree or partnering with us?" }),
+                    r.jsx("p", { className: "text-am-dark font-medium", children: "Email: ads@tunefree.com" }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Response Time" }),
+                    r.jsx("p", {
+                        children:
+                            "We aim to respond to all inquiries within 48 hours. For urgent matters related to copyright or legal issues, we prioritize faster responses.",
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function k2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "Privacy policy | TuneFree",
+                description:
+                    "Read the privacy policy for TuneFree, including local storage, playback settings and country preference handling.",
+                keywords: "privacy policy, TuneFree privacy, TuneFree privacy",
+                path: "/privacy",
+                noindex: !0,
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-2", children: "Privacy Policy" }),
+            r.jsx("p", { className: "text-sm text-am-muted mb-6", children: "Last updated: March 2026" }),
+            r.jsxs("div", {
+                className: "space-y-4 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsx("p", {
+                        children:
+                            "At TuneFree, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our website and services.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Information We Collect",
+                    }),
+                    r.jsxs("p", {
+                        children: [
+                            r.jsx("strong", { className: "text-am-dark", children: "Country/Region Selection:" }),
+                            " We store your selected country in your browser's localStorage to provide region-specific content. This data stays on your device and is not transmitted to our servers.",
+                        ],
+                    }),
+                    r.jsxs("p", {
+                        children: [
+                            r.jsx("strong", { className: "text-am-dark", children: "Search History:" }),
+                            " Your recent searches are stored locally in your browser's localStorage. This data stays on your device and can be cleared at any time.",
+                        ],
+                    }),
+                    r.jsxs("p", {
+                        children: [
+                            r.jsx("strong", { className: "text-am-dark", children: "Playback Preferences:" }),
+                            " Volume level and playback settings are stored locally on your device.",
+                        ],
+                    }),
+                    r.jsxs("p", {
+                        children: [
+                            r.jsx("strong", { className: "text-am-dark", children: "Usage Data:" }),
+                            " We may collect anonymous usage data such as page views, search queries, and playback events for analytics purposes.",
+                        ],
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "How We Use Your Information",
+                    }),
+                    r.jsxs("ul", {
+                        className: "list-disc list-inside space-y-1",
+                        children: [
+                            r.jsx("li", { children: "To provide personalized, region-specific music content" }),
+                            r.jsx("li", { children: "To remember your preferences and improve your experience" }),
+                            r.jsx("li", { children: "To analyze usage patterns and improve our services" }),
+                            r.jsx("li", { children: "To display relevant advertisements" }),
+                        ],
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Third-Party Services" }),
+                    r.jsx("p", { children: "TuneFree uses the following third-party services:" }),
+                    r.jsxs("ul", {
+                        className: "list-disc list-inside space-y-1",
+                        children: [
+                            r.jsxs("li", {
+                                children: [
+                                    r.jsx("strong", {
+                                        className: "text-am-dark",
+                                        children: "YouTube / YouTube Music:",
+                                    }),
+                                    " We use YouTube's IFrame API to stream music content. YouTube's privacy policy applies to content streamed through their player.",
+                                ],
+                            }),
+                            r.jsxs("li", {
+                                children: [
+                                    r.jsx("strong", { className: "text-am-dark", children: "Google AdSense:" }),
+                                    " We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to our website or other websites.",
+                                ],
+                            }),
+                        ],
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Cookies" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree itself does not use cookies. However, third-party services like YouTube and Google AdSense may use cookies for their functionality. You can manage cookie preferences through your browser settings.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Data Security" }),
+                    r.jsx("p", {
+                        children:
+                            "We take reasonable measures to protect the information stored on your device. Since we store data primarily in localStorage, your data remains on your device and is not transmitted to external servers unless explicitly required for functionality (e.g., search queries to fetch results).",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Your Rights" }),
+                    r.jsx("p", { children: "You have the right to:" }),
+                    r.jsxs("ul", {
+                        className: "list-disc list-inside space-y-1",
+                        children: [
+                            r.jsx("li", { children: "Clear your search history at any time" }),
+                            r.jsx("li", { children: "Change your country/region selection" }),
+                            r.jsx("li", {
+                                children: "Clear all locally stored data by clearing your browser's localStorage",
+                            }),
+                        ],
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Children's Privacy" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Changes to This Policy",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Contact Us" }),
+                    r.jsxs("p", {
+                        children: [
+                            "If you have any questions about this Privacy Policy, please contact us at ",
+                            r.jsx("span", { className: "text-am-dark font-medium", children: "privacy@tunefree.com" }),
+                            ".",
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function N2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "Terms of service | TuneFree",
+                description:
+                    "Read the terms of service for TuneFree and understand the rules for using the free online music streaming app.",
+                keywords: "terms of service, TuneFree terms, TuneFree terms",
+                path: "/terms",
+                noindex: !0,
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-2", children: "Terms of Service" }),
+            r.jsx("p", { className: "text-sm text-am-muted mb-6", children: "Last updated: March 2026" }),
+            r.jsxs("div", {
+                className: "space-y-4 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsx("p", {
+                        children:
+                            "Welcome to TuneFree. By accessing and using our website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "1. Description of Service",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree is a free, ad-supported music streaming platform that allows users to search for, discover, and listen to music sourced from YouTube Music. We provide a web-based interface for browsing music content, creating queues, and discovering new artists and playlists.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "2. Acceptable Use" }),
+                    r.jsx("p", {
+                        children:
+                            "You agree to use TuneFree only for lawful purposes and in accordance with these Terms. You agree not to:",
+                    }),
+                    r.jsxs("ul", {
+                        className: "list-disc list-inside space-y-1",
+                        children: [
+                            r.jsx("li", {
+                                children: "Use the service for any illegal purpose or in violation of any laws",
+                            }),
+                            r.jsx("li", {
+                                children: "Attempt to circumvent, disable, or interfere with security features",
+                            }),
+                            r.jsx("li", {
+                                children: "Use automated systems or software to extract data from the service",
+                            }),
+                            r.jsx("li", {
+                                children:
+                                    "Reproduce, distribute, or create derivative works from our content or interface",
+                            }),
+                            r.jsx("li", {
+                                children: "Use the service to infringe upon the intellectual property rights of others",
+                            }),
+                        ],
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "3. Intellectual Property",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "The music content available through TuneFree is sourced from YouTube Music and is owned by the respective artists, labels, and rights holders. TuneFree does not claim ownership of any music content. The TuneFree platform, including its design, code, and branding, is the intellectual property of TuneFree.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "4. Third-Party Content",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree streams content from YouTube Music using the YouTube IFrame Player API. Your use of this content is subject to YouTube's Terms of Service and Google's Privacy Policy. We are not responsible for the availability, accuracy, or content of third-party services.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "5. Advertisements" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree is a free service supported by advertising. By using our service, you agree to the display of advertisements provided by Google AdSense and other advertising partners.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "6. Disclaimer of Warranties",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            'TuneFree is provided "as is" and "as available" without any warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, error-free, or that any content will always be available.',
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "7. Limitation of Liability",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "To the fullest extent permitted by law, TuneFree shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the service.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "8. Changes to Terms" }),
+                    r.jsx("p", {
+                        children:
+                            "We reserve the right to modify these Terms at any time. Continued use of the service after changes constitutes acceptance of the new Terms.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "9. Contact" }),
+                    r.jsxs("p", {
+                        children: [
+                            "For questions about these Terms, contact us at ",
+                            r.jsx("span", { className: "text-am-dark font-medium", children: "legal@tunefree.com" }),
+                            ".",
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function S2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "DMCA policy | TuneFree",
+                description:
+                    "Review the DMCA policy for TuneFree and find the correct process for copyright takedown requests.",
+                keywords: "DMCA policy, copyright, TuneFree DMCA, TuneFree DMCA",
+                path: "/dmca",
+                noindex: !0,
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-2", children: "DMCA Policy" }),
+            r.jsx("p", {
+                className: "text-sm text-am-muted mb-6",
+                children: "Digital Millennium Copyright Act Notice",
+            }),
+            r.jsxs("div", {
+                className: "space-y-4 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsx("p", {
+                        children:
+                            "TuneFree respects the intellectual property rights of others and expects its users to do the same. In accordance with the Digital Millennium Copyright Act of 1998 (DMCA), we will respond expeditiously to claims of copyright infringement that are reported to us.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "How TuneFree Works" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree does not host any music files. All music content is streamed directly from YouTube Music using the YouTube IFrame Player API. We act as a search interface that helps users discover and play music that is already publicly available on YouTube Music.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Filing a DMCA Takedown Notice",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "If you believe that content accessible through TuneFree infringes your copyright, please provide us with the following information:",
+                    }),
+                    r.jsxs("ol", {
+                        className: "list-decimal list-inside space-y-2",
+                        children: [
+                            r.jsx("li", {
+                                children:
+                                    "A physical or electronic signature of the copyright owner or authorized representative",
+                            }),
+                            r.jsx("li", {
+                                children: "Identification of the copyrighted work claimed to have been infringed",
+                            }),
+                            r.jsx("li", {
+                                children:
+                                    "Identification of the material that is claimed to be infringing, with enough detail to locate it",
+                            }),
+                            r.jsx("li", {
+                                children: "Your contact information (address, telephone number, and email address)",
+                            }),
+                            r.jsx("li", {
+                                children:
+                                    "A statement that you have a good faith belief that use of the material is not authorized by the copyright owner",
+                            }),
+                            r.jsx("li", {
+                                children:
+                                    "A statement, under penalty of perjury, that the information in the notification is accurate and that you are the copyright owner or authorized to act on behalf of the owner",
+                            }),
+                        ],
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Where to Send DMCA Notices",
+                    }),
+                    r.jsx("p", { children: "Please send DMCA takedown notices to:" }),
+                    r.jsxs("div", {
+                        className: "bg-white border border-am-line rounded-lg p-4",
+                        children: [
+                            r.jsx("p", { className: "text-am-dark font-medium", children: "DMCA Agent" }),
+                            r.jsxs("p", {
+                                children: [
+                                    "Email: ",
+                                    r.jsx("span", { className: "text-am-dark", children: "dmca@tunefree.com" }),
+                                ],
+                            }),
+                        ],
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Note" }),
+                    r.jsx("p", {
+                        children:
+                            "Since TuneFree does not host music content directly, copyright issues with the underlying music should be directed to YouTube/Google through their DMCA process. However, if you believe our search results or interface facilitates infringement, we will review and respond to valid DMCA notices promptly.",
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function C2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "Disclaimer | TuneFree",
+                description:
+                    "Read the TuneFree disclaimer covering content sourcing, region availability and third-party streaming references.",
+                keywords: "disclaimer, TuneFree disclaimer, TuneFree disclaimer",
+                path: "/disclaimer",
+                noindex: !0,
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-2", children: "Disclaimer" }),
+            r.jsx("p", { className: "text-sm text-am-muted mb-6", children: "Last updated: March 2026" }),
+            r.jsxs("div", {
+                className: "space-y-4 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "General Disclaimer" }),
+                    r.jsx("p", {
+                        children:
+                            "The information and services provided by TuneFree are for general entertainment and personal use only. TuneFree is a free music discovery and streaming platform that aggregates publicly available content from YouTube Music.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "No Affiliation" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree is not affiliated with, endorsed by, or officially connected to YouTube, Google, Apple Music, Spotify, or any other music streaming service. All product names, logos, and brands are property of their respective owners. Use of these names, logos, and brands does not imply endorsement.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Content Availability" }),
+                    r.jsx("p", {
+                        children:
+                            "Music availability on TuneFree depends on YouTube Music's catalog and may vary by region. We do not guarantee that any particular song, album, artist, or playlist will be available. Content may be removed or become unavailable at any time without notice.",
+                    }),
+                    r.jsx("h2", {
+                        className: "text-xl font-bold text-am-dark pt-4",
+                        children: "Accuracy of Information",
+                    }),
+                    r.jsx("p", {
+                        children:
+                            "While we strive to provide accurate song titles, artist names, and album information, this data is sourced from YouTube Music's metadata and may contain inaccuracies. We are not responsible for any errors in the displayed information.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Use at Your Own Risk" }),
+                    r.jsx("p", {
+                        children:
+                            'Your use of TuneFree is at your sole risk. The service is provided on an "as is" and "as available" basis. We make no warranties, expressed or implied, and hereby disclaim all warranties, including without limitation, implied warranties of merchantability, fitness for a particular purpose, or non-infringement.',
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "External Links" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree may contain links to external websites or services that are not owned or controlled by us. We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services.",
+                    }),
+                    r.jsx("h2", { className: "text-xl font-bold text-am-dark pt-4", children: "Advertising" }),
+                    r.jsx("p", {
+                        children:
+                            "TuneFree displays advertisements through Google AdSense and potentially other advertising networks. We are not responsible for the content of advertisements displayed on our platform. The presence of an advertisement does not constitute an endorsement of the advertised product or service.",
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function T2() {
+    const n = xt(),
+        { isAuthenticated: a, openAuthModal: l } = gt(),
+        { favorites: o, loaded: u } = mr(),
+        { playTrack: f, playTracksShuffled: m } = Tt();
+    if (!a)
+        return r.jsxs("div", {
+            className: "text-center py-20",
+            children: [
+                r.jsx(fn, { size: 48, className: "mx-auto text-am-muted mb-4" }),
+                r.jsx("h2", { className: "text-xl font-bold text-am-dark mb-2", children: "Your Favorites" }),
+                r.jsx("p", {
+                    className: "text-am-gray mb-4",
+                    children: "Sign in to save and access your favorite songs",
+                }),
+                r.jsx("button", {
+                    onClick: l,
+                    className:
+                        "px-6 py-2 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h transition-colors",
+                    children: "Sign In",
+                }),
+            ],
+        });
+    if (!u)
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[40vh]",
+            children: r.jsx("div", {
+                className: "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin",
+            }),
+        });
+    const p = () => {
+            o.length > 0 && f(o[0], o);
+        },
+        h = () => {
+            o.length > 0 && m(o);
+        };
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: "Favorite songs | TuneFree",
+                description:
+                    "Open your favorite songs in TuneFree and keep your most-played music ready for instant listening.",
+                keywords: "favorite songs, liked songs, saved music, TuneFree favorites, TuneFree favorites",
+                path: "/favorites",
+                noindex: !0,
+            }),
+            r.jsxs("button", {
+                onClick: () => n(-1),
+                className: "flex items-center gap-1 text-am-gray mb-4 -ml-1 hover:text-am-dark",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsxs("div", {
+                className: "flex items-center gap-3 mb-6",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-14 h-14 bg-gradient-to-br from-am-red to-pink-600 rounded-xl flex items-center justify-center",
+                        children: r.jsx(fn, { size: 24, className: "text-white" }),
+                    }),
+                    r.jsxs("div", {
+                        className: "flex-1",
+                        children: [
+                            r.jsx("h1", { className: "text-2xl font-bold text-am-dark", children: "Favorites" }),
+                            r.jsxs("p", {
+                                className: "text-sm text-am-gray",
+                                children: [o.length, " song", o.length !== 1 ? "s" : ""],
+                            }),
+                        ],
+                    }),
+                    o.length > 0 &&
+                        r.jsxs("div", {
+                            className: "flex items-center gap-2",
+                            children: [
+                                r.jsxs("button", {
+                                    onClick: h,
+                                    className:
+                                        "flex items-center gap-2 px-4 py-2 bg-white border border-am-line text-am-dark text-sm font-semibold rounded-full hover:bg-am-bg transition-colors",
+                                    children: [r.jsx(ir, { size: 14 }), " Shuffle"],
+                                }),
+                                r.jsxs("button", {
+                                    onClick: p,
+                                    className:
+                                        "flex items-center gap-2 px-5 py-2 bg-am-red text-white text-sm font-semibold rounded-full hover:bg-am-red-h transition-colors",
+                                    children: [r.jsx(ht, { size: 18 }), " Play All"],
+                                }),
+                            ],
+                        }),
+                ],
+            }),
+            o.length === 0
+                ? r.jsx("p", {
+                      className: "text-am-gray text-center py-10",
+                      children: "No favorites yet. Tap the heart icon on any song to add it here.",
+                  })
+                : r.jsx("div", {
+                      className: "border-t border-am-line",
+                      children: o.map((v, y) => r.jsx(vs, { track: v, index: y, tracks: o }, v.id)),
+                  }),
+        ],
+    });
+}
+function E2() {
+    var xe;
+    const { id: n } = di(),
+        a = xt(),
+        { isAuthenticated: l, openAuthModal: o } = gt(),
+        { playTrack: u, playTracksShuffled: f } = Tt(),
+        { deletePlaylist: m, removeTrackFromPlaylist: p, updatePlaylist: h } = vi(),
+        [v, y] = g.useState(null),
+        [w, T] = g.useState([]),
+        [b, j] = g.useState(!0),
+        [S, k] = g.useState(!1),
+        [I, $] = g.useState(""),
+        [A, B] = g.useState("");
+    if (
+        (g.useEffect(() => {
+            if (!l) {
+                j(!1);
+                return;
+            }
+            const q = Q1(n);
+            q != null &&
+                q.playlist &&
+                (y(q.playlist), T(q.tracks || []), $(q.playlist.name), B(q.playlist.description || ""), j(!1)),
+                fh(n)
+                    .then((te) => {
+                        te != null &&
+                            te.playlist &&
+                            (y(te.playlist),
+                            T(te.tracks || []),
+                            $(te.playlist.name),
+                            B(te.playlist.description || ""),
+                            yh(n, { playlist: te.playlist, tracks: te.tracks || [] }));
+                    })
+                    .catch(() => a("/library"))
+                    .finally(() => j(!1));
+        }, [n, l, a]),
+        g.useEffect(() => {
+            const q = V1(),
+                te = (F) => {
+                    var O, X;
+                    if (((O = F.detail) == null ? void 0 : O.playlistId) !== n) return;
+                    const ge = (X = F.detail) == null ? void 0 : X.data;
+                    ge != null &&
+                        ge.playlist &&
+                        (y(ge.playlist), T(ge.tracks || []), $(ge.playlist.name), B(ge.playlist.description || ""));
+                };
+            return window.addEventListener(q, te), () => window.removeEventListener(q, te);
+        }, [n]),
+        !l)
+    )
+        return r.jsxs("div", {
+            className: "text-center py-20",
+            children: [
+                r.jsx("p", { className: "text-am-gray mb-4", children: "Sign in to view your playlists" }),
+                r.jsx("button", {
+                    onClick: o,
+                    className: "px-6 py-2 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h",
+                    children: "Sign In",
+                }),
+            ],
+        });
+    if (b)
+        return r.jsx("div", {
+            className: "flex items-center justify-center min-h-[40vh]",
+            children: r.jsx("div", {
+                className: "w-8 h-8 border-2 border-am-red border-t-transparent rounded-full animate-spin",
+            }),
+        });
+    if (!v) return null;
+    const Y = () => {
+            w.length > 0 && u(w[0], w);
+        },
+        ne = () => {
+            w.length > 0 && f(w);
+        },
+        K = async () => {
+            confirm("Delete this playlist?") && (await m(n), vh(n), a("/library"));
+        },
+        le = async (q) => {
+            await p(n, q);
+        },
+        ee = async () => {
+            await h(n, { name: I, description: A }), k(!1);
+        },
+        re = v.image || ((xe = w[0]) == null ? void 0 : xe.image);
+    return r.jsxs("div", {
+        children: [
+            r.jsx(ot, {
+                title: `${v.name} | TuneFree playlist`,
+                description: `Manage and listen to ${v.name} on TuneFree.`,
+                keywords: `${v.name}, playlist, saved playlist, TuneFree playlist, TuneFree playlist`,
+                path: `/my/playlist/${n}`,
+                image: re,
+                noindex: !0,
+            }),
+            r.jsxs("button", {
+                onClick: () => a(-1),
+                className: "flex items-center gap-1 text-am-gray mb-4 text-sm hover:text-am-dark",
+                children: [r.jsx(mn, { size: 18 }), " Back"],
+            }),
+            r.jsxs("div", {
+                className: "flex flex-col md:flex-row items-start gap-5 mb-6",
+                children: [
+                    r.jsx("div", {
+                        className:
+                            "w-40 h-40 md:w-48 md:h-48 rounded-xl overflow-hidden bg-am-bg flex-shrink-0 shadow-md",
+                        children: re
+                            ? r.jsx($e, { src: re, alt: v.name, className: "w-full h-full object-cover" })
+                            : r.jsx("div", {
+                                  className:
+                                      "w-full h-full flex items-center justify-center bg-gradient-to-br from-am-bg to-am-line",
+                                  children: r.jsx(ma, { size: 48, className: "text-am-muted" }),
+                              }),
+                    }),
+                    r.jsxs("div", {
+                        className: "flex-1 min-w-0",
+                        children: [
+                            r.jsx("p", {
+                                className: "text-xs font-semibold text-am-gray uppercase tracking-wider mb-1",
+                                children: "Playlist",
+                            }),
+                            S
+                                ? r.jsxs("div", {
+                                      className: "space-y-2 mb-3",
+                                      children: [
+                                          r.jsx("input", {
+                                              type: "text",
+                                              value: I,
+                                              onChange: (q) => $(q.target.value),
+                                              className:
+                                                  "w-full bg-am-bg border border-am-line rounded-lg py-2 px-3 text-lg font-bold text-am-dark outline-none focus:ring-2 focus:ring-am-red/30",
+                                          }),
+                                          r.jsx("input", {
+                                              type: "text",
+                                              value: A,
+                                              onChange: (q) => B(q.target.value),
+                                              placeholder: "Description",
+                                              className:
+                                                  "w-full bg-am-bg border border-am-line rounded-lg py-1.5 px-3 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/30",
+                                          }),
+                                          r.jsxs("div", {
+                                              className: "flex gap-2",
+                                              children: [
+                                                  r.jsx("button", {
+                                                      onClick: ee,
+                                                      className:
+                                                          "px-4 py-1.5 bg-am-red text-white text-sm rounded-lg hover:bg-am-red-h",
+                                                      children: "Save",
+                                                  }),
+                                                  r.jsx("button", {
+                                                      onClick: () => k(!1),
+                                                      className: "px-4 py-1.5 text-sm text-am-gray hover:text-am-dark",
+                                                      children: "Cancel",
+                                                  }),
+                                              ],
+                                          }),
+                                      ],
+                                  })
+                                : r.jsxs(r.Fragment, {
+                                      children: [
+                                          r.jsx("h1", {
+                                              className: "text-2xl md:text-3xl font-bold text-am-dark mb-1",
+                                              children: v.name,
+                                          }),
+                                          v.description &&
+                                              r.jsx("p", {
+                                                  className: "text-sm text-am-gray mb-2",
+                                                  children: v.description,
+                                              }),
+                                      ],
+                                  }),
+                            r.jsxs("p", {
+                                className: "text-sm text-am-gray mb-4",
+                                children: [w.length, " song", w.length !== 1 ? "s" : ""],
+                            }),
+                            r.jsxs("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    w.length > 0 &&
+                                        r.jsxs(r.Fragment, {
+                                            children: [
+                                                r.jsxs("button", {
+                                                    onClick: ne,
+                                                    className:
+                                                        "flex items-center gap-2 px-4 py-2 bg-white border border-am-line text-am-dark text-sm font-semibold rounded-full hover:bg-am-bg transition-colors shadow-sm",
+                                                    children: [r.jsx(ir, { size: 14 }), " Shuffle"],
+                                                }),
+                                                r.jsxs("button", {
+                                                    onClick: Y,
+                                                    className:
+                                                        "flex items-center gap-2 px-5 py-2 bg-am-red text-white text-sm font-semibold rounded-full hover:bg-am-red-h transition-colors shadow-sm",
+                                                    children: [r.jsx(ht, { size: 18 }), " Play"],
+                                                }),
+                                            ],
+                                        }),
+                                    !S &&
+                                        r.jsx("button", {
+                                            onClick: () => k(!0),
+                                            className:
+                                                "p-2 text-am-gray hover:text-am-dark rounded-full hover:bg-am-hover",
+                                            title: "Edit",
+                                            children: r.jsx(U0, { size: 16 }),
+                                        }),
+                                    r.jsx("button", {
+                                        onClick: K,
+                                        className: "p-2 text-am-gray hover:text-red-500 rounded-full hover:bg-am-hover",
+                                        title: "Delete playlist",
+                                        children: r.jsx(wm, { size: 16 }),
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+            w.length === 0
+                ? r.jsx("p", {
+                      className: "text-am-gray text-center py-10",
+                      children: "This playlist is empty. Add songs from the menu on any track.",
+                  })
+                : r.jsx("div", {
+                      className: "border-t border-am-line",
+                      children: w.map((q, te) =>
+                          r.jsx(
+                              vs,
+                              {
+                                  track: q,
+                                  index: te,
+                                  tracks: w,
+                                  showAddToPlaylist: !1,
+                                  extraMenuItems: [
+                                      {
+                                          key: "remove-song",
+                                          label: "Remove song",
+                                          icon: r.jsx(wm, { size: 16 }),
+                                          className: "text-red-500",
+                                          onClick: (F) => le(F.id),
+                                      },
+                                  ],
+                              },
+                              q.id + "-" + te
+                          )
+                      ),
+                  }),
+        ],
+    });
+}
+const P2 = [
+    { code: "US", label: "United States" },
+    { code: "IN", label: "India" },
+    { code: "GB", label: "United Kingdom" },
+    { code: "CA", label: "Canada" },
+    { code: "AU", label: "Australia" },
+    { code: "DE", label: "Germany" },
+    { code: "FR", label: "France" },
+    { code: "BR", label: "Brazil" },
+    { code: "JP", label: "Japan" },
+    { code: "KR", label: "South Korea" },
+];
+function R2() {
+    var $;
+    const n = xt(),
+        { user: a, isAuthenticated: l, openAuthModal: o, updateProfile: u } = gt(),
+        [f, m] = g.useState(""),
+        [p, h] = g.useState(""),
+        [v, y] = g.useState("US"),
+        [w, T] = g.useState(!1),
+        [b, j] = g.useState(""),
+        [S, k] = g.useState("");
+    if (
+        (g.useEffect(() => {
+            a && (m(a.name || ""), h(a.avatar || ""), y(a.country || "US"));
+        }, [a]),
+        !l)
+    )
+        return r.jsxs("div", {
+            className: "text-center py-20",
+            children: [
+                r.jsx("p", { className: "text-am-gray mb-4", children: "Sign in to customize your profile" }),
+                r.jsx("button", {
+                    onClick: o,
+                    className: "px-6 py-2 bg-am-red text-white text-sm font-semibold rounded-lg hover:bg-am-red-h",
+                    children: "Sign In",
+                }),
+            ],
+        });
+    const I = async (A) => {
+        var B, Y;
+        A.preventDefault(), T(!0), j(""), k("");
+        try {
+            const ne = zn() || (a == null ? void 0 : a.country) || "US";
+            if ((await u({ name: f, avatar: p, country: v }), Sh(v), j("Profile updated successfully."), v !== ne)) {
+                window.location.assign("/");
+                return;
+            }
+        } catch (ne) {
+            k(
+                ((Y = (B = ne == null ? void 0 : ne.response) == null ? void 0 : B.data) == null ? void 0 : Y.error) ||
+                    "Could not update profile."
+            );
+        } finally {
+            T(!1);
+        }
+    };
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "Profile settings | TuneFree account",
+                description: "Customize your TuneFree profile details, avatar and country preferences.",
+                keywords: "profile settings, account settings, TuneFree profile, TuneFree account",
+                path: "/profile",
+                noindex: !0,
+            }),
+            r.jsxs("button", {
+                onClick: () => n(-1),
+                className: "flex items-center gap-1 text-am-gray mb-4 -ml-1 hover:text-am-dark",
+                children: [r.jsx(mn, { size: 20 }), r.jsx("span", { className: "text-sm", children: "Back" })],
+            }),
+            r.jsxs("div", {
+                className: "rounded-3xl border border-am-line bg-white overflow-hidden shadow-sm",
+                children: [
+                    r.jsxs("div", {
+                        className:
+                            "px-6 md:px-8 py-8 bg-gradient-to-br from-am-bg via-white to-am-hover border-b border-am-line",
+                        children: [
+                            r.jsx("p", {
+                                className: "text-xs font-semibold uppercase tracking-[0.25em] text-am-muted mb-2",
+                                children: "Profile",
+                            }),
+                            r.jsx("h1", {
+                                className: "text-3xl font-bold text-am-dark",
+                                children: "Customize your account",
+                            }),
+                            r.jsx("p", {
+                                className: "text-sm text-am-gray mt-2",
+                                children: "Update how your profile appears across TuneFree.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("div", {
+                        className: "px-6 md:px-8 py-8",
+                        children: [
+                            r.jsxs("div", {
+                                className: "flex items-center gap-4 mb-8",
+                                children: [
+                                    r.jsx("div", {
+                                        className:
+                                            "w-20 h-20 rounded-full bg-am-red text-white overflow-hidden flex items-center justify-center text-2xl font-bold shadow-sm",
+                                        children: p
+                                            ? r.jsx("img", { src: p, alt: "", className: "w-full h-full object-cover" })
+                                            : ($ = (f || (a == null ? void 0 : a.email) || "U")[0]) == null
+                                              ? void 0
+                                              : $.toUpperCase(),
+                                    }),
+                                    r.jsxs("div", {
+                                        children: [
+                                            r.jsx("p", {
+                                                className: "text-lg font-semibold text-am-dark",
+                                                children: f || "Your profile",
+                                            }),
+                                            r.jsx("p", {
+                                                className: "text-sm text-am-gray",
+                                                children: a == null ? void 0 : a.email,
+                                            }),
+                                        ],
+                                    }),
+                                ],
+                            }),
+                            r.jsxs("form", {
+                                onSubmit: I,
+                                className: "space-y-5",
+                                children: [
+                                    r.jsxs("label", {
+                                        className: "block",
+                                        children: [
+                                            r.jsxs("span", {
+                                                className:
+                                                    "flex items-center gap-2 text-sm font-medium text-am-dark mb-2",
+                                                children: [r.jsx(Xl, { size: 15 }), "Display name"],
+                                            }),
+                                            r.jsx("input", {
+                                                type: "text",
+                                                value: f,
+                                                onChange: (A) => m(A.target.value),
+                                                placeholder: "Your name",
+                                                className:
+                                                    "w-full bg-am-bg border border-am-line rounded-xl py-3 px-4 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/20 focus:border-am-red",
+                                            }),
+                                        ],
+                                    }),
+                                    r.jsxs("label", {
+                                        className: "block",
+                                        children: [
+                                            r.jsxs("span", {
+                                                className:
+                                                    "flex items-center gap-2 text-sm font-medium text-am-dark mb-2",
+                                                children: [r.jsx(Xl, { size: 15 }), "Avatar URL"],
+                                            }),
+                                            r.jsx("input", {
+                                                type: "url",
+                                                value: p,
+                                                onChange: (A) => h(A.target.value),
+                                                placeholder: "https://example.com/avatar.jpg",
+                                                className:
+                                                    "w-full bg-am-bg border border-am-line rounded-xl py-3 px-4 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/20 focus:border-am-red",
+                                            }),
+                                        ],
+                                    }),
+                                    r.jsxs("label", {
+                                        className: "block",
+                                        children: [
+                                            r.jsxs("span", {
+                                                className:
+                                                    "flex items-center gap-2 text-sm font-medium text-am-dark mb-2",
+                                                children: [r.jsx(D0, { size: 15 }), "Country"],
+                                            }),
+                                            r.jsx("select", {
+                                                value: v,
+                                                onChange: (A) => y(A.target.value),
+                                                className:
+                                                    "w-full bg-am-bg border border-am-line rounded-xl py-3 px-4 text-sm text-am-dark outline-none focus:ring-2 focus:ring-am-red/20 focus:border-am-red",
+                                                children: P2.map((A) =>
+                                                    r.jsx("option", { value: A.code, children: A.label }, A.code)
+                                                ),
+                                            }),
+                                        ],
+                                    }),
+                                    r.jsxs("div", {
+                                        className: "rounded-2xl bg-am-bg px-4 py-4 border border-am-line",
+                                        children: [
+                                            r.jsxs("p", {
+                                                className:
+                                                    "flex items-center gap-2 text-sm font-medium text-am-dark mb-2",
+                                                children: [r.jsx(O0, { size: 15 }), "Account email"],
+                                            }),
+                                            r.jsx("p", {
+                                                className: "text-sm text-am-gray break-all",
+                                                children: a == null ? void 0 : a.email,
+                                            }),
+                                        ],
+                                    }),
+                                    b && r.jsx("p", { className: "text-sm text-green-600", children: b }),
+                                    S && r.jsx("p", { className: "text-sm text-red-500", children: S }),
+                                    r.jsxs("button", {
+                                        type: "submit",
+                                        disabled: w,
+                                        className:
+                                            "inline-flex items-center gap-2 px-5 py-3 bg-am-red text-white text-sm font-semibold rounded-xl hover:bg-am-red-h disabled:opacity-70",
+                                        children: [r.jsx(z0, { size: 16 }), w ? "Saving..." : "Save profile"],
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function _2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "TuneFree FAQ | TuneFree help and common questions",
+                description:
+                    "Find answers about TuneFree, including playback, playlists, favorites, PWA install, regional content and how the service works.",
+                keywords: "TuneFree FAQ, TuneFree help, music streaming questions, TuneFree support",
+                path: "/faq",
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-3", children: "Frequently Asked Questions" }),
+            r.jsx("p", {
+                className: "text-sm text-am-gray mb-8 leading-relaxed",
+                children:
+                    "This page answers the most common questions listeners ask about TuneFree, including how playback works, where the music data comes from, how playlists and favorites are stored, and how to install the app.",
+            }),
+            r.jsxs("div", {
+                className: "space-y-7 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "What is TuneFree?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "TuneFree is a lightweight web music experience by TuneFree focused on discovery, fast playback, playlist building, favorites, smart queueing and regional recommendations. The goal is to make it easy to start listening quickly without a complicated setup.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "How does TuneFree add value?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "TuneFree is not just a search box. It organizes music into a cleaner listening experience with curated home sections, artist and album views, country-aware discovery, favorites, user playlists, queue tools, progressive PWA support and a playback layer designed for day-to-day listening rather than raw catalog browsing.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "Why do recommendations vary by country?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "The home feed and discovery sections use your selected country to prioritize more relevant charts, artists and new releases. This helps listeners in different regions see music that is more meaningful to them.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "How do favorites and playlists work?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "Favorites and user playlists are tied to your signed-in account. TuneFree also uses local and session caching to make the interface feel faster, but the app refreshes data from the backend so your library reflects the saved state.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "Can I install TuneFree as an app?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "Yes. On supported browsers you can install TuneFree as a Progressive Web App. This gives you a cleaner, app-style experience with quicker relaunching and better session continuity.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "Who should contact you about copyright issues?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "Rights holders or their agents can use our DMCA process. The fastest path is the dedicated copyright contact information on the DMCA page, which explains what details are required for a valid notice.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "How can I report bugs or request features?",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "You can contact the TuneFree team through the support and contact channels listed on the Contact page. Useful bug reports include the device, browser, country selection and the exact playback or search issue.",
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function A2() {
+    return r.jsxs("div", {
+        className: "max-w-3xl mx-auto",
+        children: [
+            r.jsx(ot, {
+                title: "Editorial policy | TuneFree",
+                description:
+                    "Read the editorial and content policy for TuneFree, including how recommendations are organized, reviewed and presented.",
+                keywords: "editorial policy, TuneFree policy, TuneFree content policy, recommendation policy",
+                path: "/editorial-policy",
+            }),
+            r.jsx("h1", { className: "text-3xl font-bold text-am-dark mb-3", children: "Editorial Policy" }),
+            r.jsx("p", {
+                className: "text-sm text-am-gray mb-8 leading-relaxed",
+                children:
+                    "TuneFree organizes music for discovery and listening. This page explains how we present content, how we think about recommendation quality, and what standards we use for support, transparency and user trust.",
+            }),
+            r.jsxs("div", {
+                className: "space-y-7 text-sm text-am-gray leading-relaxed",
+                children: [
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", { className: "text-xl font-bold text-am-dark mb-2", children: "1. Purpose" }),
+                            r.jsx("p", {
+                                children:
+                                    "Our purpose is to help listeners discover music faster through cleaner navigation, curated sections, regional relevance, organized artist and album pages, and a practical listening workflow built around queues, favorites and playlists.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "2. Recommendation Principles",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "We prioritize usefulness over noise. Home sections are assembled to surface current hits, genre clusters, region-specific suggestions, repeat listening behavior and straightforward browsing paths. We aim for variety, clarity and consistent labeling rather than excessive clickbait or misleading presentation.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "3. Accuracy and Labeling",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "We try to label artists, albums, playlists and tracks clearly. When metadata is incomplete, we prefer neutral fallback presentation rather than invented claims. If a page contains legal, support or policy information, that information should be direct, reviewable and easy to verify.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "4. User Trust",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "We maintain public pages for contact, terms, privacy, DMCA and disclaimers so users, advertisers and rights holders can understand how TuneFree works. We avoid hiding key operational details and aim to make support paths visible.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "5. Product Quality",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "We continuously improve performance, playback continuity, queue behavior, account features, PWA install support and page quality. The site is designed to be usable across mobile and desktop, with a focus on fast loading, clean layouts and repeat listening.",
+                            }),
+                        ],
+                    }),
+                    r.jsxs("section", {
+                        children: [
+                            r.jsx("h2", {
+                                className: "text-xl font-bold text-am-dark mb-2",
+                                children: "6. Feedback and Review",
+                            }),
+                            r.jsx("p", {
+                                children:
+                                    "Listener feedback helps shape our priorities. Playback issues, content quality problems, inaccurate metadata, accessibility concerns and copyright complaints can all be reported through our public contact channels.",
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+}
+function L2() {
+    return r.jsx(Iy, {
+        children: r.jsxs(nt, {
+            path: "/",
+            element: r.jsx(Yw, {}),
+            children: [
+                r.jsx(nt, { index: !0, element: r.jsx(l2, {}) }),
+                r.jsx(nt, { path: "new", element: r.jsx(c2, {}) }),
+                r.jsx(nt, { path: "search", element: r.jsx(h2, {}) }),
+                r.jsx(nt, { path: "artist/:id", element: r.jsx(x2, {}) }),
+                r.jsx(nt, { path: "playlist/:id", element: r.jsx(g2, {}) }),
+                r.jsx(nt, { path: "album/:id", element: r.jsx(y2, {}) }),
+                r.jsx(nt, { path: "player", element: r.jsx(v2, {}) }),
+                r.jsx(nt, { path: "library", element: r.jsx(w2, {}) }),
+                r.jsx(nt, { path: "favorites", element: r.jsx(T2, {}) }),
+                r.jsx(nt, { path: "profile", element: r.jsx(R2, {}) }),
+                r.jsx(nt, { path: "my/playlist/:id", element: r.jsx(E2, {}) }),
+                r.jsx(nt, { path: "about", element: r.jsx(b2, {}) }),
+                r.jsx(nt, { path: "contact", element: r.jsx(j2, {}) }),
+                r.jsx(nt, { path: "privacy", element: r.jsx(k2, {}) }),
+                r.jsx(nt, { path: "terms", element: r.jsx(N2, {}) }),
+                r.jsx(nt, { path: "dmca", element: r.jsx(S2, {}) }),
+                r.jsx(nt, { path: "disclaimer", element: r.jsx(C2, {}) }),
+                r.jsx(nt, { path: "faq", element: r.jsx(_2, {}) }),
+                r.jsx(nt, { path: "editorial-policy", element: r.jsx(A2, {}) }),
+            ],
+        }),
+    });
+}
+try {
+    const n = localStorage.getItem("tunefree_theme_mode"),
+        a = n === "light" || n === "dark" ? n : "dark";
+    document.documentElement.setAttribute("data-theme", a);
+} catch {
+    document.documentElement.setAttribute("data-theme", "dark");
+}
+"serviceWorker" in navigator &&
+    window.addEventListener("load", () => {
+        let n = !1;
+        const a = (o) => {
+                o.waiting && o.waiting.postMessage("SKIP_WAITING");
+            },
+            l = (o) => {
+                o &&
+                    (a(o),
+                    o.addEventListener("updatefound", () => {
+                        const u = o.installing;
+                        u &&
+                            u.addEventListener("statechange", () => {
+                                u.state === "installed" && navigator.serviceWorker.controller && a(o);
+                            });
+                    }),
+                    setInterval(() => {
+                        var u;
+                        o.update().catch(() => {}), (u = o.active) == null || u.postMessage("cleanup");
+                    }, 600 * 1e3));
+            };
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+            n || ((n = !0), window.location.reload());
+        }),
+            navigator.serviceWorker
+                .register("/sw.js", { updateViaCache: "none" })
+                .then((o) => {
+                    l(o), o.update().catch(() => {});
+                })
+                .catch(() => {});
+    });
+qg.createRoot(document.getElementById("root")).render(
+    r.jsx(Me.StrictMode, {
+        children: r.jsx(G1, {
+            children: r.jsx(zp, {
+                children: r.jsx(Vy, {
+                    children: r.jsx($1, {
+                        children: r.jsx(Rw, {
+                            children: r.jsx(K1, {
+                                children: r.jsx(rw, {
+                                    children: r.jsx(Cw, {
+                                        children: r.jsx(d2, { children: r.jsx(X0, { children: r.jsx(L2, {}) }) }),
+                                    }),
+                                }),
+                            }),
+                        }),
+                    }),
+                }),
+            }),
+        }),
+    })
+);
