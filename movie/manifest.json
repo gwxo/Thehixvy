@@ -2,7 +2,7 @@
   "name": "HixvyMovie",
   "short_name": "Hixvymovie",
   "description": "Premium Movie & TV Streaming",
-  "start_url": "/",
+  "start_url": "/movie",
   "display": "standalone",
   "background_color": "#D21F3C",
   "theme_color": "#e50914",
