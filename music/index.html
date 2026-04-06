@@ -1,20 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TuneFree Player</title>
-    <!-- The JavaScript handles almost everything, but you might need some base CSS -->
+    
+    <!-- 1. Load Tailwind CSS to handle the layout and styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. Configure Tailwind with the custom colors used in your JS -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'am-red': '#fc3c44',
+              'am-red-h': '#ff6b72',
+              'am-dark': '#f9fafb', /* Light text for dark mode */
+              'am-gray': '#9ca3af',
+              'am-muted': '#6b7280',
+              'am-bg': '#18181b',
+              'am-line': '#3f3f46',
+              'am-hover': '#27272a'
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- 3. Add custom CSS variables and scrollbar styling -->
     <style>
-        body { margin: 0; padding: 0; font-family: sans-serif; background: #000; color: #fff; }
+        :root {
+            --surface-0: #09090b;
+            --surface-1: #18181b;
+            --surface-elevated: #27272a;
+            --text-primary: #f9fafb;
+            --text-secondary: #a1a1aa;
+            --am-line: #3f3f46;
+            --overlay-backdrop: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--surface-0);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden; /* App handles its own scrolling */
+        }
+
+        /* Custom Scrollbar for the app */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fc3c44;
+        }
+
+        /* Hide scrollbar for specific sections if needed */
+        .scroll-section::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- THIS IS THE CRITICAL PART: The JavaScript will load inside this div -->
+    <!-- The JavaScript will inject the entire app right here -->
     <div id="root"></div>
 
-    <!-- Link your JavaScript file here -->
-    <!-- Note: type="module" is often required for modern bundled JS -->
+    <!-- 4. Link to your app.js file in the same 'music' folder -->
+    <!-- Since they are in the same folder, "app.js" is the correct relative path -->
     <script type="module" src="app.js"></script>
 </body>
 </html>
