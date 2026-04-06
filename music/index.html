@@ -1,82 +1,51 @@
+
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TuneFree Player</title>
-    
-    <!-- 1. Load Tailwind CSS to handle the layout and styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>TuneFree | Free music streaming, online music player and instant music listening</title>
+    <meta name="description" content="Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, explore trending music and listen instantly without subscriptions." />
+    <meta name="keywords" content="free music, online music, music listening, free music streaming, online music player, listen to music online, free songs, playlists, albums, artists, TuneFree, TuneFree" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://tunefree-org.pages.dev/" />
+    <meta property="og:site_name" content="TuneFree, from the makers of ListenFree" />
+    <meta property="og:title" content="TuneFree | Free music streaming, online music player and instant music listening" />
+    <meta property="og:description" content="Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, explore trending music and listen instantly without subscriptions." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tunefree-org.pages.dev/" />
+    <meta property="og:image" content="https://tunefree-org.pages.dev/icon-512.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TuneFree | Free music streaming, online music player and instant music listening" />
+    <meta name="twitter:description" content="Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, explore trending music and listen instantly without subscriptions." />
+    <meta name="twitter:image" content="https://tunefree-org.pages.dev/icon-512.svg" />
 
-    <!-- 2. Configure Tailwind with the custom colors used in your JS -->
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#fc3c44" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="TuneFree" />
+    <link rel="apple-touch-icon" href="/icon-192.svg" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/icon-192.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSY7PVK051"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'am-red': '#fc3c44',
-              'am-red-h': '#ff6b72',
-              'am-dark': '#f9fafb', /* Light text for dark mode */
-              'am-gray': '#9ca3af',
-              'am-muted': '#6b7280',
-              'am-bg': '#18181b',
-              'am-line': '#3f3f46',
-              'am-hover': '#27272a'
-            }
-          }
-        }
-      }
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YSY7PVK051');
     </script>
-
-    <!-- 3. Add custom CSS variables and scrollbar styling -->
-    <style>
-        :root {
-            --surface-0: #09090b;
-            --surface-1: #18181b;
-            --surface-elevated: #27272a;
-            --text-primary: #f9fafb;
-            --text-secondary: #a1a1aa;
-            --am-line: #3f3f46;
-            --overlay-backdrop: rgba(0, 0, 0, 0.7);
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--surface-0);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden; /* App handles its own scrolling */
-        }
-
-        /* Custom Scrollbar for the app */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #fc3c44;
-        }
-
-        /* Hide scrollbar for specific sections if needed */
-        .scroll-section::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <!-- The JavaScript will inject the entire app right here -->
+    <script type="module" crossorigin src="app.js"></script>
+    <link rel="stylesheet" crossorigin href="style.css">
+  </head>
+  <body class="bg-white text-gray-900">
     <div id="root"></div>
-
-    <!-- 4. Link to your app.js file in the same 'music' folder -->
-    <!-- Since they are in the same folder, "app.js" is the correct relative path -->
-    <script type="module" src="app.js"></script>
-</body>
+  </body>
 </html>
