@@ -6,7 +6,7 @@
     <title>HixvyMusic - Premium Indian Audio</title>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Tailwind CSS -->
@@ -20,12 +20,12 @@
                         display: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        hmBlack: '#000000',
+                        hmBlack: '#050505',
                         hmDark: '#121212',
-                        hmCard: '#181818',
-                        hmCardHover: '#282828',
+                        hmCard: '#1a1a1a',
+                        hmCardHover: '#262626',
                         hmRed: '#fc3c44',
-                        hmGray: '#a7a7a7',
+                        hmGray: '#a0a0a0',
                     }
                 }
             }
@@ -33,7 +33,7 @@
     </script>
 
     <style>
-        body { background-color: #000000; color: #ffffff; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #050505; color: #ffffff; overflow: hidden; -webkit-tap-highlight-color: transparent; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -44,21 +44,21 @@
         }
 
         .glass-player {
-            background: rgba(18, 18, 18, 0.95);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         /* Range Slider Styling */
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%;
-            background: #ffffff; cursor: pointer; margin-top: -5px; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%;
+            background: #ffffff; cursor: pointer; margin-top: -4px; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
             opacity: 0; transition: opacity 0.2s, transform 0.1s;
         }
         .range-group:hover input[type=range]::-webkit-slider-thumb, #full-player input[type=range]::-webkit-slider-thumb { opacity: 1; }
         input[type=range]::-webkit-slider-thumb:active { transform: scale(1.3); background: #fc3c44; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #4d4d4d; border-radius: 2px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #333; border-radius: 2px; }
         input[type=range]:focus { outline: none; }
 
         .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
@@ -66,21 +66,23 @@
 
         .loader {
             border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #fc3c44;
-            border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite;
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="flex flex-col h-screen w-screen text-white font-sans selection:bg-hmRed selection:text-white">
 
-    <!-- Toast Notification -->
+    <!-- Notifications -->
     <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-hmRed text-white px-6 py-3 rounded-full shadow-lg shadow-hmRed/30 z-[200] transform -translate-y-24 transition-transform duration-300 opacity-0 pointer-events-none font-semibold text-sm">
         <span id="toast-msg"></span>
     </div>
 
-    <!-- Hidden YouTube Engine -->
+    <!-- Hidden Hybrid Playback Engine -->
     <div id="yt-player-container" class="hidden"></div>
+    <audio id="native-audio-player" class="hidden"></audio>
 
+    <!-- Main Layout -->
     <div class="flex flex-1 overflow-hidden h-[calc(100vh-80px)]">
         
         <!-- Desktop Sidebar -->
@@ -92,8 +94,14 @@
             </div>
             <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto hide-scrollbar">
                 <p class="text-[10px] font-bold text-hmGray uppercase tracking-widest px-4 mb-3">Menu</p>
-                <button onclick="switchView('home')" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg transition-colors bg-hmCard text-white nav-link" data-view="home">
+                <button onclick="switchView('home')" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-colors bg-hmCard text-white nav-link" data-view="home">
                     <i class="fa-solid fa-house text-lg"></i><span class="font-semibold text-sm">Home</span>
+                </button>
+                <button onclick="switchView('search')" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-colors text-hmGray hover:text-white nav-link" data-view="search">
+                    <i class="fa-solid fa-search text-lg"></i><span class="font-semibold text-sm">Search</span>
+                </button>
+                <button onclick="switchView('history')" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-colors text-hmGray hover:text-white nav-link" data-view="history">
+                    <i class="fa-solid fa-clock-rotate-left text-lg"></i><span class="font-semibold text-sm">History</span>
                 </button>
             </nav>
         </aside>
@@ -104,18 +112,18 @@
             <!-- Sticky Navigation Bar -->
             <header class="sticky top-0 z-40 glass-nav px-4 py-3 md:px-8 md:py-4 flex items-center justify-between">
                 <!-- Mobile Branding -->
-                <div class="flex items-center gap-2 md:hidden">
+                <div class="flex items-center gap-2 md:hidden cursor-pointer" onclick="switchView('home')">
                     <div class="w-8 h-8 rounded bg-hmRed flex items-center justify-center shadow-lg"><i class="fa-solid fa-music text-white text-xs"></i></div>
-                    <h1 class="text-xl font-display font-black tracking-tight text-white cursor-pointer" onclick="switchView('home')">Hixvy<span class="text-hmRed">Music</span></h1>
+                    <h1 class="text-xl font-display font-black tracking-tight text-white">Hixvy<span class="text-hmRed">Music</span></h1>
                 </div>
 
                 <div class="hidden md:block flex-1"></div>
 
-                <!-- Right Actions: Search, History, About Dev -->
-                <div class="flex items-center gap-4 md:gap-6 ml-auto">
+                <!-- Right Actions -->
+                <div class="flex items-center gap-5 ml-auto">
                     <button onclick="switchView('search')" title="Search" class="text-hmGray hover:text-white transition-colors"><i class="fa-solid fa-search text-xl"></i></button>
                     <button onclick="switchView('history')" title="Library/History" class="text-hmGray hover:text-white transition-colors"><i class="fa-solid fa-clock-rotate-left text-xl"></i></button>
-                    <button onclick="switchView('about')" class="text-xs md:text-sm font-bold bg-white text-black px-4 py-2 rounded-full hover:scale-105 transition-transform shadow-lg shadow-white/10">About Dev</button>
+                    <button onclick="switchView('about')" class="text-xs md:text-sm font-bold bg-white text-black px-4 py-2 rounded-full hover:scale-105 transition-transform shadow-lg">About Dev</button>
                 </div>
             </header>
 
@@ -126,20 +134,18 @@
 
             <!-- 1. Home View -->
             <div id="view-home" class="p-4 md:p-8 pb-32 block view-section">
-                <h2 id="greeting-text" class="text-3xl md:text-5xl font-display font-black mb-8 mt-2">Good Evening</h2>
+                <h2 id="greeting-text" class="text-3xl md:text-5xl font-display font-black mb-8 mt-2 tracking-tight">Good Evening</h2>
                 <div id="home-content" class="space-y-10"></div>
             </div>
 
             <!-- 2. Search View -->
             <div id="view-search" class="p-4 md:p-8 pb-32 hidden view-section">
-                <!-- Top Search Bar -->
                 <div class="relative w-full max-w-3xl mx-auto mb-10 mt-4 group">
                     <i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-hmGray text-xl group-focus-within:text-white transition-colors"></i>
                     <input type="text" id="search-input" placeholder="Search Indian Songs, Artists, or Albums..." class="w-full bg-hmCard hover:bg-hmCardHover focus:bg-hmCardHover border border-white/5 focus:border-white/20 rounded-full py-4 pl-14 pr-10 text-lg text-white focus:outline-none transition-all shadow-xl placeholder-hmGray">
                 </div>
                 
-                <!-- Dynamic Results / Suggestions -->
-                <h2 id="search-title" class="text-2xl font-bold mb-6">Suggested Indian Hits</h2>
+                <h2 id="search-title" class="text-2xl font-bold mb-6 tracking-tight">Suggested Indian Hits</h2>
                 <div id="search-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"></div>
             </div>
 
@@ -147,7 +153,7 @@
             <div id="view-history" class="p-4 md:p-8 pb-32 hidden view-section max-w-4xl mx-auto">
                 <div class="flex items-center justify-between mb-8 mt-2">
                     <h2 class="text-3xl font-display font-black">History</h2>
-                    <button onclick="clearHistory()" class="text-xs font-bold text-hmGray hover:text-white bg-hmCard px-4 py-2 rounded-full transition-colors">Clear All</button>
+                    <button onclick="clearHistory()" class="text-xs font-bold text-hmGray hover:text-white bg-hmCard px-4 py-2 rounded-full transition-colors border border-white/10">Clear All</button>
                 </div>
                 <div id="history-list" class="flex flex-col gap-2"></div>
             </div>
@@ -155,15 +161,15 @@
             <!-- 4. About Dev View -->
             <div id="view-about" class="p-4 md:p-8 pb-32 hidden view-section flex-col items-center justify-center min-h-[70vh]">
                 <div class="max-w-md w-full bg-hmCard p-8 rounded-3xl shadow-2xl border border-white/5 text-center">
-                    <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-tr from-hmRed to-purple-600 p-1 mb-6 shadow-xl">
+                    <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-tr from-hmRed to-orange-500 p-1 mb-6 shadow-xl">
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=HixvyMusic&backgroundColor=121212" alt="Dev" class="w-full h-full rounded-full object-cover bg-hmBlack">
                     </div>
                     <h2 class="text-3xl font-display font-black mb-2 text-white">Developer</h2>
-                    <p class="text-sm text-hmGray mb-8 leading-relaxed">Built for seamless Indian music streaming. Features a custom smart-fetch engine to guarantee playable tracks and auto-play vibes.</p>
+                    <p class="text-sm text-hmGray mb-8 leading-relaxed">Engineered for seamless Indian music streaming. Uses a smart hybrid playback engine to guarantee high-quality audio fetching and continuous playback.</p>
                     <div class="flex flex-col gap-3 text-sm text-hmGray text-left bg-hmBlack p-5 rounded-2xl border border-white/5">
                         <div class="flex justify-between border-b border-white/5 pb-2"><span>App Name</span><span class="text-white font-semibold">HixvyMusic</span></div>
-                        <div class="flex justify-between border-b border-white/5 pb-2"><span>Version</span><span class="text-white font-semibold">3.0.0 (Premium)</span></div>
-                        <div class="flex justify-between"><span>Core Engine</span><span class="text-white font-semibold">YT Iframe Smart API</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-2"><span>Version</span><span class="text-white font-semibold">3.5.0 (Premium)</span></div>
+                        <div class="flex justify-between"><span>Core Engine</span><span class="text-white font-semibold">Hybrid Native/YT API</span></div>
                     </div>
                 </div>
             </div>
@@ -174,7 +180,7 @@
     <!-- ================= PLAYER BARS ================= -->
 
     <!-- Mini Player (Always Visible at Bottom) -->
-    <div class="h-[75px] md:h-[90px] w-full glass-player fixed bottom-0 z-50 flex items-center justify-between px-3 md:px-6 cursor-pointer border-t border-white/5" onclick="toggleFullPlayer()">
+    <div class="h-[75px] md:h-[90px] w-full glass-player fixed bottom-[60px] md:bottom-0 z-50 flex items-center justify-between px-3 md:px-6 cursor-pointer border-t border-white/5" onclick="toggleFullPlayer()">
         <!-- Top Mobile Progress -->
         <div class="absolute top-0 left-0 w-full h-1 md:hidden bg-white/10"><div id="mini-fill" class="h-full bg-hmRed w-0 transition-all duration-75"></div></div>
 
@@ -212,13 +218,29 @@
         </div>
     </div>
 
+    <!-- Mobile Bottom Navigation (Fixed) -->
+    <nav class="md:hidden fixed bottom-0 w-full h-[60px] bg-hmBlack border-t border-white/5 flex items-center justify-around z-[60]">
+        <button onclick="switchView('home')" class="flex flex-col items-center text-white gap-1 nav-link-mobile" data-view="home">
+            <i class="fa-solid fa-house text-lg"></i><span class="text-[10px] font-medium">Home</span>
+        </button>
+        <button onclick="switchView('search')" class="flex flex-col items-center text-hmGray gap-1 nav-link-mobile transition-colors" data-view="search">
+            <i class="fa-solid fa-search text-lg"></i><span class="text-[10px] font-medium">Search</span>
+        </button>
+        <button onclick="switchView('history')" class="flex flex-col items-center text-hmGray gap-1 nav-link-mobile transition-colors" data-view="history">
+            <i class="fa-solid fa-clock-rotate-left text-lg"></i><span class="text-[10px] font-medium">History</span>
+        </button>
+        <button onclick="switchView('about')" class="flex flex-col items-center text-hmGray gap-1 nav-link-mobile transition-colors" data-view="about">
+            <i class="fa-solid fa-code text-lg"></i><span class="text-[10px] font-medium">About</span>
+        </button>
+    </nav>
+
     <!-- Full Screen Player Overlay -->
-    <div id="full-player" class="fixed inset-0 z-[100] transform translate-y-full transition-transform duration-500 ease-out hidden bg-hmDark">
+    <div id="full-player" class="fixed inset-0 z-[150] transform translate-y-full transition-transform duration-500 ease-out hidden bg-hmDark">
         <div id="fp-bg" class="absolute inset-0 bg-cover bg-center opacity-30 blur-[80px] scale-125 pointer-events-none transition-all duration-1000"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-hmBlack/60 to-hmBlack opacity-95 pointer-events-none"></div>
         
         <div class="relative z-10 flex flex-col h-full">
-            <div class="flex items-center justify-between p-6">
+            <div class="flex items-center justify-between p-6 pt-10 md:pt-6">
                 <button onclick="toggleFullPlayer()" class="text-white hover:text-hmRed transition-colors w-12 h-12 flex items-center justify-center bg-white/10 rounded-full backdrop-blur-md"><i class="fa-solid fa-chevron-down text-xl"></i></button>
                 <div class="flex flex-col text-center">
                     <span class="text-[10px] font-bold tracking-widest text-hmGray uppercase">Now Playing</span>
@@ -240,9 +262,9 @@
                     <button class="text-hmRed text-3xl hover:scale-110 transition-transform"><i class="fa-solid fa-heart"></i></button>
                 </div>
                 
-                <div class="flex items-center gap-4 mb-10">
+                <div class="flex items-center gap-4 mb-10 group">
                     <span id="fp-curr" class="text-sm font-semibold text-hmGray min-w-[40px]">0:00</span>
-                    <div class="flex-1 relative flex items-center h-5 group">
+                    <div class="flex-1 relative flex items-center h-5">
                         <input type="range" id="fp-progress" value="0" max="100" class="absolute z-10 w-full h-full opacity-0 cursor-pointer">
                         <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden pointer-events-none"><div id="fp-bar" class="h-full bg-white w-0 transition-all duration-75"></div></div>
                     </div>
@@ -267,7 +289,9 @@
         const API_BASE = 'https://freefyclone-api.albatross0071.workers.dev/api';
         
         let ytPlayer = null;
-        let isPlayerReady = false;
+        let isYTReady = false;
+        const nativeAudio = document.getElementById('native-audio-player');
+        let useNativeAudio = false; 
         
         let currentQueue = JSON.parse(localStorage.getItem('hm_queue')) || [];
         let currentIndex = parseInt(localStorage.getItem('hm_index')) || 0;
@@ -280,13 +304,20 @@
             history: document.getElementById('view-history'),
             about: document.getElementById('view-about')
         };
-        const mainScroll = document.getElementById('main-scroll-area');
-        const loader = document.getElementById('content-loader');
+
+        // Home Categories to guarantee data
+        const HOME_QUERIES = [
+            { title: "Trending Bollywood", query: "Top Bollywood Hits" },
+            { title: "Punjabi Blockbusters", query: "Punjabi Trending Hits" },
+            { title: "Soulful Romance", query: "Hindi Romantic Hits" },
+            { title: "New Releases", query: "Latest Indian Songs" }
+        ];
 
         /* ================= INITIALIZATION ================= */
         document.addEventListener('DOMContentLoaded', () => {
             setGreeting();
             injectYouTubeAPI();
+            setupNativeAudio();
             initApp();
             restorePlayerUI();
             setupEvents();
@@ -300,51 +331,69 @@
         async function initApp() {
             switchView('home');
             showLoader(true);
+            
             try {
-                // Fetch official Home Feed API
-                const res = await fetch(`${API_BASE}/browse/sections?country=IN`);
-                const data = await res.json();
-                const sections = data?.homeSections || data?.data?.homeSections || [];
+                // Fetch guaranteed queries directly to prevent empty pages
+                const promises = HOME_QUERIES.map(q => fetchSearch(q.query));
+                const results = await Promise.allSettled(promises);
                 
-                if(sections.length === 0) throw new Error("No sections");
-                renderShelves(sections);
-            } catch (err) {
-                document.getElementById('home-content').innerHTML = '<p class="text-hmGray text-center">Failed to load content. Please refresh.</p>';
-            } finally { showLoader(false); }
+                const container = document.getElementById('home-content');
+                container.innerHTML = '';
+                
+                results.forEach((res, i) => {
+                    if (res.status === 'fulfilled' && res.value.length > 0) {
+                        renderShelf(HOME_QUERIES[i].title, res.value, container);
+                    }
+                });
 
-            // Pre-load Search Suggestions
+                if (container.innerHTML === '') {
+                    container.innerHTML = '<p class="text-hmGray text-center mt-10">Unable to load data. Please refresh.</p>';
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                showLoader(false);
+            }
+
+            // Preload Search
             fetchRandomIndianHits();
         }
 
-        /* ================= VIEW MANAGEMENT ================= */
+        /* ================= VIEW ROUTING ================= */
         function switchView(viewName) {
             Object.values(views).forEach(v => { v.classList.remove('flex', 'block'); v.classList.add('hidden'); });
             
             if(viewName === 'about') views[viewName].classList.add('flex');
             else views[viewName].classList.add('block');
             
-            mainScroll.scrollTop = 0;
+            document.getElementById('main-scroll-area').scrollTop = 0;
 
             document.querySelectorAll('.nav-link').forEach(l => {
                 if(l.dataset.view === viewName) { l.classList.replace('text-hmGray', 'text-white'); l.classList.add('bg-hmCard'); } 
                 else { l.classList.replace('text-white', 'text-hmGray'); l.classList.remove('bg-hmCard'); }
             });
+            document.querySelectorAll('.nav-link-mobile').forEach(l => {
+                if(l.dataset.view === viewName) l.classList.replace('text-hmGray', 'text-white'); 
+                else l.classList.replace('text-white', 'text-hmGray');
+            });
+            
             if(viewName === 'history') renderHistory();
         }
 
-        /* ================= API & SMART FETCHING ================= */
-        // Handles standard search
+        /* ================= API & DATA FETCHING ================= */
         async function fetchSearch(query) {
             try {
                 const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}&type=song&country=IN`);
                 const data = await res.json();
-                return data?.data?.result?.items || data?.result?.items || [];
+                
+                let items = data?.data?.results || data?.results || data?.data?.result?.items || data?.result?.items || [];
+                if(!Array.isArray(items)) items = Object.values(items);
+                return items.filter(i => extractPlayableUrl(i) || extractId(i));
             } catch(e) { return []; }
         }
 
-        // Fills the search page initial state
         async function fetchRandomIndianHits() {
-            const items = await fetchSearch('Latest Bollywood Trending Hits');
+            const items = await fetchSearch('Latest Trending Indian Songs');
             if(items.length > 0) renderGrid(items, 'search-grid');
         }
 
@@ -366,23 +415,17 @@
         }
 
         /* ================= UI RENDERING ================= */
-        function renderShelves(sections) {
-            const container = document.getElementById('home-content');
-            container.innerHTML = '';
-            sections.forEach(sec => {
-                if(!sec.items || sec.items.length === 0) return;
-                
-                const shelf = document.createElement('div');
-                shelf.className = 'animate-fade-in';
-                shelf.innerHTML = `<h3 class="text-2xl font-bold text-white mb-4 tracking-tight">${sec.title || 'Featured'}</h3>`;
-                
-                const scroller = document.createElement('div');
-                scroller.className = 'flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0';
-                
-                sec.items.forEach(item => scroller.appendChild(createCard(item, sec.items)));
-                shelf.appendChild(scroller);
-                container.appendChild(shelf);
-            });
+        function renderShelf(titleText, items, container) {
+            const shelf = document.createElement('div');
+            shelf.className = 'animate-fade-in';
+            shelf.innerHTML = `<h3 class="text-2xl font-bold text-white mb-4 tracking-tight">${titleText}</h3>`;
+            
+            const scroller = document.createElement('div');
+            scroller.className = 'flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0';
+            
+            items.forEach(item => scroller.appendChild(createCard(item, items)));
+            shelf.appendChild(scroller);
+            container.appendChild(shelf);
         }
 
         function renderGrid(items, containerId) {
@@ -393,7 +436,7 @@
 
         function createCard(item, contextQueue, isGrid = false) {
             const card = document.createElement('div');
-            card.className = `group ${isGrid ? 'w-full' : 'flex-none w-[150px] md:w-[180px] snap-start'} cursor-pointer relative`;
+            card.className = `group ${isGrid ? 'w-full' : 'flex-none w-[140px] md:w-[170px] snap-start'} cursor-pointer relative`;
             
             const imgUrl = extractImg(item);
             card.innerHTML = `
@@ -405,31 +448,14 @@
                     </div>
                 </div>
                 <h3 class="text-sm md:text-base font-bold text-white line-clamp-1 mb-1">${extractTitle(item)}</h3>
-                <p class="text-xs md:text-sm text-hmGray line-clamp-1">${extractSubtitle(item)}</p>
+                <p class="text-xs text-hmGray line-clamp-1">${extractSubtitle(item)}</p>
             `;
 
-            // THE SMART CLICK LOGIC: Solves "Nothing works" bug for Playlists/Albums
-            card.onclick = async () => {
-                let vidId = extractId(item);
-                if (vidId) {
-                    // It is a directly playable song
-                    currentQueue = contextQueue.filter(i => extractId(i));
-                    currentIndex = currentQueue.findIndex(i => extractId(i) === vidId);
-                    if(currentIndex === -1) currentIndex = 0;
-                    playTrack(currentQueue[currentIndex]);
-                } else {
-                    // It is an album or playlist -> Fetch its songs using search to guarantee playback!
-                    showToast(`Loading ${extractTitle(item)}...`);
-                    const items = await fetchSearch(extractTitle(item));
-                    const playable = items.filter(i => extractId(i));
-                    if(playable.length > 0) {
-                        currentQueue = playable;
-                        currentIndex = 0;
-                        playTrack(playable[0]);
-                    } else {
-                        showToast("Cannot play this item.");
-                    }
-                }
+            card.onclick = () => {
+                currentQueue = contextQueue;
+                currentIndex = currentQueue.indexOf(item);
+                if(currentIndex === -1) currentIndex = 0;
+                playTrack(item);
             };
             lazyObserver.observe(card.querySelector('img'));
             return card;
@@ -439,7 +465,7 @@
             const container = document.getElementById('history-list');
             container.innerHTML = '';
             const history = JSON.parse(localStorage.getItem('hm_history')) || [];
-            if(history.length === 0) { container.innerHTML = '<p class="text-hmGray">No history yet.</p>'; return; }
+            if(history.length === 0) { container.innerHTML = '<p class="text-hmGray">No history found.</p>'; return; }
 
             history.forEach((item, idx) => {
                 const div = document.createElement('div');
@@ -461,7 +487,8 @@
             });
         }
 
-        /* ================= YOUTUBE ENGINE & PLAYBACK ================= */
+        /* ================= HYBRID PLAYBACK ENGINE ================= */
+        // 1. YouTube Setup
         function injectYouTubeAPI() {
             const tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
@@ -473,43 +500,71 @@
                 height: '0', width: '0', videoId: '',
                 playerVars: { 'autoplay': 1, 'controls': 0, 'disablekb': 1, 'playsinline': 1 },
                 events: {
-                    'onReady': () => { isPlayerReady = true; },
-                    'onStateChange': onStateChange,
-                    'onError': () => { showToast('Track error. Skipping.'); setTimeout(() => playNext(true), 1500); }
+                    'onReady': () => { isYTReady = true; },
+                    'onStateChange': onYTStateChange,
+                    'onError': () => { console.log("YT Error, falling back"); playNext(true); }
                 }
             });
         };
 
-        function onStateChange(e) {
+        function onYTStateChange(e) {
+            if(useNativeAudio) return; // Ignore if using Audio tag
             if (e.data === YT.PlayerState.PLAYING) {
                 isPlaying = true; updatePlayState(); startTimer(); updateDuration();
             } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.CUED) {
                 isPlaying = false; updatePlayState(); stopTimer();
             } else if (e.data === YT.PlayerState.ENDED) {
-                playNext(true); // true means auto-advance -> trigger vibe matching if end of queue
+                playNext(true);
             }
         }
 
+        // 2. Native Audio Setup
+        function setupNativeAudio() {
+            nativeAudio.addEventListener('play', () => { isPlaying = true; updatePlayState(); startTimer(); updateDuration(); });
+            nativeAudio.addEventListener('pause', () => { isPlaying = false; updatePlayState(); stopTimer(); });
+            nativeAudio.addEventListener('ended', () => { playNext(true); });
+            nativeAudio.addEventListener('error', () => { showToast("Audio error. Skipping."); playNext(true); });
+        }
+
+        // 3. Main Play Logic
         function playTrack(track) {
             if (!track) return;
-            const vidId = extractId(track);
-            if (!vidId) { playNext(); return; }
+            const audioUrl = extractPlayableUrl(track);
+            const ytId = extractId(track);
 
-            if (isPlayerReady && ytPlayer && ytPlayer.loadVideoById) {
-                ytPlayer.loadVideoById(vidId);
-                updatePlayerInfo(track);
-                saveState();
-                addToHistory(track);
-            } else { setTimeout(() => playTrack(track), 500); } 
+            if (!audioUrl && !ytId) { showToast("Unplayable track."); playNext(); return; }
+
+            // Stop whatever is currently playing
+            if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+            nativeAudio.pause();
+
+            // Prioritize High-Quality Native Audio (JioSaavn files) over YouTube if available
+            if (audioUrl) {
+                useNativeAudio = true;
+                nativeAudio.src = audioUrl;
+                nativeAudio.play().catch(e => console.log(e));
+            } else if (isYTReady && ytId) {
+                useNativeAudio = false;
+                ytPlayer.loadVideoById(ytId);
+            } else {
+                setTimeout(() => playTrack(track), 500); return;
+            }
+
+            updatePlayerInfo(track);
+            saveState();
+            addToHistory(track);
         }
 
         function togglePlay() {
-            if (!ytPlayer || !isPlayerReady) {
-                if (currentQueue.length > 0) playTrack(currentQueue[currentIndex]);
-                return;
+            if (currentQueue.length === 0) return;
+            if (!isPlaying) {
+                if (useNativeAudio) nativeAudio.play();
+                else if (isYTReady) ytPlayer.playVideo();
+                else playTrack(currentQueue[currentIndex]);
+            } else {
+                if (useNativeAudio) nativeAudio.pause();
+                else if (isYTReady) ytPlayer.pauseVideo();
             }
-            if (ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
-            else ytPlayer.playVideo();
         }
 
         async function playNext(autoAdvance = false) {
@@ -524,24 +579,30 @@
 
         function playPrev() {
             if (currentQueue.length === 0) return;
-            if (ytPlayer && ytPlayer.getCurrentTime() > 3) { ytPlayer.seekTo(0); return; }
+            const currTime = useNativeAudio ? nativeAudio.currentTime : (ytPlayer?.getCurrentTime() || 0);
+            if (currTime > 3) {
+                if (useNativeAudio) nativeAudio.currentTime = 0;
+                else ytPlayer.seekTo(0);
+                return;
+            }
             currentIndex--;
             if (currentIndex < 0) currentIndex = currentQueue.length - 1;
             playTrack(currentQueue[currentIndex]);
         }
 
-        // Auto-Play Similar Vibe
+        // 4. Auto-Vibe (Endless Music)
         async function fetchAutoVibe() {
-            const artist = extractSubtitle(currentQueue[currentQueue.length-1]).split(',')[0] || "Bollywood Hits";
-            showToast(`Auto-playing similar to ${artist}...`);
-            const items = await fetchSearch(artist + " songs");
-            const newItems = items.filter(i => extractId(i) && !currentQueue.some(q => extractId(q) === extractId(i)));
+            const lastTrack = currentQueue[currentQueue.length-1];
+            const artist = extractSubtitle(lastTrack).split(',')[0] || "Bollywood Hits";
+            showToast(`Finding similar to ${artist}...`);
+            const items = await fetchSearch(`${artist} songs`);
+            const newItems = items.filter(i => (extractPlayableUrl(i) || extractId(i)) && !currentQueue.some(q => extractTitle(q) === extractTitle(i)));
             
             if(newItems.length > 0) {
                 currentQueue = currentQueue.concat(newItems);
                 playTrack(currentQueue[currentIndex]);
             } else {
-                currentIndex = 0; playTrack(currentQueue[currentIndex]);
+                currentIndex = 0; playTrack(currentQueue[0]);
             }
         }
 
@@ -572,8 +633,9 @@
         function stopTimer() { clearInterval(progressTimer); }
 
         function updateProgress() {
-            if (!ytPlayer || !isPlayerReady) return;
-            const curr = ytPlayer.getCurrentTime() || 0; const dur = ytPlayer.getDuration() || 0;
+            const curr = useNativeAudio ? nativeAudio.currentTime : (ytPlayer?.getCurrentTime() || 0);
+            const dur = useNativeAudio ? nativeAudio.duration : (ytPlayer?.getDuration() || 0);
+            
             const currStr = formatTime(curr);
             document.getElementById('mini-curr').innerText = currStr; document.getElementById('fp-curr').innerText = currStr;
             
@@ -586,44 +648,55 @@
         }
 
         function updateDuration() {
-            if (!ytPlayer || !isPlayerReady) return;
-            const str = formatTime(ytPlayer.getDuration() || 0);
+            const dur = useNativeAudio ? nativeAudio.duration : (ytPlayer?.getDuration() || 0);
+            const str = formatTime(dur);
             document.getElementById('mini-tot').innerText = str; document.getElementById('fp-tot').innerText = str;
         }
 
         function handleSeek(e) {
-            if (!ytPlayer || !isPlayerReady) return;
-            const dur = ytPlayer.getDuration();
+            const val = e.target.value;
+            const dur = useNativeAudio ? nativeAudio.duration : (ytPlayer?.getDuration() || 0);
             if (dur) {
-                const val = e.target.value; ytPlayer.seekTo((val / 100) * dur, true);
+                const seekTime = (val / 100) * dur;
+                if(useNativeAudio) nativeAudio.currentTime = seekTime;
+                else ytPlayer.seekTo(seekTime, true);
+                
                 document.getElementById('mini-bar').style.width = `${val}%`; document.getElementById('fp-bar').style.width = `${val}%`;
                 document.getElementById('mini-fill').style.width = `${val}%`;
                 document.getElementById('mini-progress').value = val; document.getElementById('fp-progress').value = val;
             }
         }
 
-        /* ================= UTILS & STORAGE ================= */
+        /* ================= UTILITIES ================= */
+        // Data Extraction Logic optimized for Saavn APIs
+        function extractPlayableUrl(item) {
+            if(item.downloadUrl && Array.isArray(item.downloadUrl) && item.downloadUrl.length > 0) {
+                return item.downloadUrl[item.downloadUrl.length-1].url || item.downloadUrl[0].url; // Highest quality
+            }
+            if(typeof item.downloadUrl === 'string') return item.downloadUrl;
+            return null;
+        }
         function extractId(item) {
             if(!item) return null;
             if(item.videoId) return item.videoId;
-            if(typeof item.id === 'string') return item.id;
+            if(item.id && typeof item.id === 'string' && item.id.length === 11) return item.id; // Strict YT check
             if(item.id && item.id.videoId) return item.id.videoId;
             return null;
         }
         function extractImg(item) {
             if(item.image) { if(typeof item.image === 'string') return item.image; if(Array.isArray(item.image)) return item.image[item.image.length-1].url; }
             if(item.thumbnails?.length > 0) return item.thumbnails[item.thumbnails.length-1].url;
-            if(item.album?.images?.length > 0) return item.album.images[item.album.images.length-1].url;
             return 'https://via.placeholder.com/300/181818/fc3c44?text=HM';
         }
         function extractTitle(item) { return item.title || item.name || 'Unknown Track'; }
         function extractSubtitle(item) {
             if(item.subtitle) return item.subtitle;
+            if(item.artists?.primary && item.artists.primary.length > 0) return item.artists.primary.map(a => a.name).join(', ');
             if(item.artists && Array.isArray(item.artists)) return item.artists.map(a => a.name).join(', ');
             return item.artist || 'Unknown Artist';
         }
         function formatTime(sec) {
-            if(isNaN(sec)) return '0:00';
+            if(isNaN(sec) || !isFinite(sec)) return '0:00';
             const m = Math.floor(sec/60); const s = Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`;
         }
         function showLoader(b) { loader.style.display = b ? 'flex' : 'none'; }
@@ -632,18 +705,19 @@
             t.classList.remove('opacity-0', '-translate-y-24');
             setTimeout(() => t.classList.add('opacity-0', '-translate-y-24'), 3000);
         }
+        
         function saveState() { localStorage.setItem('hm_queue', JSON.stringify(currentQueue)); localStorage.setItem('hm_index', currentIndex.toString()); }
         function clearHistory() { localStorage.removeItem('hm_history'); renderHistory(); showToast('History Cleared'); }
         function addToHistory(t) {
             let hist = JSON.parse(localStorage.getItem('hm_history')) || [];
-            hist = hist.filter(x => extractId(x) !== extractId(t));
+            hist = hist.filter(x => extractTitle(x) !== extractTitle(t)); // Filter duplicates by title
             hist.unshift(t); if(hist.length > 50) hist.pop();
             localStorage.setItem('hm_history', JSON.stringify(hist));
             if(!views.history.classList.contains('hidden')) renderHistory();
         }
         function restorePlayerUI() { if (currentQueue.length > 0 && currentQueue[currentIndex]) updatePlayerInfo(currentQueue[currentIndex]); }
 
-        /* ================= EVENT LISTENERS ================= */
+        /* ================= EVENTS & LAZY LOAD ================= */
         function setupEvents() {
             const inp = document.getElementById('search-input');
             let to;
@@ -656,7 +730,6 @@
             document.addEventListener('keydown', (e) => { if(e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); togglePlay(); } });
         }
 
-        /* ================= LAZY LOADING ================= */
         const lazyObserver = new IntersectionObserver((entries, obs) => {
             entries.forEach(e => { if(e.isIntersecting) { const img = e.target; img.src = img.dataset.src; obs.unobserve(img); } });
         }, { rootMargin: '0px 0px 300px 0px' });
