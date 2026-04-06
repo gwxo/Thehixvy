@@ -1,12 +1,12 @@
-const CACHE_NAME = 'prasxmovie-v2';
+const CACHE_NAME = 'prasxmovie-v2.1'; // Bumped version to force update
 
-// These are the core files that will be saved to the user's phone for offline use
+// Update these paths to point specifically to your movie folder assets
 const CORE_ASSETS = [
-  '/movie',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/movie/',              // The movie app entry point
+  '/movie/index.html',    // Explicitly cache the movie's HTML file
+  '/manifest.json',       // (Make sure this path is correct, e.g., '/movie/manifest.json' if it's inside the folder)
+  '/icon-192.png',        // (Same here, update if inside /movie/)
+  '/icon-512.png'         // (Same here, update if inside /movie/)
 ];
 
 // Install: Save core files to the device
@@ -41,14 +41,12 @@ self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        // If internet is OFF, serve the cached index.html
-        // Your custom "No Internet" overlay will automatically trigger!
-        return caches.match('/');
+        // CHANGED: Serve the movie folder offline instead of the root '/'
+        return caches.match('/movie/') || caches.match('/movie/index.html');
       })
     );
   } else {
     // For all other requests (images, API data, etc.)
-    // Try the network first, if it fails (offline), see if we have it in the cache
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.match(event.request);
