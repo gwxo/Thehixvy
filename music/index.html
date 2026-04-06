@@ -1,47 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>TuneFree | Free music streaming, online music player and instant music listening</title>
-    <meta name="description" content="Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, explore trending music and listen instantly without subscriptions." />
-    <meta name="keywords" content="free music, online music, music listening, free music streaming, online music player, listen to music online, free songs, playlists, albums, artists, TuneFree, TuneFree" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://tunefree-org.pages.dev/" />
-    <meta property="og:site_name" content="TuneFree, from the makers of ListenFree" />
-    <meta property="og:title" content="TuneFree | Free music streaming, online music player and instant music listening" />
-    <meta property="og:description" content="Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, explore trending music and listen instantly without subscriptions." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tunefree-org.pages.dev/" />
-    <meta property="og:image" content="https://tunefree-org.pages.dev/icon-512.svg" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TuneFree | Free music streaming, online music player and instant music listening" />
-    <meta name="twitter:description" content="Stream free music online with TuneFree, from the makers of ListenFree. Discover songs, playlists, albums and artists, explore trending music and listen instantly without subscriptions." />
-    <meta name="twitter:image" content="https://tunefree-org.pages.dev/icon-512.svg" />
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#fc3c44" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="TuneFree" />
-    <link rel="apple-touch-icon" href="/icon-192.svg" />
-
-    <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="/icon-192.svg" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSY7PVK051"></script>
-    
-    <script src="/music/script.js"></script>
-    <link rel="stylesheet" href="/music/style.css">
-    
-  </head>
-  <body class="bg-white text-gray-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneFree Player</title>
+    <!-- The JavaScript handles almost everything, but you might need some base CSS -->
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; background: #000; color: #fff; }
+    </style>
+</head>
+<body>
+    <!-- THIS IS THE CRITICAL PART: The JavaScript will load inside this div -->
     <div id="root"></div>
-  </body>
+
+    <!-- Link your JavaScript file here -->
+    <!-- Note: type="module" is often required for modern bundled JS -->
+    <script type="module" src="app.js"></script>
+</body>
 </html>
