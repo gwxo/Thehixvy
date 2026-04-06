@@ -2,7 +2,7 @@ const CACHE_NAME = 'prasxmovie-v2';
 
 // These are the core files that will be saved to the user's phone for offline use
 const CORE_ASSETS = [
-  '/movie',
+  '/',
   '/index.html',
   '/manifest.json',
   '/icon-192.png',
