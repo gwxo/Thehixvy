@@ -6212,6 +6212,11 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3a9 9 0 109 9h-2a7 7 0 11-7-7v3l4-4-4-4v3z"></path></svg>
           <span>History</span>
         </button>
+
+        <button class="nav-item" data-page="dev" onclick="navigateTo('dev')">
+      <i class="fas fa-code"></i>
+      <span>Dev</span>
+    </button>
         <button class="cine-side-item" data-page="settings" onclick="navigateTo('settings')">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.08 7.08 0 000-1.88l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.61-.22l-2.39.96a7.28 7.28 0 00-1.63-.94l-.36-2.54a.5.5 0 00-.5-.42h-3.84a.5.5 0 00-.5.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 00-.61.22L2.71 8.84a.5.5 0 00.12.64l2.03 1.58a7.08 7.08 0 000 1.88l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32a.5.5 0 00.61.22l2.39-.96c.51.4 1.05.71 1.63.94l.36 2.54a.5.5 0 00.5.42h3.84a.5.5 0 00.5-.42l.36-2.54c.58-.23 1.12-.54 1.63-.94l2.39.96a.5.5 0 00.61-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z"></path></svg>
           <span>Settings</span>
@@ -10053,6 +10058,62 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
     </div>
   </div>
 
+  <!-- Developer Page -->
+    <div class="page" id="devPage">
+      <div class="settings-header">
+        <h1 class="settings-title">Developer</h1>
+        <p class="settings-subtitle">The mind behind the code</p>
+      </div>
+
+      <div class="settings-content">
+        <div style="max-width: 800px; margin: 0 auto; width: 100%;">
+          
+          <!-- Profile Card -->
+          <div class="settings-card" style="text-align: center; padding: 40px 20px; background: linear-gradient(180deg, var(--primary-glow), transparent), var(--bg-card); border-radius: 24px; margin-bottom: 24px; border: 1px solid var(--border-color);">
+            <div style="width: 130px; height: 130px; margin: 0 auto 20px; border-radius: 50%; padding: 5px; background: var(--primary-gradient, var(--primary)); box-shadow: 0 10px 30px var(--primary-glow); display: inline-block; overflow: hidden;">
+              <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOqQnDqFUVc7fzkxnw3NFGON-JqDiyrczcTnHXOjsSbeXz4AQdFlyWAn88uIFjIUCuEKZTKqzS7Nah0Kq5wHpro8hEDceZ9c0mpKwdszh6scf1FmwEBGgpKSaRCEEp2qx2Nj9W_hJZSkSpE9U2Dum9fBBMcB3wnQNydzQRrOWD4dFSOF7VtPmBOXrItOg/s1280/10101.jpg" 
+                   style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--bg-card);" alt="TheHixvy">
+            </div>
+            <h2 style="font-family: 'Bebas Neue', cursive; font-size: 36px; letter-spacing: 2px; color: var(--text-primary); margin-bottom: 8px;">TheHixvy</h2>
+            <div class="details-tag" style="background: var(--primary); color: #fff; padding: 4px 15px; border-radius: 6px; font-size: 11px; font-weight: 800;">PRO DEVELOPER</div>
+          </div>
+
+          <!-- Description Section -->
+          <div class="settings-section">
+            <h3 class="settings-section-title">About Me</h3>
+            <div class="settings-card" style="padding: 20px;">
+              <p class="details-overview" style="margin: 0; font-size: 15px; line-height: 1.8; color: var(--text-secondary);">
+                I am a specialized Web and App Developer. <strong>TheHixvy</strong> is a project built to provide a premium, 
+                high-speed streaming interface that is fully adaptable. 
+                I focus on clean code, cinematic visuals, and a user-first experience.
+              </p>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="settings-section" style="margin-top: 24px;">
+            <h3 class="settings-section-title">Connect</h3>
+            <div class="settings-card">
+              <a href="https://t.me/thehixvy" class="settings-item">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background: rgba(0, 136, 204, 0.1); color: #0088cc;"><i class="fab fa-telegram"></i></div>
+                  <div class="settings-item-label">Join Telegram</div>
+                </div>
+                <i class="fas fa-external-link-alt settings-item-right"></i>
+              </a>
+              <a href="https://thehixvy.pages.dev" class="settings-item">
+                <div class="settings-item-left">
+                  <div class="settings-item-icon" style="background: rgba(229, 9, 20, 0.1); color: var(--primary);"><i class="fas fa-globe"></i></div>
+                  <div class="settings-item-label">My Portfolio</div>
+                </div>
+                <i class="fas fa-external-link-alt settings-item-right"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   <script>
     // ==================== SAFE STORAGE HELPER ====================
     const safeStorage = {
@@ -10698,7 +10759,7 @@ function playTrailer(id, type) {
     // ==================== NAVIGATION ====================
     function navigateTo(page, pushState = true) {
       resetPlayer();
-      const pages = ['home', 'search', 'bookmarks', 'history', 'category', 'settings', 'details'];
+      const pages = ['home', 'search', 'bookmarks', 'history', 'category', 'settings', 'details', 'dev'];
       if (!pages.includes(page)) return;
 
       state.previousPage = state.currentPage;
