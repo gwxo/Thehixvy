@@ -1358,36 +1358,32 @@ body.white-mode .pwa-btn-cancel {
     }
 
     .hero-video {
-    /* Netflix Hero Video Styling */
-.hero-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 1.5s ease-in-out; /* Smooth cinematic fade */
-  z-index: 2;
-  pointer-events: none;
-  overflow: hidden;
-}
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 2;
+    }
 
-.hero-video.playing {
-  opacity: 1;
-}
+    .hero-video.playing {
+      opacity: 1;
+    }
 
-.hero-video iframe {
-  width: 100vw;
-  height: 56.25vw; /* 16:9 Aspect Ratio */
-  min-height: 100vh;
-  min-width: 177.77vh;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.1); /* Zoom to remove edges */
-}
+    .hero-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      transform: scale(1.3);
+    }
 
-.hero-gradient { z-index: 3; }
-.hero-content { z-index: 10; }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.62) 0%, transparent 58%),
+                  linear-gradient(to right, rgba(0,0,0,0.58) 0%, transparent 38%);
+      z-index: 3;
+    }
 
     .hero-backdrop {
       filter: brightness(1.06) contrast(1.04) saturate(1.05);
@@ -10156,8 +10152,6 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
 </style>
   
   <script>
-
-    
     // ==================== SAFE STORAGE HELPER ====================
     const safeStorage = {
       get: function(key) {
@@ -10328,9 +10322,6 @@ function playTrailer(id, type) {
   const serverList = document.getElementById("serverList");
   if (serverList) serverList.innerHTML = "";
 }
-
-    let videoTimer; // This handles the 3-second delay for the Netflix effect
-    
     // ==================== STATE ====================
     const state = {
       currentPage: 'home',
@@ -10804,12 +10795,6 @@ function playTrailer(id, type) {
 
     // ==================== NAVIGATION ====================
     function navigateTo(page, pushState = true) {
-      // --- Hero Video Cleanup ---
-  clearTimeout(videoTimer); // Stops the 3-second timer
-  document.querySelectorAll('.hero-video').forEach(v => {
-    v.innerHTML = ''; // Removes the YouTube iframe
-    v.classList.remove('playing'); // Resets the fade effect
-  });
       resetPlayer();
       const pages = ['home', 'search', 'bookmarks', 'history', 'category', 'settings', 'details', 'dev'];
       if (!pages.includes(page)) return;
@@ -10940,56 +10925,42 @@ window.addEventListener('beforeunload', () => {
       return `<div class="hero-indicator ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="goToHeroSlide(${index})"></div>`;
     }
 
-
     function goToHeroSlide(index) {
-  const slides = document.querySelectorAll('.hero-slide');
-  const indicators = document.querySelectorAll('.hero-indicator');
-  
-  // 1. Stop any existing video delay timer
-  clearTimeout(videoTimer);
-
-  // 2. Clean up all slides (remove old iframes and the "playing" class)
-  slides.forEach((slide) => {
-    const videoBox = slide.querySelector('.hero-video');
-    if (videoBox) {
-      videoBox.innerHTML = ''; 
-      videoBox.classList.remove('playing');
+      const slides = document.querySelectorAll('.hero-slide');
+      const indicators = document.querySelectorAll('.hero-indicator');
+      
+      slides.forEach((slide, i) => {
+        const isActive = i === index;
+        slide.classList.toggle('active', isActive);
+        
+        if (isActive) {
+          const video = slide.querySelector('.hero-video');
+          if (video && video.dataset.trailer) {
+            video.innerHTML = `
+              <iframe src="https://www.youtube.com/embed/${video.dataset.trailer}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${video.dataset.trailer}" 
+                      frameborder="0" 
+                      allow="autoplay; encrypted-media" 
+                      allowfullscreen>
+              </iframe>
+            `;
+            video.classList.add('playing');
+          }
+        } else {
+          const video = slide.querySelector('.hero-video');
+          if (video) {
+            video.innerHTML = '';
+            video.classList.remove('playing');
+          }
+        }
+      });
+      
+      indicators.forEach((ind, i) => {
+        ind.classList.toggle('active', i === index);
+      });
+      
+      state.heroSlideIndex = index;
+      resetHeroTimer();
     }
-    slide.classList.remove('active');
-  });
-
-  // 3. Set the current slide as active
-  state.heroSlideIndex = index;
-  if(slides[index]) {
-    slides[index].classList.add('active');
-  }
-  
-  // 4. Update the pagination dots
-  indicators.forEach((ind, i) => {
-    ind.classList.toggle('active', i === index);
-  });
-
-  // 5. THE NETFLIX EFFECT: Wait 3 seconds then play muted trailer
-  const activeSlide = slides[index];
-  const trailerKey = state.heroItems[index]?.trailer_key;
-
-  if (trailerKey && activeSlide) {
-    videoTimer = setTimeout(() => {
-      const videoBox = activeSlide.querySelector('.hero-video');
-      if (videoBox) {
-        // Inject the muted background player
-        videoBox.innerHTML = `
-          <iframe src="https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailerKey}&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1" 
-                  frameborder="0" allow="autoplay; encrypted-media"></iframe>
-        `;
-        // Fade in after the iframe starts to load
-        setTimeout(() => videoBox.classList.add('playing'), 800);
-      }
-    }, 3000); // 3 seconds
-  }
-
-  resetHeroTimer();
-}
 
     function nextHeroSlide() {
       const nextIndex = (state.heroSlideIndex + 1) % state.heroItems.length;
@@ -11167,26 +11138,11 @@ async function loadHomeContent() {
     ].join('');
 
     // Slider logic
-    // Slider logic with Netflix Video Effect
     const heroItems = trending?.results?.slice(0, 6) || [];
-
-    // This block fetches the video keys from TMDB for each hero item
-    await Promise.all(heroItems.map(async (item) => {
-      const type = item.media_type || (item.first_air_date ? 'tv' : 'movie');
-      const videoData = await fetchTMDB(`/${type}/${item.id}/videos`);
-      const trailer = videoData?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-      item.trailer_key = trailer ? trailer.key : null;
-    }));
-
     state.heroItems = heroItems;
     document.getElementById('heroSlider').innerHTML = heroItems.map((item, i) => createHeroSlide(item, i)).join('');
     document.getElementById('heroIndicators').innerHTML = heroItems.map((_, i) => createHeroIndicator(i)).join('');
-    
-    if (heroItems.length > 1) {
-       startHeroTimer();
-       // This starts the video logic for the very first slide immediately
-       setTimeout(() => goToHeroSlide(0), 200); 
-    }
+    if (heroItems.length > 1) startHeroTimer();
 
   } catch (error) { console.error(error); }
 }
