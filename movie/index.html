@@ -10060,54 +10060,96 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
     </div>
   </div>
 <!-- Developer Page -->
-    <div class="page" id="devPage">
-      <div class="settings-header">
-        <h1 class="settings-title">Developer</h1>
-        <p class="settings-subtitle">The mind behind the code</p>
-      </div>
+    <!-- Developer Page Redesign -->
+<div class="page" id="devPage">
+  <!-- Cinematic Header -->
+  <div class="settings-header" style="text-align: center; padding-bottom: 10px;">
+    <h1 class="settings-title" style="letter-spacing: 4px;">THE ARCHITECT</h1>
+    <p class="settings-subtitle">Building the future of streaming</p>
+  </div>
 
-      <div class="settings-content">
-        <div style="max-width: 800px; margin: 0 auto; width: 100%;">
-          
-          <!-- Profile Card (Adaptable Design) -->
-          <div class="settings-card" style="text-align: center; padding: 40px 20px; background: linear-gradient(180deg, var(--primary-glow), transparent), var(--bg-card); border-radius: 24px; margin-bottom: 24px; border: 1px solid var(--border-color);">
-            <div style="width: 130px; height: 130px; margin: 0 auto 20px; border-radius: 50%; padding: 5px; background: var(--primary-gradient, var(--primary)); box-shadow: 0 10px 30px var(--primary-glow); display: inline-block; overflow: hidden;">
-              <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOqQnDqFUVc7fzkxnw3NFGON-JqDiyrczcTnHXOjsSbeXz4AQdFlyWAn88uIFjIUCuEKZTKqzS7Nah0Kq5wHpro8hEDceZ9c0mpKwdszh6scf1FmwEBGgpKSaRCEEp2qx2Nj9W_hJZSkSpE9U2Dum9fBBMcB3wnQNydzQRrOWD4dFSOF7VtPmBOXrItOg/s1280/10101.jpg" 
-                   style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--bg-card);" alt="TheHixvy">
-            </div>
-            <h2 style="font-family: 'Bebas Neue', cursive; font-size: 36px; letter-spacing: 2px; color: var(--text-primary); margin-bottom: 8px;">TheHixvy</h2>
-            <div class="details-tag" style="background: var(--primary); color: #fff; padding: 4px 15px; border-radius: 6px; font-size: 11px; font-weight: 800;">PRO DEVELOPER</div>
+  <div class="settings-content">
+    <div class="dev-wrapper" style="max-width: 900px; margin: 0 auto; width: 100%;">
+      
+      <!-- Premium Profile Card -->
+      <div class="settings-card" style="position: relative; overflow: hidden; padding: 50px 20px; border-radius: 30px; background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2)); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);">
+        
+        <!-- Abstract Background Glow -->
+        <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--primary); filter: blur(80px); opacity: 0.3; pointer-events: none;"></div>
+        
+        <!-- Avatar with Glowing Ring -->
+        <div style="position: relative; width: 150px; height: 150px; margin: 0 auto 25px;">
+          <div style="position: absolute; inset: -8px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), transparent, var(--primary)); animation: rotate 4s linear infinite; opacity: 0.6;"></div>
+          <div style="position: absolute; inset: 2px; border-radius: 50%; background: var(--bg-dark); z-index: 1;"></div>
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOqQnDqFUVc7fzkxnw3NFGON-JqDiyrczcTnHXOjsSbeXz4AQdFlyWAn88uIFjIUCuEKZTKqzS7Nah0Kq5wHpro8hEDceZ9c0mpKwdszh6scf1FmwEBGgpKSaRCEEp2qx2Nj9W_hJZSkSpE9U2Dum9fBBMcB3wnQNydzQRrOWD4dFSOF7VtPmBOXrItOg/s1280/10101.jpg" 
+               style="position: relative; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; z-index: 2; border: 3px solid rgba(255,255,255,0.1);" alt="TheHixvy">
+        </div>
+
+        <h2 style="font-family: 'Bebas Neue', cursive; font-size: 48px; color: var(--text-primary); margin-bottom: 5px; text-shadow: 0 10px 20px rgba(0,0,0,0.5);">TheHixvy</h2>
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: var(--primary-glow); color: var(--primary); padding: 6px 18px; border-radius: 999px; font-size: 13px; font-weight: 800; border: 1px solid var(--primary); margin-bottom: 20px;">
+          <i class="fas fa-check-circle"></i> VERIFIED DEVELOPER
+        </div>
+
+        <!-- Quick Stats -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
+          <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="color: var(--primary); font-size: 20px; font-weight: 800;">100%</div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Clean Code</div>
           </div>
-
-          <!-- Description Section -->
-          <div class="settings-section">
-            <h3 class="settings-section-title">About Me</h3>
-            <div class="settings-card" style="padding: 20px;">
-              <p class="details-overview" style="margin: 0; font-size: 15px; line-height: 1.8; color: var(--text-secondary);">
-                Specialized Web and App Developer. I created <strong>TheHixvy</strong> to provide a premium, 
-                high-speed streaming interface that adapts to every user. 
-                Focusing on clean code and cinematic visual experiences.
-              </p>
-            </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="color: var(--primary); font-size: 20px; font-weight: 800;">UI/UX</div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Expert</div>
           </div>
-
-          <!-- Connect Section -->
-          <div class="settings-section" style="margin-top: 24px;">
-            <h3 class="settings-section-title">Connect</h3>
-            <div class="settings-card">
-              <a href="https://t.me/thehixvy" class="settings-item">
-                <div class="settings-item-left">
-                  <div class="settings-item-icon" style="background: rgba(0, 136, 204, 0.1); color: #0088cc;"><i class="fab fa-telegram"></i></div>
-                  <div class="settings-item-label">Join Telegram</div>
-                </div>
-                <i class="fas fa-external-link-alt settings-item-right"></i>
-              </a>
-            </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="color: var(--primary); font-size: 20px; font-weight: 800;">4K</div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Streaming</div>
           </div>
-
         </div>
       </div>
+
+      <!-- Professional Description -->
+      <div class="settings-section" style="margin-top: 30px;">
+        <h3 class="settings-section-title">The Mission</h3>
+        <div class="settings-card" style="padding: 25px; background: rgba(255,255,255,0.02); border-radius: 20px;">
+          <p style="margin: 0; font-size: 16px; line-height: 1.8; color: var(--text-secondary); font-weight: 400;">
+            As a specialized <span style="color: var(--primary); font-weight: 700;">Web & App Architect</span>, I designed <strong>TheHixvy</strong> to push the boundaries of modern streaming. 
+            By merging high-performance API integration with a cinematic fluid interface, this platform offers a seamless experience across all devices. 
+            My philosophy is simple: <span style="font-style: italic;">Performance meets Elegance.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Connect Links -->
+      <div class="settings-section" style="margin-top: 30px; padding-bottom: 50px;">
+        <h3 class="settings-section-title">Digital Presence</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <a href="https://t.me/thehixvy" class="settings-item" style="background: #0088cc; border: none; border-radius: 15px; padding: 18px; color: #fff;">
+            <div class="settings-item-left">
+              <div class="settings-item-icon" style="background: rgba(255,255,255,0.2); color: #fff;"><i class="fab fa-telegram-plane"></i></div>
+              <div class="settings-item-label" style="font-weight: 700;">Telegram</div>
+            </div>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="https://thehixvy.pages.dev" class="settings-item" style="background: var(--primary); border: none; border-radius: 15px; padding: 18px; color: #fff;">
+            <div class="settings-item-left">
+              <div class="settings-item-icon" style="background: rgba(255,255,255,0.2); color: #fff;"><i class="fas fa-globe"></i></div>
+              <div class="settings-item-label" style="font-weight: 700;">Portfolio</div>
+            </div>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
     </div>
+  </div>
+</div>
+
+<style>
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+</style>
   
   <script>
     // ==================== SAFE STORAGE HELPER ====================
