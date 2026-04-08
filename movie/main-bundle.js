@@ -1,5 +1,4 @@
-
-    // ==================== SAFE STORAGE HELPER ====================
+// ==================== SAFE STORAGE HELPER ====================
     const safeStorage = {
       get: function(key) {
         try { return localStorage.getItem(key); } catch(_) { return null; }
@@ -53,7 +52,7 @@
         document.body.classList.add(shouldOpen ? 'sidebar-open' : 'sidebar-collapsed');
         document.body.classList.remove('no-scroll');
         sidebar.classList.add('open');
-        if (!shouldOpen) sidebar.classList.add('collapsed');
+          if (!shouldOpen) sidebar.classList.add('collapsed');
       } else if (shouldOpen) {
         document.body.classList.add('sidebar-open', 'no-scroll');
         sidebar.classList.add('open');
@@ -169,6 +168,7 @@ function playTrailer(id, type) {
   const serverList = document.getElementById("serverList");
   if (serverList) serverList.innerHTML = "";
 }
+
     // ==================== STATE ====================
     const state = {
       currentPage: 'home',
@@ -235,6 +235,7 @@ function playTrailer(id, type) {
       }
     }
 
+
     // ==================== UTILITY FUNCTIONS ====================
     function getImageUrl(path, size = 'w500') {
   if (!path) {
@@ -281,7 +282,7 @@ function playTrailer(id, type) {
       return match ? parseInt(match[1], 10) : null;
     }
 
-    // ==================== CONTINUE WATCHING ====================
+// ==================== CONTINUE WATCHING ====================
     const CONTINUE_WATCHING_KEY = 'streamflix_continue_watching';
 
     function getContinueWatchingList() {
@@ -364,7 +365,7 @@ function playTrailer(id, type) {
         progress: 0
       };
 
-      entry.progress = getContinueProgress(entry);
+entry.progress = getContinueProgress(entry);
       if (existingIndex >= 0) {
         list.splice(existingIndex, 1);
       }
@@ -448,6 +449,7 @@ function playTrailer(id, type) {
         }, 220);
       }
 
+
       if (state.currentPage === 'history') {
         loadHistoryPage();
       }
@@ -513,7 +515,7 @@ function playTrailer(id, type) {
 
     }
 
-    function createContinueWatchingRow() {
+function createContinueWatchingRow() {
       const items = getContinueWatchingList();
       if (!items.length) return '';
 
@@ -538,6 +540,8 @@ function playTrailer(id, type) {
       `;
 
     }
+
+
 
     // ==================== RIPPLE EFFECT ====================
     function createRipple(event, element) {
@@ -640,10 +644,11 @@ function playTrailer(id, type) {
       if (state.currentPage === 'settings') loadSettings();
     }
 
+
     // ==================== NAVIGATION ====================
     function navigateTo(page, pushState = true) {
       resetPlayer();
-      const pages = ['home', 'search', 'bookmarks', 'history', 'category', 'settings', 'details'];
+      const pages = ['home', 'search', 'bookmarks', 'history', 'category', 'settings', 'details', 'dev'];
       if (!pages.includes(page)) return;
 
       state.previousPage = state.currentPage;
@@ -717,6 +722,7 @@ function playTrailer(id, type) {
       }
     }
 
+
     // ==================== BROWSER BACK / FORWARD ====================
 window.addEventListener('popstate', () => {
   if (location.hash) {
@@ -775,8 +781,7 @@ window.addEventListener('beforeunload', () => {
     function goToHeroSlide(index) {
       const slides = document.querySelectorAll('.hero-slide');
       const indicators = document.querySelectorAll('.hero-indicator');
-      
-      slides.forEach((slide, i) => {
+             slides.forEach((slide, i) => {
         const isActive = i === index;
         slide.classList.toggle('active', isActive);
         
@@ -834,7 +839,7 @@ window.addEventListener('beforeunload', () => {
             <div class="row-slider hide-scrollbar">
               ${Array(6).fill().map(() => '<div class="skeleton skeleton-card poster"></div>').join('')}
             </div>
-          </div>
+            </div>
         </div>
       `;
 
@@ -918,7 +923,7 @@ async function loadHomeContent() {
     createSkeletonRow('Horror Night'),
     createSkeletonRow('Drama & Comedy'),
     createSkeletonRow('Sci-Fi Masterpieces'),
-    createSkeletonRow('Marvel Universe'),
+      createSkeletonRow('Marvel Universe'),
     createSkeletonRow('DC World'),
     createSkeletonRow('Upcoming 2026')
   ].join('');
@@ -994,6 +999,8 @@ async function loadHomeContent() {
   } catch (error) { console.error(error); }
 }
 
+
+    
     // ==================== DETAILS PAGE ====================
     async function openDetails(id, type = 'movie', pushState = true) {
       finalizeContinueWatchingSession();
@@ -1103,8 +1110,8 @@ topTag.innerHTML = `
       if (detailsPosterEl) {
         detailsPosterEl.innerHTML = `<img src="${getImageUrl(details.poster_path, 'w300')}" alt="${title}">`;
       }
-      
-      const isBookmarked = state.bookmarks.some(b => b.id === details.id && b.type === type);
+
+        const isBookmarked = state.bookmarks.some(b => b.id === details.id && b.type === type);
       
       const genres = (details.genres || []).map((g, i) => 
         `<span class="genre-pill" style="animation-delay: ${i * 0.1}s">${g.name}</span>`
@@ -1255,3 +1262,1117 @@ topTag.innerHTML = `
               runtime: episodes[0].runtime || 0,
               totalEpisodes: episodes.length
             }
+          : null;
+      } catch (error) {
+
+          console.error('Failed to load episodes:', error);
+        episodeList.innerHTML = '<p style="color: var(--text-muted);">Failed to load episodes.</p>';
+      }
+    }
+
+    function selectEpisode(element) {
+      if (!element) return;
+      const episodeNumber = parseInt(element.dataset.episode, 10) || 1;
+      state.selectedEpisode = episodeNumber;
+      state.currentEpisodeInfo = {
+        title: decodeURIComponent(element.dataset.title || ''),
+        runtime: parseInt(element.dataset.runtime, 10) || 0,
+        totalEpisodes: parseInt(element.dataset.totalEpisodes, 10) || null
+      };
+      document.querySelectorAll('.episode-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      showToast(`Selected Episode ${episodeNumber}`, 'info');
+    }
+
+    // ==================== PLAYER ====================
+    
+      const PLAYERS = [
+  {
+    name: "Server 1 → Gw Server 🔥",
+    url: (id, type, s=1, e=1, imdbId=null) => {
+      // It will use the IMDb ID (ttXXXXXXX) if available, otherwise it tries TMDB ID
+      const targetId = imdbId || id;
+      if(type === "movie") {
+        return `https://piexe411qok.com/play/${targetId}`;
+      } else {
+        // TV Show format for piexe (using standard query params)
+        return `https://piexe411qok.com/play/${targetId}?s=${s}&e=${e}`;
+      }
+    }
+  },
+  {
+    name: "Server 2 → 4k Quality ⚡",
+    url: (id, type, s=1, e=1, imdbId=null) => {
+      if(type === "movie") {
+        return `https://vidstorm.ru/movie/${id}?autoplay=true&theme=ffffff&download=true&lang=en`;
+      } else {
+        return `https://vidstorm.ru/tv/${id}/${s}/${e}?autoplay=true&autonext=true&theme=0d0d0d&download=true&episodeselector=true&nextbutton=true&lang=en`;
+      }
+    }
+  },
+  {
+    name: "Server 3 → Vidify 🎨",
+    url: (id, type, s=1, e=1, imdbId=null) => {
+      if(type === "movie") {
+        return `https://player.vidify.top/embed/movie/${id}?autoplay=true&poster=true&servericon=true&setting=true&pip=true&download=true&primarycolor=4d00c9&secondarycolor=1f2937&iconcolor=ffffff`;
+      } else {
+        return `https://player.vidify.top/embed/tv/${id}/${s}/${e}?autoplay=true&poster=true&servericon=true&setting=true&pip=true&download=true&primarycolor=4d00c9&secondarycolor=1f2937&iconcolor=ffffff`;
+      }
+    }
+  },
+  {
+
+      name: "Server 4 → VidPlus 🚀",
+    url: (id, type, s=1, e=1, imdbId=null) => {
+      if(type === "movie") {
+        return `https://player.vidplus.to/embed/movie/${id}?autoplay=true&poster=true&title=true&download=true&chromecast=true&servericon=true&setting=true&pip=true&primarycolor=7800F0&secondarycolor=9F9BFF&iconcolor=FFFFFF&font=Playfair+Display&fontcolor=FFFFFF&fontsize=20&opacity=0.5`;
+      } else {
+        return `https://player.vidplus.to/embed/tv/${id}/${s}/${e}?autoplay=true&autonext=true&nextbutton=true&poster=true&title=true&download=true&chromecast=true&episodelist=true&servericon=true&setting=true&pip=true&primarycolor=7800F0&secondarycolor=9F9BFF&iconcolor=FFFFFF&font=Playfair+Display&fontcolor=FFFFFF&fontsize=20&opacity=0.5`;
+      }
+    }
+  }
+];
+
+
+async function playItem(id, type) {
+  const videoBox = document.getElementById("detailsVideo");
+  const iframe = document.getElementById("inlinePlayer");
+  const serverList = document.getElementById("serverList");
+  const banner = document.getElementById("detailsBanner");
+
+  iframe.src = "";
+  videoBox.classList.add("playing");
+  banner?.classList.add("player-active");
+  
+  // Show a loading text while we grab the IMDb ID
+  serverList.innerHTML = "<span style='color:var(--text-muted); font-size:12px; padding:10px;'><i class='fas fa-spinner fa-spin'></i> Loading Secure Servers...</span>";
+
+  // 1. Fetch the IMDb ID if we don't have it yet
+  let imdbId = state.currentDetails?.external_ids?.imdb_id;
+  if (!imdbId || state.currentDetails?.id !== id) {
+    try {
+      const extData = await fetchTMDB(`/${type}/${id}/external_ids`);
+      imdbId = extData?.imdb_id || null;
+    } catch(e) { 
+      console.error("Failed to fetch IMDb ID"); 
+    }
+    }
+
+  // Clear loading text
+  serverList.innerHTML = "";
+
+  // 2. Continue watching logic
+  upsertContinueWatching(state.currentDetails || { id, title: state.currentDetails?.title || state.currentDetails?.name || 'Untitled' }, type, {
+    season: type === 'tv' ? state.selectedSeason : null,
+    episode: type === 'tv' ? state.selectedEpisode : null,
+    totalEpisodes: type === 'tv' ? state.currentEpisodeInfo?.totalEpisodes || state.currentDetails?.number_of_episodes || null : null,
+    totalSeasons: type === 'tv' ? state.currentDetails?.number_of_seasons || null : null,
+    episodeTitle: type === 'tv' ? state.currentEpisodeInfo?.title || '' : '',
+    episodeInfo: type === 'tv' ? state.currentEpisodeInfo || {} : {},
+  });
+
+  function loadServer(index) {
+    const server = PLAYERS[index];
+    if (!server) return;
+
+    state.currentServerIndex = index;
+
+    // Pass the imdbId to the server URL generator
+    const url = server.url(id, type, state.selectedSeason, state.selectedEpisode, imdbId);
+
+    iframe.src = url;
+
+    document.querySelectorAll("#serverList button").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    const activeBtn = document.getElementById("server-" + index);
+    if (activeBtn) activeBtn.classList.add("active");
+  }
+
+  PLAYERS.forEach((server, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = server.name;
+    btn.id = "server-" + index;
+    btn.onclick = () => loadServer(index);
+    serverList.appendChild(btn);
+  });
+
+    
+  const initialIndex = Number.isInteger(state.currentServerIndex) ? state.currentServerIndex : 0;
+  loadServer(initialIndex);
+}
+  
+
+    
+
+
+    // ==================== COMMUNITY / REACTION / RATING ====================
+    const COMMUNITY_REACTIONS = {
+      like: { label: 'Like', emoji: '👍' },
+      love: { label: 'Love', emoji: '❤️' },
+      fire: { label: 'Fire', emoji: '🔥' },
+      wow: { label: 'Wow', emoji: '😮' }
+    };
+
+    function getCommunityKey(type = state.currentType, id = state.currentItem?.id) {
+      return `cinepeace_community_${type}_${id}`;
+    }
+
+    function createEmptyCommunity() {
+      return {
+        ratingSum: 0,
+        ratingCount: 0,
+        userRating: 0,
+        reactions: { like: 0, love: 0, fire: 0, wow: 0 },
+        userReaction: '',
+        comments: []
+      };
+    }
+
+    function readCommunityData() {
+      try {
+        const key = getCommunityKey();
+        const raw = safeStorage.get(key);
+        const data = raw ? JSON.parse(raw) : createEmptyCommunity();
+        return { ...createEmptyCommunity(), ...data, reactions: { ...createEmptyCommunity().reactions, ...(data.reactions || {}) } };
+      } catch (error) {
+        console.error('Failed to read community data:', error);
+        return createEmptyCommunity();
+      }
+    }
+
+    function writeCommunityData(data) {
+      try {
+        safeStorage.set(getCommunityKey(), JSON.stringify(data));
+      } catch (error) {
+        console.error('Failed to save community data:', error);
+      }
+    }
+
+    function getCommunityAverage(data) {
+      return data.ratingCount ? (data.ratingSum / data.ratingCount) : 0;
+    }
+
+    function timeAgo(value) {
+      const date = new Date(value);
+      const diff = Date.now() - date.getTime();
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      if (minutes < 1) return 'just now';
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      return `${days}d ago`;
+    }
+
+    function escapeHtml(str = '') {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderCommunitySection() {
+      const container = document.getElementById('communitySection');
+      const title = state.currentDetails?.title || state.currentDetails?.name || 'Content';
+      if (!container || !state.currentItem) return;
+
+      const data = readCommunityData();
+      const average = getCommunityAverage(data);
+      const rounded = average ? average.toFixed(1) : '0.0';
+      const userReaction = data.userReaction || '';
+      const userRating = data.userRating || 0;
+      const comments = Array.isArray(data.comments) ? data.comments.slice().reverse() : [];
+
+      container.outerHTML = `
+        <div class="community-section" id="communitySection">
+          <div class="community-header">
+            <div>
+              <div class="community-kicker"><i class="fas fa-comments"></i> Community</div>
+              <h3 class="community-title">Rate, react & comment</h3>
+            </div>
+            <div class="community-summary">
+              <div class="community-score">${rounded}</div>
+              <div class="community-count">${data.ratingCount} rating${data.ratingCount === 1 ? '' : 's'}</div>
+            </div>
+          </div>
+
+          <div class="community-rating-row">
+            <div class="community-star-strip" aria-label="Rate this title">
+              ${[5,4,3,2,1].map(star => `
+                <button type="button" class="community-star ${userRating >= star ? 'active' : ''}" onclick="submitCommunityRating(${star})" title="Rate ${star} star${star > 1 ? 's' : ''}">
+                  <i class="fas fa-star"></i>
+                </button>
+              `).join('')}
+            </div>
+            <div class="community-rating-hint">
+              ${userRating ? `You rated this <strong>${userRating}/5</strong>.` : 'Tap a star to add your rating.'}
+            </div>
+          </div>
+
+          <div class="reaction-row">
+            ${Object.entries(COMMUNITY_REACTIONS).map(([key, item]) => `
+              <button type="button" class="reaction-btn ${userReaction === key ? 'active' : ''}" onclick="toggleCommunityReaction('${key}')">
+                <span class="reaction-emoji">${item.emoji}</span>
+                <span>${item.label}</span>
+                <span class="reaction-count">${data.reactions[key] || 0}</span>
+              </button>
+            `).join('')}
+          </div>
+
+          <div class="comment-box">
+            <div class="comment-box-head">
+              <div class="comment-box-title"><i class="fas fa-pen-nib" style="color: var(--primary); margin-right: 8px;"></i>Write a comment</div>
+              <div style="font-size: 12px; color: var(--text-muted);">${escapeHtml(title)}</div>
+            </div>
+            <div class="comment-grid">
+              <input class="community-input" id="communityNameInput" type="text" maxlength="40" placeholder="Your name" value="${escapeHtml(state.profileName || 'Guest')}">
+              <input class="community-input" id="communityTagInput" type="text" maxlength="20" placeholder="Tag (optional)" value="${userReaction ? COMMUNITY_REACTIONS[userReaction].emoji + ' ' + COMMUNITY_REACTIONS[userReaction].label : ''}" readonly>
+            </div>
+            <textarea class="community-textarea" id="communityCommentInput" maxlength="500" placeholder="Share your opinion about this movie or TV show..."></textarea>
+            <div class="comment-actions">
+              <button class="btn btn-secondary" type="button" onclick="clearCommunityDraft()"><i class="fas fa-eraser"></i> Clear</button>
+              <button class="btn btn-primary" type="button" onclick="submitCommunityComment()"><i class="fas fa-paper-plane"></i> Post Comment</button>
+            </div>
+          </div>
+
+          <div class="comment-list">
+            ${comments.length ? comments.map(comment => `
+              <div class="comment-item">
+                <div class="comment-avatar">${escapeHtml((comment.name || 'U').trim().charAt(0) || 'U')}</div>
+                <div class="comment-body">
+                  <div class="comment-meta">
+                    <div class="comment-name">${escapeHtml(comment.name || 'Guest')}</div>
+                    <div class="comment-time">${timeAgo(comment.time || Date.now())}</div>
+                  </div>
+                  <div class="comment-text">${escapeHtml(comment.text || '')}</div>
+                  ${comment.reaction ? `<div class="comment-reaction"><span>${COMMUNITY_REACTIONS[comment.reaction]?.emoji || '💬'}</span><span>${COMMUNITY_REACTIONS[comment.reaction]?.label || 'Reaction'}</span></div>` : ''}
+                </div>
+              </div>
+            `).join('') : '<div class="comment-empty">No comments yet. Be the first to leave one.</div>'}
+          </div>
+        </div>
+      `;
+
+    }
+
+    function submitCommunityRating(value) {
+      if (!state.currentItem) return;
+      const data = readCommunityData();
+      const previous = Number(data.userRating || 0);
+      if (previous) {
+        data.ratingSum = Math.max(0, data.ratingSum - previous);
+        data.ratingCount = Math.max(0, data.ratingCount - 1);
+      }
+      data.userRating = value;
+      data.ratingSum += value;
+      data.ratingCount += 1;
+      writeCommunityData(data);
+      renderCommunitySection();
+      showToast(`Rated ${value}/5`, 'success');
+    }
+
+    function toggleCommunityReaction(reaction) {
+      if (!state.currentItem || !COMMUNITY_REACTIONS[reaction]) return;
+      const data = readCommunityData();
+      if (data.userReaction === reaction) {
+        data.reactions[reaction] = Math.max(0, (data.reactions[reaction] || 0) - 1);
+        data.userReaction = '';
+      } else {
+        if (data.userReaction) {
+          data.reactions[data.userReaction] = Math.max(0, (data.reactions[data.userReaction] || 0) - 1);
+        }
+        data.reactions[reaction] = (data.reactions[reaction] || 0) + 1;
+        data.userReaction = reaction;
+      }
+      writeCommunityData(data);
+      renderCommunitySection();
+      showToast(`Reacted with ${COMMUNITY_REACTIONS[reaction].label}`, 'info');
+    }
+
+    function submitCommunityComment() {
+      if (!state.currentItem) return;
+      const nameEl = document.getElementById('communityNameInput');
+      const textEl = document.getElementById('communityCommentInput');
+      const data = readCommunityData();
+      const name = (nameEl?.value || '').trim() || 'Guest';
+        const text = (textEl?.value || '').trim();
+      if (!text) {
+        showToast('Write a comment first', 'error');
+        textEl?.focus();
+        return;
+      }
+      data.comments = Array.isArray(data.comments) ? data.comments : [];
+      data.comments.push({
+        name: name.slice(0, 40),
+        text: text.slice(0, 500),
+        reaction: data.userReaction || '',
+        time: new Date().toISOString()
+      });
+      writeCommunityData(data);
+      if (nameEl?.value) {
+        safeStorage.set('streamflix_profile', name);
+        state.profileName = name;
+      }
+      renderCommunitySection();
+      showToast('Comment posted', 'success');
+    }
+
+    function clearCommunityDraft() {
+      const textEl = document.getElementById('communityCommentInput');
+      if (textEl) textEl.value = '';
+      const nameEl = document.getElementById('communityNameInput');
+      if (nameEl) nameEl.value = state.profileName || 'Guest';
+    }
+
+    // ==================== DOWNLOAD ====================
+    function downloadContent(serverIndex) {
+      if (!state.currentItem) {
+        showToast('No content selected', 'error');
+        return;
+      }
+
+      const { id, type } = state.currentItem;
+      const server = CONFIG.DOWNLOAD_SERVERS[serverIndex] || CONFIG.DOWNLOAD_SERVERS[0];
+
+      const url = type === 'tv'
+        ? `${server.base}/tv/${id}/${state.selectedSeason}/${state.selectedEpisode}`
+        : `${server.base}/movie/${id}`;
+
+      const popup = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!popup) {
+        window.location.href = url;
+        return;
+      }
+
+      showToast('Opening download server...', 'info');
+    }
+
+    // ==================== PLAYER CLOSE ====================
+    function closePlayer() {
+      const modal = document.getElementById('playerModal');
+      const iframe = document.getElementById('playerIframe');
+      if (modal) {
+        modal.classList.add('closing');
+        setTimeout(() => {
+          modal.classList.remove('active', 'closing');
+        }, 300);
+      }
+      if (iframe) iframe.src = '';
+      document.body.classList.remove('no-scroll');
+    }
+
+    // ==================== BOOKMARKS ====================
+    function toggleBookmark(id, type, title, posterPath) {
+        const index = state.bookmarks.findIndex(b => b.id === id && b.type === type);
+      
+      if (index > -1) {
+        state.bookmarks.splice(index, 1);
+        showToast('Removed from My List', 'info');
+        document.querySelector('#bookmarkBtn i')?.classList.replace('fa-check', 'fa-plus');
+      } else {
+        state.bookmarks.push({ id, type, title, poster_path: posterPath });
+        showToast('Added to My List', 'success');
+        document.querySelector('#bookmarkBtn i')?.classList.replace('fa-plus', 'fa-check');
+      }
+      
+      safeStorage.set('streamflix_bookmarks', JSON.stringify(state.bookmarks));
+      
+      if (state.currentPage === 'bookmarks') {
+        loadBookmarks();
+      }
+    }
+
+    function loadBookmarks() {
+      const grid = document.getElementById('bookmarksGrid');
+      
+      if (state.bookmarks.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fas fa-bookmark"></i>
+            <h3>Your list is empty</h3>
+            <p>Save movies and TV shows to watch later</p>
+          </div>
+        `;
+        return;
+      }
+      
+      grid.innerHTML = state.bookmarks.map((item, i) => createMovieCard(item, 'poster', i)).join('');
+    }
+
+    function loadHistoryPage() {
+      const grid = document.getElementById('historyGrid');
+      const items = getContinueWatchingList();
+
+      if (!grid) return;
+
+      if (!items.length) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fas fa-clock-rotate-left"></i>
+            <h3>No watching history yet</h3>
+            <p>Open any movie or episode and it will appear here</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map((item, i) => createContinueWatchingCard(item, i)).join('');
+    }
+
+    // ==================== SEARCH ====================
+    async function loadPopularSearches() {
+      const grid = document.getElementById('searchGrid');
+      grid.innerHTML = Array(12).fill().map(() => '<div class="skeleton search-card"></div>').join('');
+
+      try {
+        const data = await fetchTMDB('/movie/popular');
+        const items = data?.results?.slice(0, 18) || [];
+
+        grid.innerHTML = items.map((item, i) => `
+          <div class="search-card" onclick="openDetails(${item.id}, 'movie')" style="animation-delay: ${i * 0.03}s">
+            <img src="${getImageUrl(item.poster_path, 'w300')}" alt="${item.title}">
+          </div>
+        `).join('');
+          } catch (error) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><i class="fas fa-exclamation-circle"></i><p>Failed to load</p></div>';
+      }
+      if (!state.lastSearchQuery) {
+        state.lastSearchResults = null;
+      }
+    }
+
+
+    function renderSearchResults(query, results) {
+      const grid = document.getElementById('searchGrid');
+      const title = document.getElementById('searchResultsTitle');
+      title.textContent = `Results for "${query}"`;
+
+      if (!results || !results.length) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><i class="fas fa-search"></i><h3>No results found</h3><p>Try a different search term</p></div>';
+        return;
+      }
+
+      grid.innerHTML = results.map((item, i) => `
+        <div class="search-card" onclick="openDetails(${item.id}, '${item.media_type}')" style="animation-delay: ${i * 0.03}s">
+          <img src="${getImageUrl(item.poster_path, 'w300')}" alt="${item.title || item.name}">
+        </div>
+      `).join('');
+    }
+
+    function saveSearchSnapshot(query, results) {
+      state.lastSearchQuery = query || '';
+      state.lastSearchResults = Array.isArray(results) ? results : null;
+      try {
+        safeStorage.set('streamflix_last_search_query', state.lastSearchQuery);
+        safeStorage.set('streamflix_last_search_results', JSON.stringify(state.lastSearchResults));
+      } catch (e) {}
+    }
+
+    function restoreSearchState() {
+      const input = document.getElementById('searchInput');
+      const query = (state.lastSearchQuery || '').trim();
+
+      if (input && query) {
+        input.value = query;
+        renderSearchResults(query, state.lastSearchResults);
+      } else {
+        loadPopularSearches();
+      }
+    }
+
+    function handleSearchInput(event) {
+      const query = event.target.value.trim();
+      
+      clearTimeout(state.searchTimeout);
+      
+      if (!query) {
+        document.getElementById('searchResultsTitle').textContent = 'Popular Searches';
+        loadPopularSearches();
+        return;
+      }
+      
+      state.searchTimeout = setTimeout(() => performSearch(query), 500);
+    }
+async function performSearch(query) {
+      const grid = document.getElementById('searchGrid');
+      const title = document.getElementById('searchResultsTitle');
+
+      title.textContent = `Results for "${query}"`;
+      grid.innerHTML = Array(12).fill().map(() => '<div class="skeleton search-card"></div>').join('');
+
+      try {
+        const data = await fetchTMDB('/search/multi', { query });
+        const results = (data?.results || []).filter(r => r.poster_path && (r.media_type === 'movie' || r.media_type === 'tv'));
+
+        saveSearchSnapshot(query, results);
+        renderSearchResults(query, results);
+      } catch (error) {
+        saveSearchSnapshot(query, []);
+        grid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><i class="fas fa-exclamation-circle"></i><p>Search failed</p></div>';
+      }
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchResultsTitle').textContent = 'Popular Searches';
+      saveSearchSnapshot('', null);
+      loadPopularSearches();
+    }
+
+    // ==================== SETTINGS ====================
+    function loadSettings() {
+      const content = document.getElementById('settingsContent');
+      const historyCount = getContinueWatchingList().length;
+
+      content.innerHTML = `
+        <div class="settings-section" style="animation-delay: 0.1s">
+          <h3 class="settings-section-title">Profile</h3>
+          <div class="settings-card">
+            <div class="settings-item profile-settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-user"></i></div>
+                <div>
+                  <div class="settings-item-label">Display Name</div>
+                  <div class="settings-item-value">Shown across the app</div>
+                </div>
+              </div>
+              <input type="text" class="profile-input" id="profileNameInput" value="${state.profileName}" onchange="updateProfileName(this.value)" placeholder="Enter name">
+            </div>
+            <div class="settings-item profile-settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-envelope"></i></div>
+                <div>
+                  <div class="settings-item-label">Email Address</div>
+                  <div class="settings-item-value">Optional contact email</div>
+                </div>
+              </div>
+              <input type="email" class="profile-input" id="profileEmailInput" value="${state.profileEmail || ''}" onchange="updateProfileEmail(this.value)" placeholder="Enter email">
+            </div>
+            <div class="settings-item profile-settings-item" style="align-items:flex-start; gap:16px;">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-image"></i></div>
+                <div>
+                  <div class="settings-item-label">Profile Picture</div>
+                  <div class="settings-item-value">Upload / change avatar</div>
+                </div>
+              </div>
+              <div class="profile-settings-actions">
+                <button class="mode-pill" type="button" onclick="openProfileModal()"><i class="fas fa-pen"></i> Edit</button>
+                <button class="mode-pill" type="button" onclick="triggerProfileImagePicker()"><i class="fas fa-image"></i> Upload</button>
+                <button class="mode-pill danger" type="button" onclick="clearAppCacheAndReset()"><i class="fas fa-rotate-left"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-section" style="animation-delay: 0.18s">
+          <h3 class="settings-section-title">Appearance</h3>
+          <div class="settings-card">
+            <div class="settings-item" style="align-items:flex-start; gap:16px;">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-palette"></i></div>
+                <div>
+                  <div class="settings-item-label">Theme Color</div>
+                  <div class="settings-item-value">Choose a clean accent tone</div>
+                </div>
+              </div>
+              <div class="theme-colors" id="themeColors"></div>
+            </div>
+            <div class="settings-item" style="align-items:flex-start; gap:16px; border-top:1px solid var(--border-color);">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-circle-half-stroke"></i></div>
+                <div>
+                  <div class="settings-item-label">Display Mode</div>
+                  <div class="settings-item-value">Dark or white mode</div>
+                </div>
+              </div>
+              <div class="appearance-mode-row">
+                <button class="mode-pill ${state.appearanceMode === 'dark' ? 'active' : ''}" onclick="setAppearanceMode('dark')">
+                  <i class="fas fa-moon"></i> Dark
+                </button>
+                <button class="mode-pill ${state.appearanceMode === 'light' ? 'active' : ''}" onclick="setAppearanceMode('light')">
+                  <i class="fas fa-sun"></i> White
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section" style="animation-delay: 0.26s">
+          <h3 class="settings-section-title">Library</h3>
+          <div class="settings-card">
+            <div class="settings-item" onclick="navigateTo('history')" style="cursor: pointer;">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-clock-rotate-left"></i></div>
+                <div>
+                  <div class="settings-item-label">Watching History</div>
+                  <div class="settings-item-value">${historyCount} items</div>
+                </div>
+              </div>
+              <div class="settings-item-right"><i class="fas fa-chevron-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section" style="animation-delay: 0.34s">
+          <h3 class="settings-section-title">Language</h3>
+          <div class="settings-card">
+            <div class="settings-item" onclick="showLanguagePopup()" style="cursor: pointer;">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-globe"></i></div>
+                <div>
+                  <div class="settings-item-label">Content Language</div>
+                  <div class="settings-item-value" id="settingsLanguageValue">${getLanguageLabel(state.language)}</div>
+                </div>
+              </div>
+              <div class="settings-item-right"><i class="fas fa-chevron-right"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-section" style="animation-delay: 0.42s">
+          <h3 class="settings-section-title">About</h3>
+          <div class="settings-card">
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-info-circle"></i></div>
+                <div>
+                  <div class="settings-item-label">Version</div>
+                  <div class="settings-item-value">2.0.5</div>
+                </div>
+              </div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-database"></i></div>
+                <div>
+                  <div class="settings-item-label">Powered by</div>
+                  <div class="settings-item-value">TMDB API</div>
+                </div>
+              </div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-left">
+                <div class="settings-item-icon"><i class="fas fa-play-circle"></i></div>
+                <div>
+                  <div class="settings-item-label">Streaming</div>
+                  <div class="settings-item-value">Third-party providers</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateProfileName(name) {
+      state.profileName = (name || 'User').trim() || 'User';
+      safeStorage.set('streamflix_profile', state.profileName);
+      syncProfileSettingsInputs();
+      renderHeaderProfile();
+      showToast('Profile updated!', 'success');
+    }
+
+    function updateProfileEmail(email) {
+      state.profileEmail = (email || '').trim();
+      safeStorage.set('streamflix_profile_email', state.profileEmail);
+      syncProfileSettingsInputs();
+      renderHeaderProfile();
+      showToast('Email updated!', 'success');
+    }
+
+    function renderHeaderProfile() {
+      const avatar = document.getElementById('headerAvatar');
+      const preview = document.getElementById('profileAvatarPreview');
+      const name = state.profileName || 'User';
+      const initial = (name.trim().charAt(0) || 'U').toUpperCase();
+      const avatarUrl = state.profileAvatar;
+
+      if (avatar) {
+        avatar.innerHTML = avatarUrl
+          
+          ? `<img src="${avatarUrl}" alt="${escapeHtml(name)} profile picture">`
+          : initial;
+        avatar.setAttribute('aria-label', `${name}${state.profileEmail ? `, ${state.profileEmail}` : ''}`);
+        avatar.title = state.profileEmail ? `${name} · ${state.profileEmail}` : name;
+      }
+
+      if (preview) {
+        preview.innerHTML = avatarUrl
+          ? `<img src="${avatarUrl}" alt="${escapeHtml(name)} profile picture">`
+          : initial;
+      }
+
+      const modalName = document.getElementById('profileNameModalInput');
+      const modalEmail = document.getElementById('profileEmailModalInput');
+      if (modalName) modalName.value = name;
+      if (modalEmail) modalEmail.value = state.profileEmail || '';
+    }
+
+    function openProfileModal() {
+      const modal = document.getElementById('profileModal');
+      if (!modal) return;
+      renderHeaderProfile();
+      syncProfileSettingsInputs();
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('profileModal');
+      if (!modal) return;
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+
+    function triggerProfileImagePicker() {
+      document.getElementById('profileImageInput')?.click();
+    }
+
+    function handleProfileImageUpload(event) {
+      const file = event?.target?.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || '');
+        state.profileAvatar = result;
+        safeStorage.set('streamflix_profile_avatar', result);
+        renderHeaderProfile();
+        showToast('Profile photo updated!', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveProfileFromModal() {
+      const name = document.getElementById('profileNameModalInput')?.value || state.profileName || 'User';
+      const email = document.getElementById('profileEmailModalInput')?.value || '';
+      updateProfileName(name);
+      updateProfileEmail(email);
+      closeProfileModal();
+    }
+
+    function clearAppCacheAndReset() {
+      const keepTheme = safeStorage.get('streamflix_theme') || 'red';
+      const keepAppearance = safeStorage.get('streamflix_appearance') || 'dark';
+
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('streamflix_') || key.startsWith('cine_') || key === 'telegram_joined') {
+          safeStorage.remove(key);
+        }
+      });
+        safeStorage.set('streamflix_theme', keepTheme);
+      safeStorage.set('streamflix_appearance', keepAppearance);
+      showToast('Cache cleared. Reloading...', 'success');
+      setTimeout(() => window.location.reload(), 700);
+    }
+
+    // ==================== SHARE ====================
+    async function shareItem(id, type, title) {
+  const base = window.location.origin + window.location.pathname;
+  const url = `${base}#/${type}/${id}`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: `${title} - StreamFlix`,
+        text: `Check out ${title} on StreamFlix!`,
+        url: url
+      });
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        copyToClipboard(url);
+      }
+    }
+  } else {
+    copyToClipboard(url);
+  }
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Link copied!', 'success');
+    }).catch(() => {
+      _fallbackCopy(text);
+    });
+  } else {
+    _fallbackCopy(text);
+  }
+}
+
+function _fallbackCopy(text) {
+  try {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('Link copied!', 'success');
+  } catch (_) {
+    showToast('Copy failed — try manually', 'error');
+  }
+}
+
+    // ==================== HEADER SCROLL ====================
+    function handleScroll() {
+      const header = document.getElementById('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', syncSidebarOnResize, { passive: true });
+    // ==================== DEEP LINKING ====================
+    
+function handleDeepLink() {
+  const hash = location.hash; // #/movie/550
+
+  if (!hash || hash === '#/' || hash === '#') {
+    navigateTo('home', false);
+    return true;
+  }
+
+  const parts = hash.replace('#/', '').split('/');
+  const type = parts[0];
+  const id = parseInt(parts[1], 10);
+
+  if ((type === 'movie' || type === 'tv') && id) {
+    openDetails(id, type, false);
+    return true;
+  }
+
+  if (type === 'search') {
+    navigateTo('search', false);
+    return true;
+  }
+
+  if (type === 'bookmarks') {
+    navigateTo('bookmarks', false);
+    return true;
+  }
+
+  if (type === 'history') {
+    navigateTo('history', false);
+    return true;
+  }
+
+  if (type === 'category') {
+    const key = parts[1] || 'action';
+    openCategory(key, false);
+    return true;
+  }
+
+  if (type === 'settings') {
+    navigateTo('settings', false);
+    return true;
+  }
+
+  navigateTo('home', false);
+  return true;
+}
+        
+        
+
+    // ==================== INITIALIZATION ====================
+    async function init() {
+      if (state.themeColor && state.themeColor !== 'red') {
+        setThemeColor(state.themeColor);
+      }
+      
+      document.getElementById('headerAvatar').textContent = state.profileName.charAt(0).toUpperCase();
+      applyAppearanceMode(state.appearanceMode);
+      document.documentElement.lang = state.language || 'en-US';
+      syncLanguageUI();
+      renderCategoryMenus();
+      updateCategoryActiveState();
+      
+      
+      
+if (location.hash) {
+  handleDeepLink();
+} else {
+  await loadHomeContent();
+  navigateTo('home', false);
+}
+      
+      // Cinematic Preloader Fade Out
+      setTimeout(() => {
+        const loader = document.getElementById('loadingOverlay');
+        if (loader) {
+          loader.classList.add('fade-out'); // triggers your CSS fade animation
+          setTimeout(() => loader.remove(), 450); // removes it from HTML after fade
+        }
+        document.body.classList.remove('no-scroll'); // Allows user to scroll again
+      }, 1500); // 1.5 seconds gives enough time to see the cool animation
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      syncSidebarOnResize();
+      window.addEventListener('orientationchange', syncSidebarOnResize, { passive: true });
+      init();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const player = document.getElementById('playerModal');
+        if (player.classList.contains('active')) {
+          closePlayer();
+        }
+      }
+    });
+// ==================== CATEGORY EXPLORER ====================
+    const CATEGORY_CONFIG = {
+      action: {
+        label: 'Action', icon: 'fa-bolt',
+        movieParams: { with_genres: '28', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '10759', sort_by: 'popularity.desc' },
+        description: 'Fast-paced blockbusters, fight scenes, and high-energy stories.'
+      },
+      adventure: {
+        label: 'Adventure', icon: 'fa-person-hiking',
+        movieParams: { with_genres: '12', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '10759', sort_by: 'popularity.desc' },
+        description: 'Big journeys, brave heroes, and epic world-spanning stories.'
+      },
+      anime: {
+        label: 'Anime', icon: 'fa-dragon',
+        movieParams: { with_genres: '16', with_original_language: 'ja', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '16', with_original_language: 'ja', sort_by: 'popularity.desc' },
+        description: 'Japanese animated stories with style, emotion, and impact.'
+      },
+      animation: {
+        label: 'Animation', icon: 'fa-clapperboard',
+        movieParams: { with_genres: '16', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '16', sort_by: 'popularity.desc' },
+        description: 'Animated films and shows for family and all-ages entertainment.'
+      },
+      comedy: {
+        label: 'Comedy', icon: 'fa-face-grin-beam',
+        movieParams: { with_genres: '35', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '35', sort_by: 'popularity.desc' },
+        description: 'Light, funny, and feel-good picks that keep things easy.'
+      },
+      drama: {
+        label: 'Drama', icon: 'fa-masks-theater',
+        movieParams: { with_genres: '18', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '18', sort_by: 'popularity.desc' },
+        description: 'Character-driven stories with emotional depth and strong writing.'
+      },
+      horror: {
+        label: 'Horror', icon: 'fa-ghost',
+        movieParams: { with_genres: '27', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '9648,27', sort_by: 'popularity.desc' },
+        description: 'Dark, scary, and suspenseful titles for the brave only.'
+      },
+      romance: {
+        label: 'Romance', icon: 'fa-heart',
+        movieParams: { with_genres: '10749', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '10749', sort_by: 'popularity.desc' },
+        description: 'Love stories, chemistry, and relationship-driven drama.'
+      },
+      sciFi: {
+        label: 'Sci-Fi', icon: 'fa-rocket',
+        movieParams: { with_genres: '878', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '10765', sort_by: 'popularity.desc' },
+        description: 'Futuristic worlds, technology, and big imagination.'
+      },
+        thriller: {
+        label: 'Thriller', icon: 'fa-user-secret',
+        movieParams: { with_genres: '53', sort_by: 'popularity.desc', include_adult: false },
+        tvParams: { with_genres: '80,9648', sort_by: 'popularity.desc' },
+        description: 'Suspense, tension, and twists that keep you locked in.'
+      }
+    };
+
+    function renderCategoryMenus() {
+      const selected = state.selectedCategory || 'action';
+      const html = Object.entries(CATEGORY_CONFIG).map(([key, cfg]) => `
+        <button class="category-chip ${key === selected ? 'active' : ''}" type="button" data-category="${key}" onclick="openCategory('${key}')">
+          <i class="fas ${cfg.icon}"></i>
+          <span>${cfg.label}</span>
+        </button>
+      `).join('');
+
+      const sidebarList = document.getElementById('sidebarCategoryList');
+      const pageList = document.getElementById('categoryPageList');
+      if (sidebarList) sidebarList.innerHTML = html;
+      if (pageList) pageList.innerHTML = html;
+    }
+
+    function updateCategoryActiveState() {
+      const selected = state.selectedCategory || 'action';
+      document.querySelectorAll('[data-category]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === selected);
+      });
+    }
+
+    function openCategory(categoryKey, pushState = true) {
+      const cfg = CATEGORY_CONFIG[categoryKey] || CATEGORY_CONFIG.action;
+      state.selectedCategory = categoryKey in CATEGORY_CONFIG ? categoryKey : 'action';
+      safeStorage.set('streamflix_category', state.selectedCategory);
+      renderCategoryMenus();
+      updateCategoryActiveState();
+
+      if (pushState) {
+        history.pushState({ page: 'category', category: state.selectedCategory }, '', `#/category/${state.selectedCategory}`);
+      }
+      navigateTo('category', false);
+    }
+
+    async function loadCategoryPage(categoryKey = state.selectedCategory || 'action') {
+      const cfg = CATEGORY_CONFIG[categoryKey] || CATEGORY_CONFIG.action;
+      const titleEl = document.getElementById('categoryTitle');
+      const subtitleEl = document.getElementById('categorySubtitle');
+      const descEl = document.getElementById('categoryDescription');
+      const resultsEl = document.getElementById('categoryResults');
+
+      state.selectedCategory = categoryKey in CATEGORY_CONFIG ? categoryKey : 'action';
+      safeStorage.set('streamflix_category', state.selectedCategory);
+      updateCategoryActiveState();
+
+      if (titleEl) titleEl.textContent = cfg.label;
+      if (subtitleEl) subtitleEl.textContent = `Movies and TV shows for ${cfg.label.toLowerCase()} lovers`;
+      if (descEl) descEl.textContent = cfg.description;
+
+      if (!resultsEl) return;
+      resultsEl.innerHTML = `
+        ${createSkeletonRow(`${cfg.label} Movies`)}
+        ${createSkeletonRow(`${cfg.label} TV Shows`)}
+      `;
+
+      try {
+        const [movies, tvShows] = await Promise.all([
+          fetchTMDB('/discover/movie', cfg.movieParams),
+          fetchTMDB('/discover/tv', cfg.tvParams)
+        ]);
+
+        resultsEl.innerHTML = [
+          createMovieRow(`${cfg.label} Movies`, movies?.results, cfg.icon, 'poster'),
+          createMovieRow(`${cfg.label} TV Shows`, tvShows?.results, 'fa-tv', 'poster')
+        ].join('');
+      } catch (error) {
+        console.error('Failed to load category content:', error);
+        resultsEl.innerHTML = `
+          <div class="empty-state" style="padding: 40px 16px;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Category load failed</h3>
+            <p>Please try again in a moment.</p>
+          </div>
+        `;
+      }
+    }
+
+
+          
+        
+
+        
+            
+        
