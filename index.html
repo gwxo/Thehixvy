@@ -1,454 +1,554 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TheHixvy | Portfolio</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
+    /* ═══════════════════════ ROOT VARIABLES ═══════════════════════ */
     :root {
-      --green-50: #f0fdf4;
-      --green-100: #dcfce7;
-      --green-200: #bbf7d0;
-      --green-300: #86efac;
-      --green-400: #4ade80;
-      --green-500: #22c55e;
-      --green-600: #16a34a;
-      --green-700: #15803d;
-      --green-800: #166534;
-      --green-900: #14532d;
-      --accent: #00ff88;
-      --dark: #0d1117;
+      --g50:#f0fdf4; --g100:#dcfce7; --g200:#bbf7d0; --g300:#86efac;
+      --g400:#4ade80; --g500:#22c55e; --g600:#16a34a; --g700:#15803d;
+      --g800:#166534; --g900:#14532d;
+      --accent:#00ff88; --dark:#0d1117;
+      --glass-bg: rgba(255,255,255,0.55);
+      --glass-border: rgba(34,197,94,0.28);
+      --glass-shadow: 0 8px 48px rgba(34,197,94,0.13), 0 2px 12px rgba(0,0,0,0.07);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%, #f0fdf4 60%, #ecfdf5 100%);
+      background: linear-gradient(135deg, #e8fdf0 0%, #d4f8e3 25%, #edfff5 50%, #d9fae8 75%, #f0fdf4 100%);
       min-height: 100vh;
       overflow-x: hidden;
       color: #1a2e1a;
     }
 
-    /* ── Animated code rain background ── */
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:#f0fdf4}
+    ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#22c55e,#16a34a);border-radius:4px}
+
+    /* ═══════════════════ AURORA BLOBS (BG) ═══════════════════════ */
+    .aurora-wrap {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    .blob {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      animation: blobFloat 18s ease-in-out infinite;
+    }
+    .blob1 { width:520px;height:520px;background:radial-gradient(circle,rgba(34,197,94,0.22),transparent 70%);top:-10%;left:-8%;animation-delay:0s; }
+    .blob2 { width:420px;height:420px;background:radial-gradient(circle,rgba(74,222,128,0.18),transparent 70%);top:30%;right:-10%;animation-delay:-6s; }
+    .blob3 { width:360px;height:360px;background:radial-gradient(circle,rgba(0,255,136,0.14),transparent 70%);bottom:-5%;left:30%;animation-delay:-12s; }
+    .blob4 { width:280px;height:280px;background:radial-gradient(circle,rgba(134,239,172,0.2),transparent 70%);top:60%;left:10%;animation-delay:-4s; }
+    @keyframes blobFloat {
+      0%,100%{transform:translate(0,0) scale(1);}
+      33%{transform:translate(30px,-40px) scale(1.08);}
+      66%{transform:translate(-20px,20px) scale(0.95);}
+    }
+
+    /* ═══════════════════ MATRIX CANVAS ════════════════════════════ */
     #matrix-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.045;
+      position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.04;
     }
 
-    /* ── Floating particles ── */
+    /* ═══════════════════ PARTICLES ════════════════════════════════ */
     .particle {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      animation: floatParticle linear infinite;
+      position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+      animation:floatUp linear infinite;
     }
-    @keyframes floatParticle {
-      0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 1; }
-      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    @keyframes floatUp {
+      0%{transform:translateY(100vh) scale(0) rotate(0deg);opacity:0}
+      10%{opacity:1;transform:translateY(85vh) scale(1) rotate(36deg)}
+      90%{opacity:.7}
+      100%{transform:translateY(-20px) scale(0.5) rotate(720deg);opacity:0}
     }
 
-    /* ── Navbar ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      backdrop-filter: blur(20px);
-      background: rgba(240,253,244,0.88);
-      border-bottom: 1px solid rgba(34,197,94,0.25);
-      box-shadow: 0 2px 24px rgba(34,197,94,0.08);
+    /* ═══════════════════ MASTER WRAPPER ═══════════════════════════ */
+    #site-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
     }
 
-    /* ── Glowing text ── */
-    .glow-green {
-      text-shadow: 0 0 20px rgba(34,197,94,0.6), 0 0 40px rgba(34,197,94,0.3);
-    }
-
-    /* ── Hero section ── */
-    .hero-card {
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(20px);
-      border: 1.5px solid rgba(34,197,94,0.3);
+    /* ═══════════════════ GLASS CARD (UNIVERSAL) ═══════════════════ */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1.5px solid var(--glass-border);
       border-radius: 24px;
-      box-shadow: 0 8px 48px rgba(34,197,94,0.12), 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: var(--glass-shadow);
+    }
+    .glass-dark {
+      background: rgba(13,17,23,0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1.5px solid rgba(34,197,94,0.25);
+      border-radius: 24px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(34,197,94,0.1);
+    }
+    .glass-sm {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(34,197,94,0.22);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(34,197,94,0.1);
     }
 
-    /* ── Profile image ring ── */
-    .profile-ring {
-      position: relative;
-      display: inline-block;
+    /* ═══════════════════ NAVBAR ════════════════════════════════════ */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
     }
-    .profile-ring::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, #22c55e, #86efac, #00ff88, #16a34a, #22c55e);
-      animation: spinRing 3s linear infinite;
-      z-index: -1;
-    }
-    .profile-ring::after {
-      content: '';
-      position: absolute;
-      inset: -8px;
-      border-radius: 50%;
-      background: conic-gradient(from 180deg, rgba(34,197,94,0.3), transparent, rgba(34,197,94,0.3));
-      animation: spinRing 6s linear infinite reverse;
-      z-index: -2;
-    }
-    @keyframes spinRing {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ── Typing cursor ── */
-    .typing-cursor::after {
-      content: '|';
-      animation: blink 0.8s step-end infinite;
-      color: #22c55e;
-      font-weight: 300;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    /* ── Code block styling ── */
-    .code-block {
-      font-family: 'Fira Code', monospace;
-      background: rgba(13,17,23,0.92);
-      border: 1px solid rgba(34,197,94,0.4);
-      border-radius: 14px;
-      padding: 1.5rem;
-      color: #e2e8f0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.15);
-    }
-    .code-block::before {
-      content: '● ● ●';
-      position: absolute;
-      top: 10px; left: 14px;
-      font-size: 10px;
-      letter-spacing: 4px;
-      color: rgba(34,197,94,0.6);
-    }
-    .code-line { padding-top: 1.6rem; }
-    .c-keyword  { color: #7dd3fc; }
-    .c-string   { color: #86efac; }
-    .c-comment  { color: #6b7280; font-style: italic; }
-    .c-var      { color: #fcd34d; }
-    .c-fn       { color: #c084fc; }
-    .c-num      { color: #fb923c; }
-    .c-punc     { color: #94a3b8; }
-
-    /* ── Skill badge ── */
-    .skill-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.8);
-      border: 1.5px solid rgba(34,197,94,0.35);
-      border-radius: 50px;
-      padding: 6px 16px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #15803d;
-      transition: all 0.3s ease;
-      cursor: default;
-      font-family: 'Fira Code', monospace;
-    }
-    .skill-badge:hover {
-      background: #22c55e;
-      color: white;
-      border-color: #22c55e;
-      transform: translateY(-3px) scale(1.06);
-      box-shadow: 0 8px 24px rgba(34,197,94,0.35);
-    }
-
-    /* ── Project card ── */
-    .project-card {
-      background: rgba(255,255,255,0.8);
-      border: 1.5px solid rgba(34,197,94,0.2);
+    .nav-inner {
+      margin: 10px 16px 0;
+      background: rgba(240,253,244,0.82);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border: 1.5px solid rgba(34,197,94,0.3);
       border-radius: 20px;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-      position: relative;
-      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 32px rgba(34,197,94,0.12), 0 0 0 1px rgba(255,255,255,0.6) inset;
+      transition: all 0.3s ease;
     }
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #22c55e, #86efac, #00ff88);
-      transform: scaleX(0);
-      transition: transform 0.4s ease;
-      transform-origin: left;
+    .nav-inner.scrolled {
+      background: rgba(240,253,244,0.95);
+      box-shadow: 0 8px 40px rgba(34,197,94,0.18);
     }
-    .project-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 24px 64px rgba(34,197,94,0.2), 0 4px 16px rgba(0,0,0,0.08);
-      border-color: rgba(34,197,94,0.5);
+    .nav-content {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; height: 60px;
     }
-    .project-card:hover::before { transform: scaleX(1); }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; font-family: 'Fira Code', monospace;
+      font-size: 1rem; font-weight: 700; color: #14532d;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg,#16a34a,#4ade80);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1rem; font-weight: 700;
+      box-shadow: 0 4px 14px rgba(34,197,94,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .logo-icon:hover { transform: rotate(10deg) scale(1.1); box-shadow: 0 6px 22px rgba(34,197,94,0.55); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link {
+      font-family: 'Fira Code', monospace; font-size: 0.82rem;
+      color: #4b5563; text-decoration: none;
+      padding: 7px 14px; border-radius: 10px;
+      transition: all 0.25s ease; position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 4px; left: 50%; right: 50%;
+      height: 2px; background: #22c55e; border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover, .nav-link.active { color: #16a34a; background: rgba(34,197,94,0.09); }
+    .nav-link.active::after { left: 14px; right: 14px; }
+    .nav-cta {
+      padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 700;
+      background: linear-gradient(135deg,#16a34a,#22c55e,#4ade80);
+      background-size: 200%; animation: gradShift 3s ease infinite;
+      color: white; text-decoration: none; display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 4px 18px rgba(34,197,94,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,197,94,0.5); }
+    #ham { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; background: none; border: none; }
+    .ham-bar { width: 22px; height: 2.5px; background: #16a34a; border-radius: 2px; transition: all 0.3s ease; display: block; }
+    #mob-menu {
+      display: none; flex-direction: column; gap: 4px;
+      padding: 12px 16px 16px; border-top: 1px solid rgba(34,197,94,0.15);
+    }
+    #mob-menu.open { display: flex; }
 
-    /* ── Section heading ── */
+    /* ═══════════════════ SECTION LAYOUT ════════════════════════════ */
+    section { position: relative; z-index: 1; }
+
+    .section-wrap {
+      max-width: 1280px; margin: 0 auto; padding: 0 20px;
+    }
+    .section-label {
+      font-family: 'Fira Code', monospace; color: #22c55e; font-size: 0.8rem;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::before {
+      content: ''; display: inline-block; width: 20px; height: 2px;
+      background: #22c55e; border-radius: 1px;
+    }
     .section-title {
-      position: relative;
-      display: inline-block;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #14532d;
+      font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 900; color: #14532d;
+      position: relative; display: inline-block;
     }
     .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -6px; left: 0;
-      width: 60%;
-      height: 4px;
-      background: linear-gradient(90deg, #22c55e, transparent);
+      content: ''; position: absolute; bottom: -8px; left: 0;
+      width: 55%; height: 4px;
+      background: linear-gradient(90deg,#22c55e,rgba(34,197,94,0));
       border-radius: 2px;
     }
 
-    /* ── Stat cards ── */
-    .stat-card {
-      background: rgba(255,255,255,0.75);
-      border: 1.5px solid rgba(34,197,94,0.25);
-      border-radius: 18px;
-      text-align: center;
-      padding: 1.5rem 1rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-    .stat-card:hover {
-      border-color: #22c55e;
-      box-shadow: 0 8px 32px rgba(34,197,94,0.18);
-      transform: translateY(-4px);
-    }
-    .stat-num {
-      font-size: 2.4rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, #16a34a, #22c55e);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    /* ═══════════════════ GRADIENT TEXT ═════════════════════════════ */
+    .grad-text {
+      background: linear-gradient(135deg,#15803d 0%,#22c55e 50%,#4ade80 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* ── Contact card ── */
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: rgba(255,255,255,0.75);
-      border: 1.5px solid rgba(34,197,94,0.2);
-      border-radius: 14px;
-      padding: 1rem 1.4rem;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      color: inherit;
+    /* ═══════════════════ GLOW TEXT ══════════════════════════════════ */
+    .glow { text-shadow: 0 0 24px rgba(34,197,94,0.5), 0 0 48px rgba(34,197,94,0.25); }
+
+    /* ═══════════════════ TYPING CURSOR ══════════════════════════════ */
+    .typing-cursor::after {
+      content: '|'; animation: blink 0.75s step-end infinite; color: #22c55e;
     }
-    .contact-item:hover {
-      border-color: #22c55e;
-      box-shadow: 0 6px 24px rgba(34,197,94,0.18);
-      transform: translateX(8px);
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+    /* ═══════════════════ PROFILE RING ═══════════════════════════════ */
+    .profile-ring {
+      position: relative; display: inline-block; border-radius: 50%;
+    }
+    .profile-ring::before {
+      content: ''; position: absolute; inset: -5px; border-radius: 50%;
+      background: conic-gradient(from 0deg,#22c55e,#86efac,#00ff88,#4ade80,#16a34a,#22c55e);
+      animation: spinRing 3s linear infinite; z-index: -1;
+    }
+    .profile-ring::after {
+      content: ''; position: absolute; inset: -10px; border-radius: 50%;
+      background: conic-gradient(from 180deg,rgba(34,197,94,0.25),transparent,rgba(34,197,94,0.25));
+      animation: spinRing 7s linear infinite reverse; z-index: -2;
+    }
+    @keyframes spinRing { to{ transform: rotate(360deg); } }
+
+    /* ═══════════════════ BADGES / CHIPS ═════════════════════════════ */
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.72); border: 1.5px solid rgba(34,197,94,0.3);
+      border-radius: 50px; padding: 6px 16px;
+      font-size: 0.8rem; font-weight: 600; color: #15803d;
+      font-family: 'Fira Code', monospace;
+      transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+      cursor: default; position: relative; overflow: hidden;
+    }
+    .badge::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50px;
+      background: linear-gradient(135deg,#22c55e,#4ade80);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .badge span { position: relative; z-index: 1; }
+    .badge i { position: relative; z-index: 1; }
+    .badge:hover { transform: translateY(-4px) scale(1.08); box-shadow: 0 10px 28px rgba(34,197,94,0.3); border-color: #22c55e; color: white; }
+    .badge:hover::before { opacity: 1; }
+    .badge:hover i { color: white !important; }
+
+    .tag {
+      font-size: 0.7rem; font-weight: 600; font-family: 'Fira Code', monospace;
+      background: rgba(34,197,94,0.1); color: #15803d;
+      border: 1px solid rgba(34,197,94,0.25); border-radius: 50px; padding: 3px 10px;
     }
 
-    /* ── Scroll reveal ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── Animated gradient btn ── */
+    /* ═══════════════════ BUTTONS ════════════════════════════════════ */
     .btn-primary {
-      background: linear-gradient(135deg, #16a34a, #22c55e, #4ade80);
-      background-size: 200% 200%;
-      animation: gradShift 3s ease infinite;
-      color: white;
-      font-weight: 700;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
+      background: linear-gradient(135deg,#16a34a,#22c55e,#4ade80);
+      background-size: 200% 200%; animation: gradShift 3s ease infinite;
+      color: white; font-weight: 700; border-radius: 50px; border: none;
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
       transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      position: relative; overflow: hidden;
     }
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.04);
-      box-shadow: 0 12px 36px rgba(34,197,94,0.45);
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50px;
+      background: rgba(255,255,255,0);
+      transition: background 0.3s;
     }
-    @keyframes gradShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 36px rgba(34,197,94,0.48); }
+    .btn-primary:hover::after { background: rgba(255,255,255,0.12); }
 
     .btn-outline {
-      background: transparent;
-      border: 2px solid #22c55e;
-      color: #16a34a;
-      font-weight: 700;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      background: transparent; border: 2px solid #22c55e; color: #16a34a;
+      font-weight: 700; border-radius: 50px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.3s ease; position: relative; overflow: hidden;
     }
-    .btn-outline:hover {
-      background: #22c55e;
-      color: white;
-      transform: translateY(-3px);
-      box-shadow: 0 10px 28px rgba(34,197,94,0.35);
+    .btn-outline::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50px;
+      background: linear-gradient(135deg,#22c55e,#4ade80);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+    }
+    .btn-outline span { position: relative; z-index: 1; }
+    .btn-outline i { position: relative; z-index: 1; }
+    .btn-outline:hover { color: white; border-color: transparent; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(34,197,94,0.35); }
+    .btn-outline:hover::before { transform: scaleX(1); }
+
+    @keyframes gradShift {
+      0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
     }
 
-    /* ── Terminal window ── */
-    .terminal {
-      background: rgba(13,17,23,0.95);
-      border-radius: 16px;
-      border: 1px solid rgba(34,197,94,0.3);
-      overflow: hidden;
-      box-shadow: 0 16px 64px rgba(0,0,0,0.2);
+    /* ═══════════════════ CODE BLOCK ═════════════════════════════════ */
+    .code-block {
+      font-family: 'Fira Code', monospace;
+      background: rgba(13,17,23,0.93);
+      border: 1.5px solid rgba(34,197,94,0.35);
+      border-radius: 18px; padding: 1.4rem;
+      color: #e2e8f0; position: relative; overflow: hidden;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.2), 0 0 0 1px rgba(34,197,94,0.05) inset;
     }
-    .terminal-header {
-      background: rgba(34,197,94,0.1);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid rgba(34,197,94,0.2);
+    .code-block::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg,#22c55e,#4ade80,transparent);
+    }
+    .code-header {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 1rem;
+      padding-bottom: 10px; border-bottom: 1px solid rgba(34,197,94,0.15);
+    }
+    .c-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .c-keyword{color:#7dd3fc} .c-string{color:#86efac} .c-comment{color:#6b7280;font-style:italic}
+    .c-var{color:#fcd34d} .c-fn{color:#c084fc} .c-num{color:#fb923c} .c-punc{color:#94a3b8}
+
+    /* ═══════════════════ TERMINAL ═══════════════════════════════════ */
+    .terminal {
+      background: rgba(13,17,23,0.94);
+      border: 1.5px solid rgba(34,197,94,0.3);
+      border-radius: 18px; overflow: hidden;
+      box-shadow: 0 16px 64px rgba(0,0,0,0.25), 0 0 0 1px rgba(34,197,94,0.06) inset;
+    }
+    .term-header {
+      background: rgba(34,197,94,0.08); padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid rgba(34,197,94,0.15);
     }
     .t-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .terminal-body { padding: 1.2rem 1.4rem; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #86efac; }
+    .term-body { padding: 1.2rem 1.4rem; font-family: 'Fira Code',monospace; font-size: 0.83rem; color: #86efac; line-height: 1.7; }
     .t-prompt { color: #22c55e; }
-    .t-line { margin-bottom: 4px; }
 
-    /* ── Progress bars ── */
-    .progress-bar {
-      height: 8px;
-      background: rgba(34,197,94,0.15);
-      border-radius: 50px;
-      overflow: hidden;
-    }
+    /* ═══════════════════ PROGRESS BARS ══════════════════════════════ */
+    .progress-wrap { height: 10px; background: rgba(34,197,94,0.12); border-radius: 50px; overflow: hidden; position: relative; }
     .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #16a34a, #4ade80);
-      border-radius: 50px;
-      width: 0%;
-      transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    /* ── Mobile menu ── */
-    #mobile-menu {
-      display: none;
-      flex-direction: column;
-      background: rgba(240,253,244,0.97);
-      backdrop-filter: blur(20px);
-    }
-    #mobile-menu.open { display: flex; }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #f0fdf4; }
-    ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 3px; }
-
-    /* ── Section spacing ── */
-    section { position: relative; z-index: 1; }
-
-    /* ── Tag chip ── */
-    .tag {
-      font-size: 0.72rem;
-      font-weight: 600;
-      font-family: 'Fira Code', monospace;
-      background: rgba(34,197,94,0.12);
-      color: #15803d;
-      border: 1px solid rgba(34,197,94,0.3);
-      border-radius: 50px;
-      padding: 2px 10px;
-    }
-
-    /* ── Tooltip ── */
-    .tooltip { position: relative; }
-    .tooltip:hover .tt-text { opacity: 1; transform: translateX(-50%) translateY(-8px); }
-    .tt-text {
-      position: absolute;
-      bottom: 100%; left: 50%;
-      transform: translateX(-50%) translateY(0px);
-      background: #14532d;
-      color: #86efac;
-      font-size: 0.7rem;
-      font-family: 'Fira Code', monospace;
-      padding: 4px 10px;
-      border-radius: 6px;
-      white-space: nowrap;
-      opacity: 0;
-      transition: all 0.2s ease;
-      pointer-events: none;
-      margin-bottom: 6px;
-    }
-
-    .nav-link {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.85rem;
-      color: #374151;
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
+      height: 100%; border-radius: 50px; width: 0%;
+      background: linear-gradient(90deg,#15803d,#22c55e,#4ade80);
+      transition: width 1.6s cubic-bezier(0.4,0,0.2,1);
       position: relative;
     }
-    .nav-link:hover { color: #16a34a; background: rgba(34,197,94,0.08); }
-    .nav-link.active { color: #16a34a; font-weight: 600; }
-
-    /* hero gradient text */
-    .hero-name {
-      background: linear-gradient(135deg, #15803d 0%, #22c55e 50%, #4ade80 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 900;
-      line-height: 1.1;
+    .progress-fill::after {
+      content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+      width: 8px; background: rgba(255,255,255,0.6);
+      border-radius: 50px; animation: shimmer 1.5s ease-in-out infinite;
     }
+    @keyframes shimmer { 0%,100%{opacity:0} 50%{opacity:1} }
+
+    /* ═══════════════════ PROJECT CARDS ══════════════════════════════ */
+    .project-card {
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1.5px solid rgba(34,197,94,0.22);
+      border-radius: 22px; overflow: hidden;
+      transition: all 0.45s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative;
+      box-shadow: 0 4px 24px rgba(34,197,94,0.09);
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--card-color1,#22c55e), var(--card-color2,#4ade80));
+      transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+    }
+    .project-card::after {
+      content: ''; position: absolute; inset: 0; border-radius: 22px;
+      background: linear-gradient(135deg,rgba(34,197,94,0.04),transparent);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .project-card:hover {
+      transform: translateY(-12px) scale(1.01);
+      box-shadow: 0 28px 70px rgba(34,197,94,0.22), 0 4px 18px rgba(0,0,0,0.1);
+      border-color: rgba(34,197,94,0.45);
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-card:hover::after { opacity: 1; }
+
+    /* ═══════════════════ STAT CARDS ═════════════════════════════════ */
+    .stat-card {
+      background: rgba(255,255,255,0.68);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(34,197,94,0.22);
+      border-radius: 20px; text-align: center; padding: 1.6rem 1rem;
+      transition: all 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 20px;
+      background: linear-gradient(135deg,rgba(34,197,94,0.1),rgba(74,222,128,0.05));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-8px) scale(1.04); border-color: #22c55e; box-shadow: 0 16px 48px rgba(34,197,94,0.2); }
+    .stat-card:hover::before { opacity: 1; }
+    .stat-num {
+      font-size: 2.6rem; font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg,#16a34a,#22c55e,#4ade80);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ═══════════════════ CONTACT ITEMS ══════════════════════════════ */
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.68); border: 1.5px solid rgba(34,197,94,0.2);
+      border-radius: 16px; padding: 1rem 1.4rem;
+      transition: all 0.3s ease; text-decoration: none; color: inherit;
+      backdrop-filter: blur(14px); position: relative; overflow: hidden;
+    }
+    .contact-item::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; background: linear-gradient(180deg,#22c55e,#4ade80);
+      border-radius: 0 2px 2px 0; transform: scaleY(0);
+      transition: transform 0.3s ease; transform-origin: bottom;
+    }
+    .contact-item:hover { border-color: rgba(34,197,94,0.45); box-shadow: 0 8px 32px rgba(34,197,94,0.18); transform: translateX(10px); }
+    .contact-item:hover::before { transform: scaleY(1); }
+
+    /* ═══════════════════ SCROLL REVEAL ══════════════════════════════ */
+    .reveal { opacity: 0; transform: translateY(48px); transition: opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.from-left { transform: translateX(-48px); }
+    .reveal.from-right { transform: translateX(48px); }
+    .reveal.scale-in { transform: scale(0.88); }
+    .reveal.visible { opacity: 1; transform: translate(0) scale(1); }
+
+    /* ═══════════════════ PULSE DOT ══════════════════════════════════ */
+    .pulse-dot {
+      width: 9px; height: 9px; border-radius: 50%; background: #22c55e;
+      position: relative; display: inline-block;
+    }
+    .pulse-dot::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 50%;
+      border: 2px solid #22c55e; animation: pulseRing 1.8s ease-out infinite;
+    }
+    @keyframes pulseRing { 0%{transform:scale(1);opacity:0.8} 100%{transform:scale(2.4);opacity:0} }
+
+    /* ═══════════════════ NEON BORDER ANIMATION ═══════════════════════ */
+    .neon-border {
+      position: relative;
+    }
+    .neon-border::before {
+      content: ''; position: absolute; inset: -1.5px; border-radius: inherit;
+      background: linear-gradient(135deg,#22c55e,#4ade80,#86efac,#22c55e);
+      background-size: 400%;
+      animation: neonMove 4s linear infinite; z-index: -1;
+      filter: blur(4px); opacity: 0.6;
+    }
+    @keyframes neonMove { 0%{background-position:0%} 100%{background-position:400%} }
+
+    /* ═══════════════════ FLOATING CARD 3D TILT ══════════════════════ */
+    .tilt-card { transition: transform 0.15s ease; transform-style: preserve-3d; }
+
+    /* ═══════════════════ COUNTER ════════════════════════════════════ */
+    .counter { display: inline-block; }
+
+    /* ═══════════════════ HERO SECTION ═══════════════════════════════ */
+    #home { padding-top: 90px; min-height: 100vh; display: flex; align-items: center; }
+
+    /* ═══════════════════ FOOTER ════════════════════════════════════ */
+    footer {
+      background: rgba(13,17,23,0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(34,197,94,0.15);
+      position: relative; z-index: 1;
+    }
+
+    /* ═══════════════════ SPECIALIZATION LIST ════════════════════════ */
+    .spec-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 12px;
+      transition: all 0.25s ease; cursor: default;
+    }
+    .spec-item:hover { background: rgba(34,197,94,0.08); transform: translateX(6px); }
+    .spec-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg,#22c55e,#4ade80); flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(34,197,94,0.5);
+    }
+
+    /* ═══════════════════ RESPONSIVE ════════════════════════════════ */
+    @media(max-width:768px){
+      #navbar .nav-links, #navbar .nav-cta { display: none; }
+      #ham { display: flex; }
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .about-grid { grid-template-columns: 1fr !important; }
+      .skill-grid { grid-template-columns: 1fr !important; }
+      .project-grid { grid-template-columns: 1fr !important; }
+      .contact-grid { grid-template-columns: 1fr !important; }
+    }
+    @media(max-width:480px){
+      .section-title { font-size: 1.6rem; }
+    }
+
+    /* ═══════════════════ MISC ═══════════════════════════════════════ */
+    .icon-box {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.1rem; flex-shrink: 0;
+    }
+    input, textarea {
+      font-family: 'Inter', sans-serif;
+    }
+    input:focus, textarea:focus { outline: none; }
+
+    /* Glow orb for hero */
+    .hero-orb {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,197,94,0.18) 0%, transparent 70%);
+      pointer-events: none; animation: orbPulse 4s ease-in-out infinite;
+    }
+    @keyframes orbPulse { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.2);opacity:1} }
+
+    /* Animate in on load */
+    .load-in { animation: loadIn 0.8s ease forwards; }
+    .load-in-delay1 { animation: loadIn 0.8s 0.15s ease both; }
+    .load-in-delay2 { animation: loadIn 0.8s 0.3s ease both; }
+    .load-in-delay3 { animation: loadIn 0.8s 0.45s ease both; }
+    .load-in-delay4 { animation: loadIn 0.8s 0.6s ease both; }
+    @keyframes loadIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                  MATRIX CANVAS BG                     -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<canvas id="matrix-bg"></canvas>
+<!-- ═══════════════════ AURORA BG BLOBS ═══════════════════════════════ -->
+<div class="aurora-wrap" aria-hidden="true">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="blob blob4"></div>
+</div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                    NAVBAR                             -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<nav id="navbar">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
+<!-- ═══════════════════ MATRIX CANVAS ════════════════════════════════ -->
+<canvas id="matrix-bg" aria-hidden="true"></canvas>
+
+<!-- ═══════════════════ ══════════ ══════════════════════════════════ -->
+<!--                       NAVBAR                                     -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<nav id="navbar" aria-label="Main navigation">
+  <div class="nav-inner" id="nav-inner">
+    <div class="nav-content">
       <!-- Logo -->
-      <a href="#home" class="flex items-center gap-2 text-green-700 font-bold" style="font-family:'Fira Code',monospace; font-size:1.1rem; text-decoration:none;">
-        <span style="background:linear-gradient(135deg,#16a34a,#4ade80);color:white;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;">
-          &lt;/&gt;
-        </span>
-        <span class="hidden sm:block">TheHixvy<span style="color:#22c55e;">_</span></span>
+      <a href="#home" class="nav-logo">
+        <div class="logo-icon">&lt;/&gt;</div>
+        <span class="hidden sm:block">TheHixvy<span style="color:#22c55e">_</span></span>
       </a>
 
-      <!-- Desktop nav -->
-      <div class="hidden md:flex items-center gap-1">
+      <!-- Desktop Links -->
+      <div class="nav-links hidden md:flex">
         <a href="#home"     class="nav-link active">~/home</a>
         <a href="#about"    class="nav-link">~/about</a>
         <a href="#skills"   class="nav-link">~/skills</a>
@@ -456,213 +556,293 @@
         <a href="#contact"  class="nav-link">~/contact</a>
       </div>
 
-      <!-- CTA + Hamburger -->
-      <div class="flex items-center gap-3">
-        <a href="https://thehixvy.pages.dev" target="_blank" class="btn-primary hidden sm:flex" style="padding:8px 20px;font-size:0.82rem;">
-          <i class="fa fa-globe"></i> Visit Site
+      <!-- CTA & Hamburger -->
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="https://thehixvy.pages.dev" target="_blank" class="nav-cta hidden sm:flex">
+          <i class="fa fa-globe"></i><span>Visit Site</span>
         </a>
-        <button id="hamburger" class="md:hidden flex flex-col gap-1 p-2" onclick="toggleMenu()">
-          <span class="block w-6 h-0.5 bg-green-700 transition-all" id="h1"></span>
-          <span class="block w-6 h-0.5 bg-green-700 transition-all" id="h2"></span>
-          <span class="block w-6 h-0.5 bg-green-700 transition-all" id="h3"></span>
+        <button id="ham" onclick="toggleMenu()" aria-label="Toggle menu">
+          <span class="ham-bar" id="hb1"></span>
+          <span class="ham-bar" id="hb2"></span>
+          <span class="ham-bar" id="hb3"></span>
         </button>
       </div>
     </div>
-  </div>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="flex-col px-4 pb-4 gap-1">
-    <a href="#home"     class="nav-link" onclick="closeMenu()">~/home</a>
-    <a href="#about"    class="nav-link" onclick="closeMenu()">~/about</a>
-    <a href="#skills"   class="nav-link" onclick="closeMenu()">~/skills</a>
-    <a href="#projects" class="nav-link" onclick="closeMenu()">~/projects</a>
-    <a href="#contact"  class="nav-link" onclick="closeMenu()">~/contact</a>
-    <a href="https://thehixvy.pages.dev" target="_blank" class="btn-primary mt-2" style="padding:10px 20px;font-size:0.85rem;width:fit-content;">
-      <i class="fa fa-globe"></i> Visit Site
-    </a>
+    <!-- Mobile Menu -->
+    <div id="mob-menu" role="menu">
+      <a href="#home"     class="nav-link" onclick="closeMenu()">~/home</a>
+      <a href="#about"    class="nav-link" onclick="closeMenu()">~/about</a>
+      <a href="#skills"   class="nav-link" onclick="closeMenu()">~/skills</a>
+      <a href="#projects" class="nav-link" onclick="closeMenu()">~/projects</a>
+      <a href="#contact"  class="nav-link" onclick="closeMenu()">~/contact</a>
+      <a href="https://thehixvy.pages.dev" target="_blank" class="nav-cta" style="margin-top:6px;width:fit-content;">
+        <i class="fa fa-globe"></i><span>Visit Site</span>
+      </a>
+    </div>
   </div>
 </nav>
 
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                   HERO SECTION                        -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<section id="home" style="padding-top:80px; min-height:100vh; display:flex; align-items:center;">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                       HERO SECTION                               -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<section id="home">
+  <!-- Decorative orbs -->
+  <div class="hero-orb" style="width:600px;height:600px;top:-100px;right:-150px;opacity:0.5;"></div>
+  <div class="hero-orb" style="width:400px;height:400px;bottom:-80px;left:-100px;opacity:0.35;animation-delay:-2s;"></div>
 
-      <!-- Left: Text -->
-      <div class="order-2 lg:order-1">
-        <!-- Terminal badge -->
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:50px;padding:6px 16px;margin-bottom:1.5rem;font-family:'Fira Code',monospace;font-size:0.78rem;color:#15803d;">
-          <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite;"></span>
-          <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}</style>
-          &lt;available for projects /&gt;
+  <div class="section-wrap" style="padding-top:2rem;padding-bottom:5rem;width:100%;">
+    <div class="hero-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+
+      <!-- ── LEFT ── -->
+      <div style="order:2" class="lg:order-1">
+
+        <!-- Available badge -->
+        <div class="load-in" style="margin-bottom:1.5rem;">
+          <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.3);border-radius:50px;padding:7px 18px;font-family:'Fira Code',monospace;font-size:0.75rem;color:#15803d;backdrop-filter:blur(10px);">
+            <div class="pulse-dot"></div>
+            <span>&lt;available for projects /&gt;</span>
+          </div>
         </div>
 
-        <p style="font-family:'Fira Code',monospace;color:#16a34a;font-size:1rem;margin-bottom:0.5rem;">// Hello, World! I'm</p>
-        <h1 class="hero-name" style="font-size:clamp(3rem,7vw,5.5rem);">TheHixvy</h1>
-        <div style="height:4px;width:80px;background:linear-gradient(90deg,#22c55e,#86efac);border-radius:2px;margin:1rem 0;"></div>
-
-        <h2 id="typing-el" class="typing-cursor" style="font-size:clamp(1.1rem,2.5vw,1.5rem);color:#374151;font-weight:600;min-height:2rem;margin-bottom:1.2rem;"></h2>
-
-        <p style="color:#4b5563;line-height:1.8;max-width:500px;margin-bottom:2rem;font-size:0.97rem;">
-          A passionate <strong style="color:#15803d;">Full-Stack Developer</strong>, 
-          <strong style="color:#15803d;">Reverse Engineer</strong>, and <strong style="color:#15803d;">Medico</strong> 
-          from <span style="color:#16a34a;">Bihar, India 🇮🇳</span>. 
-          Building powerful digital experiences — from movie streaming platforms to AI models.
+        <!-- Hello -->
+        <p class="load-in-delay1" style="font-family:'Fira Code',monospace;color:#22c55e;font-size:1rem;margin-bottom:0.3rem;">
+          // Hello, World! I'm
         </p>
 
-        <div class="flex flex-wrap gap-3">
-          <a href="#projects" class="btn-primary" style="padding:12px 28px;font-size:0.9rem;">
-            <i class="fa fa-code"></i> View Projects
+        <!-- Name -->
+        <h1 class="grad-text glow load-in-delay1" style="font-size:clamp(3rem,7vw,5.8rem);font-weight:900;line-height:1.05;letter-spacing:-1px;">
+          TheHixvy
+        </h1>
+
+        <!-- Underline bar -->
+        <div class="load-in-delay2" style="height:5px;width:90px;background:linear-gradient(90deg,#22c55e,#86efac);border-radius:3px;margin:1rem 0;"></div>
+
+        <!-- Typing role -->
+        <h2 id="typing-el" class="typing-cursor load-in-delay2"
+          style="font-size:clamp(1rem,2.5vw,1.45rem);color:#374151;font-weight:600;min-height:2rem;margin-bottom:1.4rem;font-family:'Fira Code',monospace;"></h2>
+
+        <!-- Description -->
+        <p class="load-in-delay3" style="color:#4b5563;line-height:1.85;max-width:500px;margin-bottom:2rem;font-size:0.95rem;">
+          A passionate <strong style="color:#15803d;">Full-Stack Developer</strong>,
+          <strong style="color:#15803d;">Reverse Engineer</strong>, and <strong style="color:#15803d;">Medico</strong>
+          from <span style="color:#16a34a;font-weight:600;">Bihar, India 🇮🇳</span>.
+          Building powerful digital experiences — from movie streaming platforms to custom AI models.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="load-in-delay3" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:2.5rem;">
+          <a href="#projects" class="btn-primary" style="padding:13px 30px;font-size:0.88rem;font-family:'Fira Code',monospace;">
+            <i class="fa fa-code"></i><span>View Projects</span>
           </a>
-          <a href="#contact" class="btn-outline" style="padding:12px 28px;font-size:0.9rem;">
-            <i class="fa fa-envelope"></i> Contact Me
+          <a href="#contact" class="btn-outline" style="padding:13px 30px;font-size:0.88rem;font-family:'Fira Code',monospace;">
+            <i class="fa fa-envelope"></i><span>Contact Me</span>
           </a>
         </div>
 
-        <!-- Quick stats -->
-        <div class="flex flex-wrap gap-4 mt-8">
-          <div style="text-align:center;">
-            <div class="stat-num" style="font-size:1.8rem;">5+</div>
-            <div style="font-size:0.75rem;color:#6b7280;font-family:'Fira Code',monospace;">Projects</div>
-          </div>
-          <div style="width:1px;background:rgba(34,197,94,0.3);"></div>
-          <div style="text-align:center;">
-            <div class="stat-num" style="font-size:1.8rem;">10+</div>
-            <div style="font-size:0.75rem;color:#6b7280;font-family:'Fira Code',monospace;">Languages</div>
-          </div>
-          <div style="width:1px;background:rgba(34,197,94,0.3);"></div>
-          <div style="text-align:center;">
-            <div class="stat-num" style="font-size:1.8rem;">1</div>
-            <div style="font-size:0.75rem;color:#6b7280;font-family:'Fira Code',monospace;">AI Model</div>
-          </div>
-          <div style="width:1px;background:rgba(34,197,94,0.3);"></div>
-          <div style="text-align:center;">
-            <div class="stat-num" style="font-size:1.8rem;">∞</div>
-            <div style="font-size:0.75rem;color:#6b7280;font-family:'Fira Code',monospace;">Passion</div>
+        <!-- Stat mini-bar -->
+        <div class="load-in-delay4">
+          <div class="glass-sm" style="display:inline-flex;gap:0;overflow:hidden;padding:0;">
+            <div style="padding:1rem 1.5rem;text-align:center;border-right:1px solid rgba(34,197,94,0.2);">
+              <div class="stat-num" style="font-size:1.7rem;" data-target="5">0</div>
+              <div style="font-size:0.72rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:2px;">Projects</div>
+            </div>
+            <div style="padding:1rem 1.5rem;text-align:center;border-right:1px solid rgba(34,197,94,0.2);">
+              <div class="stat-num" style="font-size:1.7rem;" data-target="10">0</div>
+              <div style="font-size:0.72rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:2px;">Languages</div>
+            </div>
+            <div style="padding:1rem 1.5rem;text-align:center;border-right:1px solid rgba(34,197,94,0.2);">
+              <div style="font-size:1.7rem;font-weight:900;background:linear-gradient(135deg,#16a34a,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">1</div>
+              <div style="font-size:0.72rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:2px;">AI Model</div>
+            </div>
+            <div style="padding:1rem 1.5rem;text-align:center;">
+              <div style="font-size:1.7rem;font-weight:900;background:linear-gradient(135deg,#16a34a,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">∞</div>
+              <div style="font-size:0.72rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:2px;">Passion</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Right: Profile + Code card -->
-      <div class="order-1 lg:order-2 flex flex-col items-center gap-6">
-        <!-- Profile image -->
-        <div class="profile-ring">
-          <img
-            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiuTgzK4beIoct9pav4tkFKmxS_uZMimFUbwUV_u3iuehTcl-FBnt9sFx5dVbGPlH7-oin7Xn1xNMulZ3ceGq2_BxJ3Nc11IHXry0dvQjJwxJWaneYErQ6OZSQJd9szl7MjQn1OPShjbopwkKY9vGzshojA9tshHBwKSmZWZAY_QZ7MHZkEadRMc8aNw8h/s996/10324.png"
-            alt="TheHixvy"
-            style="width:200px;height:200px;border-radius:50%;object-fit:cover;border:4px solid white;display:block;position:relative;z-index:1;"
-          />
+      <!-- ── RIGHT ── -->
+      <div style="order:1;display:flex;flex-direction:column;align-items:center;gap:1.5rem;" class="lg:order-2">
+
+        <!-- Profile image with neon ring -->
+        <div class="load-in neon-border" style="border-radius:50%;padding:6px;">
+          <div class="profile-ring">
+            <img
+              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiuTgzK4beIoct9pav4tkFKmxS_uZMimFUbwUV_u3iuehTcl-FBnt9sFx5dVbGPlH7-oin7Xn1xNMulZ3ceGq2_BxJ3Nc11IHXry0dvQjJwxJWaneYErQ6OZSQJd9szl7MjQn1OPShjbopwkKY9vGzshojA9tshHBwKSmZWZAY_QZ7MHZkEadRMc8aNw8h/s996/10324.png"
+              alt="TheHixvy Profile"
+              style="width:190px;height:190px;border-radius:50%;object-fit:cover;border:4px solid white;display:block;position:relative;z-index:1;box-shadow:0 8px 40px rgba(34,197,94,0.3);"
+            />
+          </div>
         </div>
 
         <!-- Code card -->
-        <div class="code-block w-full" style="max-width:420px;">
-          <div class="code-line" style="font-size:0.82rem;line-height:2;">
-            <div><span class="c-keyword">const</span> <span class="c-var">developer</span> <span class="c-punc">=</span> <span class="c-punc">{</span></div>
+        <div class="code-block load-in-delay1 tilt-card" style="width:100%;max-width:410px;font-size:0.8rem;line-height:1.9;">
+          <div class="code-header">
+            <div class="c-dot" style="background:#ff5f56;"></div>
+            <div class="c-dot" style="background:#ffbd2e;"></div>
+            <div class="c-dot" style="background:#27c93f;"></div>
+            <span style="margin-left:8px;color:rgba(134,239,172,0.5);font-size:0.72rem;">developer.js</span>
+          </div>
+          <div>
+            <div><span class="c-keyword">const</span> <span class="c-var">hixvy</span> <span class="c-punc">=</span> <span class="c-punc">{</span></div>
             <div style="padding-left:1.2rem;"><span class="c-string">"name"</span><span class="c-punc">:</span> <span class="c-string">"TheHixvy"</span><span class="c-punc">,</span></div>
-            <div style="padding-left:1.2rem;"><span class="c-string">"role"</span><span class="c-punc">:</span> <span class="c-string">"Full-Stack Dev"</span><span class="c-punc">,</span></div>
-            <div style="padding-left:1.2rem;"><span class="c-string">"location"</span><span class="c-punc">:</span> <span class="c-string">"Bihar, India 🇮🇳"</span><span class="c-punc">,</span></div>
+            <div style="padding-left:1.2rem;"><span class="c-string">"stack"</span><span class="c-punc">:</span> <span class="c-punc">[</span><span class="c-string">"HTML"</span><span class="c-punc">,</span><span class="c-string">"CSS"</span><span class="c-punc">,</span><span class="c-string">"JS"</span><span class="c-punc">],</span></div>
+            <div style="padding-left:1.2rem;"><span class="c-string">"location"</span><span class="c-punc">:</span> <span class="c-string">"Bihar 🇮🇳"</span><span class="c-punc">,</span></div>
             <div style="padding-left:1.2rem;"><span class="c-string">"medico"</span><span class="c-punc">:</span> <span class="c-keyword">true</span><span class="c-punc">,</span></div>
             <div style="padding-left:1.2rem;"><span class="c-string">"reverseEng"</span><span class="c-punc">:</span> <span class="c-keyword">true</span><span class="c-punc">,</span></div>
             <div style="padding-left:1.2rem;"><span class="c-string">"aiBuilder"</span><span class="c-punc">:</span> <span class="c-keyword">true</span></div>
             <div><span class="c-punc">}</span><span class="c-punc">;</span></div>
-            <div style="margin-top:0.5rem;"><span class="c-comment">// Open to collaborations 🚀</span></div>
+            <div style="margin-top:6px;"><span class="c-comment">// Open to collaborations 🚀</span></div>
           </div>
+        </div>
+
+        <!-- Social quick links -->
+        <div class="load-in-delay2" style="display:flex;gap:10px;">
+          <a href="https://thehixvy.pages.dev" target="_blank" title="Website"
+            style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.7);border:1.5px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;color:#16a34a;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);"
+            onmouseover="this.style.background='#22c55e';this.style.color='white';this.style.transform='translateY(-4px)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.7)';this.style.color='#16a34a';this.style.transform=''">
+            <i class="fa fa-globe"></i>
+          </a>
+          <a href="https://gwcrick.blogspot.com" target="_blank" title="GWCrick"
+            style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.7);border:1.5px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;color:#16a34a;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);"
+            onmouseover="this.style.background='#22c55e';this.style.color='white';this.style.transform='translateY(-4px)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.7)';this.style.color='#16a34a';this.style.transform=''">
+            <i class="fa fa-tv"></i>
+          </a>
+          <a href="https://laxmi-coaching.blogspot.com" target="_blank" title="Laxmi Coaching"
+            style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.7);border:1.5px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;color:#16a34a;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);"
+            onmouseover="this.style.background='#22c55e';this.style.color='white';this.style.transform='translateY(-4px)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.7)';this.style.color='#16a34a';this.style.transform=''">
+            <i class="fa fa-graduation-cap"></i>
+          </a>
+          <a href="#contact"
+            style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.7);border:1.5px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;color:#16a34a;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);"
+            onmouseover="this.style.background='#22c55e';this.style.color='white';this.style.transform='translateY(-4px)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.7)';this.style.color='#16a34a';this.style.transform=''">
+            <i class="fa fa-envelope"></i>
+          </a>
         </div>
       </div>
     </div>
+
+    <!-- Scroll indicator -->
+    <div style="text-align:center;margin-top:3rem;" class="load-in-delay4">
+      <a href="#about" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:#6b7280;font-family:'Fira Code',monospace;font-size:0.72rem;animation:bounceDown 2s ease-in-out infinite;">
+        <span>scroll</span>
+        <i class="fa fa-chevron-down" style="color:#22c55e;"></i>
+      </a>
+    </div>
+    <style>@keyframes bounceDown{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}</style>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                   ABOUT SECTION                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<section id="about" style="padding:80px 0;">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="reveal">
-      <p style="font-family:'Fira Code',monospace;color:#22c55e;font-size:0.85rem;margin-bottom:0.5rem;">// section_01</p>
-      <h2 class="section-title" style="margin-bottom:3rem;">About Me</h2>
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                       ABOUT SECTION                              -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<section id="about" style="padding:100px 0;">
+  <div class="section-wrap">
+
+    <!-- Section heading -->
+    <div class="reveal" style="margin-bottom:3.5rem;">
+      <div class="section-label">// section_01</div>
+      <h2 class="section-title">About Me</h2>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-10 items-start">
-      <!-- Terminal -->
-      <div class="reveal terminal">
-        <div class="terminal-header">
-          <div class="t-dot" style="background:#ff5f56;"></div>
-          <div class="t-dot" style="background:#ffbd2e;"></div>
-          <div class="t-dot" style="background:#27c93f;"></div>
-          <span style="font-family:'Fira Code',monospace;font-size:0.75rem;color:rgba(134,239,172,0.6);margin-left:8px;">hixvy@portfolio:~$</span>
-        </div>
-        <div class="terminal-body">
-          <div class="t-line"><span class="t-prompt">❯</span> whoami</div>
-          <div class="t-line" style="color:#e2e8f0;margin-bottom:8px;">TheHixvy — Coder, Developer, Medico</div>
-          <div class="t-line"><span class="t-prompt">❯</span> cat about.txt</div>
-          <div class="t-line" style="color:#d1fae5;margin-bottom:2px;">Hi! I'm <span style="color:#fcd34d;">Hixvy</span> (TheHixvy),</div>
-          <div class="t-line" style="color:#d1fae5;margin-bottom:2px;">a passionate programmer & developer</div>
-          <div class="t-line" style="color:#d1fae5;margin-bottom:8px;">from Bihar, India.</div>
-          <div class="t-line"><span class="t-prompt">❯</span> cat specialties.json</div>
-          <div class="t-line" style="color:#fcd34d;margin-bottom:2px;">{</div>
-          <div class="t-line" style="color:#86efac;padding-left:1rem;">"frontend": "Expert",</div>
-          <div class="t-line" style="color:#86efac;padding-left:1rem;">"reverseEng": "Expert",</div>
-          <div class="t-line" style="color:#86efac;padding-left:1rem;">"medical": "Medico",</div>
-          <div class="t-line" style="color:#86efac;padding-left:1rem;">"ai_builder": true</div>
-          <div class="t-line" style="color:#fcd34d;margin-bottom:8px;">}</div>
-          <div class="t-line"><span class="t-prompt">❯</span> <span id="term-typing" style="color:#22c55e;"></span><span class="typing-cursor" style="font-size:0.85rem;"></span></div>
+    <!-- Grid -->
+    <div class="about-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+
+      <!-- Terminal card -->
+      <div class="reveal from-left">
+        <div class="terminal">
+          <div class="term-header">
+            <div class="t-dot" style="background:#ff5f56;"></div>
+            <div class="t-dot" style="background:#ffbd2e;"></div>
+            <div class="t-dot" style="background:#27c93f;"></div>
+            <span style="margin-left:10px;font-family:'Fira Code',monospace;font-size:0.72rem;color:rgba(134,239,172,0.55);">hixvy@portfolio ~ $</span>
+            <div style="margin-left:auto;font-size:0.65rem;color:rgba(134,239,172,0.35);font-family:'Fira Code',monospace;">zsh</div>
+          </div>
+          <div class="term-body">
+            <div style="margin-bottom:6px;"><span class="t-prompt">❯ </span><span>whoami</span></div>
+            <div style="color:#e2e8f0;margin-bottom:14px;">TheHixvy — Coder · Developer · Medico</div>
+            <div style="margin-bottom:6px;"><span class="t-prompt">❯ </span><span>cat about.txt</span></div>
+            <div style="color:#d1fae5;margin-bottom:2px;">Hi! I'm <span style="color:#fcd34d;font-weight:600;">Hixvy</span> (TheHixvy),</div>
+            <div style="color:#d1fae5;margin-bottom:2px;">a self-driven coder & developer</div>
+            <div style="color:#d1fae5;margin-bottom:14px;">from Bihar, India 🇮🇳</div>
+            <div style="margin-bottom:6px;"><span class="t-prompt">❯ </span><span>cat specialties.json</span></div>
+            <div style="color:#fcd34d;margin-bottom:2px;">{</div>
+            <div style="color:#86efac;padding-left:1rem;">"frontend": <span style="color:#fb923c;">"Expert"</span>,</div>
+            <div style="color:#86efac;padding-left:1rem;">"reverseEng": <span style="color:#fb923c;">"Expert"</span>,</div>
+            <div style="color:#86efac;padding-left:1rem;">"medico": <span style="color:#7dd3fc;">true</span>,</div>
+            <div style="color:#86efac;padding-left:1rem;">"aiBuilder": <span style="color:#7dd3fc;">true</span></div>
+            <div style="color:#fcd34d;margin-bottom:14px;">}</div>
+            <div><span class="t-prompt">❯ </span><span id="term-typing" style="color:#22c55e;"></span><span class="typing-cursor" style="font-size:0.83rem;"></span></div>
+          </div>
         </div>
       </div>
 
       <!-- Info cards -->
-      <div class="reveal flex flex-col gap-4">
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:16px;padding:1.4rem;backdrop-filter:blur(10px);">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;">
-            <div style="width:36px;height:36px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem;">
+      <div class="reveal from-right" style="display:flex;flex-direction:column;gap:1.2rem;">
+
+        <!-- Who Am I -->
+        <div class="glass tilt-card" style="padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+            <div class="icon-box" style="background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 4px 16px rgba(34,197,94,0.35);">
               <i class="fa fa-user"></i>
             </div>
-            <h3 style="font-weight:700;color:#14532d;font-size:1rem;">Who Am I?</h3>
+            <div>
+              <h3 style="font-weight:800;color:#14532d;font-size:0.95rem;">Who Am I?</h3>
+              <p style="font-size:0.72rem;color:#9ca3af;font-family:'Fira Code',monospace;">identity.profile</p>
+            </div>
           </div>
-          <p style="color:#4b5563;line-height:1.75;font-size:0.9rem;">
-            I'm <strong style="color:#15803d;">Hixvy</strong>, professionally known as <strong style="color:#15803d;">TheHixvy</strong>. I'm a self-driven coder, web & app developer, and frontend expert. What makes me unique is that I'm also a <strong style="color:#15803d;">Medico</strong> — blending technology with medicine. I specialize in reverse engineering and have built everything from streaming platforms to my own LLM AI model.
+          <p style="color:#4b5563;line-height:1.8;font-size:0.88rem;">
+            I'm <strong style="color:#15803d;">Hixvy</strong>, professionally known as <strong style="color:#15803d;">TheHixvy</strong>.
+            A self-driven coder, web & app developer, and frontend expert. Uniquely, I'm also a
+            <strong style="color:#15803d;">Medico</strong> — bridging tech and medicine. I specialize in
+            reverse engineering and have built everything from streaming platforms to my own LLM AI model.
           </p>
         </div>
 
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:16px;padding:1.4rem;backdrop-filter:blur(10px);">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;">
-            <div style="width:36px;height:36px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem;">
+        <!-- Location & Role -->
+        <div class="glass tilt-card" style="padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+            <div class="icon-box" style="background:linear-gradient(135deg,#0891b2,#22d3ee);box-shadow:0 4px 16px rgba(8,145,178,0.3);">
               <i class="fa fa-map-marker-alt"></i>
             </div>
-            <h3 style="font-weight:700;color:#14532d;font-size:1rem;">Location & Background</h3>
+            <div>
+              <h3 style="font-weight:800;color:#14532d;font-size:0.95rem;">Location & Roles</h3>
+              <p style="font-size:0.72rem;color:#9ca3af;font-family:'Fira Code',monospace;">identity.location</p>
+            </div>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;">
-            <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:#374151;">
-              <i class="fa fa-map-pin" style="color:#22c55e;"></i> Bihar, India 🇮🇳
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:#374151;">
-              <i class="fa fa-laptop-code" style="color:#22c55e;"></i> Full-Stack Developer
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:#374151;">
-              <i class="fa fa-heartbeat" style="color:#22c55e;"></i> Medico
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:#374151;">
-              <i class="fa fa-shield-alt" style="color:#22c55e;"></i> Reverse Engineer
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:#374151;">
-              <i class="fa fa-robot" style="color:#22c55e;"></i> AI Builder
-            </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:50px;padding:5px 12px;font-size:0.8rem;color:#374151;"><i class="fa fa-map-pin" style="color:#22c55e;"></i>Bihar, India 🇮🇳</span>
+            <span style="display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:50px;padding:5px 12px;font-size:0.8rem;color:#374151;"><i class="fa fa-laptop-code" style="color:#22c55e;"></i>Full-Stack Dev</span>
+            <span style="display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:50px;padding:5px 12px;font-size:0.8rem;color:#374151;"><i class="fa fa-heartbeat" style="color:#ef4444;"></i>Medico</span>
+            <span style="display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:50px;padding:5px 12px;font-size:0.8rem;color:#374151;"><i class="fa fa-shield-alt" style="color:#f59e0b;"></i>Reverse Engineer</span>
+            <span style="display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:50px;padding:5px 12px;font-size:0.8rem;color:#374151;"><i class="fa fa-robot" style="color:#8b5cf6;"></i>AI Builder</span>
           </div>
         </div>
 
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:16px;padding:1.4rem;backdrop-filter:blur(10px);">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.8rem;">
-            <div style="width:36px;height:36px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem;">
+        <!-- Main Site -->
+        <div class="glass tilt-card" style="padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+            <div class="icon-box" style="background:linear-gradient(135deg,#7c3aed,#c084fc);box-shadow:0 4px 16px rgba(124,58,237,0.3);">
               <i class="fa fa-globe"></i>
             </div>
-            <h3 style="font-weight:700;color:#14532d;font-size:1rem;">Main Website</h3>
+            <div>
+              <h3 style="font-weight:800;color:#14532d;font-size:0.95rem;">Main Website</h3>
+              <p style="font-size:0.72rem;color:#9ca3af;font-family:'Fira Code',monospace;">web.primary</p>
+            </div>
           </div>
-          <a href="https://thehixvy.pages.dev" target="_blank" style="color:#16a34a;font-family:'Fira Code',monospace;font-size:0.88rem;text-decoration:none;display:flex;align-items:center;gap:6px;">
-            <i class="fa fa-external-link-alt"></i> thehixvy.pages.dev
+          <a href="https://thehixvy.pages.dev" target="_blank"
+            style="display:inline-flex;align-items:center;gap:8px;color:#16a34a;font-family:'Fira Code',monospace;font-size:0.85rem;text-decoration:none;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:10px;padding:8px 14px;transition:all 0.3s ease;"
+            onmouseover="this.style.background='rgba(34,197,94,0.15)';this.style.borderColor='#22c55e';"
+            onmouseout="this.style.background='rgba(34,197,94,0.08)';this.style.borderColor='rgba(34,197,94,0.25)';">
+            <i class="fa fa-external-link-alt"></i>thehixvy.pages.dev
           </a>
         </div>
       </div>
@@ -671,120 +851,117 @@
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                   SKILLS SECTION                      -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<section id="skills" style="padding:80px 0;background:rgba(220,252,231,0.3);">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="reveal" style="margin-bottom:3rem;">
-      <p style="font-family:'Fira Code',monospace;color:#22c55e;font-size:0.85rem;margin-bottom:0.5rem;">// section_02</p>
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                       SKILLS SECTION                             -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<section id="skills" style="padding:100px 0;background:linear-gradient(180deg,transparent,rgba(220,252,231,0.4),transparent);">
+  <div class="section-wrap">
+
+    <div class="reveal" style="margin-bottom:3.5rem;">
+      <div class="section-label">// section_02</div>
       <h2 class="section-title">Skills & Tech Stack</h2>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-8">
-      <!-- Skill bars -->
-      <div class="reveal flex flex-col gap-5">
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:18px;padding:1.6rem;backdrop-filter:blur(10px);">
-          <h3 style="font-weight:700;color:#14532d;margin-bottom:1.4rem;font-family:'Fira Code',monospace;">
-            <i class="fa fa-code" style="color:#22c55e;margin-right:8px;"></i>Proficiency Levels
+    <div class="skill-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+
+      <!-- Proficiency Bars -->
+      <div class="reveal from-left">
+        <div class="glass" style="padding:1.8rem;height:100%;">
+          <h3 style="font-weight:800;color:#14532d;margin-bottom:1.6rem;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:8px;">
+            <i class="fa fa-code" style="color:#22c55e;"></i>Proficiency Levels
           </h3>
-          <div class="flex flex-col gap-4" id="skill-bars">
-            <div data-skill="HTML / CSS" data-level="97">
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:0.85rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;">HTML / CSS</span>
-                <span style="font-size:0.8rem;color:#16a34a;font-weight:600;">97%</span>
+          <div id="skill-bars" style="display:flex;flex-direction:column;gap:1.2rem;">
+
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:0.83rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:6px;"><i class="fab fa-html5" style="color:#e34c26;"></i>HTML / CSS</span>
+                <span style="font-size:0.78rem;color:#16a34a;font-weight:700;font-family:'Fira Code',monospace;">97%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill" data-width="97"></div></div>
+              <div class="progress-wrap"><div class="progress-fill" data-width="97"></div></div>
             </div>
-            <div data-skill="JavaScript" data-level="88">
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:0.85rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;">JavaScript</span>
-                <span style="font-size:0.8rem;color:#16a34a;font-weight:600;">88%</span>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:0.83rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:6px;"><i class="fab fa-js-square" style="color:#f7df1e;"></i>JavaScript</span>
+                <span style="font-size:0.78rem;color:#16a34a;font-weight:700;font-family:'Fira Code',monospace;">88%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill" data-width="88"></div></div>
+              <div class="progress-wrap"><div class="progress-fill" data-width="88"></div></div>
             </div>
-            <div data-skill="Python" data-level="82">
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:0.85rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;">Python</span>
-                <span style="font-size:0.8rem;color:#16a34a;font-weight:600;">82%</span>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:0.83rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:6px;"><i class="fab fa-python" style="color:#3776ab;"></i>Python</span>
+                <span style="font-size:0.78rem;color:#16a34a;font-weight:700;font-family:'Fira Code',monospace;">82%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill" data-width="82"></div></div>
+              <div class="progress-wrap"><div class="progress-fill" data-width="82"></div></div>
             </div>
-            <div data-skill="PHP / SQL" data-level="78">
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:0.85rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;">PHP / SQL</span>
-                <span style="font-size:0.8rem;color:#16a34a;font-weight:600;">78%</span>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:0.83rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:6px;"><i class="fab fa-php" style="color:#777bb4;"></i>PHP / SQL</span>
+                <span style="font-size:0.78rem;color:#16a34a;font-weight:700;font-family:'Fira Code',monospace;">78%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill" data-width="78"></div></div>
+              <div class="progress-wrap"><div class="progress-fill" data-width="78"></div></div>
             </div>
-            <div data-skill="React Framework" data-level="75">
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:0.85rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;">React Framework</span>
-                <span style="font-size:0.8rem;color:#16a34a;font-weight:600;">75%</span>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:0.83rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:6px;"><i class="fab fa-react" style="color:#61dafb;"></i>React Framework</span>
+                <span style="font-size:0.78rem;color:#16a34a;font-weight:700;font-family:'Fira Code',monospace;">75%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill" data-width="75"></div></div>
+              <div class="progress-wrap"><div class="progress-fill" data-width="75"></div></div>
             </div>
-            <div data-skill="Reverse Engineering" data-level="91">
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                <span style="font-size:0.85rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;">Reverse Engineering</span>
-                <span style="font-size:0.8rem;color:#16a34a;font-weight:600;">91%</span>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:0.83rem;font-weight:600;color:#374151;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:6px;"><i class="fa fa-shield-alt" style="color:#f59e0b;"></i>Reverse Engineering</span>
+                <span style="font-size:0.78rem;color:#16a34a;font-weight:700;font-family:'Fira Code',monospace;">91%</span>
               </div>
-              <div class="progress-bar"><div class="progress-fill" data-width="91"></div></div>
+              <div class="progress-wrap"><div class="progress-fill" data-width="91"></div></div>
             </div>
+
           </div>
         </div>
       </div>
 
-      <!-- Skill badges grid -->
-      <div class="reveal flex flex-col gap-5">
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:18px;padding:1.6rem;backdrop-filter:blur(10px);">
-          <h3 style="font-weight:700;color:#14532d;margin-bottom:1.2rem;font-family:'Fira Code',monospace;">
-            <i class="fa fa-layer-group" style="color:#22c55e;margin-right:8px;"></i>Technologies
+      <!-- Right column: Badges + Specializations -->
+      <div class="reveal from-right" style="display:flex;flex-direction:column;gap:1.5rem;">
+
+        <!-- Tech badges -->
+        <div class="glass" style="padding:1.8rem;">
+          <h3 style="font-weight:800;color:#14532d;margin-bottom:1.2rem;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:8px;">
+            <i class="fa fa-layer-group" style="color:#22c55e;"></i>Technologies
           </h3>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;" id="badges-container">
-            <span class="skill-badge"><i class="fab fa-html5" style="color:#e34c26;"></i> HTML5</span>
-            <span class="skill-badge"><i class="fab fa-css3-alt" style="color:#264de4;"></i> CSS3</span>
-            <span class="skill-badge"><i class="fab fa-js-square" style="color:#f7df1e;"></i> JavaScript</span>
-            <span class="skill-badge"><i class="fab fa-python" style="color:#3776ab;"></i> Python</span>
-            <span class="skill-badge"><i class="fab fa-php" style="color:#777bb4;"></i> PHP</span>
-            <span class="skill-badge"><i class="fab fa-react" style="color:#61dafb;"></i> React</span>
-            <span class="skill-badge"><i class="fa fa-database" style="color:#00618a;"></i> SQL</span>
-            <span class="skill-badge"><i class="fa fa-code" style="color:#22c55e;"></i> Java</span>
-            <span class="skill-badge"><i class="fa fa-file-code" style="color:#f7820a;"></i> JSON</span>
-            <span class="skill-badge"><i class="fa fa-shield-alt" style="color:#dc2626;"></i> Rev. Eng.</span>
-            <span class="skill-badge"><i class="fa fa-robot" style="color:#8b5cf6;"></i> AI / LLM</span>
-            <span class="skill-badge"><i class="fab fa-git-alt" style="color:#f05032;"></i> Git</span>
-            <span class="skill-badge"><i class="fa fa-heartbeat" style="color:#ef4444;"></i> Medico</span>
-            <span class="skill-badge"><i class="fa fa-film" style="color:#f59e0b;"></i> Streaming Dev</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <div class="badge"><i class="fab fa-html5" style="color:#e34c26;"></i><span>HTML5</span></div>
+            <div class="badge"><i class="fab fa-css3-alt" style="color:#264de4;"></i><span>CSS3</span></div>
+            <div class="badge"><i class="fab fa-js-square" style="color:#f7df1e;"></i><span>JavaScript</span></div>
+            <div class="badge"><i class="fab fa-python" style="color:#3776ab;"></i><span>Python</span></div>
+            <div class="badge"><i class="fab fa-php" style="color:#777bb4;"></i><span>PHP</span></div>
+            <div class="badge"><i class="fab fa-react" style="color:#61dafb;"></i><span>React</span></div>
+            <div class="badge"><i class="fa fa-database" style="color:#00618a;"></i><span>SQL</span></div>
+            <div class="badge"><i class="fa fa-code" style="color:#22c55e;"></i><span>Java</span></div>
+            <div class="badge"><i class="fa fa-file-code" style="color:#f7820a;"></i><span>JSON</span></div>
+            <div class="badge"><i class="fa fa-shield-alt" style="color:#f59e0b;"></i><span>Rev. Eng.</span></div>
+            <div class="badge"><i class="fa fa-robot" style="color:#8b5cf6;"></i><span>AI / LLM</span></div>
+            <div class="badge"><i class="fab fa-git-alt" style="color:#f05032;"></i><span>Git</span></div>
+            <div class="badge"><i class="fa fa-heartbeat" style="color:#ef4444;"></i><span>Medico</span></div>
+            <div class="badge"><i class="fa fa-film" style="color:#f59e0b;"></i><span>Streaming</span></div>
           </div>
         </div>
 
         <!-- Specializations -->
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:18px;padding:1.6rem;backdrop-filter:blur(10px);">
-          <h3 style="font-weight:700;color:#14532d;margin-bottom:1.2rem;font-family:'Fira Code',monospace;">
-            <i class="fa fa-star" style="color:#22c55e;margin-right:8px;"></i>Specializations
+        <div class="glass" style="padding:1.8rem;">
+          <h3 style="font-weight:800;color:#14532d;margin-bottom:1rem;font-family:'Fira Code',monospace;display:flex;align-items:center;gap:8px;">
+            <i class="fa fa-star" style="color:#22c55e;"></i>Specializations
           </h3>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-              <span style="font-size:0.88rem;color:#374151;">Frontend Development & UI/UX Expert</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-              <span style="font-size:0.88rem;color:#374151;">Reverse Engineering & Security Analysis</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-              <span style="font-size:0.88rem;color:#374151;">AI / LLM Model Development</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-              <span style="font-size:0.88rem;color:#374151;">Video Streaming Platform Architecture</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;"></div>
-              <span style="font-size:0.88rem;color:#374151;">Medical + Technology Integration</span>
-            </div>
+          <div>
+            <div class="spec-item"><div class="spec-dot"></div><span style="font-size:0.87rem;color:#374151;">Frontend Development &amp; UI/UX Expert</span></div>
+            <div class="spec-item"><div class="spec-dot"></div><span style="font-size:0.87rem;color:#374151;">Reverse Engineering &amp; Security Analysis</span></div>
+            <div class="spec-item"><div class="spec-dot"></div><span style="font-size:0.87rem;color:#374151;">AI / LLM Model Development</span></div>
+            <div class="spec-item"><div class="spec-dot"></div><span style="font-size:0.87rem;color:#374151;">Video Streaming Platform Architecture</span></div>
+            <div class="spec-item"><div class="spec-dot"></div><span style="font-size:0.87rem;color:#374151;">Medical + Technology Integration</span></div>
+            <div class="spec-item"><div class="spec-dot"></div><span style="font-size:0.87rem;color:#374151;">Web App &amp; Educational Platform Development</span></div>
           </div>
         </div>
       </div>
@@ -793,108 +970,140 @@
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                  PROJECTS SECTION                     -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<section id="projects" style="padding:80px 0;">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="reveal" style="margin-bottom:3rem;">
-      <p style="font-family:'Fira Code',monospace;color:#22c55e;font-size:0.85rem;margin-bottom:0.5rem;">// section_03</p>
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                      STATS BANNER                                -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<section style="padding:60px 0;">
+  <div class="section-wrap">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;">
+      <div class="stat-card reveal scale-in" style="transition-delay:0s;">
+        <div class="stat-num" id="c1" data-target="5">0</div>
+        <div style="font-size:0.78rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:6px;">Live Projects</div>
+        <i class="fa fa-rocket" style="color:#22c55e;font-size:1.4rem;margin-top:10px;"></i>
+      </div>
+      <div class="stat-card reveal scale-in" style="transition-delay:0.1s;">
+        <div class="stat-num" id="c2" data-target="10">0</div>
+        <div style="font-size:0.78rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:6px;">Languages</div>
+        <i class="fa fa-code" style="color:#22c55e;font-size:1.4rem;margin-top:10px;"></i>
+      </div>
+      <div class="stat-card reveal scale-in" style="transition-delay:0.2s;">
+        <div style="font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#16a34a,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">1</div>
+        <div style="font-size:0.78rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:6px;">Own AI Model</div>
+        <i class="fa fa-robot" style="color:#22c55e;font-size:1.4rem;margin-top:10px;"></i>
+      </div>
+      <div class="stat-card reveal scale-in" style="transition-delay:0.3s;">
+        <div style="font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#16a34a,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">∞</div>
+        <div style="font-size:0.78rem;color:#6b7280;font-family:'Fira Code',monospace;margin-top:6px;">Passion &amp; Drive</div>
+        <i class="fa fa-fire" style="color:#22c55e;font-size:1.4rem;margin-top:10px;"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                      PROJECTS SECTION                            -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<section id="projects" style="padding:100px 0;background:linear-gradient(180deg,transparent,rgba(220,252,231,0.35),transparent);">
+  <div class="section-wrap">
+
+    <div class="reveal" style="margin-bottom:3.5rem;">
+      <div class="section-label">// section_03</div>
       <h2 class="section-title">Projects</h2>
-      <p style="color:#6b7280;margin-top:0.8rem;font-size:0.9rem;">Things I've built with passion and code.</p>
+      <p style="color:#6b7280;margin-top:1rem;font-size:0.9rem;font-family:'Fira Code',monospace;">Things I've built with passion and code.</p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+    <div class="project-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;">
 
-      <!-- Project 1 -->
-      <div class="project-card reveal" style="padding:1.8rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-          <div style="width:50px;height:50px;background:linear-gradient(135deg,#dc2626,#f97316);border-radius:14px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;">
+      <!-- Project 1: HixvyMovie -->
+      <div class="project-card reveal" style="--card-color1:#dc2626;--card-color2:#f97316;padding:2rem;transition-delay:0s;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px;">
+          <div style="width:54px;height:54px;background:linear-gradient(135deg,#dc2626,#f97316);border-radius:16px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.4rem;box-shadow:0 6px 20px rgba(220,38,38,0.35);flex-shrink:0;">
             <i class="fa fa-film"></i>
           </div>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
             <span class="tag">Streaming</span>
-            <span class="tag">Featured</span>
+            <span class="tag" style="background:rgba(34,197,94,0.15);color:#15803d;border-color:rgba(34,197,94,0.4);">⭐ Featured</span>
           </div>
         </div>
-        <h3 style="font-size:1.2rem;font-weight:800;color:#14532d;margin-bottom:0.5rem;">HixvyMovie 🎬</h3>
-        <p style="color:#4b5563;font-size:0.88rem;line-height:1.7;margin-bottom:1.2rem;">
-          A fully-featured movie streaming platform built from scratch. Browse, search, and stream movies with a smooth, modern UI. One of TheHixvy's most ambitious projects.
+        <h3 style="font-size:1.25rem;font-weight:900;color:#14532d;margin-bottom:0.6rem;">HixvyMovie 🎬</h3>
+        <p style="color:#4b5563;font-size:0.87rem;line-height:1.75;margin-bottom:1.2rem;">
+          A fully-featured movie streaming platform built from scratch. Browse, search &amp; stream movies with a smooth modern UI. One of TheHixvy's most ambitious creations.
         </p>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.4rem;">
           <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">API</span>
         </div>
-        <a href="https://thehixvy.pages.dev" target="_blank" class="btn-primary" style="padding:8px 20px;font-size:0.82rem;">
-          <i class="fa fa-external-link-alt"></i> View Live
+        <a href="https://thehixvy.pages.dev" target="_blank" class="btn-primary" style="padding:9px 22px;font-size:0.8rem;">
+          <i class="fa fa-external-link-alt"></i><span>View Live</span>
         </a>
       </div>
 
-      <!-- Project 2 -->
-      <div class="project-card reveal" style="padding:1.8rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-          <div style="width:50px;height:50px;background:linear-gradient(135deg,#8b5cf6,#c084fc);border-radius:14px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;">
+      <!-- Project 2: Custom LLM AI -->
+      <div class="project-card reveal" style="--card-color1:#7c3aed;--card-color2:#c084fc;padding:2rem;transition-delay:0.1s;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px;">
+          <div style="width:54px;height:54px;background:linear-gradient(135deg,#7c3aed,#c084fc);border-radius:16px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.4rem;box-shadow:0 6px 20px rgba(124,58,237,0.35);flex-shrink:0;">
             <i class="fa fa-robot"></i>
           </div>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
             <span class="tag">AI</span>
             <span class="tag">LLM</span>
           </div>
         </div>
-        <h3 style="font-size:1.2rem;font-weight:800;color:#14532d;margin-bottom:0.5rem;">Custom LLM AI Model 🤖</h3>
-        <p style="color:#4b5563;font-size:0.88rem;line-height:1.7;margin-bottom:1.2rem;">
+        <h3 style="font-size:1.25rem;font-weight:900;color:#14532d;margin-bottom:0.6rem;">Custom LLM AI Model 🤖</h3>
+        <p style="color:#4b5563;font-size:0.87rem;line-height:1.75;margin-bottom:1.2rem;">
           TheHixvy's own Large Language Model — built independently to understand, generate, and process text. A groundbreaking personal AI project. Link coming soon!
         </p>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.4rem;">
           <span class="tag">Python</span><span class="tag">AI</span><span class="tag">NLP</span><span class="tag">LLM</span>
         </div>
-        <span class="btn-outline" style="padding:8px 20px;font-size:0.82rem;cursor:default;opacity:0.7;">
-          <i class="fa fa-clock"></i> Link Coming Soon
-        </span>
+        <div class="btn-outline" style="padding:9px 22px;font-size:0.8rem;width:fit-content;opacity:0.7;cursor:default;">
+          <i class="fa fa-clock"></i><span>Coming Soon</span>
+        </div>
       </div>
 
-      <!-- Project 3 -->
-      <div class="project-card reveal" style="padding:1.8rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-          <div style="width:50px;height:50px;background:linear-gradient(135deg,#0891b2,#22d3ee);border-radius:14px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;">
+      <!-- Project 3: Laxmi Coaching -->
+      <div class="project-card reveal" style="--card-color1:#0891b2;--card-color2:#22d3ee;padding:2rem;transition-delay:0.2s;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px;">
+          <div style="width:54px;height:54px;background:linear-gradient(135deg,#0891b2,#22d3ee);border-radius:16px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.4rem;box-shadow:0 6px 20px rgba(8,145,178,0.35);flex-shrink:0;">
             <i class="fa fa-graduation-cap"></i>
           </div>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
             <span class="tag">Education</span>
             <span class="tag">Web App</span>
           </div>
         </div>
-        <h3 style="font-size:1.2rem;font-weight:800;color:#14532d;margin-bottom:0.5rem;">Laxmi Coaching 📚</h3>
-        <p style="color:#4b5563;font-size:0.88rem;line-height:1.7;margin-bottom:1.2rem;">
-          An educational web application designed to provide quality coaching resources, study materials, and interactive learning tools for students.
+        <h3 style="font-size:1.25rem;font-weight:900;color:#14532d;margin-bottom:0.6rem;">Laxmi Coaching 📚</h3>
+        <p style="color:#4b5563;font-size:0.87rem;line-height:1.75;margin-bottom:1.2rem;">
+          An educational web application providing quality coaching resources, study materials, and interactive learning tools for students across Bihar.
         </p>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.4rem;">
           <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Blogger</span>
         </div>
-        <a href="https://laxmi-coaching.blogspot.com" target="_blank" class="btn-primary" style="padding:8px 20px;font-size:0.82rem;">
-          <i class="fa fa-external-link-alt"></i> View Live
+        <a href="https://laxmi-coaching.blogspot.com" target="_blank" class="btn-primary" style="padding:9px 22px;font-size:0.8rem;">
+          <i class="fa fa-external-link-alt"></i><span>View Live</span>
         </a>
       </div>
 
-      <!-- Project 4 -->
-      <div class="project-card reveal" style="padding:1.8rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-          <div style="width:50px;height:50px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:14px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;">
-            <i class="fa fa-cricket"></i>
+      <!-- Project 4: GWCrick -->
+      <div class="project-card reveal" style="--card-color1:#16a34a;--card-color2:#4ade80;padding:2rem;transition-delay:0.3s;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px;">
+          <div style="width:54px;height:54px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:16px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.4rem;box-shadow:0 6px 20px rgba(22,163,74,0.35);flex-shrink:0;">
+            <i class="fa fa-tv"></i>
           </div>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
             <span class="tag">Sports</span>
             <span class="tag">Streaming</span>
           </div>
         </div>
-        <h3 style="font-size:1.2rem;font-weight:800;color:#14532d;margin-bottom:0.5rem;">GWCrick 🏏</h3>
-        <p style="color:#4b5563;font-size:0.88rem;line-height:1.7;margin-bottom:1.2rem;">
-          A live cricket streaming website — watch cricket matches live with real-time scores, commentary, and a seamless streaming experience built entirely by TheHixvy.
+        <h3 style="font-size:1.25rem;font-weight:900;color:#14532d;margin-bottom:0.6rem;">GWCrick 🏏</h3>
+        <p style="color:#4b5563;font-size:0.87rem;line-height:1.75;margin-bottom:1.2rem;">
+          A live cricket streaming website — watch matches live with real-time scores, commentary &amp; seamless streaming experience, built entirely by TheHixvy.
         </p>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.4rem;">
           <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Streaming</span>
         </div>
-        <a href="https://gwcrick.blogspot.com" target="_blank" class="btn-primary" style="padding:8px 20px;font-size:0.82rem;">
-          <i class="fa fa-external-link-alt"></i> View Live
+        <a href="https://gwcrick.blogspot.com" target="_blank" class="btn-primary" style="padding:9px 22px;font-size:0.8rem;">
+          <i class="fa fa-external-link-alt"></i><span>View Live</span>
         </a>
       </div>
 
@@ -902,245 +1111,232 @@
 
     <!-- More coming soon -->
     <div class="reveal" style="margin-top:2.5rem;text-align:center;">
-      <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.7);border:1.5px dashed rgba(34,197,94,0.4);border-radius:14px;padding:1rem 2rem;color:#6b7280;font-family:'Fira Code',monospace;font-size:0.85rem;">
-        <i class="fa fa-plus-circle" style="color:#22c55e;"></i>
-        More exciting projects coming soon...
+      <div class="glass-sm" style="display:inline-flex;align-items:center;gap:12px;padding:1rem 2.2rem;color:#6b7280;font-family:'Fira Code',monospace;font-size:0.82rem;border-style:dashed;">
+        <div class="pulse-dot"></div>
+        More exciting projects loading...
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                   STATS SECTION                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<section style="padding:60px 0;background:rgba(220,252,231,0.3);">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="stat-card reveal">
-        <div class="stat-num">5+</div>
-        <div style="font-size:0.82rem;color:#6b7280;margin-top:4px;font-family:'Fira Code',monospace;">Live Projects</div>
-        <i class="fa fa-rocket" style="color:#22c55e;font-size:1.2rem;margin-top:8px;"></i>
-      </div>
-      <div class="stat-card reveal">
-        <div class="stat-num">10+</div>
-        <div style="font-size:0.82rem;color:#6b7280;margin-top:4px;font-family:'Fira Code',monospace;">Languages</div>
-        <i class="fa fa-code" style="color:#22c55e;font-size:1.2rem;margin-top:8px;"></i>
-      </div>
-      <div class="stat-card reveal">
-        <div class="stat-num">1</div>
-        <div style="font-size:0.82rem;color:#6b7280;margin-top:4px;font-family:'Fira Code',monospace;">Own AI Model</div>
-        <i class="fa fa-robot" style="color:#22c55e;font-size:1.2rem;margin-top:8px;"></i>
-      </div>
-      <div class="stat-card reveal">
-        <div class="stat-num">∞</div>
-        <div style="font-size:0.82rem;color:#6b7280;margin-top:4px;font-family:'Fira Code',monospace;">Passion & Drive</div>
-        <i class="fa fa-fire" style="color:#22c55e;font-size:1.2rem;margin-top:8px;"></i>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                      CONTACT SECTION                             -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<section id="contact" style="padding:100px 0;">
+  <div class="section-wrap">
 
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                  CONTACT SECTION                      -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<section id="contact" style="padding:80px 0;">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="reveal" style="margin-bottom:3rem;">
-      <p style="font-family:'Fira Code',monospace;color:#22c55e;font-size:0.85rem;margin-bottom:0.5rem;">// section_04</p>
+    <div class="reveal" style="margin-bottom:3.5rem;">
+      <div class="section-label">// section_04</div>
       <h2 class="section-title">Get In Touch</h2>
-      <p style="color:#6b7280;margin-top:0.8rem;font-size:0.9rem;">Feel free to reach out for collaborations or just a chat!</p>
+      <p style="color:#6b7280;margin-top:1rem;font-size:0.9rem;">Feel free to reach out for collaborations, projects, or just a chat!</p>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-10">
+    <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1.1fr;gap:2rem;align-items:start;">
 
-      <!-- Contact info -->
-      <div class="reveal flex flex-col gap-4">
+      <!-- Contact items -->
+      <div class="reveal from-left" style="display:flex;flex-direction:column;gap:1rem;">
+
         <a href="https://thehixvy.pages.dev" target="_blank" class="contact-item">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;">
+          <div class="icon-box" style="background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 4px 14px rgba(34,197,94,0.3);">
             <i class="fa fa-globe"></i>
           </div>
           <div>
-            <div style="font-size:0.78rem;color:#9ca3af;font-family:'Fira Code',monospace;">Website</div>
-            <div style="font-weight:600;color:#14532d;">thehixvy.pages.dev</div>
+            <div style="font-size:0.73rem;color:#9ca3af;font-family:'Fira Code',monospace;">Website</div>
+            <div style="font-weight:700;color:#14532d;font-size:0.92rem;">thehixvy.pages.dev</div>
           </div>
-          <i class="fa fa-arrow-right" style="color:#22c55e;margin-left:auto;"></i>
+          <i class="fa fa-arrow-right" style="color:#22c55e;margin-left:auto;font-size:0.9rem;"></i>
         </a>
 
         <div class="contact-item" style="cursor:default;">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;">
+          <div class="icon-box" style="background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 4px 14px rgba(34,197,94,0.3);">
             <i class="fa fa-phone"></i>
           </div>
           <div>
-            <div style="font-size:0.78rem;color:#9ca3af;font-family:'Fira Code',monospace;">Phone</div>
-            <div style="font-weight:600;color:#14532d;">+91 xxxxxxxx</div>
+            <div style="font-size:0.73rem;color:#9ca3af;font-family:'Fira Code',monospace;">Phone</div>
+            <div style="font-weight:700;color:#14532d;font-size:0.92rem;">+91 xxxxxxxx</div>
           </div>
-          <div style="background:rgba(34,197,94,0.1);color:#16a34a;font-size:0.72rem;padding:3px 10px;border-radius:20px;margin-left:auto;font-family:'Fira Code',monospace;">India</div>
+          <div style="background:rgba(34,197,94,0.1);color:#16a34a;font-size:0.7rem;padding:4px 12px;border-radius:50px;margin-left:auto;font-family:'Fira Code',monospace;border:1px solid rgba(34,197,94,0.2);">India 🇮🇳</div>
         </div>
 
         <div class="contact-item" style="cursor:default;">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;">
+          <div class="icon-box" style="background:linear-gradient(135deg,#f59e0b,#fcd34d);box-shadow:0 4px 14px rgba(245,158,11,0.3);">
             <i class="fa fa-map-marker-alt"></i>
           </div>
           <div>
-            <div style="font-size:0.78rem;color:#9ca3af;font-family:'Fira Code',monospace;">Location</div>
-            <div style="font-weight:600;color:#14532d;">Bihar, India 🇮🇳</div>
+            <div style="font-size:0.73rem;color:#9ca3af;font-family:'Fira Code',monospace;">Location</div>
+            <div style="font-weight:700;color:#14532d;font-size:0.92rem;">Bihar, India 🇮🇳</div>
           </div>
         </div>
 
         <a href="https://laxmi-coaching.blogspot.com" target="_blank" class="contact-item">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,#0891b2,#22d3ee);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;">
+          <div class="icon-box" style="background:linear-gradient(135deg,#0891b2,#22d3ee);box-shadow:0 4px 14px rgba(8,145,178,0.3);">
             <i class="fa fa-graduation-cap"></i>
           </div>
           <div>
-            <div style="font-size:0.78rem;color:#9ca3af;font-family:'Fira Code',monospace;">Education App</div>
-            <div style="font-weight:600;color:#14532d;">Laxmi Coaching</div>
+            <div style="font-size:0.73rem;color:#9ca3af;font-family:'Fira Code',monospace;">Education App</div>
+            <div style="font-weight:700;color:#14532d;font-size:0.92rem;">Laxmi Coaching</div>
           </div>
-          <i class="fa fa-arrow-right" style="color:#22c55e;margin-left:auto;"></i>
+          <i class="fa fa-arrow-right" style="color:#22c55e;margin-left:auto;font-size:0.9rem;"></i>
         </a>
 
         <a href="https://gwcrick.blogspot.com" target="_blank" class="contact-item">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,#16a34a,#4ade80);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0;">
+          <div class="icon-box" style="background:linear-gradient(135deg,#16a34a,#4ade80);box-shadow:0 4px 14px rgba(34,197,94,0.3);">
             <i class="fa fa-tv"></i>
           </div>
           <div>
-            <div style="font-size:0.78rem;color:#9ca3af;font-family:'Fira Code',monospace;">Cricket Streaming</div>
-            <div style="font-weight:600;color:#14532d;">GWCrick</div>
+            <div style="font-size:0.73rem;color:#9ca3af;font-family:'Fira Code',monospace;">Cricket Streaming</div>
+            <div style="font-weight:700;color:#14532d;font-size:0.92rem;">GWCrick</div>
           </div>
-          <i class="fa fa-arrow-right" style="color:#22c55e;margin-left:auto;"></i>
+          <i class="fa fa-arrow-right" style="color:#22c55e;margin-left:auto;font-size:0.9rem;"></i>
         </a>
+
       </div>
 
-      <!-- Message card -->
-      <div class="reveal">
-        <div style="background:rgba(255,255,255,0.8);border:1.5px solid rgba(34,197,94,0.2);border-radius:20px;padding:2rem;backdrop-filter:blur(10px);">
-          <h3 style="font-weight:800;color:#14532d;margin-bottom:0.4rem;font-size:1.2rem;">
-            <i class="fa fa-paper-plane" style="color:#22c55e;margin-right:8px;"></i>Send a Message
+      <!-- Contact Form -->
+      <div class="reveal from-right">
+        <div class="glass neon-border" style="padding:2.2rem;border-radius:24px;">
+          <h3 style="font-weight:900;color:#14532d;margin-bottom:0.4rem;font-size:1.25rem;display:flex;align-items:center;gap:10px;">
+            <i class="fa fa-paper-plane" style="color:#22c55e;"></i>Send a Message
           </h3>
-          <p style="color:#6b7280;font-size:0.85rem;margin-bottom:1.5rem;">Have a project or collaboration in mind? Let's talk!</p>
-          <form onsubmit="handleForm(event)" style="display:flex;flex-direction:column;gap:14px;">
+          <p style="color:#6b7280;font-size:0.83rem;margin-bottom:1.8rem;font-family:'Fira Code',monospace;">// have_a_project_in_mind? Let's talk!</p>
+
+          <form onsubmit="handleForm(event)" style="display:flex;flex-direction:column;gap:1rem;">
             <div>
-              <label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:4px;font-family:'Fira Code',monospace;">Name</label>
-              <input type="text" placeholder="Your Name" required
-                style="width:100%;padding:10px 14px;border:1.5px solid rgba(34,197,94,0.25);border-radius:10px;background:rgba(240,253,244,0.7);font-size:0.88rem;outline:none;color:#1a2e1a;transition:border-color 0.2s;"
-                onfocus="this.style.borderColor='#22c55e'" onblur="this.style.borderColor='rgba(34,197,94,0.25)'"
-              />
+              <label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:5px;font-family:'Fira Code',monospace;">const name =</label>
+              <input type="text" placeholder='"Your Name"' required
+                style="width:100%;padding:12px 16px;border:1.5px solid rgba(34,197,94,0.25);border-radius:12px;background:rgba(240,253,244,0.7);font-size:0.87rem;color:#1a2e1a;transition:all 0.25s ease;backdrop-filter:blur(8px);"
+                onfocus="this.style.borderColor='#22c55e';this.style.boxShadow='0 0 0 3px rgba(34,197,94,0.12)'"
+                onblur="this.style.borderColor='rgba(34,197,94,0.25)';this.style.boxShadow='none'"/>
             </div>
             <div>
-              <label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:4px;font-family:'Fira Code',monospace;">Email</label>
-              <input type="email" placeholder="your@email.com" required
-                style="width:100%;padding:10px 14px;border:1.5px solid rgba(34,197,94,0.25);border-radius:10px;background:rgba(240,253,244,0.7);font-size:0.88rem;outline:none;color:#1a2e1a;transition:border-color 0.2s;"
-                onfocus="this.style.borderColor='#22c55e'" onblur="this.style.borderColor='rgba(34,197,94,0.25)'"
-              />
+              <label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:5px;font-family:'Fira Code',monospace;">const email =</label>
+              <input type="email" placeholder='"your@email.com"' required
+                style="width:100%;padding:12px 16px;border:1.5px solid rgba(34,197,94,0.25);border-radius:12px;background:rgba(240,253,244,0.7);font-size:0.87rem;color:#1a2e1a;transition:all 0.25s ease;backdrop-filter:blur(8px);"
+                onfocus="this.style.borderColor='#22c55e';this.style.boxShadow='0 0 0 3px rgba(34,197,94,0.12)'"
+                onblur="this.style.borderColor='rgba(34,197,94,0.25)';this.style.boxShadow='none'"/>
             </div>
             <div>
-              <label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:4px;font-family:'Fira Code',monospace;">Message</label>
-              <textarea placeholder="Your message..." required rows="4"
-                style="width:100%;padding:10px 14px;border:1.5px solid rgba(34,197,94,0.25);border-radius:10px;background:rgba(240,253,244,0.7);font-size:0.88rem;outline:none;color:#1a2e1a;resize:vertical;transition:border-color 0.2s;font-family:'Inter',sans-serif;"
-                onfocus="this.style.borderColor='#22c55e'" onblur="this.style.borderColor='rgba(34,197,94,0.25)'"
-              ></textarea>
+              <label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:5px;font-family:'Fira Code',monospace;">const message =</label>
+              <textarea placeholder='"Your message here..."' required rows="4"
+                style="width:100%;padding:12px 16px;border:1.5px solid rgba(34,197,94,0.25);border-radius:12px;background:rgba(240,253,244,0.7);font-size:0.87rem;color:#1a2e1a;resize:vertical;transition:all 0.25s ease;backdrop-filter:blur(8px);"
+                onfocus="this.style.borderColor='#22c55e';this.style.boxShadow='0 0 0 3px rgba(34,197,94,0.12)'"
+                onblur="this.style.borderColor='rgba(34,197,94,0.25)';this.style.boxShadow='none'"></textarea>
             </div>
-            <button type="submit" class="btn-primary" style="padding:12px 28px;font-size:0.9rem;justify-content:center;">
-              <i class="fa fa-paper-plane"></i> Send Message
+            <button type="submit" id="submit-btn" class="btn-primary" style="padding:13px 28px;font-size:0.88rem;justify-content:center;width:100%;font-family:'Fira Code',monospace;">
+              <i class="fa fa-paper-plane"></i><span>send_message()</span>
             </button>
           </form>
-          <div id="form-success" style="display:none;margin-top:1rem;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px;text-align:center;color:#15803d;font-weight:600;font-size:0.9rem;">
-            <i class="fa fa-check-circle"></i> Message sent! TheHixvy will get back to you soon.
+
+          <div id="form-success" style="display:none;margin-top:1rem;background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.35);border-radius:12px;padding:14px;text-align:center;color:#15803d;font-weight:700;font-size:0.88rem;font-family:'Fira Code',monospace;">
+            <i class="fa fa-check-circle" style="margin-right:6px;"></i>Message sent! TheHixvy will get back to you soon. 🚀
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--                    FOOTER                             -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<footer style="background:rgba(13,17,23,0.95);padding:2.5rem 0;position:relative;z-index:1;">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="background:linear-gradient(135deg,#16a34a,#4ade80);color:white;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-family:'Fira Code',monospace;">&lt;/&gt;</span>
-        <span style="font-family:'Fira Code',monospace;font-size:1.1rem;color:#86efac;font-weight:700;">TheHixvy</span>
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                          FOOTER                                  -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<footer style="padding:3rem 0;">
+  <div class="section-wrap">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1.2rem;text-align:center;">
+
+      <!-- Logo -->
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#16a34a,#4ade80);display:flex;align-items:center;justify-content:center;color:white;font-family:'Fira Code',monospace;font-size:1rem;font-weight:700;box-shadow:0 4px 16px rgba(34,197,94,0.4);">&lt;/&gt;</div>
+        <span style="font-family:'Fira Code',monospace;font-size:1.2rem;color:#86efac;font-weight:700;">TheHixvy<span style="color:#22c55e;">_</span></span>
       </div>
-      <p style="font-family:'Fira Code',monospace;font-size:0.8rem;color:rgba(134,239,172,0.5);">
+
+      <!-- Links -->
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <a href="#home"     style="font-family:'Fira Code',monospace;font-size:0.78rem;color:rgba(134,239,172,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='rgba(134,239,172,0.6)'">~/home</a>
+        <a href="#about"    style="font-family:'Fira Code',monospace;font-size:0.78rem;color:rgba(134,239,172,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='rgba(134,239,172,0.6)'">~/about</a>
+        <a href="#skills"   style="font-family:'Fira Code',monospace;font-size:0.78rem;color:rgba(134,239,172,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='rgba(134,239,172,0.6)'">~/skills</a>
+        <a href="#projects" style="font-family:'Fira Code',monospace;font-size:0.78rem;color:rgba(134,239,172,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='rgba(134,239,172,0.6)'">~/projects</a>
+        <a href="#contact"  style="font-family:'Fira Code',monospace;font-size:0.78rem;color:rgba(134,239,172,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#86efac'" onmouseout="this.style.color='rgba(134,239,172,0.6)'">~/contact</a>
+      </div>
+
+      <p style="font-family:'Fira Code',monospace;font-size:0.78rem;color:rgba(134,239,172,0.45);">
         Built with <span style="color:#ef4444;">♥</span> using HTML · CSS · Vanilla JS · Tailwind
       </p>
-      <p style="font-size:0.78rem;color:rgba(134,239,172,0.35);font-family:'Fira Code',monospace;">
+      <p style="font-size:0.74rem;color:rgba(134,239,172,0.3);font-family:'Fira Code',monospace;">
         © 2025 TheHixvy · Bihar, India 🇮🇳 · All rights reserved
       </p>
-      <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
-        <div style="width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite;"></div>
-        <span style="font-family:'Fira Code',monospace;font-size:0.75rem;color:#22c55e;">Available for new projects</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="pulse-dot" style="width:7px;height:7px;"></div>
+        <span style="font-family:'Fira Code',monospace;font-size:0.74rem;color:#22c55e;">Available for new projects</span>
       </div>
     </div>
   </div>
 </footer>
 
 
-<!-- ─────────────────────────────── JAVASCRIPT ─────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--                         JAVASCRIPT                               -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
 <script>
-  // ── 1. Matrix Canvas Rain ──────────────────────────────────────────────────
-  (function() {
-    const canvas = document.getElementById('matrix-bg');
-    const ctx    = canvas.getContext('2d');
+  /* ══ 1. MATRIX CANVAS RAIN ══════════════════════════════════════════ */
+  (function(){
+    const c = document.getElementById('matrix-bg');
+    const x = c.getContext('2d');
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/{}[]()=;:.,!@#$%^&*+_|~';
+    const fs = 13;
     let cols, drops;
-    const chars  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/{}[]()=;:.,!@#$%^&*+-_|~';
-    const fontSize = 14;
 
-    function resize() {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-      cols  = Math.floor(canvas.width / fontSize);
-      drops = Array.from({length: cols}, () => Math.random() * -100);
+    function resize(){
+      c.width  = window.innerWidth;
+      c.height = window.innerHeight;
+      cols  = Math.floor(c.width / fs);
+      drops = Array.from({length:cols}, () => Math.random() * -120);
     }
 
-    function draw() {
-      ctx.fillStyle = 'rgba(240,253,244,0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#22c55e';
-      ctx.font = fontSize + 'px Fira Code, monospace';
-
-      for (let i = 0; i < drops.length; i++) {
-        const ch = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    function draw(){
+      x.fillStyle = 'rgba(240,253,244,0.045)';
+      x.fillRect(0,0,c.width,c.height);
+      x.fillStyle = '#22c55e';
+      x.font = fs + 'px Fira Code, monospace';
+      for(let i=0;i<drops.length;i++){
+        const ch = chars[Math.floor(Math.random()*chars.length)];
+        x.fillText(ch, i*fs, drops[i]*fs);
+        if(drops[i]*fs > c.height && Math.random() > 0.975) drops[i] = 0;
         drops[i]++;
       }
     }
 
     resize();
     window.addEventListener('resize', resize);
-    setInterval(draw, 50);
+    setInterval(draw, 48);
   })();
 
 
-  // ── 2. Floating particles ──────────────────────────────────────────────────
-  (function() {
-    const colors = ['#22c55e','#4ade80','#86efac','#16a34a'];
-    for (let i = 0; i < 18; i++) {
+  /* ══ 2. FLOATING PARTICLES ══════════════════════════════════════════ */
+  (function(){
+    const colors = ['#22c55e','#4ade80','#86efac','#16a34a','#00ff88'];
+    for(let i=0;i<22;i++){
       const p = document.createElement('div');
       p.className = 'particle';
-      const size = Math.random() * 6 + 3;
-      p.style.cssText = `
-        width:${size}px; height:${size}px;
-        background:${colors[Math.floor(Math.random()*colors.length)]};
-        left:${Math.random()*100}%;
-        opacity:${Math.random()*0.5+0.2};
-        animation-duration:${Math.random()*15+10}s;
-        animation-delay:${Math.random()*10}s;
-      `;
+      const s = Math.random()*7+2;
+      Object.assign(p.style, {
+        width:s+'px', height:s+'px',
+        background: colors[Math.floor(Math.random()*colors.length)],
+        left: Math.random()*100+'%',
+        opacity: Math.random()*0.45+0.1,
+        animationDuration: Math.random()*18+12+'s',
+        animationDelay: Math.random()*15+'s',
+        borderRadius: Math.random()>0.5?'50%':'4px'
+      });
       document.body.appendChild(p);
     }
   })();
 
 
-  // ── 3. Typing animation (hero) ─────────────────────────────────────────────
-  (function() {
-    const el    = document.getElementById('typing-el');
+  /* ══ 3. HERO TYPING ANIMATION ═══════════════════════════════════════ */
+  (function(){
+    const el = document.getElementById('typing-el');
     const texts = [
       'Full-Stack Developer 💻',
       'Frontend Expert 🎨',
@@ -1149,131 +1345,170 @@
       'Medico + Coder 🩺💡',
       'Based in Bihar, India 🇮🇳'
     ];
-    let ti = 0, ci = 0, del = false;
-
-    function type() {
+    let ti=0, ci=0, del=false;
+    function type(){
       const cur = texts[ti];
-      if (!del) {
-        el.textContent = cur.slice(0, ++ci);
-        if (ci === cur.length) { del = true; setTimeout(type, 1800); return; }
-      } else {
-        el.textContent = cur.slice(0, --ci);
-        if (ci === 0) { del = false; ti = (ti + 1) % texts.length; setTimeout(type, 400); return; }
-      }
-      setTimeout(type, del ? 40 : 70);
+      if(!del){ el.textContent = cur.slice(0,++ci); if(ci===cur.length){del=true;setTimeout(type,1800);return;} }
+      else     { el.textContent = cur.slice(0,--ci); if(ci===0){del=false;ti=(ti+1)%texts.length;setTimeout(type,350);return;} }
+      setTimeout(type, del?35:65);
     }
-    setTimeout(type, 800);
+    setTimeout(type, 900);
   })();
 
 
-  // ── 4. Terminal typing ─────────────────────────────────────────────────────
-  (function() {
-    const el    = document.getElementById('term-typing');
-    const cmds  = ['ls -la projects/', 'git status', 'python train_ai.py', 'npm run build', 'whoami'];
-    let i = 0;
-    function cycle() {
-      const cmd = cmds[i % cmds.length];
-      let c = 0;
-      el.textContent = '';
-      const t = setInterval(() => {
-        el.textContent = cmd.slice(0, ++c);
-        if (c === cmd.length) { clearInterval(t); setTimeout(() => { i++; cycle(); }, 2000); }
-      }, 70);
+  /* ══ 4. TERMINAL TYPING ═════════════════════════════════════════════ */
+  (function(){
+    const el   = document.getElementById('term-typing');
+    const cmds = ['ls -la projects/','git status','python train_ai.py','npm run build','whoami','cat about.txt'];
+    let i=0;
+    function cycle(){
+      const cmd=cmds[i%cmds.length]; let c=0; el.textContent='';
+      const t=setInterval(()=>{
+        el.textContent=cmd.slice(0,++c);
+        if(c===cmd.length){clearInterval(t);setTimeout(()=>{i++;cycle();},2100);}
+      },65);
     }
-    setTimeout(cycle, 1000);
+    setTimeout(cycle,1200);
   })();
 
 
-  // ── 5. Scroll reveal ──────────────────────────────────────────────────────
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, idx) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), idx * 80);
-        observer.unobserve(e.target);
+  /* ══ 5. SCROLL REVEAL ═══════════════════════════════════════════════ */
+  const revealObs = new IntersectionObserver((entries)=>{
+    entries.forEach((e,idx)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('visible'), idx*90);
+        revealObs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-
-  // ── 6. Progress bars ──────────────────────────────────────────────────────
-  const barObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.progress-fill').forEach(bar => {
-          bar.style.width = bar.dataset.width + '%';
+  /* ══ 6. ANIMATED PROGRESS BARS ══════════════════════════════════════ */
+  const barObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.progress-fill').forEach(bar=>{
+          setTimeout(()=>{ bar.style.width = bar.dataset.width+'%'; },200);
         });
-        barObserver.unobserve(e.target);
+        barObs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.3 });
-
+  },{threshold:0.2});
   const barSection = document.getElementById('skill-bars');
-  if (barSection) barObserver.observe(barSection.parentElement.parentElement);
+  if(barSection) barObs.observe(barSection);
 
 
-  // ── 7. Active nav link on scroll ──────────────────────────────────────────
-  const sections  = document.querySelectorAll('section[id]');
-  const navLinks  = document.querySelectorAll('.nav-link');
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY + 100;
-    sections.forEach(sec => {
-      if (scrollY >= sec.offsetTop && scrollY < sec.offsetTop + sec.offsetHeight) {
-        navLinks.forEach(l => {
+  /* ══ 7. COUNTING ANIMATION ══════════════════════════════════════════ */
+  const countObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const target = parseInt(e.target.dataset.target);
+        let n=0; const step = target/40;
+        const t = setInterval(()=>{
+          n = Math.min(n+step, target);
+          e.target.textContent = Math.floor(n) + '+';
+          if(n>=target){ e.target.textContent=target+'+'; clearInterval(t); }
+        },35);
+        countObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.5});
+  document.querySelectorAll('[data-target]').forEach(el=>countObs.observe(el));
+
+
+  /* ══ 8. ACTIVE NAV ON SCROLL ════════════════════════════════════════ */
+  const secs    = document.querySelectorAll('section[id]');
+  const navLnks = document.querySelectorAll('.nav-link');
+  const navInner = document.getElementById('nav-inner');
+
+  window.addEventListener('scroll',()=>{
+    // Scrolled class for navbar
+    navInner.classList.toggle('scrolled', window.scrollY > 40);
+
+    const scrollY = window.scrollY + 120;
+    secs.forEach(sec=>{
+      if(scrollY>=sec.offsetTop && scrollY<sec.offsetTop+sec.offsetHeight){
+        navLnks.forEach(l=>{
           l.classList.remove('active');
-          if (l.getAttribute('href') === '#' + sec.id) l.classList.add('active');
+          if(l.getAttribute('href')==='#'+sec.id) l.classList.add('active');
         });
       }
     });
   });
 
 
-  // ── 8. Mobile menu toggle ─────────────────────────────────────────────────
-  let menuOpen = false;
-  function toggleMenu() {
-    menuOpen = !menuOpen;
-    const m  = document.getElementById('mobile-menu');
-    const h1 = document.getElementById('h1');
-    const h2 = document.getElementById('h2');
-    const h3 = document.getElementById('h3');
-    if (menuOpen) {
+  /* ══ 9. MOBILE MENU TOGGLE ══════════════════════════════════════════ */
+  let menuOpen=false;
+  function toggleMenu(){
+    menuOpen=!menuOpen;
+    const m=document.getElementById('mob-menu');
+    const b1=document.getElementById('hb1'),b2=document.getElementById('hb2'),b3=document.getElementById('hb3');
+    if(menuOpen){
       m.classList.add('open');
-      h1.style.transform = 'rotate(45deg) translate(5px,5px)';
-      h2.style.opacity   = '0';
-      h3.style.transform = 'rotate(-45deg) translate(5px,-5px)';
+      b1.style.transform='rotate(45deg) translate(5px,5px)';
+      b2.style.opacity='0'; b2.style.transform='scaleX(0)';
+      b3.style.transform='rotate(-45deg) translate(5px,-5px)';
     } else {
       m.classList.remove('open');
-      h1.style.transform = '';
-      h2.style.opacity   = '1';
-      h3.style.transform = '';
+      b1.style.transform=''; b2.style.opacity='1'; b2.style.transform='';
+      b3.style.transform='';
     }
   }
-  function closeMenu() { if (menuOpen) toggleMenu(); }
+  function closeMenu(){ if(menuOpen) toggleMenu(); }
 
 
-  // ── 9. Form submit ─────────────────────────────────────────────────────────
-  function handleForm(e) {
+  /* ══ 10. FORM SUBMIT ════════════════════════════════════════════════ */
+  function handleForm(e){
     e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
-    btn.disabled  = true;
-    setTimeout(() => {
-      btn.innerHTML = '<i class="fa fa-check"></i> Sent!';
-      btn.style.background = 'linear-gradient(135deg,#15803d,#22c55e)';
-      document.getElementById('form-success').style.display = 'block';
+    const btn=document.getElementById('submit-btn');
+    btn.innerHTML='<i class="fa fa-spinner fa-spin"></i><span>sending...</span>';
+    btn.disabled=true;
+    setTimeout(()=>{
+      btn.innerHTML='<i class="fa fa-check"></i><span>sent! ✓</span>';
+      btn.style.background='linear-gradient(135deg,#15803d,#22c55e)';
+      document.getElementById('form-success').style.display='block';
       e.target.reset();
-    }, 1500);
+    },1600);
   }
 
 
-  // ── 10. Smooth scroll ─────────────────────────────────────────────────────
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  /* ══ 11. SMOOTH SCROLL ══════════════════════════════════════════════ */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
     });
   });
+
+
+  /* ══ 12. 3D TILT EFFECT ON CARDS ═══════════════════════════════════ */
+  document.querySelectorAll('.tilt-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-0.5;
+      const y=(e.clientY-r.top)/r.height-0.5;
+      card.style.transform=`perspective(600px) rotateY(${x*10}deg) rotateX(${-y*10}deg) scale(1.02)`;
+    });
+    card.addEventListener('mouseleave',()=>{ card.style.transform=''; });
+  });
+
+
+  /* ══ 13. CURSOR GLOW (DESKTOP) ══════════════════════════════════════ */
+  (function(){
+    const glow = document.createElement('div');
+    Object.assign(glow.style,{
+      position:'fixed',width:'300px',height:'300px',borderRadius:'50%',
+      background:'radial-gradient(circle,rgba(34,197,94,0.08) 0%,transparent 70%)',
+      pointerEvents:'none',zIndex:'0',transform:'translate(-50%,-50%)',
+      transition:'left 0.12s ease,top 0.12s ease',left:'-9999px',top:'-9999px'
+    });
+    document.body.appendChild(glow);
+    document.addEventListener('mousemove',e=>{
+      glow.style.left=e.clientX+'px';
+      glow.style.top=e.clientY+'px';
+    });
+  })();
 </script>
 
 </body>
