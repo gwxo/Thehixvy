@@ -6208,6 +6208,10 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 011 1v17l-7-4-7 4V4a1 1 0 011-1zm1 3v11l6-3.43L19 17V6H7z"></path></svg>
           <span>My List</span>
         </button>
+        <button class="nav-item" data-page="dev" onclick="navigateTo('dev')">
+      <i class="fas fa-code"></i>
+      <span>Dev</span>
+    </button>
         <button class="cine-side-item" data-page="history" onclick="navigateTo('history')">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3a9 9 0 109 9h-2a7 7 0 11-7-7v3l4-4-4-4v3z"></path></svg>
           <span>History</span>
@@ -10057,8 +10061,7 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
       </div>
     </div>
   </div>
-
-  <!-- Developer Page -->
+<!-- Developer Page -->
     <div class="page" id="devPage">
       <div class="settings-header">
         <h1 class="settings-title">Developer</h1>
@@ -10068,7 +10071,7 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
       <div class="settings-content">
         <div style="max-width: 800px; margin: 0 auto; width: 100%;">
           
-          <!-- Profile Card -->
+          <!-- Profile Card (Adaptable Design) -->
           <div class="settings-card" style="text-align: center; padding: 40px 20px; background: linear-gradient(180deg, var(--primary-glow), transparent), var(--bg-card); border-radius: 24px; margin-bottom: 24px; border: 1px solid var(--border-color);">
             <div style="width: 130px; height: 130px; margin: 0 auto 20px; border-radius: 50%; padding: 5px; background: var(--primary-gradient, var(--primary)); box-shadow: 0 10px 30px var(--primary-glow); display: inline-block; overflow: hidden;">
               <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOqQnDqFUVc7fzkxnw3NFGON-JqDiyrczcTnHXOjsSbeXz4AQdFlyWAn88uIFjIUCuEKZTKqzS7Nah0Kq5wHpro8hEDceZ9c0mpKwdszh6scf1FmwEBGgpKSaRCEEp2qx2Nj9W_hJZSkSpE9U2Dum9fBBMcB3wnQNydzQRrOWD4dFSOF7VtPmBOXrItOg/s1280/10101.jpg" 
@@ -10083,14 +10086,14 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
             <h3 class="settings-section-title">About Me</h3>
             <div class="settings-card" style="padding: 20px;">
               <p class="details-overview" style="margin: 0; font-size: 15px; line-height: 1.8; color: var(--text-secondary);">
-                I am a specialized Web and App Developer. <strong>TheHixvy</strong> is a project built to provide a premium, 
-                high-speed streaming interface that is fully adaptable. 
-                I focus on clean code, cinematic visuals, and a user-first experience.
+                Specialized Web and App Developer. I created <strong>TheHixvy</strong> to provide a premium, 
+                high-speed streaming interface that adapts to every user. 
+                Focusing on clean code and cinematic visual experiences.
               </p>
             </div>
           </div>
 
-          <!-- Social Links -->
+          <!-- Connect Section -->
           <div class="settings-section" style="margin-top: 24px;">
             <h3 class="settings-section-title">Connect</h3>
             <div class="settings-card">
@@ -10101,19 +10104,13 @@ body.white-mode .notif-item.unread { background: rgba(229,9,20,0.04); }
                 </div>
                 <i class="fas fa-external-link-alt settings-item-right"></i>
               </a>
-              <a href="https://thehixvy.pages.dev" class="settings-item">
-                <div class="settings-item-left">
-                  <div class="settings-item-icon" style="background: rgba(229, 9, 20, 0.1); color: var(--primary);"><i class="fas fa-globe"></i></div>
-                  <div class="settings-item-label">My Portfolio</div>
-                </div>
-                <i class="fas fa-external-link-alt settings-item-right"></i>
-              </a>
             </div>
           </div>
 
         </div>
       </div>
     </div>
+  
   <script>
     // ==================== SAFE STORAGE HELPER ====================
     const safeStorage = {
