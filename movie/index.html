@@ -1,13 +1,14 @@
 
   <head>
-    <!-- OneSignal Push Notifications -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(function(OneSignal) {
     OneSignal.init({
-      appId: "4ee49ca6-fd1b-4e9b-817f-e4e0d9817fc2", 
-      serviceWorkerPath: "OneSignalSDKWorker.js",
+      appId: "4ee49ca6-fd1b-4e9b-817f-e4e0d9817fc2",
+      // We point this to your original PWA sw.js which now contains OneSignal
+      serviceWorkerPath: "sw.js", 
       serviceWorkerParam: { scope: "/movie/" },
       allowLocalhostAsSecureOrigin: true,
     });
