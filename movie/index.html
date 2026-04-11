@@ -4108,4 +4108,1463 @@
   to { transform: rotate(360deg); }
 }
 </style>
+
+    <script id="cinepeace-final-js-fixes">
+  (function () {
+    const THEMES = {
+      red: { type: 'solid', label: 'Red', colors: ['#e50914', '#ff6b6b'] },
+      blue: { type: 'solid', label: 'Blue', colors: ['#0077ff', '#4cc9f0'] },
+      green: { type: 'solid', label: 'Green', colors: ['#00c853', '#64dd17'] },
+      purple: { type: 'solid', label: 'Purple', colors: ['#9c27b0', '#d500f9'] },
+      orange: { type: 'solid', label: 'Orange', colors: ['#ff5722', '#ff9800'] },
+      pink: { type: 'solid', label: 'Pink', colors: ['#e91e63', '#ff4d6d'] },
+      teal: { type: 'solid', label: 'Teal', colors: ['#00bcd4', '#4dd0e1'] },
+      indigo: { type: 'solid', label: 'Indigo', colors: ['#3f51b5', '#536dfe'] },
+      amber: { type: 'solid', label: 'Amber', colors: ['#ffb300', '#ffd54f'] },
+      lime: { type: 'solid', label: 'Lime', colors: ['#cddc39', '#aed581'] },
+      cyan: { type: 'solid', label: 'Cyan', colors: ['#18ffff', '#00e5ff'] },
+      rose: { type: 'solid', label: 'Rose', colors: ['#ff4d6d', '#ff8fab'] },
+      aurora: { type: 'gradient', label: 'Aurora', colors: ['#4facfe', '#00f2fe'] },
+      sunset: { type: 'gradient', label: 'Sunset', colors: ['#ff5f6d', '#ffc371'] },
+      midnight: { type: 'gradient', label: 'Midnight', colors: ['#232526', '#414345'] },
+      candy: { type: 'gradient', label: 'Candy', colors: ['#ff8a00', '#e52e71'] },
+      ocean: { type: 'gradient', label: 'Ocean', colors: ['#00c6ff', '#0072ff'] },
+      neon: { type: 'gradient', label: 'Neon', colors: ['#7f00ff', '#e100ff'] }
+    };
+
+    function rgbGlow(hex, alpha) {
+      const value = String(hex || '').replace('#', '');
+      if (value.length !== 6) return `rgba(229, 9, 20, ${alpha})`;
+      const r = parseInt(value.slice(0, 2), 16);
+      const g = parseInt(value.slice(2, 4), 16);
+      const b = parseInt(value.slice(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // applyTheme and renderThemeColors - use window versions if available, else define fallback
+    if (typeof window.applyTheme !== 'function') {
+      window.applyTheme = function(key) {
+        const t = THEMES[key] || THEMES.red;
+        const [start, end] = t.colors;
+        document.documentElement.style.setProperty('--primary', start);
+        document.documentElement.style.setProperty('--primary-hover', end);
+        document.documentElement.style.setProperty('--primary-glow', 'rgba(229,9,20,0.38)');
+        document.documentElement.style.setProperty('--primary-gradient', `linear-gradient(135deg, ${start}, ${end})`);
+        if (typeof state !== 'undefined') {
+          state.themeColor = key in THEMES ? key : 'red';
+          safeStorage.set('streamflix_theme', state.themeColor);
+        }
+      };
+    }
+    if (typeof window.renderThemeColors !== 'function') {
+      window.renderThemeColors = function() {
+        const container = document.getElementById('themeColors');
+        if (!container) return;
+        container.innerHTML = Object.entries(THEMES).map(([key, theme]) => {
+          const bg = theme.type === 'gradient'
+            ? `linear-gradient(135deg, ${theme.colors[0]}, ${theme.colors[1]})`
+            : theme.colors[0];
+          const active = (typeof state !== 'undefined' && state.themeColor === key) ? 'active' : '';
+          return `<button class="theme-color ${theme.type} ${active}" type="button" data-theme="${key}" title="${theme.label}" aria-label="${theme.label} theme" style="background:${bg}" onclick="setThemeColor('${key}')"></button>`;
+        }).join('');
+      };
+    }
+
+    window.setThemeColor = function (color) {
+      applyTheme(color);
+      renderThemeColors();
+      showToast('Theme updated!', 'success');
+    };
+
+    const __originalLoadSettings = window.loadSettings;
+    window.loadSettings = function () {
+      if (typeof __originalLoadSettings === 'function') {
+        __originalLoadSettings();
+      }
+      requestAnimationFrame(() => {
+        renderThemeColors();
+      });
+    };
+
+    const __originalOpenProfileModal = window.openProfileModal;
+    window.openProfileModal = function () {
+      if (typeof __originalOpenProfileModal === 'function') {
+        __originalOpenProfileModal();
+      }
+      requestAnimationFrame(() => document.getElementById('profileNameModalInput')?.focus());
+    };
+
+    window.closeProfileModal = function () {
+      const modal = document.getElementById('profileModal');
+      if (!modal) return;
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    };
+
+    window.triggerProfileImagePicker = function () {
+      document.getElementById('profileImageInput')?.click();
+    };
+
+    let profileTempObjectUrl = '';
+
+    window.handleProfileImageUpload = function (event) {
+      const file = event?.target?.files?.[0];
+      if (!file) return;
+
+      if (profileTempObjectUrl) {
+        URL.revokeObjectURL(profileTempObjectUrl);
+        profileTempObjectUrl = '';
+      }
+
+      profileTempObjectUrl = URL.createObjectURL(file);
+      state.profileAvatar = profileTempObjectUrl;
+      renderHeaderProfile();
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || '');
+        state.profileAvatar = result;
+        safeStorage.set('streamflix_profile_avatar', result);
+        renderHeaderProfile();
+        if (profileTempObjectUrl) {
+          URL.revokeObjectURL(profileTempObjectUrl);
+          profileTempObjectUrl = '';
+        }
+        showToast('Profile photo updated!', 'success');
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    };
+
+    window.saveProfileFromModal = function () {
+      const name = document.getElementById('profileNameModalInput')?.value || state.profileName || 'User';
+      const email = document.getElementById('profileEmailModalInput')?.value || '';
+      state.profileName = (name || 'User').trim() || 'User';
+      state.profileEmail = (email || '').trim();
+      safeStorage.set('streamflix_profile', state.profileName);
+      safeStorage.set('streamflix_profile_email', state.profileEmail);
+      syncProfileSettingsInputs();
+      renderHeaderProfile();
+      closeProfileModal();
+      showToast('Profile saved!', 'success');
+    };
+
+    window.clearAppCacheAndReset = async function () {
+      try {
+        try { sessionStorage.clear(); } catch (_) {}
+        const keys = Object.keys(localStorage);
+        keys.forEach((key) => safeStorage.remove(key));
+        if ('caches' in window && caches?.keys) {
+          const names = await caches.keys();
+          await Promise.all(names.map((name) => caches.delete(name)));
+        }
+        document.cookie.split(';').forEach((cookie) => {
+          const eq = cookie.indexOf('=');
+          const name = (eq > -1 ? cookie.slice(0, eq) : cookie).trim();
+          if (name) document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        });
+        showToast('Cache cleared. Reloading...', 'success');
+      } catch (error) {
+        console.error('Reset failed:', error);
+      } finally {
+        setTimeout(() => window.location.reload(), 450);
+      }
+    };
+
+    const __originalPlayItem = window.playItem;
+    window.playItem = function (id, type) {
+      if (typeof __originalPlayItem === 'function') {
+        __originalPlayItem(id, type);
+      }
+      requestAnimationFrame(() => {
+        document.querySelectorAll('#serverList button').forEach((btn) => {
+          btn.type = 'button';
+          btn.style.fontFamily = `'Bebas Neue', 'Inter', sans-serif`;
+          btn.style.letterSpacing = '1px';
+          btn.style.textTransform = 'uppercase';
+        });
+      });
+    };
+
+    const themeFromStorage = safeStorage.get('streamflix_theme') || state.themeColor || 'red';
+    applyTheme(themeFromStorage);
+    renderThemeColors();
+    renderHeaderProfile();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        renderThemeColors();
+        renderHeaderProfile();
+      }, { once: true });
+    }
+  })();
+  </script>
+
+
+<script id="cinepeace-player-gradient-footer-fixes">
+(function () {
+  const THEME_SET = {
+    red:      { type: 'solid',    label: 'Red',      colors: ['#e50914', '#ff6b6b'] },
+    blue:     { type: 'solid',    label: 'Blue',     colors: ['#0077ff', '#4cc9f0'] },
+    teal:     { type: 'gradient', label: 'Teal',     colors: ['#00bcd4', '#4dd0e1'] },
+    aurora:   { type: 'gradient', label: 'Aurora',   colors: ['#4facfe', '#00f2fe'] },
+    sunset:   { type: 'gradient', label: 'Sunset',   colors: ['#ff5f6d', '#ffc371'] },
+    midnight: { type: 'gradient', label: 'Midnight', colors: ['#232526', '#414345'] }
+  };
+
+  function hexToRgb(hex) {
+    const value = String(hex || '').replace('#', '');
+    if (value.length !== 6) return [229, 9, 20];
+    return [
+      parseInt(value.slice(0, 2), 16),
+      parseInt(value.slice(2, 4), 16),
+      parseInt(value.slice(4, 6), 16)
+    ];
+  }
+
+  function toRgba(hex, alpha) {
+    const [r, g, b] = hexToRgb(hex);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  function resolveTheme(key) {
+    return THEME_SET[key] || THEME_SET.red;
+  }
+
+  function applyTheme(key) {
+    const theme = resolveTheme(key);
+    const [start, end] = theme.colors;
+    const gradient = `linear-gradient(135deg, ${start}, ${end})`;
+
+    document.documentElement.style.setProperty('--primary', start);
+    document.documentElement.style.setProperty('--primary-hover', end);
+    document.documentElement.style.setProperty('--primary-glow', toRgba(start, 0.38));
+    document.documentElement.style.setProperty('--primary-gradient', gradient);
+    document.documentElement.style.setProperty('--accent-gradient', gradient);
+
+    if (typeof state !== 'undefined') {
+      state.themeColor = key in THEME_SET ? key : 'red';
+      try { safeStorage.set('streamflix_theme', state.themeColor); } catch (_) {}
+    }
+  }
+
+  function renderThemeColors() {
+    const container = document.getElementById('themeColors');
+    if (!container) return;
+
+    container.innerHTML = Object.entries(THEME_SET).map(([key, theme]) => {
+      const bg = theme.type === 'gradient'
+        ? `linear-gradient(135deg, ${theme.colors[0]}, ${theme.colors[1]})`
+        : theme.colors[0];
+      const active = (typeof state !== 'undefined' && state.themeColor === key) ? 'active' : '';
+      return `<button class="theme-color ${theme.type} ${active}" type="button" data-theme="${key}" title="${theme.label}" aria-label="${theme.label} theme" style="background:${bg}; background-image:${bg};" onclick="setThemeColor('${key}')"></button>`;
+    }).join('');
+  }
+
+  window.setThemeColor = function (color) {
+    applyTheme(color);
+    renderThemeColors();
+    if (typeof window.showToast === 'function') showToast('Theme updated!', 'success');
+  };
+
+  window.renderThemeColors = renderThemeColors;
+  window.applyTheme = applyTheme;
+
+  function setDetailsBannerState(stateName, text) {
+    const banner = document.getElementById('detailsBanner');
+    if (!banner) return;
+
+    banner.classList.remove('player-loading', 'player-ready');
+    if (stateName === 'loading') {
+      banner.classList.add('player-loading');
+      const label = document.getElementById('detailsPlayerLoaderText');
+      if (label && text) label.textContent = text;
+    } else if (stateName === 'ready') {
+      banner.classList.add('player-ready');
+    }
+
+    banner.dataset.playerState = stateName;
+  }
+
+  function bindInlinePlayerLoad() {
+    const iframe = document.getElementById('inlinePlayer');
+    if (!iframe || iframe.dataset.cineBound === '1') return;
+
+    iframe.dataset.cineBound = '1';
+    iframe.addEventListener('load', () => {
+      const banner = document.getElementById('detailsBanner');
+      if (!banner) return;
+      const started = Number(window.__cinePlayerLoadingStart || 0);
+      const elapsed = started ? Date.now() - started : 0;
+      const finish = () => setDetailsBannerState('ready');
+
+      if (elapsed < 650) {
+        window.setTimeout(finish, 650 - elapsed);
+      } else {
+        finish();
+      }
+    }, { passive: true });
+  }
+
+  window.playCurrentDetailServer = function () {
+    if (typeof state === 'undefined' || !state.currentItem) return;
+    const banner = document.getElementById('detailsBanner');
+    if (state.playerStarted) {
+      banner?.classList.add('player-started');
+      return;
+    }
+    state.playerStarted = true;
+    banner?.classList.add('player-started');
+    if (typeof window.playItem === 'function') {
+      window.playItem(state.currentItem.id, state.currentType || 'movie');
+    }
+  };
+
+  const __origOpenDetails = window.openDetails;
+  if (typeof __origOpenDetails === 'function') {
+    window.openDetails = async function (id, type = 'movie', pushState = true) {
+      setDetailsBannerState('loading', 'Loading details...');
+      try {
+        const result = __origOpenDetails(id, type, pushState);
+        if (result && typeof result.then === 'function') await result;
+      } finally {
+        window.setTimeout(() => {
+          if (document.getElementById('detailsBanner')) setDetailsBannerState('ready');
+        }, 250);
+      }
+    };
+  }
+
+  const __origPlayItem = window.playItem;
+  if (typeof __origPlayItem === 'function') {
+    window.playItem = function (id, type) {
+      bindInlinePlayerLoad();
+      window.__cinePlayerLoadingStart = Date.now();
+      setDetailsBannerState('loading', 'Server loading...');
+      const result = __origPlayItem(id, type);
+      window.setTimeout(() => {
+        const banner = document.getElementById('detailsBanner');
+        if (banner && banner.classList.contains('player-loading')) {
+          setDetailsBannerState('ready');
+        }
+      }, 1200);
+      return result;
+    };
+  }
+
+  const __origPlayTrailer = window.playTrailer;
+  if (typeof __origPlayTrailer === 'function') {
+    window.playTrailer = function (id, type) {
+      bindInlinePlayerLoad();
+      window.__cinePlayerLoadingStart = Date.now();
+      setDetailsBannerState('loading', 'Trailer loading...');
+      const result = __origPlayTrailer(id, type);
+      window.setTimeout(() => {
+        const banner = document.getElementById('detailsBanner');
+        if (banner && banner.classList.contains('player-loading')) {
+          setDetailsBannerState('ready');
+        }
+      }, 1200);
+      return result;
+    };
+  }
+
+  const __origResetPlayer = window.resetPlayer;
+  if (typeof __origResetPlayer === 'function') {
+    window.resetPlayer = function () {
+      const result = __origResetPlayer();
+      const banner = document.getElementById('detailsBanner');
+      if (banner) banner.classList.remove('player-loading', 'player-ready');
+      return result;
+    };
+  }
+
+  const __origShowDetailsLoading = window.showDetailsLoading;
+  if (typeof __origShowDetailsLoading === 'function') {
+    window.showDetailsLoading = function () {
+      setDetailsBannerState('loading', 'Loading content...');
+      return __origShowDetailsLoading();
+    };
+  }
+
+  const __origRenderDetails = window.renderDetails;
+  if (typeof __origRenderDetails === 'function') {
+    window.renderDetails = function (...args) {
+      const result = __origRenderDetails.apply(this, args);
+      window.requestAnimationFrame(() => setDetailsBannerState('ready'));
+      return result;
+    };
+  }
+
+  const __origClear = window.clearAppCacheAndReset;
+  if (typeof __origClear === 'function') {
+    window.clearAppCacheAndReset = async function () {
+      try {
+        await __origClear();
+      } catch (_) {
+        try {
+          try { localStorage.clear(); } catch(_) {}
+          sessionStorage.clear();
+        } catch (e) {}
+        location.reload();
+      }
+    };
+  }
+
+  const __origLoadSettings = window.loadSettings;
+  if (typeof __origLoadSettings === 'function') {
+    window.loadSettings = function () {
+      const result = __origLoadSettings();
+      window.requestAnimationFrame(() => {
+        renderThemeColors();
+      });
+      return result;
+    };
+  }
+
+  function refreshServerButtonFont() {
+    const buttons = document.querySelectorAll('#serverList button');
+    buttons.forEach((btn) => {
+      btn.style.fontFamily = "'Bebas Neue', 'Inter', sans-serif";
+      btn.style.letterSpacing = '1px';
+      btn.style.textTransform = 'uppercase';
+    });
+  }
+
+  const __origLoadHome = window.loadHomeContent;
+  if (typeof __origLoadHome === 'function') {
+    window.loadHomeContent = function () {
+      const result = __origLoadHome();
+      window.requestAnimationFrame(refreshServerButtonFont);
+      return result;
+    };
+  }
+
+  const __origSetSidebar = window.setSidebarState;
+  if (typeof __origSetSidebar === 'function') {
+    window.setSidebarState = function (...args) {
+      const result = __origSetSidebar.apply(this, args);
+      const btn = document.querySelector('.menu-toggle');
+      if (btn) btn.style.borderRadius = '14px';
+      return result;
+    };
+  }
+
+  applyTheme((typeof state !== 'undefined' && state.themeColor) || safeStorage.get('streamflix_theme') || 'red');
+  renderThemeColors();
+  bindInlinePlayerLoad();
+  refreshServerButtonFont();
+
+  document.addEventListener('click', (e) => {
+    if (e.target?.closest?.('#serverList button')) {
+      window.requestAnimationFrame(refreshServerButtonFont);
+    }
+  }, { passive: true });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderThemeColors();
+    refreshServerButtonFont();
+  }, { once: true });
+})();
+</script>
+
+
+<!-- ===== NO INTERNET OVERLAY ===== -->
+<div class="cine-system-overlay" id="cineNoInternet" role="alert" aria-live="assertive">
+  <div class="cso-icon-wrap">
+    <svg class="cso-wifi-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- slash line -->
+      <line x1="8" y1="8" x2="56" y2="56" stroke="#e50914" stroke-width="4" stroke-linecap="round"></line>
+      <!-- wifi arcs -->
+      <path class="wifi-arc" d="M10 28 C18 18 46 18 54 28" stroke="#e50914" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <path class="wifi-arc" d="M18 36 C22 30 42 30 46 36" stroke="#e50914" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <path class="wifi-arc" d="M26 44 C28 41 36 41 38 44" stroke="#e50914" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <!-- dot -->
+      <circle class="wifi-dot" cx="32" cy="52" r="3.5" fill="#e50914"></circle>
+    </svg>
+  </div>
+  <h2 class="cso-title">No Internet</h2>
+  <p class="cso-sub">Looks like you're offline. Check your connection and try again.</p>
+  <div>
+    <button class="cso-btn" onclick="cineRetryConnection()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4"></path>
+      </svg>
+      Retry
+    </button>
+  </div>
+</div>
+
+<!-- ===== OFFLINE BANNER (small top bar) ===== -->
+<div id="cineOfflineBanner">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+    <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+    <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+    <line x1="12" y1="20" x2="12.01" y2="20"></line>
+  </svg>
+  No internet connection
+</div>
+
+<!-- ===== 404 PAGE NOT FOUND OVERLAY ===== -->
+<div class="cine-system-overlay" id="cine404" role="alert">
+  <div class="cso-icon-wrap">
+    <span class="cso-star"></span>
+    <span class="cso-star"></span>
+    <span class="cso-star"></span>
+    <span class="cso-star"></span>
+    <span class="cso-404-text">404</span>
+  </div>
+  <h2 class="cso-title">Page Not Found</h2>
+  <p class="cso-sub">This content doesn't exist or was removed. Head back to discover more.</p>
+  <div>
+    <button class="cso-btn" onclick="cine404GoHome()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      Go Home
+    </button>
+  </div>
+</div>
+
+<!-- ===== AD BLOCKER OVERLAY ===== -->
+<div class="cine-system-overlay" id="cineAdBlock" role="alert">
+  <div class="cso-icon-wrap">
+    <svg class="cso-shield" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 4 L56 14 L56 34 C56 48 44 58 32 62 C20 58 8 48 8 34 L8 14 Z" fill="rgba(70,211,105,0.15)" stroke="#46d369" stroke-width="3"></path>
+      <text x="32" y="40" text-anchor="middle" font-size="22" fill="#46d369" font-weight="900">!</text>
+    </svg>
+  </div>
+  <h2 class="cso-title">Ad Blocker Detected</h2>
+  <p class="cso-sub">We noticed you're using an ad blocker. Our servers are free — please whitelist us to keep streaming. 💙</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
+    <button class="cso-btn" onclick="cineAdBlockDismiss()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      I've Whitelisted
+    </button>
+    <button class="cso-btn cso-btn-outline" onclick="cineAdBlockDismiss()">Continue Anyway</button>
+  </div>
+</div>
+
+
+<script id="cine-system-overlays-js">
+(function () {
+  'use strict';
+
+  /* ---- helpers ---- */
+  function showOverlay(id)  { document.getElementById(id)?.classList.add('active'); }
+  function hideOverlay(id)  { document.getElementById(id)?.classList.remove('active'); }
+  function isOverlay(id)    { return document.getElementById(id)?.classList.contains('active'); }
+
+  /* ================================================================
+     1.  NO INTERNET DETECTION
+  ================================================================ */
+  var _wasOffline = false;
+  var _firstLoad  = true;
+
+  function handleOnline() {
+    document.getElementById('cineOfflineBanner')?.classList.remove('show');
+    if (_wasOffline) {
+      hideOverlay('cineNoInternet');
+      document.body.classList.remove('no-scroll');
+      _wasOffline = false;
+      if (typeof window.showToast === 'function') {
+        window.showToast('Back online! 🎉', 'success');
+      }
+    }
+  }
+
+  function handleOffline() {
+    _wasOffline = true;
+    if (_firstLoad) {
+      /* first page load with no internet → full overlay */
+      showOverlay('cineNoInternet');
+      document.body.classList.add('no-scroll');
+    } else {
+      /* went offline mid-session → small top banner only */
+      document.getElementById('cineOfflineBanner')?.classList.add('show');
+    }
+  }
+
+  window.cineRetryConnection = function () {
+    if (navigator.onLine) {
+      handleOnline();
+    } else {
+      /* shake the icon to give feedback */
+      var icon = document.querySelector('#cineNoInternet .cso-wifi-icon');
+      if (icon) {
+        icon.style.animation = 'none';
+        setTimeout(function() {
+          icon.style.animation = '';
+        }, 50);
+      }
+      if (typeof window.showToast === 'function') {
+        window.showToast('Still offline… check your WiFi', 'error');
+      }
+    }
+  };
+
+  window.addEventListener('online',  handleOnline);
+  window.addEventListener('offline', handleOffline);
+
+  /* check on load */
+  document.addEventListener('DOMContentLoaded', function () {
+    _firstLoad = false;
+    if (!navigator.onLine) {
+      _wasOffline = true;
+      showOverlay('cineNoInternet');
+      document.body.classList.add('no-scroll');
+    }
+  });
+
+  /* ================================================================
+     2.  404 – show when navigateTo/openDetails fails
+         Exposed as window.cineShow404() so other code can call it
+  ================================================================ */
+  window.cineShow404 = function () {
+    hideOverlay('cineNoInternet');
+    showOverlay('cine404');
+    document.body.classList.add('no-scroll');
+  };
+
+  window.cine404GoHome = function () {
+    hideOverlay('cine404');
+    document.body.classList.remove('no-scroll');
+    if (typeof window.navigateTo === 'function') {
+      window.navigateTo('home');
+    }
+  };
+
+  /* ================================================================
+     3.  AD BLOCKER DETECTION
+         Strategy: try to load a tiny bait resource that ad-blockers
+         commonly block (ads.js path). If it fails → show overlay.
+         Only shown once per session.
+  ================================================================ */
+  window.cineAdBlockDismiss = function () {
+    hideOverlay('cineAdBlock');
+    document.body.classList.remove('no-scroll');
+    try { sessionStorage.setItem('cine_adblock_dismissed', '1'); } catch(_) {}
+  };
+
+  function detectAdBlocker() {
+    /* skip if already dismissed this session */
+    try {
+      if (sessionStorage.getItem('cine_adblock_dismissed')) return;
+    } catch(_) {}
+
+    var bait = document.createElement('div');
+    bait.className = 'ad-banner pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads banner-ad';
+    bait.style.cssText = 'position:absolute;width:1px;height:1px;top:-9999px;left:-9999px;pointer-events:none;';
+    document.body.appendChild(bait);
+
+    window.requestAnimationFrame(function () {
+      var blocked = false;
+      try {
+        blocked = (
+          bait.offsetParent === null ||
+          bait.offsetHeight === 0 ||
+          bait.offsetWidth  === 0 ||
+          bait.clientHeight === 0 ||
+          bait.clientWidth  === 0 ||
+          window.getComputedStyle(bait).display === 'none' ||
+          window.getComputedStyle(bait).visibility === 'hidden'
+        );
+      } catch (_) { blocked = true; }
+
+      document.body.removeChild(bait);
+
+      if (blocked) {
+        /* delay a bit so page loads first */
+        setTimeout(function () {
+          if (!isOverlay('cineNoInternet') && !isOverlay('cine404')) {
+            showOverlay('cineAdBlock');
+            document.body.classList.add('no-scroll');
+          }
+        }, 3500);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(detectAdBlocker, 1500);
+  });
+
+})();
+</script>
+
+
+<!-- ===== NOTIFICATION PANEL ===== -->
+<div class="notif-panel" id="notifPanel" role="dialog" aria-label="Notifications">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">🔔 Notifications</span>
+    <button class="notif-mark-read" onclick="notifMarkAllRead()">Mark all read</button>
+  </div>
+  <div class="notif-list" id="notifList"><div class="notif-item unread" style="animation-delay:0.00s" data-notif-id="n001" data-action-type="movie" data-action-id="550"><div class="notif-thumb notif-thumb-svg"><svg viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path><path d="M7 8l3 2-3 2V8zM14 10h3"></path></svg></div><div class="notif-body"><div class="notif-body-title">🎬 Worldwide All Movies! <span class="notif-tag" style="background:#46d36922;color:#46d369;border-color:#46d36944">NEW</span></div><div class="notif-body-text">Bollywood &amp; Hollywood titles just dropped. Check the trending section now.</div><div class="notif-body-time">01-04-26</div></div></div><div class="notif-item unread" style="animation-delay:0.06s" data-notif-id="n003" data-link="https://t.me/cinepeaceupdate"><div class="notif-thumb"><img src="https://i.ibb.co/sdhxKCqY/photo-2025-11-29-17-13-42-7578196749836091420.jpg" alt="" loading="lazy"></div><div class="notif-body"><div class="notif-body-title">📢 Join Our Telegram <span class="notif-tag" style="background:#00bcd422;color:#00bcd4;border-color:#00bcd444">INFO</span></div><div class="notif-body-text">Get instant movie alerts &amp; direct download links on our Telegram channel.</div><div class="notif-body-time">Yesterday</div></div></div></div>
+</div>
+
+
+<script id="cine-notif-preloader-js">
+(function() {
+'use strict';
+
+// ================================================================
+// NOTIFICATION SYSTEM (FULLY FIXED)
+// ================================================================
+
+var DEFAULT_NOTIFICATIONS = [
+  {
+    id: 'n001',
+    title: 'About Me!',
+    text: 'Im A web & App Developer as well as Medico.',
+    time: '01-04-26',
+    image: '',
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#e50914" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8l3 2-3 2V8zM14 10h3"/></svg>',
+    tag: 'NEW',
+    unread: true,
+    link: 'https://thehixvy.pages.dev',
+    action: null
+  },
+  {
+    id: 'n003',
+    title: 'Join Our Telegram',
+    text: 'Get instant movie alerts & direct download links on our Telegram channel.',
+    time: 'Yesterday',
+    image: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisSxziRExJb-nx0c7xAtEWDtZ8BYcOp-MknhS9B8gYae5B1J68z_ppRdTB9NFQ8y8BwYSkUrm9WK0Xo_W1uiPbqB-3WsYaV8QMDLIh6EZBwjZdGrxYyqXj5oIoYC-yI74gr7HbnsWznu4_L_M-kc6P5OjYUZYQ6tFRFfebiJJXWxlN3dMvnS_EHRtM4REK/s996/10324.png',
+    svg: '',
+    tag: 'INFO',
+    unread: true,
+    link: 'https://t.me/thehixvy',
+    action: null
+  }
+];
+
+function getReadIds() {
+  try {
+    var r = sessionStorage.getItem('cine_notif_read');
+    return r ? JSON.parse(r) : [];
+  } catch(_) { return []; }
+}
+
+function saveReadId(id) {
+  try {
+    var ids = getReadIds();
+    if (ids.indexOf(id) === -1) ids.push(id);
+    sessionStorage.setItem('cine_notif_read', JSON.stringify(ids));
+  } catch(_) {}
+}
+
+function loadNotifications() {
+  var readIds = getReadIds();
+  var base = (window.CINE_NOTIFICATIONS && window.CINE_NOTIFICATIONS.length)
+    ? window.CINE_NOTIFICATIONS
+    : DEFAULT_NOTIFICATIONS;
+  return base.map(function(n) {
+    var isRead = readIds.indexOf(n.id) !== -1;
+    return {
+      id: n.id || ('n' + Math.random()),
+      title: n.title || '',
+      text: n.text || '',
+      time: n.time || '',
+      image: n.image || '',
+      svg: n.svg || '',
+      tag: n.tag || '',
+      unread: isRead ? false : (n.unread !== false),
+      link: n.link || null,
+      action: n.action || null
+    };
+  });
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildThumbHtml(n) {
+  if (n.image) {
+    return '<div class="notif-thumb"><img src="' + escHtml(n.image) + '" alt="" loading="lazy"></div>';
+  }
+  if (n.svg) {
+    return '<div class="notif-thumb notif-thumb-svg">' + n.svg + '</div>';
+  }
+  return '<div class="notif-thumb notif-thumb-default"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22a2.4 2.4 0 002.4-2.4H9.6A2.4 2.4 0 0012 22zm7-6.2V11a7 7 0 10-14 0v4.8L3.5 17.3V18h17v-.7L19 15.8z"/></svg></div>';
+}
+
+function buildTagHtml(tag) {
+  if (!tag) return '';
+  var colors = {
+    'NEW':    '#46d369',
+    'UPDATE': '#f5c518',
+    'INFO':   '#00bcd4',
+    'ALERT':  '#e50914',
+    'NEWS':   '#9c27b0'
+  };
+  var color = colors[tag] || '#808080';
+  return '<span class="notif-tag" style="background:' + color + '22;color:' + color + ';border-color:' + color + '44">' + escHtml(tag) + '</span>';
+}
+
+function renderNotifications() {
+  var list  = document.getElementById('notifList');
+  var badge = document.getElementById('notifBadge');
+  if (!list) return;
+
+  var notifs = loadNotifications();
+  var unread = notifs.filter(function(n) { return n.unread; }).length;
+
+  if (badge) badge.classList.toggle('show', unread > 0);
+
+  if (!notifs.length) {
+    list.innerHTML = '<div class="notif-empty"><svg viewBox="0 0 24 24"><path d="M12 22a2.4 2.4 0 002.4-2.4H9.6A2.4 2.4 0 0012 22zm7-6.2V11a7 7 0 10-14 0v4.8L3.5 17.3V18h17v-.7L19 15.8z"/></svg>No notifications yet</div>';
+    return;
+  }
+
+  list.innerHTML = notifs.map(function(n, i) {
+    var delay = (i * 0.06).toFixed(2);
+    var unreadClass = n.unread ? ' unread' : '';
+    var thumb = buildThumbHtml(n);
+    var tag   = buildTagHtml(n.tag);
+
+    // ✅ লিংক এবং অ্যাকশন ডাটা সেট করা
+    var linkAttr = n.link ? 'data-link="' + escHtml(n.link) + '"' : '';
+    var actionTypeAttr = n.action && n.action.type ? 'data-action-type="' + escHtml(n.action.type) + '"' : '';
+    var actionIdAttr = n.action && n.action.id ? 'data-action-id="' + n.action.id + '"' : '';
+
+    return '<div class="notif-item' + unreadClass + '" style="animation-delay:' + delay + 's" data-notif-id="' + escHtml(n.id) + '" ' + linkAttr + ' ' + actionTypeAttr + ' ' + actionIdAttr + '>'
+      + thumb
+      + '<div class="notif-body">'
+      + '<div class="notif-body-title">' + escHtml(n.title) + ' ' + tag + '</div>'
+      + '<div class="notif-body-text">' + escHtml(n.text) + '</div>'
+      + '<div class="notif-body-time">' + escHtml(n.time) + '</div>'
+      + '</div></div>';
+  }).join('');
+
+  // ✅ ক্লিক হ্যান্ডলার
+  list.querySelectorAll('.notif-item[data-notif-id]').forEach(function(el) {
+    // পুরনো ইভেন্ট লিসেনার রিমুভ করার জন্য নতুন করে যোগ করা
+    var newEl = el.cloneNode(true);
+    el.parentNode.replaceChild(newEl, el);
+    
+    newEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var id = this.getAttribute('data-notif-id');
+      saveReadId(id);
+      this.classList.remove('unread');
+      
+      var stillUnread = document.querySelectorAll('.notif-item.unread').length;
+      if (badge) badge.classList.toggle('show', stillUnread > 0);
+
+      // 🚀 লিংকে নেভিগেট
+      var link = this.getAttribute('data-link');
+      if (link && link.trim()) {
+        window.open(link, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      
+      // 🚀 অ্যাকশনে নেভিগেট
+      var actionType = this.getAttribute('data-action-type');
+      var actionId = this.getAttribute('data-action-id');
+      if (actionType && actionId) {
+        if (typeof window.openDetails === 'function') {
+          window.openDetails(parseInt(actionId), actionType);
+        }
+        return;
+      }
+    });
+  });
+}
+
+window.toggleNotifPanel = function() {
+  var panel = document.getElementById('notifPanel');
+  if (!panel) return;
+  if (panel.classList.contains('open')) {
+    panel.classList.remove('open');
+  } else {
+    renderNotifications();
+    panel.classList.add('open');
+  }
+};
+
+window.notifMarkAllRead = function() {
+  loadNotifications().forEach(function(n) { saveReadId(n.id); });
+  renderNotifications();
+};
+
+// ✅ ক্লিক ইভেন্ট ব্লক করা (প্যানেলের বাইরে ক্লিক করলে বন্ধ)
+document.addEventListener('click', function(e) {
+  var panel = document.getElementById('notifPanel');
+  var btn   = document.getElementById('notifToggleBtn');
+  if (!panel || !panel.classList.contains('open')) return;
+  if (!panel.contains(e.target) && btn && !btn.contains(e.target)) {
+    panel.classList.remove('open');
+  }
+}, { passive: true });
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(renderNotifications, 900);
+});
+
+})();
+</script>
+
+
+<style id="cinebolt-final-fixes">
+  .movie-card .card-desc {
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .movie-card:hover .card-desc {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .details-banner.player-trailer .details-player-overlay,
+  .details-banner.player-trailer .details-player-play {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .details-banner.player-trailer .details-backdrop {
+    filter: brightness(0.75) saturate(1.02);
+    transform: scale(1.02);
+  }
+</style>
+
+
+<script id="cinebolt-final-runtime-fixes">
+(function () {
+  function escapeHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function getMediaType(item, fallback = 'movie') {
+    return item?.media_type || (item?.first_air_date ? 'tv' : fallback);
+  }
+
+  function getTitle(item) {
+    return item?.title || item?.name || 'Unknown';
+  }
+
+  function getYear(item) {
+    return String(item?.release_date || item?.first_air_date || '').split('-')[0];
+  }
+
+  function getRating(item) {
+    return item?.vote_average ? Number(item.vote_average).toFixed(1) : 'N/A';
+  }
+
+  function getOverview(item) {
+    return String(item?.overview || '').trim();
+  }
+
+  // Replace the card renderer so rows actually show synopsis text.
+  window.createMovieCard = function createMovieCard(item, type = 'poster', index = 0) {
+    const title = getTitle(item);
+    const imagePath = type === 'poster' ? item?.poster_path : (item?.backdrop_path || item?.poster_path);
+    const rating = getRating(item);
+    const year = getYear(item);
+    const mediaType = getMediaType(item);
+    const overview = getOverview(item);
+
+    return `
+      <div class="movie-card ${type}" onclick="openDetails(${item.id}, '${mediaType}')" style="animation-delay: ${index * 0.05}s">
+        <img src="${getImageUrl(imagePath, type === 'poster' ? 'w300' : 'w500')}" alt="${escapeHtml(title)}" loading="lazy">
+        <div class="card-badge"><i class="fas fa-star"></i> ${rating}</div>
+        <div class="card-play"><i class="fas fa-play"></i></div>
+        <div class="card-overlay">
+          <div class="card-title">${escapeHtml(title)}</div>
+          <div class="card-meta">
+            <span class="card-rating"><i class="fas fa-star"></i> ${rating}</span>
+            <span>${escapeHtml(year || 'N/A')}</span>
+          </div>
+          ${overview ? `<div class="card-desc">${escapeHtml(overview)}</div>` : ''}
+        </div>
+      </div>
+    `;
+  };
+
+  // Keep trailer mode separate from full movie playback.
+  const originalResetPlayer = window.resetPlayer;
+  window.resetPlayer = function () {
+    window.__cineTrailerMode = false;
+    const banner = document.getElementById('detailsBanner');
+    banner?.classList.remove('player-trailer');
+    return typeof originalResetPlayer === 'function' ? originalResetPlayer() : undefined;
+  };
+
+  const originalOpenDetails = window.openDetails;
+  if (typeof originalOpenDetails === 'function') {
+    window.openDetails = async function (id, type = 'movie', pushState = true) {
+      window.__cineTrailerMode = false;
+      document.getElementById('detailsBanner')?.classList.remove('player-trailer');
+      return await originalOpenDetails.call(this, id, type, pushState);
+    };
+  }
+
+  const originalPlayItem = window.playItem;
+  if (typeof originalPlayItem === 'function') {
+    window.playItem = function (id, type) {
+      window.__cineTrailerMode = false;
+      document.getElementById('detailsBanner')?.classList.remove('player-trailer');
+      return originalPlayItem.call(this, id, type);
+    };
+  }
+
+  const originalPlayTrailer = window.playTrailer;
+  if (typeof originalPlayTrailer === 'function') {
+    window.playTrailer = function (id, type) {
+      const result = originalPlayTrailer.call(this, id, type);
+      window.__cineTrailerMode = true;
+      document.getElementById('detailsBanner')?.classList.add('player-trailer');
+      return result;
+    };
+  }
+
+  const originalPlayCurrentDetailServer = window.playCurrentDetailServer;
+  window.playCurrentDetailServer = function () {
+    const banner = document.getElementById('detailsBanner');
+    if (window.__cineTrailerMode || banner?.classList.contains('player-trailer')) {
+      // Prevent accidental switch from trailer to full movie on the centered play button.
+      showToast?.('Trailer is playing. Use the main Play button to start the movie.', 'info');
+      return;
+    }
+
+    if (typeof originalPlayCurrentDetailServer === 'function') {
+      return originalPlayCurrentDetailServer();
+    }
+  };
+
+  // Make sure any later retries still use the fixed description renderer.
+  window.__cineboltFinalFixesApplied = true;
+})();
+</script>
+
+
+<script id="cinebolt-final-hardening">
+(function () {
+  const THEME_SET = {
+    red:     { type: 'solid',     label: 'Red',     colors: ['#e50914', '#ff6b6b'] },
+    blue:    { type: 'solid',     label: 'Blue',    colors: ['#0077ff', '#4cc9f0'] },
+    green:   { type: 'solid',     label: 'Green',   colors: ['#00c853', '#64dd17'] },
+    purple:  { type: 'solid',     label: 'Purple',  colors: ['#9c27b0', '#d500f9'] },
+    orange:  { type: 'solid',     label: 'Orange',  colors: ['#ff5722', '#ff9800'] },
+    pink:    { type: 'solid',     label: 'Pink',    colors: ['#e91e63', '#ff4d6d'] },
+    teal:    { type: 'solid',     label: 'Teal',    colors: ['#00bcd4', '#4dd0e1'] },
+    indigo:  { type: 'solid',     label: 'Indigo',  colors: ['#3f51b5', '#536dfe'] },
+    amber:   { type: 'solid',     label: 'Amber',   colors: ['#ffb300', '#ffd54f'] },
+    lime:    { type: 'solid',     label: 'Lime',    colors: ['#cddc39', '#aed581'] },
+    cyan:    { type: 'solid',     label: 'Cyan',    colors: ['#18ffff', '#00e5ff'] },
+    rose:    { type: 'solid',     label: 'Rose',    colors: ['#ff4d6d', '#ff8fab'] },
+    aurora:  { type: 'gradient',  label: 'Aurora',  colors: ['#4facfe', '#00f2fe'] },
+    sunset:  { type: 'gradient',  label: 'Sunset',  colors: ['#ff5f6d', '#ffc371'] },
+    midnight:{ type: 'gradient',  label: 'Midnight',colors: ['#232526', '#414345'] },
+    candy:   { type: 'gradient',  label: 'Candy',   colors: ['#ff8a00', '#e52e71'] },
+    ocean:   { type: 'gradient',  label: 'Ocean',   colors: ['#00c6ff', '#0072ff'] },
+    neon:    { type: 'gradient',  label: 'Neon',    colors: ['#7f00ff', '#e100ff'] }
+  };
+
+  const toRgba = (hex, alpha) => {
+    const value = String(hex || '').replace('#', '');
+    if (value.length !== 6) return `rgba(229, 9, 20, ${alpha})`;
+    const r = parseInt(value.slice(0, 2), 16);
+    const g = parseInt(value.slice(2, 4), 16);
+    const b = parseInt(value.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  const resolveTheme = (key) => THEME_SET[key] || THEME_SET.red;
+
+  window.applyTheme = function applyTheme(key) {
+    const themeKey = Object.prototype.hasOwnProperty.call(THEME_SET, key) ? key : 'red';
+    const theme = resolveTheme(themeKey);
+    const [start, end] = theme.colors;
+    const gradient = `linear-gradient(135deg, ${start}, ${end})`;
+
+    document.documentElement.style.setProperty('--primary', start);
+    document.documentElement.style.setProperty('--primary-hover', end);
+    document.documentElement.style.setProperty('--primary-glow', toRgba(start, 0.38));
+    document.documentElement.style.setProperty('--primary-gradient', gradient);
+    document.documentElement.style.setProperty('--accent-gradient', gradient);
+
+    if (typeof state !== 'undefined') {
+      state.themeColor = themeKey;
+      try { safeStorage.set('streamflix_theme', themeKey); } catch (_) {}
+    }
+  };
+
+  window.renderThemeColors = function renderThemeColors() {
+    const container = document.getElementById('themeColors');
+    if (!container) return;
+
+    container.innerHTML = Object.entries(THEME_SET).map(([key, theme]) => {
+      const bg = theme.type === 'gradient'
+        ? `linear-gradient(135deg, ${theme.colors[0]}, ${theme.colors[1]})`
+        : theme.colors[0];
+      const active = (typeof state !== 'undefined' && state.themeColor === key) ? 'active' : '';
+      return `<button class="theme-color ${theme.type} ${active}" type="button" data-theme="${key}" title="${theme.label}" aria-label="${theme.label} theme" style="background:${bg}; background-image:${bg};" onclick="setThemeColor('${key}')"></button>`;
+    }).join('');
+  };
+
+  window.setThemeColor = function setThemeColor(color) {
+    window.applyTheme(color);
+    window.renderThemeColors();
+    if (typeof window.showToast === 'function') showToast('Theme updated!', 'success');
+  };
+
+  const originalLoadSettings = window.loadSettings;
+  if (typeof originalLoadSettings === 'function') {
+    window.loadSettings = function (...args) {
+      const result = originalLoadSettings.apply(this, args);
+      window.requestAnimationFrame(() => window.renderThemeColors());
+      return result;
+    };
+  }
+
+  const originalLoadHomeContent = window.loadHomeContent;
+  if (typeof originalLoadHomeContent === 'function') {
+    let homeLock = null;
+    window.loadHomeContent = function (...args) {
+      if (homeLock) return homeLock;
+      const call = Promise.resolve().then(() => originalLoadHomeContent.apply(this, args));
+      homeLock = call.finally(() => {
+        window.setTimeout(() => {
+          if (homeLock === call) homeLock = null;
+        }, 250);
+      });
+      window.requestAnimationFrame(() => {
+        document.querySelectorAll('#serverList button').forEach((btn) => {
+          btn.style.fontFamily = "'Bebas Neue', 'Inter', sans-serif";
+          btn.style.letterSpacing = '1px';
+          btn.style.textTransform = 'uppercase';
+        });
+      });
+      return homeLock;
+    };
+  }
+
+  const originalLoadBookmarks = window.loadBookmarks;
+  window.loadBookmarks = function () {
+    const grid = document.getElementById('bookmarksGrid');
+    if (!grid) return typeof originalLoadBookmarks === 'function' ? originalLoadBookmarks() : undefined;
+
+    const items = Array.isArray(state?.bookmarks) ? state.bookmarks : [];
+    if (!items.length) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <i class="fas fa-bookmark"></i>
+          <h3>Your list is empty</h3>
+          <p>Save movies and TV shows to watch later</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = items.map((item, i) => {
+      const safeType = item.type || item.media_type || 'movie';
+      const normalized = {
+        ...item,
+        media_type: safeType,
+        title: item.title || item.name || 'Untitled',
+        name: item.name || item.title || 'Untitled'
+      };
+      return window.createMovieCard ? window.createMovieCard(normalized, 'poster', i) : `
+        <div class="search-card" onclick="openDetails(${item.id}, '${safeType}')" style="animation-delay: ${i * 0.05}s">
+          <img src="${window.getImageUrl ? window.getImageUrl(item.poster_path, 'w300') : ''}" alt="${(item.title || item.name || 'Untitled').replace(/[&<>\"']/g, '')}">
+        </div>
+      `;
+    }).join('');
+  };
+
+  const originalShareItem = window.shareItem;
+  window.shareItem = async function (id, type, title) {
+    const base = window.location.origin + window.location.pathname;
+    const url = `${base}#/${type}/${id}`;
+    const payload = {
+      title: `${title} - CINEBOLT`,
+      text: `Check out ${title} on CINEBOLT!`,
+      url
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(payload);
+        return;
+      } catch (error) {
+        if (error?.name !== 'AbortError') {
+          if (typeof copyToClipboard === 'function') copyToClipboard(url);
+          return;
+        }
+        return;
+      }
+    }
+
+    if (typeof copyToClipboard === 'function') copyToClipboard(url);
+    else if (originalShareItem && originalShareItem !== window.shareItem) return originalShareItem(id, type, title);
+  };
+
+  window.getImageUrl = function getImageUrl(path, size = 'w500') {
+    if (!path) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#141414"/>
+              <stop offset="100%" stop-color="#222222"/>
+            </linearGradient>
+          </defs>
+          <rect width="300" height="450" fill="url(#g)"/>
+          <rect x="24" y="24" width="252" height="402" rx="18" fill="#1a1a1a" stroke="#2b2b2b"/>
+          <circle cx="150" cy="182" r="42" fill="#2b2b2b"/>
+          <path d="M120 246c16-20 44-20 60 0" fill="none" stroke="#3b3b3b" stroke-width="10" stroke-linecap="round"/>
+          <text x="150" y="340" text-anchor="middle" fill="#7a7a7a" font-family="Arial, sans-serif" font-size="18">No Image</text>
+        </svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+    return `${CONFIG.IMG_BASE}/${size}${path}`;
+  };
+
+  const originalDownloadContent = window.downloadContent;
+  window.downloadContent = function (serverIndex) {
+    if (!state.currentItem) {
+      showToast?.('No content selected', 'error');
+      return;
+    }
+
+    const { id, type } = state.currentItem;
+    const server = CONFIG.DOWNLOAD_SERVERS?.[serverIndex] || CONFIG.DOWNLOAD_SERVERS?.[0];
+    if (!server) {
+      showToast?.('No download server available', 'error');
+      return;
+    }
+
+    const url = type === 'tv'
+      ? `${server.base}/tv/${id}/${state.selectedSeason}/${state.selectedEpisode}`
+      : `${server.base}/movie/${id}`;
+
+    const newTab = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!newTab) window.location.href = url;
+    showToast?.('Opening download server...', 'info');
+  };
+
+  const originalPlayItem = window.playItem;
+  if (typeof originalPlayItem === 'function') {
+    window.playItem = function (id, type) {
+      window.__cineTrailerMode = false;
+      document.getElementById('detailsBanner')?.classList.remove('player-trailer');
+      return originalPlayItem.call(this, id, type);
+    };
+  }
+
+  const originalPlayTrailer = window.playTrailer;
+  if (typeof originalPlayTrailer === 'function') {
+    window.playTrailer = function (id, type) {
+      const result = originalPlayTrailer.call(this, id, type);
+      window.__cineTrailerMode = true;
+      document.getElementById('detailsBanner')?.classList.add('player-trailer');
+      if (typeof state !== 'undefined') state.playerStarted = false;
+      return result;
+    };
+  }
+
+  const originalPlayCurrentDetailServer = window.playCurrentDetailServer;
+  window.playCurrentDetailServer = function () {
+    const banner = document.getElementById('detailsBanner');
+    if (window.__cineTrailerMode || banner?.classList.contains('player-trailer')) {
+      showToast?.('Trailer is playing. Use the main Play button to start the movie.', 'info');
+      return;
+    }
+    return typeof originalPlayCurrentDetailServer === 'function'
+      ? originalPlayCurrentDetailServer.call(this)
+      : undefined;
+  };
+</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then((registration) => {
+            console.log('PWA ServiceWorker registered successfully!');
+          })
+          .catch((error) => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+  </script>
+  <!-- PWA Install Popup -->
+  <div id="pwaInstallPopup" class="pwa-popup">
+    <div class="pwa-content">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyKs_SvvTb8wWoP8NzjhFxD012HCU9CHKTBUc5LrfClHw1oSFWq5O_s6d8VouZO92-3iSNB0V8AUnzQkBfW7_RjThOykYuWAUH7WYMmbN5pkUAGx9KpW7rkPPGvkFrjyd5RoGWsSx9LzVl03XMwj-dDgS1bfEolj2_VFBI7Ji5lw9cCuGVpt_TSedFO979/s1024/10373.png" class="pwa-logo" alt="hixvyLogo">
+      <div class="pwa-text">
+        <h4>Install HixvyMovie</h4>
+        <p>Add our app to your home screen for full-screen streaming, offline access, and a faster experience.</p>
+      </div>
+    </div>
+    <div class="pwa-actions">
+      <button class="pwa-btn pwa-btn-cancel" onclick="closePwaPopup()">Not Now</button>
+      <button class="pwa-btn pwa-btn-install" onclick="installPwaApp()">Install App</button>
+    </div>
+  </div>
+
+  <!-- PWA Install Logic -->
+  <!-- PWA Install Logic -->
+  <script>
+    let deferredPrompt;
+
+    // 1. Catch the browser's hidden install prompt
+    // This event ONLY fires if the user HAS NOT installed the app yet.
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome from showing the default mini-infobar
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+      
+      // 👉 INTEGRATION: Show the "Install App" button in the sidebar
+      const sidebarBtn = document.getElementById('installPwaSidebarBtn');
+      if (sidebarBtn) sidebarBtn.style.display = 'flex';
+
+      // Wait 3 seconds so the preloader animation can finish, then show popup
+      setTimeout(() => {
+        // Double check they aren't already running the app in standalone mode
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+          const popup = document.getElementById('pwaInstallPopup');
+          if (popup) popup.classList.add('show');
+        }
+      }, 3000);
+    });
+
+    function closePwaPopup() {
+      // Hide popup. Because there is NO local storage saved, 
+      // if they refresh the page, it will pop up again.
+      const popup = document.getElementById('pwaInstallPopup');
+      if (popup) popup.classList.remove('show');
+    }
+
+    async function installPwaApp() {
+      if (deferredPrompt) {
+        // Show the browser's native install prompt
+        deferredPrompt.prompt();
+        
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('User installed the PWA');
+          
+          // 👉 INTEGRATION: Hide the sidebar button because it's now installed
+          const sidebarBtn = document.getElementById('installPwaSidebarBtn');
+          if (sidebarBtn) sidebarBtn.style.display = 'none';
+        }
+        
+        // We've used the prompt, and can't use it again, throw it away
+        deferredPrompt = null;
+      }
+      // Hide popup
+      closePwaPopup();
+    }
+
+    // If the user successfully installs the app via browser menu or our buttons
+    window.addEventListener('appinstalled', () => {
+      const popup = document.getElementById('pwaInstallPopup');
+      if (popup) popup.classList.remove('show');
+      
+      // 👉 INTEGRATION: Hide the sidebar button
+      const sidebarBtn = document.getElementById('installPwaSidebarBtn');
+      if (sidebarBtn) sidebarBtn.style.display = 'none';
+
+      deferredPrompt = null;
+    });
+  </script>
+
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "84f8583f0582477fbf8406581afdbb9d"}'></script><!-- End Cloudflare Web Analytics -->
+
+<!-- ============================================== -->
+<!-- FAKE BLOG JAVASCRIPT LOGIC ADDED HERE          -->
+<!-- ============================================== -->
+<script id="stealth-blog-logic">
+(function() {
+    // === 🛑 SET YOUR SECRET PASSWORD HERE 🛑 ===
+    const SECRET_PASSWORD = "admin"; 
+    // ============================================
+
+    const originalTitle = document.title;
+
+    window.checkSecretPassword = function() {
+        const inputVal = document.getElementById('blogSecretInput').value.trim();
+        
+        if (inputVal === SECRET_PASSWORD) {
+            // Correct password: Save to local storage forever and unlock
+            localStorage.setItem('hixvy_stealth_unlocked', 'true');
+            unlockStreamingApp();
+        } else if (inputVal !== "") {
+            // Wrong password: Act like a normal blog search
+            alert('No articles found for: "' + inputVal + '". Try searching for "Deforestation" or "Climate".');
+            document.getElementById('blogSecretInput').value = "";
+        }
+    };
+
+    // Allow pressing "Enter" on the keyboard in the search box
+    document.getElementById('blogSecretInput')?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            checkSecretPassword();
+        }
+    });
+
+    function unlockStreamingApp() {
+        // Remove the lock class to show the movie site
+        document.body.classList.remove('app-locked');
+        document.title = originalTitle || "The Hixvy";
+        
+        // Play the cinematic loading animation so it looks awesome when unlocked
+        const loader = document.getElementById('loadingOverlay');
+        if(loader) {
+            loader.style.opacity = '1';
+            loader.style.visibility = 'visible';
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    // Allow scrolling in the movie app again
+                    document.body.classList.remove('no-scroll'); 
+                }, 450);
+            }, 1500);
+        }
+    }
+
+    function lockApp() {
+        // Add the lock class to hide the movie site and show the blog
+        document.body.classList.add('app-locked');
+        document.title = "EcoNature | The Vital Role of Trees"; // Fake title for browser tab
+    }
+
+    // CHECK STATE IMMEDIATELY ON LOAD
+    document.addEventListener("DOMContentLoaded", function() {
+        const isUnlocked = localStorage.getItem('hixvy_stealth_unlocked') === 'true';
+        if (!isUnlocked) {
+            lockApp(); // Hide movies, show blog
+        } else {
+            document.body.classList.remove('app-locked'); // Keep movies visible
+        }
+    });
+})();
+</script>
+<!-- ============================================== -->
   
