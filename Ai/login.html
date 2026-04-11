@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - The Hixvy AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark BG */
+            background-image: radial-gradient(circle at top right, rgba(12, 74, 110, 0.5), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(109, 40, 217, 0.3), transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .form-input {
+            background-color: rgba(31, 41, 55, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <div class="form-container w-full max-w-md p-8 space-y-6 rounded-2xl shadow-2xl">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold tracking-tight text-white">The Hixvy AI</h1>
+            <p class="mt-2 text-sm text-gray-400">Sign in to unlock all features</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label for="loginEmail" class="text-sm font-medium text-gray-300">Email</label>
+                <input id="loginEmail" type="email" required class="form-input w-full px-4 py-2.5 mt-1 text-sm rounded-lg focus:ring-2 focus:ring-violet-500 focus:outline-none transition">
+            </div>
+            <div>
+                <label for="loginPassword" class="text-sm font-medium text-gray-300">Password</label>
+                <input id="loginPassword" type="password" required class="form-input w-full px-4 py-2.5 mt-1 text-sm rounded-lg focus:ring-2 focus:ring-violet-500 focus:outline-none transition">
+            </div>
+            <button type="submit" class="w-full py-3 font-semibold text-white bg-violet-600 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-violet-500 transition-transform hover:scale-105">Login</button>
+        </form>
+
+        <div class="text-center text-sm text-gray-400">
+            <p>Don't have an account? <a href="#" id="showSignup" class="font-medium text-violet-400 hover:underline">Sign up</a></p>
+             <p class="mt-4">Or <a href="index.html" id="guestLogin" class="font-medium text-gray-300 hover:underline">Continue as Guest</a> (5 message limit)</p>
+        </div>
+
+        <!-- Signup Form (hidden by default) -->
+        <form id="signupForm" class="hidden space-y-4">
+            <div>
+                <label for="signupEmail" class="text-sm font-medium text-gray-300">Email</label>
+                <input id="signupEmail" type="email" required class="form-input w-full px-4 py-2.5 mt-1 text-sm rounded-lg focus:ring-2 focus:ring-violet-500 focus:outline-none transition">
+            </div>
+            <div>
+                <label for="signupPassword" class="text-sm font-medium text-gray-300">Password</label>
+                <input id="signupPassword" type="password" required class="form-input w-full px-4 py-2.5 mt-1 text-sm rounded-lg focus:ring-2 focus:ring-violet-500 focus:outline-none transition">
+            </div>
+            <button type="submit" class="w-full py-3 font-semibold text-white bg-violet-600 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-violet-500 transition-transform hover:scale-105">Create Account</button>
+             <div class="text-center text-sm text-gray-400">
+                <p>Already have an account? <a href="#" id="showLogin" class="font-medium text-violet-400 hover:underline">Log in</a></p>
+            </div>
+        </form>
+
+        <p id="authError" class="text-center text-sm text-red-400 mt-2"></p>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { firebaseConfig } from './firebase-config.js';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const authError = document.getElementById('authError');
+        
+        // Form Switching Logic
+        document.getElementById('showSignup').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+        });
+
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+        // Event Listeners
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = 'index.html';
+            } catch (error) {
+                authError.textContent = error.message;
+            }
+        });
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                window.location.href = 'index.html';
+            } catch (error) {
+                authError.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>
