@@ -107,18 +107,15 @@
 
   <!-- CINEMATIC PRELOADER (Highest Z-index) -->
   <div id="preloader" class="fixed inset-0 z-[9999] bg-black flex flex-col justify-end overflow-hidden">
-    <!-- Fullscreen GIF with Zoom -->
     <div class="absolute inset-0 z-0 bg-[url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTGoumblEEHpVEbKLGXCA1qkYlgw72M9OGswh9ivDLQOkNHMYrPjDHp0RBy5XOOaEeSCHWBvBh-niWAYxsNtNgu8l2_X3AtaXU7hoIToGJ5oT18RahWyhnSKy2ysug_FhF4QySWIa4kFDb3lyiCeJed3WHP7Whyphenhyphen_1p2aaQa-M2UzL3F9oV_hmXC_tIygoB/s480/11088.gif')] bg-cover bg-center bg-no-repeat animate-ken-burns"></div>
-    <!-- Fade to Black Gradient Overlay -->
     <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-black/60 to-black"></div>
-    <!-- Logo Content -->
     <div class="relative z-20 flex flex-col items-center pb-20 animate-slide-up">
       <h1 class="text-4xl md:text-6xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary tracking-widest neon-text drop-shadow-[0_0_30px_rgba(255,46,147,0.8)]">TheHixvy Creation</h1>
       <p class="text-white text-sm font-bold tracking-[0.4em] mt-4 uppercase border-t border-white/20 pt-3 px-10 drop-shadow-md">Gw Team</p>
     </div>
   </div>
 
-  <!-- CONSENT DISCLAIMER MODAL (Just below preloader) -->
+  <!-- CONSENT DISCLAIMER MODAL -->
   <div id="consentModal" class="fixed inset-0 z-[9998] bg-black/90 backdrop-blur-sm hidden items-center justify-center transition-opacity duration-500 opacity-0">
     <div id="consentBox" class="glass-card max-w-lg w-full mx-4 rounded-3xl p-8 border border-white/10 shadow-[0_20px_60px_rgba(255,46,147,0.2)] transform scale-95 transition-all duration-500">
       <div class="w-16 h-16 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(255,46,147,0.4)]">
@@ -175,7 +172,6 @@
       </nav>
       
       <div class="flex items-center gap-2 md:gap-4 flex-1 justify-end">
-        <!-- Desktop Search Input -->
         <div class="hidden lg:block relative max-w-sm w-full group">
           <input type="text" id="searchInput" placeholder="Search anime series & movies..." class="w-full bg-black/40 border border-white/10 rounded-full py-2 px-4 pl-10 focus:outline-none focus:border-primary focus:bg-black/60 transition text-sm relative z-[61]">
           <svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors z-[61]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -225,7 +221,6 @@
       </a>
     </div>
 
-    <!-- Power Footer -->
     <div class="p-4 border-t border-white/5 flex items-center gap-3 bg-black/40 shrink-0">
       <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOUbCZt2C0H9t4H1wRvLagrlCbxvm_noKw8HuzksaWbeo0gYxp2ZMVoYb72TonQ4eA8zvZ2Sy6oChYPcskI7e1f0T9vJc3BWAHScMqj_g45fXgqVclf7nHWqTdFsnpHHjBoQJQ7Y7KVTZEy_t6q2E6uWPPJHif2vVvB16Pjn6hzefftH1va5cI-iU8LJv4/s320/11086.png" class="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(255,46,147,0.5)] animate-float">
       <div>
@@ -291,6 +286,7 @@
         </div>
       </section>
 
+      <!-- FULL RESPONSIVE HOME FOOTER -->
       <footer class="w-full border-t border-white/5 bg-[#08080c] py-10 mt-6 relative overflow-hidden">
         <div class="max-w-[1600px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
             <div class="flex flex-col md:flex-row items-center gap-6">
@@ -357,7 +353,7 @@
           <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg> Go Back
         </button>
         
-        <!-- PLAYER (Highest Z-index) -->
+        <!-- PLAYER -->
         <div class="glass-card rounded-2xl overflow-hidden mb-10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 relative z-[40]">
           <div id="playerContainer" class="relative aspect-video w-full bg-black flex items-center justify-center">
             <iframe id="videoFrame" class="absolute inset-0 w-full h-full border-0 hidden" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
@@ -376,7 +372,6 @@
                 <svg class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> SERVERS
               </div>
               <div class="flex flex-wrap gap-2 overflow-x-auto scrollbar-hide pb-1" id="serverButtons">
-                <!-- Exact Requested Servers & Names -->
                 <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Gw Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> 4k Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg> Vidify</button>
@@ -622,50 +617,6 @@
       toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-4'); setTimeout(() => toast.classList.add('hidden'), 400); }, 3000);
     };
 
-    // INIT PRELOADER & MODAL LOGIC
-    window.addEventListener('load', () => { 
-      setTimeout(() => {
-        $('#preloader').classList.add('hidden-loader'); 
-        
-        // Show Consent Modal if not accepted
-        if (!localStorage.getItem('animeXConsent')) {
-          setTimeout(() => {
-            const modal = $('#consentModal');
-            const box = $('#consentBox');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            // Trigger animation
-            requestAnimationFrame(() => {
-              modal.classList.remove('opacity-0');
-              box.classList.remove('scale-95');
-            });
-          }, 300);
-        }
-      }, 2500); 
-    });
-
-    // CONSENT MODAL LOGIC
-    $('#consentCheck').addEventListener('change', (e) => {
-      const btn = $('#consentBtn');
-      if(e.target.checked) {
-        btn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-      } else {
-        btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-      }
-    });
-
-    $('#consentBtn').addEventListener('click', () => {
-      localStorage.setItem('animeXConsent', 'true');
-      const modal = $('#consentModal');
-      const box = $('#consentBox');
-      modal.classList.add('opacity-0');
-      box.classList.add('scale-95');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }, 500);
-    });
-
     // AUTH
     const appAuth = {
       mode: 'login', isDummy: !window.firebase || !firebase.apps.length, user: null,
@@ -726,7 +677,7 @@
       async loadGenre(data) {
         $('#genreTitle').textContent = data.name + ' Anime'; const list = $('#genreList');
         list.innerHTML = Array(12).fill(`<div class="skeleton rounded-xl w-full poster-aspect"></div>`).join('');
-        try { const res = await tmdb.fetch('/discover/tv', { with_genres: `16,${data.id}`, with_original_language: 'ja', sort_by: 'popularity.desc' }); list.innerHTML = res.results.filter(a => a.poster_path).map(a => renderCard(a)).join(''); } catch(e) { list.innerHTML = '<p class="text-red-500 col-span-full">Failed to load genre.</p>'; }
+        try { const res = await tmdb.fetch('/discover/tv', { with_genres: `16,${data.id}`, with_original_language: 'ja', sort_by: 'popularity.desc' }); res.results.forEach(m => m.media_type = 'tv'); list.innerHTML = res.results.filter(a => a.poster_path).map(a => renderCard(a)).join(''); } catch(e) { list.innerHTML = '<p class="text-red-500 col-span-full">Failed to load genre.</p>'; }
       },
 
       async loadDetails(reqData) {
@@ -771,9 +722,6 @@
               } catch(e) { epGrid.innerHTML = `<p class="text-red-400 text-sm">Failed to load episodes</p>`; }
             };
             $('#seasonSelect').onchange = (e) => loadEpisodes(e.target.value); if($('#seasonSelect').options.length) loadEpisodes($('#seasonSelect').options[0].value);
-          } else {
-             // Ensure episode section is strictly hidden for movies
-             $('#episodeSection').classList.add('hidden');
           }
 
           if (anime.credits?.cast) {
@@ -797,10 +745,9 @@
           const addHist = () => { this.addToHistory({id, title:titleText, media_type:type, poster_path:anime.poster_path, first_air_date:yearText}); showToast('Added to watch list!'); };
           if($('#addToHistoryBtn')) $('#addToHistoryBtn').onclick = addHist; if($('#addToHistoryBtnMobile')) $('#addToHistoryBtnMobile').onclick = addHist;
 
-        } catch (e) { titleEls.forEach(el => { if(el) el.textContent = 'API Error'; }); showToast('Failed to load details', 'error'); }
+        } catch (e) { console.error(e); titleEls.forEach(el => { if(el) el.textContent = 'API Error'; }); showToast('Failed to load details', 'error'); }
       },
       
-      // FIXED EXACT PIEXE MOVIE / TV LOGIC
       loadPlayer(id, type, season = 1, episode = 1, server = '1') {
         const iframe = $('#videoFrame'); let url = '';
         switch(server) {
@@ -849,7 +796,7 @@
       }
     };
 
-    // TMDB Engine (UPDATED TO MIX ANIME SERIES & MOVIES)
+    // TMDB Engine (Fixed movie fetching and types)
     const tmdb = {
       async fetch(endpoint, params = {}) {
         const url = new URL(`${TMDB_BASE}${endpoint}`); url.searchParams.append('api_key', TMDB_API_KEY);
@@ -857,35 +804,32 @@
         const res = await fetch(url); if (!res.ok) throw new Error(`TMDB Error`); return res.json();
       },
       async getTrendingAnime() { 
-        // Fetches both trending series and movies, filters them to Japanese Animation
         const data = await this.fetch('/trending/all/day', { language: 'en-US' }); 
         data.results = data.results.filter(a => ['tv', 'movie'].includes(a.media_type) && (a.original_language === 'ja' || a.genre_ids?.includes(16)));
         return data;
       },
       async getPopularAnime() { 
-        // specifically targets Anime Movies
         const data = await this.fetch('/discover/movie', { with_genres: '16', with_original_language: 'ja', sort_by: 'popularity.desc', page: 1 }); 
         data.results.forEach(m => m.media_type = 'movie');
         return data;
       },
       async getTopRatedAnime() { 
-        const data = await this.fetch('/discover/tv', { with_genres: '16', with_original_language: 'ja', sort_by: 'vote_average.desc', 'vote_count.gte': 1000, page: 1 }); 
+        const data = await this.fetch('/discover/tv', { with_genres: '16', with_original_language: 'ja', sort_by: 'vote_average.desc', 'vote_count.gte': 500, page: 1 }); 
         data.results.forEach(m => m.media_type = 'tv');
         return data;
       },
       async searchAnime(query) { 
         const data = await this.fetch('/search/multi', { query, include_adult: false }); 
-        // Filter out actors, focus on anime
         data.results = data.results.filter(a => ['tv', 'movie'].includes(a.media_type) && (a.original_language === 'ja' || a.genre_ids?.includes(16)));
         return data;
-      }
+      },
+      async getDetails(id, type = 'tv') { return this.fetch(`/${type}/${id}`, { append_to_response: 'credits' }); }
     };
 
     const renderCard = (anime, isTop = false, rank = null, historyView = false) => {
       if(!anime.poster_path) return '';
       const title = anime.name || anime.title; const rating = anime.vote_average ? anime.vote_average.toFixed(1) : (historyView ? '--' : '0.0'); const year = (anime.first_air_date || anime.release_date)?.split('-')[0] || '--';
       const mType = anime.media_type === 'movie' ? 'MOVIE' : 'TV';
-      
       return `
         <div class="glass-card rounded-xl overflow-hidden card-hover cursor-pointer relative ${isTop ? 'min-w-[160px] md:min-w-[200px]' : ''}" onclick="router.navigate('details', {id: ${anime.id}, media_type: '${anime.media_type || 'tv'}'})">
           ${rank ? `<div class="absolute -top-1 -left-1 w-8 h-8 rounded-br-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-black text-xs z-10 shadow-lg">${rank}</div>` : ''}
@@ -951,7 +895,6 @@
               
               results.classList.remove('hidden');
               
-              // Desktop Header dropdown
               if(inputId === '#searchInput') {
                 results.innerHTML = valid.map(anime => `
                   <div class="flex gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 transition" onclick="router.navigate('details', {id: ${anime.id}, media_type: '${anime.media_type}'}); document.dispatchEvent(new Event('closeDesktopSearch'));">
@@ -963,7 +906,6 @@
                   </div>
                 `).join('');
               } else {
-                // Full page grid layout
                 results.innerHTML = valid.map(anime => renderCard(anime, false)).join('');
               }
             } catch(e) { 
