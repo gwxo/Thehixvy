@@ -22,19 +22,13 @@
             anime: ['"Exo 2"', 'sans-serif']
           },
           animation: {
-            'fade-in': 'fadeIn 0.4s ease-out forwards',
-            'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             'pulse-glow': 'pulseGlow 2s infinite',
             'ken-burns': 'kenBurns 10s ease-out forwards',
-            'float': 'float 6s ease-in-out infinite',
             'spin-slow': 'spin 8s linear infinite',
           },
           keyframes: {
-            fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
-            slideUp: { '0%': { opacity: 0, transform: 'translateY(30px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
             pulseGlow: { '0%, 100%': { boxShadow: '0 0 15px rgba(255, 46, 147, 0.5)' }, '50%': { boxShadow: '0 0 40px rgba(255, 46, 147, 0.8)' } },
-            kenBurns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.1)' } },
-            float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+            kenBurns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.1)' } }
           }
         }
       }
@@ -54,17 +48,18 @@
       -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
     }
 
-    /* Utilities */
-    .glass { background: rgba(15, 15, 26, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    /* Standard Utilities */
+    .glass { background: rgba(15, 15, 26, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
     .glass-card { background: linear-gradient(145deg, rgba(20,20,35,0.9), rgba(10,10,15,0.95)); backdrop-filter: blur(12px); border: 1px solid rgba(255, 46, 147, 0.15); }
-    .neon-glow { box-shadow: 0 0 15px rgba(255, 46, 147, 0.4), inset 0 0 10px rgba(255, 46, 147, 0.2); }
     .neon-text { text-shadow: 0 0 10px rgba(255,46,147,0.8), 0 0 20px rgba(0,240,255,0.4); }
     
+    /* Hover Effects */
     .card-hover { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .card-hover:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.8); border-color: rgba(255,46,147,0.6); z-index: 10; }
     .card-hover img { transition: transform 0.5s ease; }
     .card-hover:hover img { transform: scale(1.08); }
     
+    /* Scrollbars */
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     .poster-aspect { aspect-ratio: 2/3; object-fit: cover; }
@@ -73,95 +68,94 @@
     .skeleton { background: linear-gradient(90deg, #10101a 25%, #1a1a2e 50%, #10101a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; color: transparent !important; }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
     
-    /* Interactive */
-    .view { display: none; min-height: 100vh; padding-bottom: 90px; opacity: 0; }
-    .view.active { display: block; animation: fade-in 0.4s ease-out forwards; }
+    /* BUG FIX: View Routing & Animation */
+    .view { display: none; min-height: 100vh; padding-bottom: 90px; }
+    .view.active { display: block; animation: viewFadeIn 0.4s ease-out forwards; }
+    @keyframes viewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    .hero-slide { transition: opacity 0.8s ease-in-out; }
-    .hero-slide:not(.active) { opacity: 0; position: absolute; z-index: 0; }
+    .hero-slide { transition: opacity 0.8s ease-in-out; opacity: 0; position: absolute; z-index: 0; }
     .hero-slide.active { opacity: 1; position: relative; z-index: 1; }
     .hero-slide.active .hero-bg { animation: ken-burns 10s ease-out forwards; }
     
-    /* Components */
-    .btn-primary { background: linear-gradient(135deg, #ff2e93, #ff8a00); color: white; border: none; position: relative; overflow: hidden; }
-    .btn-primary::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%); transform: rotate(45deg); transition: all 0.3s; opacity: 0; }
-    .btn-primary:hover::after { animation: shine 1.5s infinite; opacity: 1; }
-    @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
-
+    /* Primary Button */
+    .btn-primary { background: linear-gradient(135deg, #ff2e93, #ff8a00); color: white; border: none; position: relative; overflow: hidden; transition: all 0.3s; }
+    .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(255,46,147,0.5); }
+    
+    /* Server & Ep Buttons */
     .server-btn { position: relative; overflow: hidden; }
     .server-btn.active { background: rgba(255, 46, 147, 0.15); border-color: #ff2e93; color: #ff2e93; box-shadow: 0 0 15px rgba(255,46,147,0.3); }
-    .server-btn.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #ff2e93; }
+    .ep-card.active { border-color: #ff2e93; background: rgba(255,46,147,0.1); }
+    .ep-card.active .ep-num { color: #ff2e93; }
 
+    /* Navigation */
     .nav-tab.active { color: #ff2e93; }
     .nav-link.active { background: rgba(255,46,147,0.1); color: #ff2e93; border-left: 3px solid #ff2e93; }
     .mobile-menu { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
     .mobile-menu.open { transform: translateX(0); }
     
-    /* Custom Scrollbar */
+    /* Auth Tabs */
+    .auth-tab { border-bottom: 2px solid transparent; transition: all 0.3s; }
+    .auth-tab.active { border-bottom-color: #ff2e93; color: #ff2e93; }
+
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #05050a; }
     ::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 6px; }
     ::-webkit-scrollbar-thumb:hover { background: #ff2e93; }
-
-    /* Episode Grid Items */
-    .ep-card.active { border-color: #ff2e93; background: rgba(255,46,147,0.1); }
-    .ep-card.active .ep-num { color: #ff2e93; }
-
-    /* Form Tabs */
-    .auth-tab { border-bottom: 2px solid transparent; }
-    .auth-tab.active { border-bottom-color: #ff2e93; color: #ff2e93; }
-
-    @media (max-width: 768px) {
-      .hide-mobile { display: none; }
-      .show-mobile { display: flex; }
-    }
   </style>
 </head>
 <body class="text-white selection:bg-primary selection:text-white">
 
   <!-- API Configurations -->
   <script>
-    const TMDB_API_KEY = 'b72a0e80058553968e369cae73736579'; 
+    const TMDB_API_KEY = 'b72a0e80058553968e369cae73736579'; // Your TMDB Key
     const TMDB_BASE = 'https://api.themoviedb.org/3';
     const IMG_BASE = 'https://image.tmdb.org/t/p';
   </script>
 
-  <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 z-[60] glass">
-    <div class="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <button id="mobileMenuBtn" class="show-mobile p-2 hover:text-primary transition rounded-lg">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/></svg>
+  <!-- PERFECT RESPONSIVE HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-[60] glass shadow-lg">
+    <div class="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      
+      <!-- Left: Mobile Menu Toggle & Logo -->
+      <div class="flex items-center gap-3 shrink-0">
+        <button id="mobileMenuBtn" class="lg:hidden p-1.5 hover:text-primary transition rounded-lg bg-white/5 border border-white/10">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/></svg>
         </button>
-        <h1 class="text-2xl md:text-3xl font-anime font-black tracking-wider cursor-pointer hover:scale-105 transition-transform flex items-center gap-2" data-view="home">
-          <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <h1 class="text-xl md:text-3xl font-anime font-black tracking-wider cursor-pointer hover:scale-105 transition-transform flex items-center gap-1.5" data-view="home">
+          <svg class="w-6 h-6 md:w-8 md:h-8 text-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           AnimeX<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">PRO</span>
         </h1>
+      </div>
+      
+      <!-- Center: Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10 shrink-0">
+        <button class="px-5 py-2 rounded-full transition text-sm font-medium nav-link active border-none" data-view="home">Home</button>
+        <button class="px-5 py-2 rounded-full transition text-sm font-medium nav-link border-none hover:text-white" data-view="home" data-section="trending">Trending</button>
+        <button class="px-5 py-2 rounded-full transition text-sm font-medium nav-link border-none hover:text-white" data-view="home" data-section="top">Masterpieces</button>
+      </nav>
+      
+      <!-- Right: Search & Dedicated Sign In Button -->
+      <div class="flex items-center gap-2 md:gap-4 flex-1 justify-end">
         
-        <nav class="hide-mobile flex items-center gap-1 ml-6 bg-white/5 p-1 rounded-full border border-white/5">
-          <button class="px-5 py-2 rounded-full transition text-sm font-medium nav-link active border-none" data-view="home">Home</button>
-          <button class="px-5 py-2 rounded-full transition text-sm font-medium nav-link border-none hover:text-white" data-view="home" data-section="trending">Trending</button>
-          <button class="px-5 py-2 rounded-full transition text-sm font-medium nav-link border-none hover:text-white" data-view="home" data-section="top">Masterpieces</button>
-        </nav>
-      </div>
-      
-      <div class="flex-1 max-w-xl mx-8 hidden lg:block relative group">
-        <input type="text" id="searchInput" placeholder="Search for anime..." class="w-full bg-black/40 border border-white/10 rounded-full py-2.5 px-5 pl-12 focus:outline-none focus:border-primary focus:bg-black/60 transition text-sm shadow-inner backdrop-blur-sm">
-        <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <div id="searchResults" class="absolute top-full left-0 right-0 mt-3 glass-card rounded-2xl overflow-hidden hidden max-h-[400px] overflow-y-auto shadow-2xl z-50"></div>
-      </div>
-      
-      <div class="flex items-center gap-3">
-        <button id="searchBtnMobile" class="lg:hidden p-2 hover:text-primary transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <!-- Desktop Search Bar -->
+        <div class="hidden lg:block relative max-w-sm w-full group">
+          <input type="text" id="searchInput" placeholder="Search anime..." class="w-full bg-black/40 border border-white/10 rounded-full py-2 px-4 pl-10 focus:outline-none focus:border-primary focus:bg-black/60 transition text-sm">
+          <svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 glass-card rounded-xl overflow-hidden hidden max-h-[400px] overflow-y-auto shadow-2xl z-50"></div>
+        </div>
+
+        <!-- Mobile Search Button -->
+        <button id="searchBtnMobile" class="lg:hidden p-2 hover:text-primary transition bg-white/5 border border-white/10 rounded-full shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </button>
-        <button class="flex items-center gap-2 p-1.5 pr-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition cursor-pointer" onclick="router.navigate('profile')">
-          <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          </div>
-          <span class="text-sm font-bold hide-mobile" id="navUserName">Sign In</span>
+
+        <!-- Clean Header Sign In Button -->
+        <button id="headerAuthBtn" onclick="router.navigate('profile')" class="btn-primary px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap shrink-0 flex items-center gap-2">
+          <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+          Sign In
         </button>
       </div>
+      
     </div>
   </header>
 
@@ -185,14 +179,14 @@
 
       <p class="px-4 py-2 mt-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Genres</p>
       <div class="grid grid-cols-2 gap-2 px-2">
-        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition">Action</button>
-        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition">Romance</button>
-        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition">Isekai</button>
-        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition">Sci-Fi</button>
+        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition border border-white/5">Action</button>
+        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition border border-white/5">Romance</button>
+        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition border border-white/5">Isekai</button>
+        <button class="py-2 px-3 bg-white/5 rounded-lg text-sm text-center hover:bg-primary/20 hover:text-primary transition border border-white/5">Sci-Fi</button>
       </div>
 
       <p class="px-4 py-2 mt-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Community</p>
-      <button class="px-4 py-3 mt-1 bg-blue-500/10 text-blue-400 rounded-xl hover:bg-blue-500/20 transition font-medium text-left flex items-center gap-3 border border-blue-500/20">
+      <button class="px-4 py-3 mt-1 bg-blue-500/10 text-blue-400 rounded-xl hover:bg-blue-500/20 transition font-medium text-left flex items-center gap-3 border border-blue-500/20 mx-2">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.42.9-4.01 2.64-.38.26-.72.39-1.02.38-.34-.01-.99-.19-1.48-.35-.6-.2-1.06-.31-1.01-.65.02-.17.26-.35.7-.54 2.73-1.19 4.55-1.95 5.46-2.33 2.6-.1 3.14.82 3.14 1.1z"/></svg> Join Telegram
       </button>
     </div>
@@ -201,8 +195,8 @@
 
   <!-- Mobile Search Overlay -->
   <div id="searchOverlay" class="fixed inset-0 z-[70] bg-dark/95 backdrop-blur-xl hidden flex-col">
-    <div class="p-4 pt-8 flex items-center gap-3 border-b border-white/10 bg-dark">
-      <input type="text" id="searchInputMobile" placeholder="Search anime..." class="flex-1 bg-white/5 border border-white/20 rounded-xl py-3.5 px-4 focus:outline-none focus:border-primary transition text-lg">
+    <div class="p-4 pt-6 flex items-center gap-3 border-b border-white/10 bg-dark">
+      <input type="text" id="searchInputMobile" placeholder="Search anime..." class="flex-1 bg-white/5 border border-white/20 rounded-xl py-3 px-4 focus:outline-none focus:border-primary transition text-base">
       <button id="closeSearchMobile" class="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition">
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -216,25 +210,25 @@
     <!-- HOME VIEW -->
     <div id="view-home" class="view active">
       <!-- Premium Hero Slider -->
-      <section class="relative h-[70vh] md:h-[80vh] min-h-[500px] w-full overflow-hidden border-b border-white/5 bg-black">
+      <section class="relative h-[65vh] md:h-[80vh] min-h-[450px] w-full overflow-hidden border-b border-white/5 bg-black">
         <div id="heroSlider" class="absolute inset-0 w-full h-full"></div>
         <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-transparent z-10 pointer-events-none"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent z-10 pointer-events-none"></div>
         
         <div class="absolute inset-0 z-20 flex items-center">
-          <div class="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-20 pt-20">
-            <div id="heroContent" class="max-w-2xl animate-slide-up">
+          <div class="max-w-[1600px] w-full mx-auto px-6 md:px-12 lg:px-20 pt-10">
+            <div id="heroContent" class="max-w-2xl">
               <div class="flex items-center gap-3 mb-4">
                 <span id="heroRating" class="inline-flex items-center gap-1 px-3 py-1 bg-white/10 backdrop-blur-md rounded-md text-sm font-bold text-yellow-400 border border-white/10">
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                  <span id="heroRatingValue" class="text-white">8.5</span>
+                  <span id="heroRatingValue" class="text-white">--</span>
                 </span>
-                <span class="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-md text-xs font-bold tracking-widest uppercase">HD/SUB</span>
+                <span class="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-md text-xs font-bold tracking-widest uppercase">HD</span>
               </div>
-              <h2 id="heroTitle" class="text-4xl md:text-6xl lg:text-7xl font-anime font-black mb-4 leading-tight text-white drop-shadow-2xl neon-text">Loading...</h2>
-              <p id="heroOverview" class="text-gray-300 text-sm md:text-lg mb-8 line-clamp-3 md:line-clamp-4 drop-shadow-md leading-relaxed font-medium">Fetching premium anime content from the global network...</p>
+              <h2 id="heroTitle" class="text-4xl md:text-6xl lg:text-7xl font-anime font-black mb-4 leading-tight text-white drop-shadow-2xl neon-text">Loading Anime...</h2>
+              <p id="heroOverview" class="text-gray-300 text-sm md:text-base mb-8 line-clamp-3 md:line-clamp-4 drop-shadow-md leading-relaxed font-medium">Please wait while we connect to the TMDB network to fetch the latest premium content...</p>
               <div class="flex flex-wrap gap-4">
-                <button id="heroWatchBtn" class="btn-primary px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 text-lg shadow-[0_10px_30px_rgba(255,46,147,0.4)]">
+                <button id="heroWatchBtn" class="btn-primary px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 text-base md:text-lg shadow-[0_10px_30px_rgba(255,46,147,0.4)]">
                   <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
                   Play Now
                 </button>
@@ -250,19 +244,18 @@
 
       <!-- Content Sections -->
       <section class="max-w-[1600px] mx-auto px-4 md:px-8 py-10 space-y-12">
-        <!-- Trending -->
+        <!-- Trending Row -->
         <div>
           <div class="flex items-center justify-between mb-6">
             <h3 class="text-2xl font-anime font-bold flex items-center gap-3">
               <svg class="w-7 h-7 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-1.245-1.141-1.928-.16-.682-.132-1.353.037-1.99.16-.605.44-1.168.795-1.637.355-.47.78-.89 1.19-1.23.27-.225.4-.58.318-.912z" clip-rule="evenodd"/></svg>
               Trending Now
             </h3>
-            <button class="text-sm text-primary hover:text-white transition font-medium">View All →</button>
           </div>
           <div id="rowTrending" class="flex gap-4 md:gap-5 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory px-1"></div>
         </div>
 
-        <!-- Latest/Popular -->
+        <!-- Popular Row -->
         <div>
           <h3 class="text-2xl font-anime font-bold mb-6 flex items-center gap-3">
             <svg class="w-7 h-7 text-secondary" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/></svg>
@@ -271,7 +264,7 @@
           <div id="rowPopular" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"></div>
         </div>
 
-        <!-- Top Rated -->
+        <!-- Masterpieces Row -->
         <div>
           <h3 class="text-2xl font-anime font-bold mb-6 flex items-center gap-3">
             <svg class="w-7 h-7 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -284,12 +277,12 @@
 
     <!-- DETAILS VIEW -->
     <div id="view-details" class="view">
-      <div id="detailHeroBg" class="absolute top-0 left-0 right-0 h-[60vh] bg-cover bg-center opacity-20 mask-image-b z-[-1] pointer-events-none transition-all duration-700 blur-sm"></div>
+      <div id="detailHeroBg" class="absolute top-0 left-0 right-0 h-[60vh] bg-cover bg-center opacity-20 z-[-1] pointer-events-none blur-sm" style="mask-image: linear-gradient(to bottom, black 0%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);"></div>
       
       <div class="max-w-[1600px] mx-auto px-4 md:px-8 py-6 md:py-8">
-        <button onclick="router.back()" class="flex items-center gap-2 text-gray-400 hover:text-primary font-medium mb-6 transition bg-white/5 py-2 px-5 rounded-full w-fit hover:bg-white/10 group backdrop-blur-md border border-white/5">
+        <button onclick="router.back()" class="flex items-center gap-2 text-gray-400 hover:text-primary font-medium mb-6 transition bg-white/5 py-2 px-5 rounded-full w-fit hover:bg-white/10 group backdrop-blur-md border border-white/5 text-sm">
           <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          Back
+          Go Back
         </button>
         
         <!-- Premium Player Area -->
@@ -314,11 +307,12 @@
                 SERVERS
               </div>
               <div class="flex flex-wrap gap-2 overflow-x-auto scrollbar-hide pb-1" id="serverButtons">
-                <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-5 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg> Server 1 (Piexe)</button>
-                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-5 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> VidStorm</button>
-                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-5 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/></svg> Vidify</button>
-                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-5 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="4"><svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg> MultiEmbed</button>
-                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-5 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="5"><svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.759-1.576 5.5 5.5 0 115.61 5.516L13.5 16h-8z"/></svg> 2Embed</button>
+                <!-- EXACT Request Server Setup -->
+                <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Server 1 (Piexe)</button>
+                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> VidStorm</button>
+                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg> Vidify</button>
+                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="4"><svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7z"/></svg> MultiEmbed</button>
+                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="5"><svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.759-1.576 5.5 5.5 0 115.61 5.516L13.5 16h-8z"/></svg> 2Embed</button>
               </div>
             </div>
           </div>
@@ -329,7 +323,7 @@
           
           <!-- Left Col: Poster & Actions -->
           <div class="hidden lg:block lg:col-span-3 space-y-4">
-            <div class="rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-white/10 relative -mt-32 z-20 bg-dark group">
+            <div class="rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.6)] border border-white/10 relative -mt-24 z-20 bg-dark group">
               <img id="detailPoster" src="" class="w-full poster-aspect object-cover skeleton transition-transform duration-500 group-hover:scale-105">
             </div>
             <div class="grid grid-cols-2 gap-3 mt-4">
@@ -347,11 +341,11 @@
           <!-- Right Col: Info & Episodes -->
           <div class="lg:col-span-9 space-y-8">
             <!-- Mobile Header Profile -->
-            <div class="flex gap-5 lg:hidden bg-white/5 p-4 rounded-2xl border border-white/5 backdrop-blur-md">
-              <img id="detailPosterMobile" src="" class="w-32 rounded-xl object-cover shadow-lg border border-white/10 skeleton">
+            <div class="flex gap-4 lg:hidden bg-white/5 p-4 rounded-2xl border border-white/5 backdrop-blur-md">
+              <img id="detailPosterMobile" src="" class="w-28 rounded-xl object-cover shadow-lg border border-white/10 skeleton">
               <div class="flex flex-col justify-center">
-                <h1 id="detailTitleMobile" class="text-2xl font-anime font-black mb-2 leading-tight">Loading...</h1>
-                <div class="flex flex-wrap gap-2 text-xs font-bold mb-3">
+                <h1 id="detailTitleMobile" class="text-xl font-anime font-black mb-2 leading-tight">Loading...</h1>
+                <div class="flex flex-wrap gap-2 text-[10px] font-bold mb-2 uppercase">
                   <span id="detailTypeMobile" class="px-2 py-1 bg-primary/20 text-primary border border-primary/30 rounded">TV</span>
                   <span id="detailYearMobile" class="px-2 py-1 bg-white/10 border border-white/10 rounded">2024</span>
                   <span class="flex items-center gap-1 text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded border border-yellow-400/20"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> <span id="detailRatingMobile">0.0</span></span>
@@ -361,8 +355,8 @@
 
             <!-- Desktop Header Profile -->
             <div class="hidden lg:block">
-              <h1 id="detailTitle" class="text-5xl font-anime font-black mb-4 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Loading...</h1>
-              <div class="flex flex-wrap items-center gap-3 text-sm font-bold mb-5">
+              <h1 id="detailTitle" class="text-4xl lg:text-5xl font-anime font-black mb-3 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Loading...</h1>
+              <div class="flex flex-wrap items-center gap-3 text-sm font-bold mb-4">
                 <span id="detailRating" class="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/10 text-yellow-400 rounded-lg border border-yellow-500/20 shadow-inner">
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                   <span>0.0</span>
@@ -374,7 +368,7 @@
               <div id="detailGenres" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <p id="detailOverview" class="text-gray-300 leading-relaxed text-sm md:text-base bg-white/5 p-5 rounded-2xl border border-white/5 shadow-inner backdrop-blur-sm">Loading description...</p>
+            <p id="detailOverview" class="text-gray-300 leading-relaxed text-sm md:text-base bg-white/5 p-4 rounded-2xl border border-white/5 shadow-inner backdrop-blur-sm"></p>
             
             <!-- Mobile Action Bar -->
             <div class="flex gap-3 lg:hidden">
@@ -382,7 +376,7 @@
               <button id="shareBtnMobile" class="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-secondary/20 hover:text-secondary transition text-sm font-bold flex justify-center items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg> Share</button>
             </div>
 
-            <!-- TV Episode Selector UI (Professional Grid) -->
+            <!-- Episodes Section -->
             <div id="episodeSection" class="hidden">
               <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
                 <h4 class="font-anime font-bold text-xl flex items-center gap-2">
@@ -395,14 +389,12 @@
                 </div>
               </div>
               
-              <div id="episodeGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
-                <!-- Rendered dynamically -->
-              </div>
+              <div id="episodeGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-hide"></div>
             </div>
             
             <!-- Credits -->
-            <div id="creditsSection" class="pt-4">
-              <h4 class="font-anime font-bold mb-4 text-xl border-l-4 border-primary pl-3">Characters & Cast</h4>
+            <div id="creditsSection" class="pt-2">
+              <h4 class="font-anime font-bold mb-4 text-lg border-l-4 border-primary pl-3">Characters & Cast</h4>
               <div id="creditsList" class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x"></div>
             </div>
           </div>
@@ -415,14 +407,13 @@
       <div class="max-w-[1600px] mx-auto px-4 md:px-8 py-8 md:py-10">
         <div class="flex items-center justify-between mb-8 bg-white/5 p-5 rounded-2xl border border-white/5 backdrop-blur-sm">
           <div>
-            <h2 class="text-3xl font-anime font-black flex items-center gap-3">
+            <h2 class="text-2xl md:text-3xl font-anime font-black flex items-center gap-3">
               <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               Watch History
             </h2>
-            <p class="text-gray-400 text-sm mt-1">Pick up where you left off.</p>
           </div>
-          <button id="clearHistoryBtn" class="px-5 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition text-sm font-bold border border-red-500/20 hidden flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <button id="clearHistoryBtn" class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition text-sm font-bold border border-red-500/20 hidden flex items-center gap-2">
+            <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             Clear All
           </button>
         </div>
@@ -431,23 +422,24 @@
       </div>
     </div>
 
-    <!-- PROFILE / AUTH VIEW -->
+    <!-- PROFILE / AUTH VIEW (Combined) -->
     <div id="view-profile" class="view">
       <div class="max-w-md mx-auto px-4 py-12 md:py-20">
-        <!-- Not logged in layout -->
-        <div id="profileAuth" class="glass-card rounded-3xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
+        
+        <!-- Not logged in layout (Auth Form) -->
+        <div id="profileAuth" class="glass-card rounded-3xl p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
           <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary"></div>
           <div class="text-center mb-8">
-            <div class="w-20 h-20 mx-auto rounded-full bg-dark border-2 border-primary flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(255,46,147,0.4)]">
-              <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
+            <div class="w-16 h-16 mx-auto rounded-full bg-dark border-2 border-primary flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(255,46,147,0.4)]">
+              <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
             </div>
-            <h2 class="text-3xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">AnimeX Sync</h2>
-            <p class="text-sm text-gray-400 mt-2">Unlock cloud history & bookmarks</p>
+            <h2 class="text-2xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Welcome Back</h2>
+            <p class="text-xs text-gray-400 mt-1">Sign in or create an account</p>
           </div>
 
           <div class="flex mb-6 border-b border-white/10">
             <button class="flex-1 py-3 text-sm font-bold auth-tab active" onclick="switchAuthTab('login')">Login</button>
-            <button class="flex-1 py-3 text-sm font-bold auth-tab text-gray-400" onclick="switchAuthTab('register')">Register</button>
+            <button class="flex-1 py-3 text-sm font-bold auth-tab text-gray-500" onclick="switchAuthTab('register')">Register</button>
           </div>
 
           <div class="space-y-4">
@@ -456,30 +448,30 @@
             <div class="flex justify-end text-xs">
               <span class="text-primary hover:underline cursor-pointer">Forgot Password?</span>
             </div>
-            <button onclick="dummyLogin()" class="btn-primary w-full py-3.5 rounded-xl font-bold text-sm shadow-lg mt-2">Dive In</button>
+            <button onclick="dummyLogin()" class="btn-primary w-full py-3.5 rounded-xl font-bold text-sm shadow-lg mt-2">Sign In to AnimeX</button>
           </div>
         </div>
 
-        <!-- Logged in layout -->
-        <div id="profileSignedIn" class="hidden glass-card rounded-3xl p-8 text-center shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative border-t-4 border-t-primary">
-          <div id="profileAvatarBig" class="w-28 h-28 mx-auto mb-5 rounded-full bg-dark shadow-[0_0_30px_rgba(255,46,147,0.4)] border-4 border-primary bg-cover bg-center flex items-center justify-center">
-             <svg class="w-12 h-12 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+        <!-- Logged in layout (Profile Page) -->
+        <div id="profileSignedIn" class="hidden glass-card rounded-3xl p-6 md:p-8 text-center shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative border-t-4 border-t-primary">
+          <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-dark shadow-[0_0_30px_rgba(255,46,147,0.4)] border-4 border-primary flex items-center justify-center">
+             <svg class="w-10 h-10 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
           </div>
           <h2 id="profileName" class="text-2xl font-black mb-1 font-anime tracking-wide">User</h2>
-          <p id="profileEmail" class="text-gray-400 text-sm mb-8">user@animex.pro</p>
+          <p id="profileEmail" class="text-gray-400 text-sm mb-6">user@animex.pro</p>
           
           <div class="grid grid-cols-2 gap-3 mb-8">
             <div class="bg-dark/50 border border-white/5 rounded-xl p-4">
-              <p class="text-xs text-gray-500 font-bold uppercase mb-1">Anime Watched</p>
+              <p class="text-[10px] text-gray-500 font-bold uppercase mb-1">Anime Watched</p>
               <p id="profileHistoryCount" class="text-2xl font-black text-primary">0</p>
             </div>
             <div class="bg-dark/50 border border-white/5 rounded-xl p-4">
-              <p class="text-xs text-gray-500 font-bold uppercase mb-1">Status</p>
+              <p class="text-[10px] text-gray-500 font-bold uppercase mb-1">Status</p>
               <p class="text-sm font-black text-secondary mt-2">Premium</p>
             </div>
           </div>
 
-          <button onclick="dummyLogout()" class="w-full py-3.5 bg-white/5 text-gray-300 border border-white/10 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/30 rounded-xl font-bold transition">Sign Out</button>
+          <button onclick="dummyLogout()" class="w-full py-3.5 bg-white/5 text-gray-300 border border-white/10 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/30 rounded-xl font-bold transition text-sm">Sign Out</button>
         </div>
       </div>
     </div>
@@ -487,34 +479,34 @@
   </main>
 
   <!-- Sticky Bottom Nav (Mobile Only) -->
-  <nav class="fixed bottom-0 left-0 right-0 z-[50] glass md:hidden pb-safe">
-    <div class="flex justify-around py-2 px-2">
-      <button class="nav-tab active flex flex-col items-center gap-1.5 py-2 px-4 transition rounded-xl w-16" data-view="home">
+  <nav class="fixed bottom-0 left-0 right-0 z-[50] glass md:hidden pb-safe border-t border-white/5">
+    <div class="flex justify-around py-1 px-1">
+      <button class="nav-tab active flex flex-col items-center gap-1 py-2 transition rounded-xl w-16" data-view="home">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-        <span class="text-[10px] font-bold tracking-wider">HOME</span>
+        <span class="text-[9px] font-bold tracking-wider">HOME</span>
       </button>
-      <button class="nav-tab flex flex-col items-center gap-1.5 py-2 px-4 transition rounded-xl w-16" data-view="home" data-search="true">
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 transition rounded-xl w-16" data-view="home" data-search="true">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <span class="text-[10px] font-bold tracking-wider">FIND</span>
+        <span class="text-[9px] font-bold tracking-wider">FIND</span>
       </button>
-      <button class="nav-tab flex flex-col items-center gap-1.5 py-2 px-4 transition rounded-xl w-16" data-view="history">
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 transition rounded-xl w-16" data-view="history">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="text-[10px] font-bold tracking-wider">LIST</span>
+        <span class="text-[9px] font-bold tracking-wider">LIST</span>
       </button>
-      <button class="nav-tab flex flex-col items-center gap-1.5 py-2 px-4 transition rounded-xl w-16" data-view="profile">
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 transition rounded-xl w-16" data-view="profile">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-        <span class="text-[10px] font-bold tracking-wider">USER</span>
+        <span class="text-[9px] font-bold tracking-wider">PROFILE</span>
       </button>
     </div>
   </nav>
 
   <!-- Toast Notification -->
-  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-xl shadow-2xl hidden transition-all pointer-events-none backdrop-blur-md font-bold text-sm">
+  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] px-5 py-2.5 rounded-xl shadow-2xl hidden transition-all pointer-events-none backdrop-blur-md font-bold text-sm">
     <p id="toastMessage" class="tracking-wide flex items-center gap-2"></p>
   </div>
 
   <script>
-    // ===== UTILITY FUNCTIONS =====
+    // ===== UTILITIES =====
     const $ = (sel, ctx = document) => ctx.querySelector(sel);
     const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
     
@@ -530,14 +522,11 @@
     const showToast = (msg, type = 'info') => {
       const toast = $('#toast');
       clearTimeout(toastTimeout);
-      
       let icon = type === 'error' 
         ? `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
         : `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
-        
       $('#toastMessage').innerHTML = `${icon} ${msg}`;
-      toast.className = `fixed top-20 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] animate-slide-up border backdrop-blur-md font-bold text-sm ${type === 'error' ? 'bg-red-900/80 border-red-500 text-white' : 'bg-dark/90 border-primary text-primary'}`;
-      
+      toast.className = `fixed top-20 left-1/2 -translate-x-1/2 z-[100] px-5 py-2.5 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] border backdrop-blur-md font-bold text-sm ${type === 'error' ? 'bg-red-900/80 border-red-500 text-white' : 'bg-dark/90 border-primary text-primary'}`;
       toast.classList.remove('hidden', 'opacity-0');
       toastTimeout = setTimeout(() => {
         toast.classList.add('opacity-0');
@@ -545,18 +534,18 @@
       }, 3000);
     };
 
-    // User Auth Dummy Logic for native feel
+    // User Auth Dummy
     let currentUser = null;
     function switchAuthTab(tab) {
       $$('.auth-tab').forEach(t => {
-        t.classList.remove('active', 'text-gray-400');
+        t.classList.remove('active', 'text-gray-500');
         if(t.textContent.toLowerCase() === tab) t.classList.add('active');
-        else t.classList.add('text-gray-400');
+        else t.classList.add('text-gray-500');
       });
     }
     function dummyLogin() {
       currentUser = { name: 'OtakuMaster', email: 'otaku@animex.pro' };
-      showToast('Logged in securely to AnimeX Sync');
+      showToast('Logged in successfully');
       router.loadProfile();
     }
     function dummyLogout() {
@@ -570,9 +559,7 @@
       currentView: 'home',
       
       navigate(view, data = null) {
-        $$('.view').forEach(v => {
-          v.classList.remove('active');
-        });
+        $$('.view').forEach(v => v.classList.remove('active'));
         const target = $(`#view-${view}`);
         
         if (target) {
@@ -586,7 +573,6 @@
           $$('.nav-tab, .nav-link').forEach(el => {
             el.classList.toggle('active', el.dataset.view === view && !el.dataset.section);
           });
-          
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       },
@@ -597,22 +583,19 @@
         const id = reqData.id;
         const type = reqData.media_type || 'tv';
 
-        // Reset UI immediately
+        // Reset UI Setup
         const titleEls = [$('#detailTitle'), $('#detailTitleMobile')];
-        titleEls.forEach(el => { if(el) el.textContent = 'Loading...'; });
-        $('#detailOverview').innerHTML = '<div class="h-4 w-3/4 bg-white/10 rounded animate-pulse mb-2"></div><div class="h-4 w-full bg-white/10 rounded animate-pulse mb-2"></div><div class="h-4 w-2/3 bg-white/10 rounded animate-pulse"></div>';
+        titleEls.forEach(el => { if(el) el.textContent = 'Loading Anime...'; });
+        $('#detailOverview').innerHTML = '<div class="h-4 w-3/4 bg-white/10 rounded animate-pulse mb-2"></div><div class="h-4 w-full bg-white/10 rounded animate-pulse mb-2"></div><div class="h-4 w-1/2 bg-white/10 rounded animate-pulse"></div>';
         
         const posterEls = [$('#detailPoster'), $('#detailPosterMobile')];
-        posterEls.forEach(el => { 
-          if(el) { el.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; el.classList.add('skeleton'); }
-        });
-
+        posterEls.forEach(el => { if(el) { el.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; el.classList.add('skeleton'); }});
+        
         $('#detailHeroBg').style.backgroundImage = '';
         $('#episodeSection').classList.add('hidden');
         $('#creditsList').innerHTML = '';
         $('#detailGenres').innerHTML = '';
         
-        // Reset Player
         const iframe = $('#videoFrame');
         const overlay = $('#playerOverlay');
         const serverSection = $('#serverSection');
@@ -621,23 +604,20 @@
         overlay.classList.remove('hidden');
         serverSection.classList.add('hidden');
         
-        // Default to Server 1 visually
         $$('.server-btn').forEach(b => b.classList.remove('active'));
         $$('[data-server="1"]')[0]?.classList.add('active');
 
         try {
           const anime = await tmdb.getDetails(id, type);
-          anime.media_type = type;
-          
-          const titleText = anime.name || anime.title;
-          const ratingText = anime.vote_average?.toFixed(1) || 'N/A';
-          const yearText = (anime.first_air_date || anime.release_date)?.split('-')[0] || 'N/A';
-          const typeText = type === 'movie' ? 'Movie' : 'TV Series';
+          const titleText = anime.name || anime.title || 'Unknown Title';
+          const ratingText = anime.vote_average?.toFixed(1) || '0.0';
+          const yearText = (anime.first_air_date || anime.release_date)?.split('-')[0] || 'TBA';
+          const typeText = type === 'movie' ? 'Movie' : 'TV';
           const posterPath = anime.poster_path ? `${IMG_BASE}/w500${anime.poster_path}` : 'https://via.placeholder.com/300x450/10101a/ff2e93?text=No+Image';
           const backdropPath = anime.backdrop_path ? `${IMG_BASE}/original${anime.backdrop_path}` : '';
 
           titleEls.forEach(el => { if(el) el.textContent = titleText; });
-          $('#detailOverview').textContent = anime.overview || 'Synopsis not available for this title in the database.';
+          $('#detailOverview').textContent = anime.overview || 'Synopsis not available in database.';
           
           $('#detailRating span').textContent = ratingText;
           if($('#detailRatingMobile')) $('#detailRatingMobile').textContent = ratingText;
@@ -654,120 +634,93 @@
 
           if (anime.genres) {
             $('#detailGenres').innerHTML = anime.genres.map(g => 
-              `<span class="px-3 py-1 bg-white/10 rounded-lg border border-white/5 text-xs font-bold text-gray-200 tracking-wide">${g.name}</span>`
+              `<span class="px-3 py-1 bg-white/10 rounded-lg border border-white/5 text-[10px] uppercase font-bold text-gray-300 tracking-wider">${g.name}</span>`
             ).join('');
           }
           
-          // Seasons & Episodes Grid logic
+          // Episodes Setup (Anime TV)
           if (type === 'tv' && anime.seasons) {
             $('#episodeSection').classList.remove('hidden');
-            const seasonSelect = $('#seasonSelect');
-            const epGrid = $('#episodeGrid');
-            
-            // Filter out season 0 (Specials usually) unless it's the only one
             const validSeasons = anime.seasons.filter(s => s.season_number > 0);
             const seasonsToUse = validSeasons.length > 0 ? validSeasons : anime.seasons;
-
-            seasonSelect.innerHTML = seasonsToUse.map(s => 
-              `<option value="${s.season_number}">Season ${s.season_number}</option>`
-            ).join('');
+            
+            $('#seasonSelect').innerHTML = seasonsToUse.map(s => `<option value="${s.season_number}">Season ${s.season_number}</option>`).join('');
             
             const loadEpisodes = async (seasonNum) => {
-              epGrid.innerHTML = Array(6).fill('<div class="h-10 bg-white/5 rounded-lg skeleton"></div>').join('');
+              const epGrid = $('#episodeGrid');
+              epGrid.innerHTML = Array(4).fill('<div class="h-10 bg-white/5 rounded-lg skeleton"></div>').join('');
               try {
                 const epData = await tmdb.fetch(`/tv/${id}/season/${seasonNum}`);
                 if(epData.episodes && epData.episodes.length > 0) {
                   epGrid.innerHTML = epData.episodes.map(ep => `
-                    <button class="ep-card bg-dark/50 border border-white/10 rounded-lg py-2.5 px-3 flex items-center justify-center gap-2 hover:bg-primary/20 hover:border-primary/50 transition font-bold text-sm truncate" data-ep="${ep.episode_number}">
+                    <button class="ep-card bg-dark/50 border border-white/10 rounded-lg py-2.5 px-3 flex items-center justify-center transition font-bold text-sm" data-ep="${ep.episode_number}">
                       <span class="ep-num text-gray-400">EP ${ep.episode_number}</span>
                     </button>
                   `).join('');
 
-                  // Attach click events to grid episodes
                   $$('.ep-card').forEach(btn => {
                     btn.onclick = () => {
                       $$('.ep-card').forEach(b => b.classList.remove('active'));
                       btn.classList.add('active');
-                      // Auto play if clicked
-                      const activeServerBtn = $('.server-btn.active');
-                      this.loadPlayer(id, type, seasonNum, btn.dataset.ep, activeServerBtn?.dataset.server || '1');
-                      
-                      // UI tweaks to reveal iframe
+                      const activeServer = $('.server-btn.active')?.dataset.server || '1';
+                      this.loadPlayer(id, type, seasonNum, btn.dataset.ep, activeServer);
                       overlay.classList.add('hidden');
                       iframe.classList.remove('hidden');
                       serverSection.classList.remove('hidden');
                     };
                   });
-                  
-                  // Mark ep 1 as default active
                   $$('.ep-card')[0]?.classList.add('active');
-
                 } else {
-                   epGrid.innerHTML = `<button class="ep-card active col-span-2 bg-primary/20 border border-primary/50 text-primary rounded-lg py-2.5 font-bold" data-ep="1">EP 1</button>`;
+                   epGrid.innerHTML = `<button class="ep-card active bg-primary/20 border border-primary/50 text-primary rounded-lg py-2.5 font-bold col-span-2" data-ep="1">EP 1</button>`;
                 }
-              } catch(e) {
-                epGrid.innerHTML = `<button class="ep-card active col-span-2 bg-primary/20 border border-primary/50 text-primary rounded-lg py-2.5 font-bold" data-ep="1">EP 1</button>`;
-              }
+              } catch(e) { epGrid.innerHTML = `<p class="text-red-400 text-sm">Failed to load episodes</p>`; }
             };
-            
-            seasonSelect.onchange = () => loadEpisodes(seasonSelect.value);
-            if (seasonSelect.options.length > 0) loadEpisodes(seasonSelect.options[0].value);
+            $('#seasonSelect').onchange = (e) => loadEpisodes(e.target.value);
+            if(seasonsToUse.length > 0) loadEpisodes(seasonsToUse[0].season_number);
           }
 
           if (anime.credits && anime.credits.cast) {
-            $('#creditsList').innerHTML = anime.credits.cast.slice(0, 12).map(person => `
-              <div class="flex-shrink-0 w-[90px] text-center group cursor-pointer">
-                <div class="w-20 h-20 mx-auto rounded-full overflow-hidden mb-2 border-2 border-white/10 group-hover:border-primary transition duration-300 shadow-lg">
-                  <img src="${person.profile_path ? `${IMG_BASE}/w185${person.profile_path}` : 'https://via.placeholder.com/185/10101a/ff2e93?text=?'}" 
-                       class="w-full h-full object-cover skeleton transition-transform duration-500 group-hover:scale-110" 
-                       onload="this.classList.remove('skeleton')">
+            $('#creditsList').innerHTML = anime.credits.cast.slice(0, 10).map(person => `
+              <div class="flex-shrink-0 w-20 text-center group cursor-pointer">
+                <div class="w-16 h-16 mx-auto rounded-full overflow-hidden mb-2 border-2 border-white/10 group-hover:border-primary transition duration-300">
+                  <img src="${person.profile_path ? `${IMG_BASE}/w185${person.profile_path}` : 'https://via.placeholder.com/185/10101a/ff2e93?text=?'}" class="w-full h-full object-cover skeleton transition-transform duration-500 group-hover:scale-110" onload="this.classList.remove('skeleton')">
                 </div>
-                <p class="text-[12px] font-bold text-gray-200 truncate leading-tight">${person.name}</p>
-                <p class="text-[10px] text-gray-500 truncate mt-0.5">${person.character}</p>
+                <p class="text-[11px] font-bold text-gray-200 truncate leading-tight">${person.name}</p>
               </div>
             `).join('');
           }
 
-          // Main Big Play Button Logic
           const triggerPlay = () => {
             overlay.classList.add('hidden');
             iframe.classList.remove('hidden');
             serverSection.classList.remove('hidden');
             
-            const activeServerBtn = $('.server-btn.active');
-            const server = activeServerBtn ? activeServerBtn.dataset.server : '1';
-            
+            const server = $('.server-btn.active')?.dataset.server || '1';
             const s = $('#seasonSelect')?.value || 1;
-            const activeEpBtn = $('.ep-card.active');
-            const e = activeEpBtn ? activeEpBtn.dataset.ep : 1;
+            const e = $('.ep-card.active')?.dataset.ep || 1;
             
             this.loadPlayer(id, type, s, e, server);
-            this.addToHistory(anime); 
+            this.addToHistory({ id, title: titleText, media_type: type, poster_path: anime.poster_path, first_air_date: yearText }); 
           };
 
           $('#playBtn').onclick = (e) => { e.stopPropagation(); triggerPlay(); };
           overlay.onclick = triggerPlay;
           
-          // Server Selection Logic
           $$('.server-btn').forEach(btn => {
             btn.onclick = () => {
               $$('.server-btn').forEach(b => b.classList.remove('active'));
               btn.classList.add('active');
-              
               const s = $('#seasonSelect')?.value || 1;
-              const activeEpBtn = $('.ep-card.active');
-              const e = activeEpBtn ? activeEpBtn.dataset.ep : 1;
-              
-              if(!overlay.classList.contains('hidden')) { triggerPlay(); } 
-              else { this.loadPlayer(id, type, s, e, btn.dataset.server); }
+              const e = $('.ep-card.active')?.dataset.ep || 1;
+              if(!overlay.classList.contains('hidden')) triggerPlay(); 
+              else this.loadPlayer(id, type, s, e, btn.dataset.server);
             };
           });
 
-          // Action Buttons
-          const addHist = () => { this.addToHistory(anime); showToast('Added to watch list'); };
+          const addHist = () => { this.addToHistory({id, title:titleText, media_type:type, poster_path:anime.poster_path, first_air_date:yearText}); showToast('Added to list'); };
           const share = async () => {
             try { await navigator.share({ title: titleText, text: anime.overview, url: location.href }); } 
-            catch(e) { navigator.clipboard?.writeText(location.href); showToast('Link copied to clipboard'); }
+            catch(e) { navigator.clipboard?.writeText(location.href); showToast('Link copied'); }
           };
           
           if($('#addToHistoryBtn')) $('#addToHistoryBtn').onclick = addHist;
@@ -776,37 +729,22 @@
           if($('#shareBtnMobile')) $('#shareBtnMobile').onclick = share;
 
         } catch (e) {
-          titleEls.forEach(el => { if(el) el.textContent = 'Error loading content'; });
-          showToast('Network error loading details', 'error');
+          titleEls.forEach(el => { if(el) el.textContent = 'API Error'; });
+          showToast('Failed to load anime info', 'error');
         }
       },
       
-      // Exact Iframe Server URLs mapped to requested spec
+      // Iframe URL Configurator
       loadPlayer(id, type, season = 1, episode = 1, server = '1') {
         const iframe = $('#videoFrame');
         let url = '';
-        
         switch(server) {
-          case '1': // Piexe
-            // Note: The prompt asks for {id or imdb}, we will use tmdb id.
-            url = `https://piexe411qok.com/play/${id}?s=${season}&e=${episode}`;
-            // If movie, could drop s/e, but typically query params are ignored if movie on these backends. Let's send them anyway or format conditionally.
-            if(type === 'movie') url = `https://piexe411qok.com/play/${id}`;
-            break;
-          case '2': // VidStorm
-            url = type === 'tv' ? `https://vidstorm.ru/tv/${id}/${season}/${episode}` : `https://vidstorm.ru/movie/${id}`;
-            break;
-          case '3': // Vidify
-            url = type === 'tv' ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}` : `https://player.vidify.top/embed/movie/${id}`;
-            break;
-          case '4': // MultiEmbed
-            url = `https://multiembed.mov/directstream.php?video_id=${id}`;
-            break;
-          case '5': // 2Embed
-            url = type === 'tv' ? `https://www.2embed.cc/embedtv/${id}` : `https://www.2embed.cc/embed/${id}`;
-            break;
+          case '1': url = type === 'tv' ? `https://piexe411qok.com/play/${id}?s=${season}&e=${episode}` : `https://piexe411qok.com/play/${id}`; break;
+          case '2': url = type === 'tv' ? `https://vidstorm.ru/tv/${id}/${season}/${episode}` : `https://vidstorm.ru/movie/${id}`; break;
+          case '3': url = type === 'tv' ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}` : `https://player.vidify.top/embed/movie/${id}`; break;
+          case '4': url = `https://multiembed.mov/directstream.php?video_id=${id}`; break;
+          case '5': url = type === 'tv' ? `https://www.2embed.cc/embedtv/${id}` : `https://www.2embed.cc/embed/${id}`; break;
         }
-        
         iframe.src = url;
       },
       
@@ -814,14 +752,7 @@
         if(!anime || !anime.id) return;
         let history = JSON.parse(localStorage.getItem('animeHistory') || '[]');
         history = history.filter(a => a.id !== anime.id);
-        history.unshift({
-          id: anime.id,
-          title: anime.title || anime.name,
-          media_type: anime.media_type || 'tv',
-          poster_path: anime.poster_path,
-          first_air_date: anime.first_air_date || anime.release_date,
-          watchedAt: Date.now()
-        });
+        history.unshift({ ...anime, watchedAt: Date.now() });
         if (history.length > 50) history = history.slice(0, 50);
         localStorage.setItem('animeHistory', JSON.stringify(history));
       },
@@ -832,17 +763,10 @@
         const clearBtn = $('#clearHistoryBtn');
         
         if (history.length === 0) {
-          list.innerHTML = `
-            <div class="col-span-full flex flex-col items-center justify-center py-24 text-gray-500">
-              <svg class="w-24 h-24 mb-6 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <p class="text-xl font-anime font-bold">Your list is empty</p>
-              <p class="text-sm mt-2">Start watching to build your history.</p>
-            </div>
-          `;
+          list.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-500"><svg class="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p class="text-lg font-anime font-bold">List is empty</p></div>`;
           clearBtn.classList.add('hidden');
           return;
         }
-        
         clearBtn.classList.remove('hidden');
         list.innerHTML = history.map(anime => renderCard(anime, false, null, true)).join('');
       },
@@ -850,26 +774,28 @@
       loadProfile() {
         const profileAuth = $('#profileAuth');
         const profileSignedIn = $('#profileSignedIn');
+        const headerBtn = $('#headerAuthBtn');
         const history = JSON.parse(localStorage.getItem('animeHistory') || '[]');
         
         if (currentUser) {
           $('#profileName').textContent = currentUser.name;
           $('#profileEmail').textContent = currentUser.email;
-          $('#navUserName').textContent = currentUser.name.split(' ')[0];
           $('#profileHistoryCount').textContent = history.length;
+          
+          // Update the single clean header button
+          headerBtn.innerHTML = `<svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Profile`;
           
           profileAuth.classList.add('hidden');
           profileSignedIn.classList.remove('hidden');
         } else {
-          $('#navUserName').textContent = 'Sign In';
+          headerBtn.innerHTML = `<svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg> Sign In`;
           profileAuth.classList.remove('hidden');
           profileSignedIn.classList.add('hidden');
         }
       }
     };
 
-    // ===== TMDB API - Strictly Anime Configured =====
-    // Genre 16 = Animation. Original Language 'ja' = Japanese. This forces Anime results.
+    // ===== TMDB Core =====
     const tmdb = {
       async fetch(endpoint, params = {}) {
         const url = new URL(`${TMDB_BASE}${endpoint}`);
@@ -882,97 +808,78 @@
       async getTrendingAnime() { return this.fetch('/discover/tv', { with_genres: '16', with_original_language: 'ja', sort_by: 'popularity.desc', page: 1 }); },
       async getPopularAnime() { return this.fetch('/discover/tv', { with_genres: '16', with_original_language: 'ja', sort_by: 'vote_count.desc', page: 1 }); },
       async getTopRatedAnime() { return this.fetch('/discover/tv', { with_genres: '16', with_original_language: 'ja', sort_by: 'vote_average.desc', 'vote_count.gte': 500, page: 1 }); },
-      async searchAnime(query) { return this.fetch('/search/tv', { query, include_adult: false }); }, // filtered post-fetch
+      async searchAnime(query) { return this.fetch('/search/tv', { query, include_adult: false }); },
       async getDetails(id, type = 'tv') { return this.fetch(`/${type}/${id}`, { append_to_response: 'credits' }); }
     };
 
     // ===== UI RENDERERS =====
     const renderCard = (anime, isTop = false, rank = null, historyView = false) => {
       if(!anime.poster_path) return '';
-      const id = anime.id;
-      const type = anime.media_type || 'tv';
       const title = anime.name || anime.title;
       const rating = anime.vote_average ? anime.vote_average.toFixed(1) : (historyView ? '--' : '0.0');
       const year = (anime.first_air_date || anime.release_date)?.split('-')[0] || '--';
       
       return `
-        <div class="glass-card rounded-xl overflow-hidden card-hover cursor-pointer relative ${isTop ? 'min-w-[160px] md:min-w-[220px]' : ''}" 
-             onclick="router.navigate('details', {id: ${id}, media_type: '${type}'})">
-          ${rank ? `<div class="absolute -top-1 -left-1 w-10 h-10 rounded-br-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-black text-sm z-10 shadow-[2px_2px_10px_rgba(0,0,0,0.5)] border-r border-b border-white/20">${rank}</div>` : ''}
-          <div class="absolute top-2 right-2 px-1.5 py-0.5 bg-black/80 backdrop-blur rounded text-[9px] font-bold z-10 border border-white/10 uppercase tracking-widest text-primary">TV</div>
-          
-          <div class="relative w-full poster-aspect overflow-hidden">
-            <img src="${IMG_BASE}/w300${anime.poster_path}" class="w-full h-full object-cover skeleton" onload="this.classList.remove('skeleton')">
-            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 z-10">
-              <div class="w-10 h-10 rounded-full bg-primary/90 flex items-center justify-center mb-auto self-center transform translate-y-4 hover:scale-110 transition shadow-lg">
-                 <svg class="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
-              </div>
-            </div>
+        <div class="glass-card rounded-xl overflow-hidden card-hover cursor-pointer relative ${isTop ? 'min-w-[160px] md:min-w-[200px]' : ''}" 
+             onclick="router.navigate('details', {id: ${anime.id}, media_type: '${anime.media_type || 'tv'}'})">
+          ${rank ? `<div class="absolute -top-1 -left-1 w-8 h-8 rounded-br-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-black text-xs z-10 shadow-lg">${rank}</div>` : ''}
+          <div class="relative w-full poster-aspect overflow-hidden bg-dark skeleton">
+            <img src="${IMG_BASE}/w300${anime.poster_path}" class="w-full h-full object-cover" onload="this.parentElement.classList.remove('skeleton')">
           </div>
-          
-          <div class="p-3 border-t border-white/5 bg-dark">
-            <h4 class="font-bold text-sm md:text-sm leading-tight truncate font-anime tracking-wide text-gray-100">${title}</h4>
-            <div class="flex justify-between items-center mt-1.5 text-xs font-bold text-gray-500">
+          <div class="p-3 border-t border-white/5 bg-dark h-[70px]">
+            <h4 class="font-bold text-xs md:text-sm leading-tight truncate text-gray-100">${title}</h4>
+            <div class="flex justify-between items-center mt-1.5 text-[10px] font-bold text-gray-500">
               ${historyView ? `<span>${year}</span>` : `<span class="flex items-center gap-1 text-yellow-400/90"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${rating}</span>`}
-              <span>${historyView ? 'WATCHED' : year}</span>
+              <span>TV</span>
             </div>
           </div>
         </div>
       `;
     };
 
-    // ===== INIT CONTENT LOGIC =====
+    // ===== INIT LOGIC =====
     const sections = {
       hero: {
-        slides: [],
-        currentIndex: 0,
-        interval: null,
+        slides: [], currentIndex: 0, interval: null,
         async init() {
           try {
             const data = await tmdb.getTrendingAnime();
-            // Filter ones with backdrop
             this.slides = data.results.filter(a => a.backdrop_path).slice(0, 5);
             if(this.slides.length === 0) return;
             
             $('#heroSlider').innerHTML = this.slides.map((a, i) => `
-              <div class="hero-slide absolute inset-0 w-full h-full ${i === 0 ? 'active' : ''}">
+              <div class="hero-slide w-full h-full ${i === 0 ? 'active' : ''}">
                  <div class="hero-bg w-full h-full bg-cover bg-center" style="background-image: url('${IMG_BASE}/original${a.backdrop_path}')"></div>
               </div>
             `).join('');
             
             this.update(this.slides[0]);
             this.start();
-          } catch(e) {}
+          } catch(e) { $('#heroTitle').textContent = "Failed to Connect to DB"; }
         },
         update(anime) {
-          const type = anime.media_type || 'tv';
           $('#heroTitle').textContent = anime.name || anime.title;
           $('#heroRatingValue').textContent = anime.vote_average?.toFixed(1) || '0.0';
           $('#heroOverview').textContent = anime.overview;
-          
-          const navObj = { id: anime.id, media_type: type };
-          $('#heroWatchBtn').onclick = () => router.navigate('details', navObj);
-          $('#heroDetailsBtn').onclick = () => router.navigate('details', navObj);
+          const nav = () => router.navigate('details', { id: anime.id, media_type: 'tv' });
+          $('#heroWatchBtn').onclick = nav; $('#heroDetailsBtn').onclick = nav;
         },
         start() {
           if (this.interval) clearInterval(this.interval);
           this.interval = setInterval(() => {
             this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-            const sls = $$('.hero-slide');
-            sls.forEach((s, i) => s.classList.toggle('active', i === this.currentIndex));
+            $$('.hero-slide').forEach((s, i) => s.classList.toggle('active', i === this.currentIndex));
             this.update(this.slides[this.currentIndex]);
           }, 8000);
         }
       },
-      
-      async buildRow(containerId, fetchFn, isTopRow = false) {
-        const c = $(containerId);
-        if(!c) return;
-        c.innerHTML = Array(isTopRow ? 10 : 6).fill(`<div class="skeleton rounded-xl ${isTopRow ? 'min-w-[160px] md:min-w-[220px]' : 'w-full'} poster-aspect"></div>`).join('');
+      async buildRow(id, fetchFn, isTop) {
+        const c = $(id); if(!c) return;
+        c.innerHTML = Array(6).fill(`<div class="skeleton rounded-xl ${isTop?'min-w-[160px] md:min-w-[200px]':'w-full'} poster-aspect"></div>`).join('');
         try {
           const data = await fetchFn();
-          c.innerHTML = data.results.filter(a => a.poster_path).slice(0, isTopRow ? 12 : 12).map((a, i) => renderCard(a, isTopRow, isTopRow ? i+1 : null)).join('');
-        } catch(e) {}
+          c.innerHTML = data.results.filter(a => a.poster_path).slice(0, 12).map((a, i) => renderCard(a, isTop, isTop?i+1:null)).join('');
+        } catch(e) { c.innerHTML = '<p class="text-sm text-red-500 p-4">Loading failed.</p>'; }
       }
     };
 
@@ -980,43 +887,32 @@
     const searchSystem = {
       init() {
         const attachSearch = (inputId, resultsId) => {
-          const input = $(inputId);
-          const results = $(resultsId);
+          const input = $(inputId); const results = $(resultsId);
           if(!input || !results) return;
 
           input.addEventListener('input', debounce(async (e) => {
             const query = e.target.value.trim();
-            if (!query) { results.classList.add('hidden'); results.innerHTML=''; return; }
+            if (!query) { results.classList.add('hidden'); return; }
             
             results.classList.remove('hidden');
-            results.innerHTML = '<div class="p-8 text-center text-sm font-bold text-gray-500 animate-pulse">Scanning Anime Database...</div>';
+            results.innerHTML = '<div class="p-6 text-center text-xs font-bold text-gray-500 animate-pulse">Searching DB...</div>';
             
             try {
               const data = await tmdb.searchAnime(query);
-              // Filter to ensure it's animation if possible, but search/tv is usually accurate enough.
-              const valid = data.results.filter(r => r.poster_path).slice(0, 8);
-              
-              if (valid.length === 0) {
-                results.innerHTML = '<div class="p-8 text-center text-sm font-bold text-red-400">No matching anime found</div>';
-                return;
-              }
+              const valid = data.results.filter(r => r.poster_path).slice(0, 6);
+              if (valid.length === 0) { results.innerHTML = '<div class="p-6 text-center text-xs font-bold text-red-400">No results found</div>'; return; }
               
               results.innerHTML = valid.map(anime => `
-                <div class="search-result flex gap-4 p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 transition" 
-                     onclick="router.navigate('details', {id: ${anime.id}, media_type: 'tv'}); document.querySelectorAll('#searchResults, #searchOverlay').forEach(el=>el.classList.add('hidden')); document.querySelectorAll('input[id^=search]').forEach(el=>el.value='');">
-                  <img src="${IMG_BASE}/w92${anime.poster_path}" class="w-12 h-16 object-cover rounded shadow border border-white/10">
+                <div class="flex gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 transition" 
+                     onclick="router.navigate('details', {id: ${anime.id}, media_type: 'tv'}); $$('.hidden-on-search').forEach(e=>e.classList.add('hidden'));">
+                  <img src="${IMG_BASE}/w92${anime.poster_path}" class="w-10 h-14 object-cover rounded shadow">
                   <div class="flex flex-col justify-center min-w-0">
-                    <h4 class="font-bold text-sm truncate text-white font-anime tracking-wide">${anime.name}</h4>
-                    <div class="flex gap-2 text-[10px] font-bold text-gray-500 mt-1 uppercase">
-                      <span class="text-primary border border-primary/20 bg-primary/10 px-1 rounded">TV</span>
-                      <span>${(anime.first_air_date)?.split('-')[0] || 'TBA'}</span>
-                    </div>
+                    <h4 class="font-bold text-sm truncate text-white">${anime.name}</h4>
+                    <span class="text-[10px] text-gray-400">${(anime.first_air_date)?.split('-')[0] || ''}</span>
                   </div>
                 </div>
               `).join('');
-            } catch(e) {
-               results.innerHTML = '<div class="p-8 text-center text-sm text-red-500 font-bold">Connection Error</div>';
-            }
+            } catch(e) { results.innerHTML = '<div class="p-6 text-center text-xs text-red-500 font-bold">Error</div>'; }
           }, 400));
         };
 
@@ -1033,49 +929,34 @@
       }
     };
 
-    // ===== APP INITIALIZATION =====
+    // BOOTSTRAP APP
     document.addEventListener('DOMContentLoaded', async () => {
       
-      // Nav Linking
+      // Nav Links
       $$('.nav-link, .nav-tab').forEach(el => {
         el.addEventListener('click', () => {
-          if (el.dataset.search) {
-             if (window.innerWidth < 1024) { $('#searchBtnMobile').click(); }
-             else { $('#searchInput').focus(); }
-             return;
-          }
+          if (el.dataset.search) { window.innerWidth < 1024 ? $('#searchBtnMobile').click() : $('#searchInput').focus(); return; }
           router.navigate(el.dataset.view);
-          if (el.dataset.section) {
-            setTimeout(() => {
-              const sec = el.dataset.section === 'trending' ? '#rowTrending' : '#rowTopRated';
-              $(sec)?.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-          }
+          if (el.dataset.section) setTimeout(() => $({trending:'#rowTrending', top:'#rowTopRated'}[el.dataset.section])?.parentElement.scrollIntoView({behavior:'smooth'}), 100);
         });
       });
 
-      // Mobile Menu
-      const menu = $('#mobileMenu');
-      const overlay = $('#menuOverlay');
-      const toggleMenu = () => { menu.classList.toggle('open'); overlay.classList.toggle('hidden'); };
-      $('#mobileMenuBtn').onclick = toggleMenu;
-      overlay.onclick = toggleMenu;
-      menu.querySelectorAll('.nav-link, button').forEach(link => { link.addEventListener('click', toggleMenu); });
+      // Menu interactions
+      const toggleMenu = () => { $('#mobileMenu').classList.toggle('open'); $('#menuOverlay').classList.toggle('hidden'); };
+      $('#mobileMenuBtn').onclick = toggleMenu; $('#menuOverlay').onclick = toggleMenu;
+      $$('#mobileMenu .nav-link').forEach(link => link.addEventListener('click', toggleMenu));
 
-      // Clear History
-      $('#clearHistoryBtn').onclick = () => {
-        if(confirm('Clear all watch history?')) { localStorage.removeItem('animeHistory'); router.loadHistory(); showToast('History wiped clean.'); }
-      };
+      // Clear History binding
+      $('#clearHistoryBtn').onclick = () => { if(confirm('Wipe history?')) { localStorage.removeItem('animeHistory'); router.loadHistory(); showToast('History Cleared'); } };
 
-      // Load Data
-      await sections.hero.init();
+      // Initialize API Calls
+      sections.hero.init();
       sections.buildRow('#rowTrending', () => tmdb.getTrendingAnime(), true);
-      sections.buildRow('#rowPopular', () => tmdb.getPopularAnime());
-      sections.buildRow('#rowTopRated', () => tmdb.getTopRatedAnime());
+      sections.buildRow('#rowPopular', () => tmdb.getPopularAnime(), false);
+      sections.buildRow('#rowTopRated', () => tmdb.getTopRatedAnime(), false);
       
       searchSystem.init();
       router.loadProfile();
-
       window.addEventListener('popstate', () => router.navigate('home'));
     });
   </script>
