@@ -69,6 +69,7 @@
     .poster-aspect { aspect-ratio: 2/3; object-fit: cover; }
     .skeleton { background: linear-gradient(90deg, #10101a 25%, #1a1a2e 50%, #10101a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; color: transparent !important; }
     
+    /* Dedicated Views */
     .view { display: none; min-height: 100vh; padding-bottom: 100px; }
     .view.active { display: block; animation: viewFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes viewFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -105,15 +106,18 @@
 </head>
 <body class="text-white selection:bg-primary selection:text-white">
 
-  <!-- PRELOADER -->
+  <!-- PRELOADER WITH GIF -->
   <div id="preloader" class="fixed inset-0 z-[9999] bg-dark flex flex-col items-center justify-center">
-    <div class="relative w-24 h-24 flex items-center justify-center animate-float">
-      <div class="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary animate-spin-slow"></div>
-      <div class="absolute inset-2 rounded-full border-4 border-secondary/20 border-b-secondary animate-[spin_4s_linear_infinite_reverse]"></div>
-      <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    <div class="relative animate-float mb-6 flex items-center justify-center">
+      <!-- Outer Glowing Ring -->
+      <div class="absolute inset-[-10px] rounded-full border-4 border-transparent border-t-primary border-b-secondary animate-spin-slow opacity-60"></div>
+      <!-- GIF Container -->
+      <div class="w-32 h-32 rounded-full border-4 border-primary/50 overflow-hidden shadow-[0_0_40px_rgba(255,46,147,0.6)] p-1 bg-black relative z-10">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTGoumblEEHpVEbKLGXCA1qkYlgw72M9OGswh9ivDLQOkNHMYrPjDHp0RBy5XOOaEeSCHWBvBh-niWAYxsNtNgu8l2_X3AtaXU7hoIToGJ5oT18RahWyhnSKy2ysug_FhF4QySWIa4kFDb3lyiCeJed3WHP7Whyphenhyphen_1p2aaQa-M2UzL3F9oV_hmXC_tIygoB/s480/11088.gif" class="w-full h-full rounded-full object-cover">
+      </div>
     </div>
-    <h1 class="text-4xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary tracking-widest mt-6 neon-text">TheHixvy</h1>
-    <p class="text-gray-400 text-xs font-bold tracking-[0.3em] mt-2 uppercase italic shadow-primary border-t border-white/10 pt-2">part of <span class="text-white">gw team</span></p>
+    <h1 class="text-4xl md:text-5xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary tracking-widest neon-text">TheHixvy Creation</h1>
+    <p class="text-white text-xs font-bold tracking-[0.3em] mt-3 uppercase border-t border-white/20 pt-2 px-6">Gw Team</p>
   </div>
 
   <!-- API SETTINGS -->
@@ -150,37 +154,40 @@
       </nav>
       
       <div class="flex items-center gap-2 md:gap-4 flex-1 justify-end">
+        <!-- Desktop Search Input (Dropdown Mode) -->
         <div class="hidden lg:block relative max-w-sm w-full group">
           <input type="text" id="searchInput" placeholder="Search anime..." class="w-full bg-black/40 border border-white/10 rounded-full py-2 px-4 pl-10 focus:outline-none focus:border-primary focus:bg-black/60 transition text-sm relative z-[61]">
           <svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors z-[61]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 glass-card rounded-xl overflow-hidden hidden max-h-[400px] overflow-y-auto shadow-2xl z-[62] transition-opacity duration-300"></div>
         </div>
 
-        <button onclick="searchSystem.openMobile()" class="lg:hidden p-2 hover:text-primary transition bg-white/5 border border-white/10 rounded-full shrink-0">
+        <!-- Mobile Header Search Button -->
+        <button onclick="router.navigate('search')" class="lg:hidden p-2 hover:text-primary transition bg-white/5 border border-white/10 rounded-full shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </button>
 
         <button id="headerAuthBtn" onclick="router.navigate('profile')" class="btn-primary px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap shrink-0 flex items-center gap-2">
-          <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
-          Sign In
+          <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg> Sign In
         </button>
       </div>
     </div>
   </header>
 
-  <!-- SIDEBAR MENU -->
-  <div id="mobileMenu" class="mobile-menu fixed inset-y-0 left-0 w-[280px] bg-[#0a0a0f] border-r border-white/10 z-[80] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.8)]">
-    <div class="p-6 border-b border-white/5 flex-shrink-0 flex items-center justify-between mt-[60px] md:mt-[72px]">
-      <div>
-        <h2 class="text-2xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary leading-none">Animeverse</h2>
-      </div>
-      <button id="closeMenuBtn" class="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+  <!-- PERFECTLY ALIGNED SIDEBAR MENU -->
+  <div id="mobileMenu" class="mobile-menu fixed inset-y-0 left-0 w-[280px] bg-[#0a0a0f] border-r border-white/10 z-[100] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.8)]">
+    <!-- Clean Header, aligns Animeverse with Hamburger natively -->
+    <div class="p-5 border-b border-white/5 flex items-center justify-between shrink-0">
+      <h2 class="text-2xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary leading-none">Animeverse</h2>
+      <button id="closeMenuBtn" class="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </div>
 
     <div class="overflow-y-auto flex-1 py-4 px-3 flex flex-col gap-1 scrollbar-hide">
       <p class="px-4 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Navigation</p>
       <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link active flex items-center gap-3" data-view="home"><svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Home</button>
       <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link flex items-center gap-3" data-view="home" data-section="trending"><svg class="w-5 h-5 opacity-70 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg> Trending</button>
+      <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link flex items-center gap-3" data-view="search"><svg class="w-5 h-5 opacity-70 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg> Search</button>
       <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link flex items-center gap-3" data-view="history"><svg class="w-5 h-5 opacity-70 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Watch History</button>
       <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link flex items-center gap-3" data-view="dev"><svg class="w-5 h-5 opacity-70 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg> Developer Info</button>
 
@@ -195,12 +202,13 @@
       </div>
 
       <p class="px-4 py-2 mt-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Community</p>
-      <a href="https://t.me/Thehixvy" target="_blank" class="px-4 py-3 mt-1 bg-[#24A1DE]/10 text-[#24A1DE] rounded-xl hover:bg-[#24A1DE]/20 transition font-bold text-left flex items-center gap-3 border border-[#24A1DE]/20 mx-2">
+      <a href="https://t.me/Thehixvy" target="_blank" class="px-4 py-3 mt-1 bg-[#24A1DE]/10 text-[#24A1DE] rounded-xl hover:bg-[#24A1DE]/20 transition font-bold text-left flex items-center gap-3 border border-[#24A1DE]/20 mx-2 mb-4">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.42.9-4.01 2.64-.38.26-.72.39-1.02.38-.34-.01-.99-.19-1.48-.35-.6-.2-1.06-.31-1.01-.65.02-.17.26-.35.7-.54 2.73-1.19 4.55-1.95 5.46-2.33 2.6-.1 3.14.82 3.14 1.1z"/></svg> Join Telegram
       </a>
     </div>
 
-    <div class="p-4 border-t border-white/5 flex items-center gap-3 bg-black/40">
+    <!-- Power Footer -->
+    <div class="p-4 border-t border-white/5 flex items-center gap-3 bg-black/40 shrink-0">
       <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOUbCZt2C0H9t4H1wRvLagrlCbxvm_noKw8HuzksaWbeo0gYxp2ZMVoYb72TonQ4eA8zvZ2Sy6oChYPcskI7e1f0T9vJc3BWAHScMqj_g45fXgqVclf7nHWqTdFsnpHHjBoQJQ7Y7KVTZEy_t6q2E6uWPPJHif2vVvB16Pjn6hzefftH1va5cI-iU8LJv4/s320/11086.png" class="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(255,46,147,0.5)] animate-float">
       <div>
          <p class="text-[9px] text-gray-500 uppercase tracking-widest font-bold">Powered by</p>
@@ -208,18 +216,7 @@
       </div>
     </div>
   </div>
-  <div id="menuOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[75] hidden transition-opacity"></div>
-
-  <!-- FIXED MOBILE SEARCH OVERLAY (INSTANT OPEN FOR KEYBOARD) -->
-  <div id="searchOverlay" class="fixed inset-0 z-[80] bg-dark/95 backdrop-blur-xl hidden flex-col">
-    <div class="p-4 pt-6 flex items-center gap-3 border-b border-white/10 bg-dark shadow-md">
-      <input type="text" id="searchInputMobile" placeholder="Search anime..." class="flex-1 bg-white/5 border border-white/20 rounded-xl py-3 px-4 focus:outline-none focus:border-primary text-base text-white">
-      <button onclick="searchSystem.closeMobile()" class="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div id="searchResultsMobile" class="flex-1 overflow-y-auto p-2 space-y-2 pb-24 scrollbar-hide"></div>
-  </div>
+  <div id="menuOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[90] hidden transition-opacity"></div>
 
   <!-- MAIN VIEWS -->
   <main class="pt-[60px] md:pt-[72px]">
@@ -295,6 +292,37 @@
       </footer>
     </div>
 
+    <!-- FULL PAGE SEARCH VIEW (NEW & BUG FREE) -->
+    <div id="view-search" class="view">
+      <div class="max-w-[1600px] mx-auto px-4 md:px-8 py-6 pb-24">
+        
+        <div class="relative w-full max-w-3xl mx-auto group mb-8">
+          <input type="text" id="searchInputPage" placeholder="Search for anime, characters..." class="w-full bg-white/5 border border-white/20 rounded-2xl py-4 px-6 pl-14 focus:outline-none focus:border-primary transition text-base shadow-lg text-white font-medium" autocomplete="off">
+          <svg class="w-6 h-6 absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <!-- Default State: Genres -->
+        <div id="searchSuggestions">
+          <h3 class="text-xl font-anime font-black mb-5 flex items-center gap-2 text-white">
+            <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> Discover Genres
+          </h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-5">
+            <button onclick="router.navigate('genre', {id: 10759, name: 'Action'})" class="bg-gradient-to-br from-primary/20 to-transparent border border-primary/30 py-5 px-4 rounded-xl text-center font-bold text-primary hover:scale-105 transition shadow-lg flex flex-col items-center gap-2"><span class="text-2xl">⚔️</span> Action</button>
+            <button onclick="router.navigate('genre', {id: 35, name: 'Comedy'})" class="bg-gradient-to-br from-secondary/20 to-transparent border border-secondary/30 py-5 px-4 rounded-xl text-center font-bold text-secondary hover:scale-105 transition shadow-lg flex flex-col items-center gap-2"><span class="text-2xl">😂</span> Comedy</button>
+            <button onclick="router.navigate('genre', {id: 10765, name: 'Sci-Fi'})" class="bg-gradient-to-br from-purple-500/20 to-transparent border border-purple-500/30 py-5 px-4 rounded-xl text-center font-bold text-purple-400 hover:scale-105 transition shadow-lg flex flex-col items-center gap-2"><span class="text-2xl">🚀</span> Sci-Fi</button>
+            <button onclick="router.navigate('genre', {id: 9648, name: 'Mystery'})" class="bg-gradient-to-br from-green-500/20 to-transparent border border-green-500/30 py-5 px-4 rounded-xl text-center font-bold text-green-400 hover:scale-105 transition shadow-lg flex flex-col items-center gap-2"><span class="text-2xl">🕵️</span> Mystery</button>
+            <button onclick="router.navigate('genre', {id: 10749, name: 'Romance'})" class="bg-gradient-to-br from-pink-500/20 to-transparent border border-pink-500/30 py-5 px-4 rounded-xl text-center font-bold text-pink-400 hover:scale-105 transition shadow-lg flex flex-col items-center gap-2"><span class="text-2xl">💖</span> Romance</button>
+            <button onclick="router.navigate('genre', {id: 14, name: 'Fantasy'})" class="bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500/30 py-5 px-4 rounded-xl text-center font-bold text-yellow-400 hover:scale-105 transition shadow-lg flex flex-col items-center gap-2"><span class="text-2xl">🔮</span> Fantasy</button>
+          </div>
+        </div>
+
+        <!-- Search Results State -->
+        <div id="searchLoadingPage" class="hidden py-20 text-center font-anime font-black text-gray-500 animate-pulse text-xl">Scanning the Animeverse...</div>
+        <div id="searchErrorPage" class="hidden py-20 text-center font-anime font-black text-red-500 text-xl">No anime found matching your query.</div>
+        <div id="searchResultsPage" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mt-6"></div>
+      </div>
+    </div>
+
     <!-- GENRE VIEW -->
     <div id="view-genre" class="view">
       <div class="max-w-[1600px] mx-auto px-4 md:px-8 py-8 md:py-10">
@@ -334,6 +362,7 @@
                 <svg class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> SERVERS
               </div>
               <div class="flex flex-wrap gap-2 overflow-x-auto scrollbar-hide pb-1" id="serverButtons">
+                <!-- Exact Requested Servers -->
                 <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Gw Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> 4k Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg> Vidify</button>
@@ -537,8 +566,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         <span class="text-[9px] font-bold tracking-widest">HOME</span>
       </button>
-      <!-- Sync Search Trigger -->
-      <button class="nav-tab flex flex-col items-center justify-center gap-1 py-1 transition rounded-xl w-[20%]" onclick="searchSystem.openMobile()">
+      <button class="nav-tab flex flex-col items-center justify-center gap-1 py-1 transition rounded-xl w-[20%]" data-view="search">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <span class="text-[9px] font-bold tracking-widest">FIND</span>
       </button>
@@ -628,11 +656,11 @@
           if (view === 'genre' && data) this.loadGenre(data);
           if (view === 'history') this.loadHistory();
           if (view === 'profile') this.loadProfile();
+          
+          if(view === 'search') setTimeout(() => $('#searchInputPage').focus(), 100);
+          
           $$('.nav-tab, .nav-link').forEach(el => { 
-            // Avoid marking search button as active view
-            if (!el.getAttribute('onclick')?.includes('searchSystem')) {
-              el.classList.toggle('active', el.dataset.view === view && !el.dataset.section); 
-            }
+            el.classList.toggle('active', el.dataset.view === view && !el.dataset.section); 
           });
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -814,55 +842,63 @@
       }
     };
 
-    // PURE INSTANT MOBILE SEARCH FIX
+    // SEARCH SYSTEM 
     const searchSystem = {
-      openMobile() {
-        const overlay = $('#searchOverlay');
-        overlay.classList.remove('hidden');
-        overlay.classList.add('flex');
-        setTimeout(() => $('#searchInputMobile').focus(), 50); // Ensures keyboard pops up
-      },
-      closeMobile() {
-        const overlay = $('#searchOverlay');
-        overlay.classList.remove('flex');
-        overlay.classList.add('hidden');
-        $('#searchInputMobile').value = '';
-        $('#searchResultsMobile').innerHTML = '';
-        $('#searchInputMobile').blur();
-      },
       init() {
-        const attachSearch = (inputId, resultsId, isMobile = false) => {
-          const input = $(inputId); const results = $(resultsId); if(!input || !results) return;
+        const attachSearch = (inputId, resultsId, suggestionsId, loadingId, errorId) => {
+          const input = $(inputId); const results = $(resultsId); const sugg = $(suggestionsId); const load = $(loadingId); const err = $(errorId);
+          if(!input || !results) return;
+          
           input.addEventListener('input', debounce(async (e) => {
-            const query = e.target.value.trim(); if (!query) { results.classList.add('hidden'); return; }
-            results.classList.remove('hidden'); results.innerHTML = '<div class="p-6 text-center text-xs font-bold text-gray-500 animate-pulse">Searching DB...</div>';
+            const query = e.target.value.trim(); 
+            if (!query) { 
+              results.classList.add('hidden'); if(load) load.classList.add('hidden'); if(err) err.classList.add('hidden'); if(sugg) sugg.classList.remove('hidden'); return; 
+            }
+            if(sugg) sugg.classList.add('hidden'); results.classList.add('hidden'); if(err) err.classList.add('hidden');
+            if(load) load.classList.remove('hidden');
+            
             try {
-              const data = await tmdb.searchAnime(query); const valid = data.results.filter(r => r.poster_path).slice(0, 6);
-              if (!valid.length) { results.innerHTML = '<div class="p-6 text-center text-xs font-bold text-red-400">No results found</div>'; return; }
-              results.innerHTML = valid.map(anime => `
-                <div class="flex gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 transition" 
-                     onclick="router.navigate('details', {id: ${anime.id}, media_type: 'tv'}); ${isMobile ? 'searchSystem.closeMobile()' : 'document.dispatchEvent(new Event(\'closeDesktopSearch\'))'};">
-                  <img src="${IMG_BASE}/w92${anime.poster_path}" class="w-10 h-14 object-cover rounded shadow">
-                  <div class="flex flex-col justify-center min-w-0">
-                    <h4 class="font-bold text-sm truncate text-white">${anime.name}</h4>
-                    <span class="text-[10px] text-gray-400 font-bold tracking-widest mt-0.5">${(anime.first_air_date)?.split('-')[0] || ''}</span>
+              const data = await tmdb.searchAnime(query); const valid = data.results.filter(r => r.poster_path).slice(0, 12);
+              if(load) load.classList.add('hidden');
+              if (!valid.length) { if(err) err.classList.remove('hidden'); return; }
+              
+              results.classList.remove('hidden');
+              
+              // If it's the desktop dropdown
+              if(inputId === '#searchInput') {
+                results.innerHTML = valid.map(anime => `
+                  <div class="flex gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 transition" onclick="router.navigate('details', {id: ${anime.id}, media_type: 'tv'}); document.dispatchEvent(new Event('closeDesktopSearch'));">
+                    <img src="${IMG_BASE}/w92${anime.poster_path}" class="w-10 h-14 object-cover rounded shadow">
+                    <div class="flex flex-col justify-center min-w-0">
+                      <h4 class="font-bold text-sm truncate text-white">${anime.name}</h4>
+                      <span class="text-[10px] text-gray-400 font-bold tracking-widest mt-0.5">${(anime.first_air_date)?.split('-')[0] || ''}</span>
+                    </div>
                   </div>
-                </div>
-              `).join('');
-            } catch(e) { results.innerHTML = '<div class="p-6 text-center text-xs text-red-500 font-bold">Error</div>'; }
+                `).join('');
+              } else {
+                // Full page grid layout
+                results.innerHTML = valid.map(anime => renderCard(anime, false)).join('');
+              }
+            } catch(e) { 
+              if(load) load.classList.add('hidden'); 
+              if(err) { err.textContent = 'API Error occurred'; err.classList.remove('hidden'); }
+            }
           }, 400));
         };
 
-        attachSearch('#searchInput', '#searchResults', false); 
-        attachSearch('#searchInputMobile', '#searchResultsMobile', true);
+        attachSearch('#searchInput', '#searchResults', null, null, null); 
+        attachSearch('#searchInputPage', '#searchResultsPage', '#searchSuggestions', '#searchLoadingPage', '#searchErrorPage');
         
         document.addEventListener('closeDesktopSearch', () => {
-          $('#searchResults').classList.add('hidden');
-          $('#searchInput').value = '';
-          $('#searchInput').blur();
+          $('#searchResults').classList.add('hidden'); $('#searchInput').value = ''; $('#searchInput').blur();
         });
         
-        document.addEventListener('click', (e) => { const sr = $('#searchResults'); if (sr && !$('#searchInput').contains(e.target) && !sr.contains(e.target)) { sr.classList.add('hidden'); } });
+        document.addEventListener('click', (e) => { 
+          const sr = $('#searchResults'); 
+          if (sr && !$('#searchInput').contains(e.target) && !sr.contains(e.target)) {
+            sr.classList.add('hidden');
+          } 
+        });
       }
     };
 
@@ -871,8 +907,9 @@
       appAuth.init();
       
       $$('.nav-link, .nav-tab').forEach(el => el.addEventListener('click', (e) => {
-        if (!el.dataset.view) return; // Ignores search buttons
-        router.navigate(el.dataset.view);
+        const targetView = el.dataset.view;
+        if (!targetView) return; 
+        router.navigate(targetView);
         if (el.dataset.section) setTimeout(() => $({trending:'#rowTrending', top:'#rowTopRated'}[el.dataset.section])?.parentElement.scrollIntoView({behavior:'smooth'}), 100);
       }));
 
