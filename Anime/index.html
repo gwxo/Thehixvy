@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#05050a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>PranjalXanime| TheHixvy Creation</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -617,6 +623,19 @@
     </div>
   </nav>
 
+<!-- OFFLINE UI MODAL -->
+  <div id="offlineModal" class="fixed inset-0 z-[10000] bg-[#05050a]/95 backdrop-blur-xl hidden flex-col items-center justify-center transition-all duration-500 opacity-0 px-6">
+    <div class="relative w-28 h-28 mb-6">
+       <div class="absolute inset-0 border-4 border-red-600 rounded-full animate-ping opacity-30"></div>
+       <div class="absolute inset-0 flex items-center justify-center bg-red-500/10 rounded-full border-2 border-red-600 shadow-[0_0_30px_rgba(220,38,38,0.5)]">
+         <svg class="w-12 h-12 text-red-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 00-12.728 0M15.536 8.464a5 5 0 00-7.072 0M12 12v4m0 4h.01"/></svg>
+       </div>
+    </div>
+    <h2 class="text-3xl md:text-5xl font-anime font-black text-white tracking-widest mb-3 text-center drop-shadow-[0_0_15px_rgba(255,0,0,0.8)]">CONNECTION LOST</h2>
+    <p class="text-gray-400 text-sm md:text-base font-medium text-center max-w-sm mb-8 leading-relaxed">You are currently offline. Please check your internet connection to continue exploring the Animeverse.</p>
+    <button onclick="window.location.reload()" class="px-10 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold tracking-widest uppercase rounded-xl shadow-[0_10px_30px_rgba(220,38,38,0.4)] transition hover:scale-105">Retry Connection</button>
+  </div>
+  
   <!-- TOAST -->
   <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 z-[100] px-5 py-3 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] hidden font-bold text-sm flex items-center transition-all opacity-0 -translate-y-4">
     <p id="toastMessage" class="tracking-wide flex items-center gap-2"></p>
@@ -1027,6 +1046,35 @@
       }
     };
 
+// --- PWA REGISTRATION & OFFLINE LOGIC ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Registering SW with exact path
+        navigator.serviceWorker.register('/Anime/sw.js')
+          .then(reg => console.log('PWA SW Registered!', reg.scope))
+          .catch(err => console.error('PWA Setup Failed:', err));
+      });
+    }
+
+    const offlineModal = document.getElementById('offlineModal');
+    
+    window.addEventListener('offline', () => {
+      offlineModal.classList.remove('hidden');
+      offlineModal.classList.add('flex');
+      requestAnimationFrame(() => offlineModal.classList.remove('opacity-0'));
+    });
+
+    window.addEventListener('online', () => {
+      offlineModal.classList.add('opacity-0');
+      setTimeout(() => {
+        offlineModal.classList.add('hidden');
+        offlineModal.classList.remove('flex');
+        showToast('Internet connection restored!', 'info');
+      }, 500);
+    });
+
+    
+    
     // INIT
     document.addEventListener('DOMContentLoaded', async () => {
       initLazyLoad(); 
