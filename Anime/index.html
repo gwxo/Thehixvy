@@ -116,6 +116,7 @@
     <p class="text-gray-400 text-xs font-bold tracking-[0.3em] mt-2 uppercase italic shadow-primary border-t border-white/10 pt-2">part of <span class="text-white">gw team</span></p>
   </div>
 
+  <!-- API SETTINGS -->
   <script>
     const TMDB_API_KEY = 'b72a0e80058553968e369cae73736579'; 
     const TMDB_BASE = 'https://api.themoviedb.org/3';
@@ -126,7 +127,7 @@
       authDomain: "YOUR_AUTH_DOMAIN",
       projectId: "YOUR_PROJECT_ID",
     };
-    try { if(firebaseConfig.apiKey !== "YOUR_API_KEY") firebase.initializeApp(firebaseConfig); } catch(e) { console.warn("Firebase config required"); }
+    try { if(firebaseConfig.apiKey !== "YOUR_API_KEY") firebase.initializeApp(firebaseConfig); } catch(e) {}
   </script>
 
   <!-- HEADER -->
@@ -155,7 +156,7 @@
           <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 glass-card rounded-xl overflow-hidden hidden max-h-[400px] overflow-y-auto shadow-2xl z-[62] transition-opacity duration-300"></div>
         </div>
 
-        <button id="searchBtnMobile" class="lg:hidden p-2 hover:text-primary transition bg-white/5 border border-white/10 rounded-full shrink-0">
+        <button onclick="searchSystem.openMobile()" class="lg:hidden p-2 hover:text-primary transition bg-white/5 border border-white/10 rounded-full shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </button>
 
@@ -209,11 +210,11 @@
   </div>
   <div id="menuOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[75] hidden transition-opacity"></div>
 
-  <!-- FIXED MOBILE SEARCH OVERLAY (Synchronous Open for Keyboard) -->
+  <!-- FIXED MOBILE SEARCH OVERLAY (INSTANT OPEN FOR KEYBOARD) -->
   <div id="searchOverlay" class="fixed inset-0 z-[80] bg-dark/95 backdrop-blur-xl hidden flex-col">
-    <div class="p-4 pt-6 flex items-center gap-3 border-b border-white/10 bg-dark">
-      <input type="text" id="searchInputMobile" placeholder="Search anime..." class="flex-1 bg-white/5 border border-white/20 rounded-xl py-3 px-4 focus:outline-none focus:border-primary transition text-base">
-      <button id="closeSearchMobile" class="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition">
+    <div class="p-4 pt-6 flex items-center gap-3 border-b border-white/10 bg-dark shadow-md">
+      <input type="text" id="searchInputMobile" placeholder="Search anime..." class="flex-1 bg-white/5 border border-white/20 rounded-xl py-3 px-4 focus:outline-none focus:border-primary text-base text-white">
+      <button onclick="searchSystem.closeMobile()" class="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition">
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
@@ -333,8 +334,8 @@
                 <svg class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> SERVERS
               </div>
               <div class="flex flex-wrap gap-2 overflow-x-auto scrollbar-hide pb-1" id="serverButtons">
-                <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Server 1 (Piexe)</button>
-                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> VidStorm</button>
+                <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Gw Server</button>
+                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> 4k Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg> Vidify</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="4"><svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7z"/></svg> MultiEmbed</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="5"><svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.759-1.576 5.5 5.5 0 115.61 5.516L13.5 16h-8z"/></svg> 2Embed</button>
@@ -344,7 +345,6 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-[20]">
-          <!-- Left Col: Poster -->
           <div class="hidden lg:block lg:col-span-3 space-y-4 relative z-10">
             <div class="rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.8)] border border-primary/20 bg-dark group transition-all duration-500 hover:shadow-[0_0_50px_rgba(255,46,147,0.6)] hover:border-primary -mt-24">
               <img id="detailPoster" src="" class="w-full poster-aspect object-cover skeleton transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1">
@@ -530,14 +530,15 @@
 
   </main>
 
-  <!-- RESTORED STICKY BOTTOM NAV -->
+  <!-- RESTORED STICKY BOTTOM NAV WITH SAFE AREA -->
   <nav class="fixed bottom-0 left-0 right-0 z-[80] glass md:hidden border-t border-white/10" style="padding-bottom: env(safe-area-inset-bottom);">
     <div class="flex justify-around py-2 px-1">
       <button class="nav-tab active flex flex-col items-center justify-center gap-1 py-1 transition rounded-xl w-[20%]" data-view="home">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         <span class="text-[9px] font-bold tracking-widest">HOME</span>
       </button>
-      <button class="nav-tab flex flex-col items-center justify-center gap-1 py-1 transition rounded-xl w-[20%]" data-search="true">
+      <!-- Sync Search Trigger -->
+      <button class="nav-tab flex flex-col items-center justify-center gap-1 py-1 transition rounded-xl w-[20%]" onclick="searchSystem.openMobile()">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <span class="text-[9px] font-bold tracking-widest">FIND</span>
       </button>
@@ -627,7 +628,12 @@
           if (view === 'genre' && data) this.loadGenre(data);
           if (view === 'history') this.loadHistory();
           if (view === 'profile') this.loadProfile();
-          $$('.nav-tab, .nav-link').forEach(el => { if(!el.dataset.search) el.classList.toggle('active', el.dataset.view === view && !el.dataset.section); });
+          $$('.nav-tab, .nav-link').forEach(el => { 
+            // Avoid marking search button as active view
+            if (!el.getAttribute('onclick')?.includes('searchSystem')) {
+              el.classList.toggle('active', el.dataset.view === view && !el.dataset.section); 
+            }
+          });
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       },
@@ -808,16 +814,24 @@
       }
     };
 
+    // PURE INSTANT MOBILE SEARCH FIX
     const searchSystem = {
+      openMobile() {
+        const overlay = $('#searchOverlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        setTimeout(() => $('#searchInputMobile').focus(), 50); // Ensures keyboard pops up
+      },
+      closeMobile() {
+        const overlay = $('#searchOverlay');
+        overlay.classList.remove('flex');
+        overlay.classList.add('hidden');
+        $('#searchInputMobile').value = '';
+        $('#searchResultsMobile').innerHTML = '';
+        $('#searchInputMobile').blur();
+      },
       init() {
-        const closeSearchSmoothly = () => {
-          const dRes = $('#searchResults'); const dInp = $('#searchInput');
-          const mOverlay = $('#searchOverlay'); const mInp = $('#searchInputMobile');
-          if(dRes) { dRes.classList.add('hidden'); dInp.value = ''; dInp.blur(); }
-          if(mOverlay) { mOverlay.classList.add('hidden'); mOverlay.classList.remove('flex'); mInp.value = ''; mInp.blur(); }
-        };
-
-        const attachSearch = (inputId, resultsId) => {
+        const attachSearch = (inputId, resultsId, isMobile = false) => {
           const input = $(inputId); const results = $(resultsId); if(!input || !results) return;
           input.addEventListener('input', debounce(async (e) => {
             const query = e.target.value.trim(); if (!query) { results.classList.add('hidden'); return; }
@@ -827,7 +841,7 @@
               if (!valid.length) { results.innerHTML = '<div class="p-6 text-center text-xs font-bold text-red-400">No results found</div>'; return; }
               results.innerHTML = valid.map(anime => `
                 <div class="flex gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 transition" 
-                     onclick="router.navigate('details', {id: ${anime.id}, media_type: 'tv'}); document.dispatchEvent(new Event('closeSearchRequested'));">
+                     onclick="router.navigate('details', {id: ${anime.id}, media_type: 'tv'}); ${isMobile ? 'searchSystem.closeMobile()' : 'document.dispatchEvent(new Event(\'closeDesktopSearch\'))'};">
                   <img src="${IMG_BASE}/w92${anime.poster_path}" class="w-10 h-14 object-cover rounded shadow">
                   <div class="flex flex-col justify-center min-w-0">
                     <h4 class="font-bold text-sm truncate text-white">${anime.name}</h4>
@@ -839,21 +853,16 @@
           }, 400));
         };
 
-        attachSearch('#searchInput', '#searchResults'); attachSearch('#searchInputMobile', '#searchResultsMobile');
-        document.addEventListener('closeSearchRequested', closeSearchSmoothly);
-        document.addEventListener('click', (e) => { const sr = $('#searchResults'); if (sr && !$('#searchInput').contains(e.target) && !sr.contains(e.target)) closeSearchSmoothly(); });
+        attachSearch('#searchInput', '#searchResults', false); 
+        attachSearch('#searchInputMobile', '#searchResultsMobile', true);
         
-        // FIX FOR MOBILE KEYBOARD (Synchronous open)
-        const openMobileSearch = (e) => {
-          if(e) e.preventDefault();
-          const overlay = $('#searchOverlay');
-          overlay.classList.remove('hidden'); overlay.classList.add('flex');
-          $('#searchInputMobile').focus();
-        };
-
-        $('#searchBtnMobile').addEventListener('click', openMobileSearch);
-        $$('[data-search="true"]').forEach(btn => btn.addEventListener('click', openMobileSearch));
-        $('#closeSearchMobile').onclick = closeSearchSmoothly;
+        document.addEventListener('closeDesktopSearch', () => {
+          $('#searchResults').classList.add('hidden');
+          $('#searchInput').value = '';
+          $('#searchInput').blur();
+        });
+        
+        document.addEventListener('click', (e) => { const sr = $('#searchResults'); if (sr && !$('#searchInput').contains(e.target) && !sr.contains(e.target)) { sr.classList.add('hidden'); } });
       }
     };
 
@@ -862,7 +871,7 @@
       appAuth.init();
       
       $$('.nav-link, .nav-tab').forEach(el => el.addEventListener('click', (e) => {
-        if (el.dataset.search) return; // handled separately above
+        if (!el.dataset.view) return; // Ignores search buttons
         router.navigate(el.dataset.view);
         if (el.dataset.section) setTimeout(() => $({trending:'#rowTrending', top:'#rowTopRated'}[el.dataset.section])?.parentElement.scrollIntoView({behavior:'smooth'}), 100);
       }));
