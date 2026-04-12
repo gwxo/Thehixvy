@@ -218,6 +218,11 @@
 
     <!-- Rest of the menu content stays perfectly below the top aligned header -->
     <div class="overflow-y-auto flex-1 py-4 px-3 flex flex-col gap-1 scrollbar-hide">
+      <!-- Install PWA Button (Hidden by default) -->
+      <button id="installPwaBtn" class="hidden mx-4 mt-4 mb-2 py-3 px-4 rounded-xl bg-gradient-to-r from-primary via-purple-500 to-secondary text-white font-black text-sm shadow-[0_0_20px_rgba(255,46,147,0.4)] hover:scale-105 transition-all items-center justify-center gap-2">
+        <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        INSTALL APP
+      </button>
       <p class="px-4 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Navigation</p>
       <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link active flex items-center gap-3" data-view="home"><svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Home</button>
       <button class="px-4 py-3 rounded-xl hover:bg-white/5 transition font-medium text-left nav-link flex items-center gap-3" data-view="home" data-section="trending"><svg class="w-5 h-5 opacity-70 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg> Trending</button>
@@ -1073,7 +1078,49 @@
       }, 500);
     });
 
-    
+    // --- PWA INSTALL PROMPT LOGIC ---
+    let deferredPrompt;
+    const installBtn = document.getElementById('installPwaBtn');
+
+    // Listen for the browser telling us the app can be installed
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+      // Remove 'hidden' and show the button
+      if (installBtn) {
+        installBtn.classList.remove('hidden');
+        installBtn.classList.add('flex');
+      }
+    });
+
+    // Handle the install button click
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          // Hide the button if they install it
+          installBtn.classList.add('hidden');
+          installBtn.classList.remove('flex');
+        }
+        // Throw away the prompt, it can only be used once
+        deferredPrompt = null;
+      });
+    }
+
+    // Double check: if app is installed successfully, hide the button forever
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      if (installBtn) {
+        installBtn.classList.add('hidden');
+        installBtn.classList.remove('flex');
+      }
+    });
     
     // INIT
     document.addEventListener('DOMContentLoaded', async () => {
