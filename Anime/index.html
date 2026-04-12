@@ -1,980 +1,1204 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AnimeX Pro - Stream Anime Free</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-        colors: {
-          primary: '#8b5cf6',
-          secondary: '#6366f1',
-          dark: '#050508',
-          surface: '#0f0f1a',
-          card: '#14142a',
-          border: 'rgba(139,92,246,0.3)'
-        },
-        animation: {
-          shimmer: 'shimmer 1.5s infinite',
-          fadeIn: 'fadeIn 0.3s ease',
-          slideUp: 'slideUp 0.3s ease'
-        },
-        keyframes: {
-          shimmer: {
-            '0%': { backgroundPosition: '-200% 0' },
-            '100%': { backgroundPosition: '200% 0' }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AnimeX Ultra Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#8b5cf6',
+            secondary: '#3b82f6',
+            dark: '#0a0a0f',
+            card: '#13131f',
+            glass: 'rgba(30, 30, 46, 0.7)'
           },
-          fadeIn: {
-            '0%': { opacity: '0' },
-            '100%': { opacity: '1' }
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.4s ease-out',
+            'pulse-glow': 'pulseGlow 2s infinite',
+            'ripple': 'ripple 0.6s linear'
           },
-          slideUp: {
-            '0%': { opacity: '0', transform: 'translateY(15px)' },
-            '100%': { opacity: '1', transform: 'translateY(0)' }
-          }
+          keyframes: {
+            fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+            slideUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            pulseGlow: { '0%, 100%': { boxShadow: '0 0 15px rgba(139, 92, 246, 0.5)' }, '50%': { boxShadow: '0 0 25px rgba(139, 92, 246, 0.9)' } },
+            ripple: { '0%': { transform: 'scale(0)', opacity: 0.5 }, '100%': { transform: 'scale(4)', opacity: 0 } }
+          },
+          backdropBlur: { xs: '2px' }
         }
       }
     }
-  }
-</script>
-<style>
-  :root {
-    --bg-dark: #050508;
-    --glass-bg: rgba(20,20,35,0.85);
-    --glass-border: rgba(139,92,246,0.25);
-  }
-  
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  html, body {
-    width: 100%;
-    min-height: 100vh;
-    background: var(--bg-dark);
-    color: #fff;
-    font-family: 'Inter', system-ui, sans-serif;
-    overflow-x: hidden;
-  }
-  
-  /* Sticky Header */
-  .app-header {
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(5,5,8,0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-  }
-  
-  /* Glass Cards */
-  .glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    transition: all 0.25s ease;
-  }
-  .glass-card:hover {
-    border-color: rgba(139,92,246,0.6);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 20px rgba(139,92,246,0.15);
-  }
-  
-  /* Neon Text */
-  .neon-text {
-    text-shadow: 0 0 12px rgba(139,92,246,0.7), 0 0 24px rgba(139,92,246,0.3);
-  }
-  
-  /* Hero Slider */
-  .hero-slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.9s ease;
-    background-size: cover;
-    background-position: center top;
-  }
-  .hero-slide.active { opacity: 1; }
-  .hero-overlay {
-    background: linear-gradient(90deg, rgba(5,5,8,0.98) 0%, rgba(5,5,8,0.7) 45%, transparent 100%),
-                linear-gradient(0deg, rgba(5,5,8,0.95) 0%, transparent 50%);
-  }
-  
-  /* Scroll Rows */
-  .scroll-row {
-    display: flex;
-    gap: 14px;
-    overflow-x: auto;
-    padding: 6px 4px 10px;
-    scroll-snap-type: x mandatory;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scroll-row::-webkit-scrollbar { display: none; }
-  .anime-card {
-    scroll-snap-align: start;
-    min-width: 140px;
-    max-width: 140px;
-    cursor: pointer;
-  }
-  @media(min-width: 640px) { .anime-card { min-width: 160px; max-width: 160px; } }
-  @media(min-width: 1024px) { .anime-card { min-width: 180px; max-width: 180px; } }
-  
-  /* View Transitions */
-  .view { display: none; min-height: calc(100vh - 140px); }
-  .view.active { display: block; animation: fadeIn 0.25s ease; }
-  
-  /* Mobile Bottom Nav */
-  .mobile-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(15,15,26,0.95);
-    backdrop-filter: blur(16px);
-    border-top: 1px solid var(--glass-border);
-    z-index: 90;
-    display: flex;
-    justify-content: space-around;
-    padding: 6px 0 10px;
-  }
-  @media(min-width: 768px) { .mobile-nav { display: none; } }
-  
-  /* Player Iframe */
-  .player-wrap {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    background: #000;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-  }
-  .player-wrap iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border: none;
-  }
-  
-  /* Skeleton */
-  .skel {
-    background: linear-gradient(90deg, #14142a 25%, #1a1a35 50%, #14142a 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 10px;
-  }
-  
-  /* Server Buttons */
-  .srv-btn {
-    transition: all 0.15s ease;
-    background: rgba(255,255,255,0.06);
-    border: 1.5px solid transparent;
-  }
-  .srv-btn:hover { background: rgba(139,92,246,0.15); }
-  .srv-btn.on {
-    border-color: #8b5cf6;
-    background: rgba(139,92,246,0.2);
-    box-shadow: 0 0 12px rgba(139,92,246,0.3);
-  }
-  
-  /* Toast */
-  #toast {
-    position: fixed;
-    bottom: 80px; left: 50%;
-    transform: translateX(-50%) translateY(30px);
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-    opacity: 0; pointer-events: none;
-    transition: all 0.3s ease;
-    z-index: 300;
-    max-width: 90%;
-    text-align: center;
-  }
-  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  
-  /* Search Overlay */
-  #searchOverlay {
-    position: fixed; inset: 0;
-    background: rgba(5,5,8,0.97);
-    backdrop-filter: blur(20px);
-    z-index: 150;
-    display: none;
-    flex-direction: column;
-    padding: 16px;
-    padding-top: 70px;
-  }
-  #searchOverlay.open { display: flex; animation: fadeIn 0.2s ease; }
-  
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.5); border-radius: 4px; }
-  
-  /* Episode Grid */
-  .ep-btn {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    transition: all 0.15s ease;
-  }
-  .ep-btn:hover { background: rgba(139,92,246,0.15); border-color: rgba(139,92,246,0.4); }
-  .ep-btn.on { background: rgba(139,92,246,0.25); border-color: #8b5cf6; box-shadow: 0 0 10px rgba(139,92,246,0.3); }
-  
-  /* Utility */
-  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-</style>
+  </script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0a0a0f; color: #fff; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
+    .glass { background: rgba(30, 30, 46, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(139, 92, 246, 0.2); }
+    .glass-card { background: linear-gradient(145deg, rgba(30,30,46,0.9), rgba(19,19,31,0.95)); backdrop-filter: blur(10px); border: 1px solid rgba(139,92,246,0.15); }
+    .neon-glow { box-shadow: 0 0 10px rgba(139,92,246,0.5), 0 0 20px rgba(59,130,246,0.3); }
+    .neon-glow-hover:hover { box-shadow: 0 0 15px rgba(139,92,246,0.8), 0 0 30px rgba(59,130,246,0.5); }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .card-hover:hover { transform: scale(1.03); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .skeleton { background: linear-gradient(90deg, #1a1a2e 25%, #252540 50%, #1a1a2e 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .ripple { position: absolute; border-radius: 50%; background: rgba(139,92,246,0.4); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; }
+    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+    .view { display: none; min-height: 100vh; padding-bottom: 80px; }
+    .view.active { display: block; animation: fade-in 0.3s ease-out; }
+    .hero-slide { transition: opacity 0.8s ease-in-out; }
+    .hero-slide:not(.active) { opacity: 0; position: absolute; }
+    .hero-slide.active { opacity: 1; position: relative; }
+    .server-btn.active { background: linear-gradient(135deg, #8b5cf6, #3b82f6); box-shadow: 0 0 20px rgba(139,92,246,0.6); }
+    .nav-tab.active { color: #8b5cf6; border-bottom: 2px solid #8b5cf6; }
+    .episode-btn.active { background: rgba(139,92,246,0.3); border-color: #8b5cf6; }
+    .search-result:hover { background: rgba(139,92,246,0.15); }
+    .mobile-menu { transform: translateX(-100%); transition: transform 0.3s ease; }
+    .mobile-menu.open { transform: translateX(0); }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #3b3b5c; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+    iframe { border: none; width: 100%; height: 100%; min-height: 400px; background: #000; }
+    .poster-aspect { aspect-ratio: 2/3; }
+    .backdrop-aspect { aspect-ratio: 16/9; }
+    @media (max-width: 768px) {
+      .hide-mobile { display: none; }
+      .show-mobile { display: flex; }
+    }
+  </style>
 </head>
-<body>
+<body class="bg-dark text-white">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-<!-- ==================== HEADER ==================== -->
-<header class="app-header">
-  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-2.5 cursor-pointer" onclick="goHome()">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-bold text-sm neon-text">A</div>
-      <span class="text-xl font-extrabold neon-text tracking-tight">Anime<span class="text-primary">X</span> Pro</span>
-    </div>
+  <!-- TMDB & Firebase Config - REPLACE WITH YOUR KEYS -->
+  <script>
+    const TMDB_API_KEY = 'b72a0e80058553968e369cae73736579'; // ⚠️ Replace with your TMDB API key
+    const TMDB_BASE = 'https://api.themoviedb.org/3';
+    const IMG_BASE = 'https://image.tmdb.org/t/p';
     
-    <nav class="hidden md:flex items-center gap-1.5">
-      <button onclick="goHome()" class="px-4 py-2 rounded-xl hover:bg-white/10 transition font-medium text-sm">Home</button>
-      <button onclick="openSection('trending')" class="px-4 py-2 rounded-xl hover:bg-white/10 transition font-medium text-sm">Trending</button>
-      <button onclick="openSection('popular')" class="px-4 py-2 rounded-xl hover:bg-white/10 transition font-medium text-sm">Popular</button>
-      <button onclick="openSection('toprated')" class="px-4 py-2 rounded-xl hover:bg-white/10 transition font-medium text-sm">Top Rated</button>
-      <button onclick="openSection('airing')" class="px-4 py-2 rounded-xl hover:bg-white/10 transition font-medium text-sm">Airing</button>
-    </nav>
+    const firebaseConfig = {
+      apiKey: "YOUR_FIREBASE_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
     
-    <div class="flex items-center gap-2.5">
-      <button onclick="toggleSearch()" class="p-2.5 rounded-xl hover:bg-white/10 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      </button>
-      <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="md:hidden p-2.5 rounded-xl hover:bg-white/10 transition">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
+    // Initialize Firebase
+    if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+  </script>
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button id="mobileMenuBtn" class="show-mobile p-2 hover:bg-white/10 rounded-lg transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <h1 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent cursor-pointer" data-view="home">AnimeX</h1>
+        <nav class="hide-mobile flex items-center gap-1 ml-4">
+          <button class="px-3 py-1.5 rounded-lg hover:bg-white/10 transition text-sm nav-link active" data-view="home">Home</button>
+          <button class="px-3 py-1.5 rounded-lg hover:bg-white/10 transition text-sm nav-link" data-view="home" data-section="trending">Trending</button>
+          <button class="px-3 py-1.5 rounded-lg hover:bg-white/10 transition text-sm nav-link" data-view="home" data-section="top">Top Rated</button>
+        </nav>
+      </div>
+      
+      <div class="flex-1 max-w-md mx-4 hidden md:block">
+        <div class="relative">
+          <input type="text" id="searchInput" placeholder="Search anime..." class="w-full bg-white/5 border border-white/10 rounded-full py-2 px-4 pl-10 focus:outline-none focus:border-primary transition text-sm">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 glass rounded-xl overflow-hidden hidden max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <button id="searchBtnMobile" class="show-mobile p-2 hover:bg-white/10 rounded-lg transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
+        <div id="authSection">
+          <button id="loginBtn" class="px-4 py-1.5 bg-gradient-to-r from-primary to-secondary rounded-full text-sm font-medium hover:opacity-90 transition neon-glow-hover">Sign In</button>
+          <div id="userProfile" class="hidden flex items-center gap-2">
+            <img id="userAvatar" src="" class="w-8 h-8 rounded-full border-2 border-primary">
+            <button id="logoutBtn" class="text-xs text-gray-400 hover:text-white transition">Logout</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  
+  </header>
+
   <!-- Mobile Menu -->
-  <div id="mobileMenu" class="hidden md:hidden px-4 pb-4">
-    <div class="glass-card p-3 flex flex-col gap-1">
-      <button onclick="goHome(); document.getElementById('mobileMenu').classList.add('hidden')" class="text-left px-4 py-3 rounded-xl hover:bg-white/10 transition">🏠 Home</button>
-      <button onclick="openSection('trending'); document.getElementById('mobileMenu').classList.add('hidden')" class="text-left px-4 py-3 rounded-xl hover:bg-white/10 transition">🔥 Trending</button>
-      <button onclick="openSection('popular'); document.getElementById('mobileMenu').classList.add('hidden')" class="text-left px-4 py-3 rounded-xl hover:bg-white/10 transition">⭐ Popular</button>
-      <button onclick="openSection('toprated'); document.getElementById('mobileMenu').classList.add('hidden')" class="text-left px-4 py-3 rounded-xl hover:bg-white/10 transition">🏆 Top Rated</button>
-      <button onclick="openSection('airing'); document.getElementById('mobileMenu').classList.add('hidden')" class="text-left px-4 py-3 rounded-xl hover:bg-white/10 transition">📺 Airing</button>
+  <div id="mobileMenu" class="mobile-menu fixed inset-y-0 left-0 w-64 glass z-50 p-4 pt-20">
+    <nav class="flex flex-col gap-2">
+      <button class="px-4 py-3 rounded-lg hover:bg-white/10 transition text-left nav-link active" data-view="home">🏠 Home</button>
+      <button class="px-4 py-3 rounded-lg hover:bg-white/10 transition text-left nav-link" data-view="home" data-section="trending">🔥 Trending</button>
+      <button class="px-4 py-3 rounded-lg hover:bg-white/10 transition text-left nav-link" data-view="home" data-section="top">⭐ Top Rated</button>
+      <button class="px-4 py-3 rounded-lg hover:bg-white/10 transition text-left nav-link" data-view="history">📜 Watch History</button>
+      <button class="px-4 py-3 rounded-lg hover:bg-white/10 transition text-left nav-link" data-view="dev">👨‍💻 Dev Page</button>
+      <button class="px-4 py-3 rounded-lg hover:bg-white/10 transition text-left nav-link" data-view="profile">👤 Profile</button>
+    </nav>
+  </div>
+  <div id="menuOverlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
+
+  <!-- Mobile Search Overlay -->
+  <div id="searchOverlay" class="fixed inset-0 z-50 bg-dark hidden">
+    <div class="p-4">
+      <div class="flex items-center gap-3 mb-4">
+        <button id="closeSearchMobile" class="p-2 hover:bg-white/10 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <input type="text" id="searchInputMobile" placeholder="Search anime..." class="flex-1 bg-white/5 border border-white/10 rounded-full py-2.5 px-4 focus:outline-none focus:border-primary transition">
+      </div>
+      <div id="searchResultsMobile" class="space-y-2 max-h-[calc(100vh-100px)] overflow-y-auto pb-20"></div>
     </div>
   </div>
-</header>
 
-<!-- ==================== SEARCH OVERLAY ==================== -->
-<div id="searchOverlay">
-  <div class="flex gap-3 mb-6">
-    <div class="relative flex-1">
-      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input id="searchInput" placeholder="Search anime..." 
-             class="w-full glass-card pl-11 pr-4 py-3.5 bg-white/5 focus:outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/20 text-base">
-    </div>
-    <button onclick="toggleSearch()" class="p-3.5 rounded-xl bg-white/10 hover:bg-white/20 transition">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <div id="searchResults" class="flex-1 overflow-y-auto pb-4 space-y-3">
-    <div class="text-center text-gray-500 pt-12">Type to search anime...</div>
-  </div>
-</div>
-
-<!-- ==================== HOME VIEW ==================== -->
-<section id="homeView" class="view active pb-20">
-  <div class="max-w-7xl mx-auto px-4">
+  <!-- MAIN VIEWS -->
+  <main class="pt-16">
     
-    <!-- Hero -->
-    <div class="relative h-[55vh] md:h-[65vh] rounded-2xl overflow-hidden mb-8 glass-card">
-      <div class="hero-slide active" id="heroSlide1"></div>
-      <div class="hero-slide" id="heroSlide2"></div>
-      <div class="hero-slide" id="heroSlide3"></div>
-      <div class="absolute inset-0 hero-overlay"></div>
-      <div class="absolute bottom-0 left-0 right-0 p-5 md:p-8">
-        <div id="heroContent" class="max-w-xl">
-          <div class="flex flex-wrap gap-2 mb-3">
-            <span class="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-semibold border border-primary/30">⭐ <span id="heroRating">-</span></span>
-            <span class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold border border-white/10" id="heroYear">-</span>
-            <span class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold border border-white/10" id="heroEps">-</span>
-          </div>
-          <h1 id="heroTitle" class="text-2xl md:text-4xl font-extrabold mb-2 neon-text leading-tight">Loading Anime...</h1>
-          <p id="heroDesc" class="text-gray-300 text-sm md:text-base mb-4 line-clamp-3">Fetching content...</p>
-          <div class="flex flex-wrap gap-3">
-            <button id="heroWatchBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-sm hover:shadow-lg hover:shadow-primary/40 transition flex items-center gap-2">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg>
-              Watch Now
-            </button>
-            <button id="heroListBtn" class="px-5 py-2.5 rounded-xl bg-white/10 border border-white/20 font-semibold text-sm hover:bg-white/20 transition flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-              Add to List
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="absolute bottom-4 right-4 flex gap-1.5">
-        <button onclick="slideTo(0)" class="w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-primary transition dot"></button>
-        <button onclick="slideTo(1)" class="w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-primary transition dot"></button>
-        <button onclick="slideTo(2)" class="w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-primary transition dot"></button>
-      </div>
-    </div>
-    
-    <!-- Rows -->
-    <div id="row-trending" class="mb-10"><SectionHeader title="🔥 Trending Now" id="trending" /></div>
-    <div id="row-popular" class="mb-10"><SectionHeader title="⭐ Popular Anime" id="popular" /></div>
-    <div id="row-toprated" class="mb-10"><SectionHeader title="🏆 Top Rated" id="toprated" /></div>
-    <div id="row-airing" class="mb-10"><SectionHeader title="📺 Airing Today" id="airing" /></div>
-    <div id="row-upcoming" class="mb-10"><SectionHeader title="🗓️ Upcoming" id="upcoming" /></div>
-    
-    <!-- Genres -->
-    <div class="mb-10">
-      <h2 class="text-lg font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-primary/80">🎭 Browse by Genre</h2>
-      <div class="flex flex-wrap gap-2">
-        <button onclick="loadGenre(16,'Animation')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Animation</button>
-        <button onclick="loadGenre(10759,'Action & Adventure')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Action & Adventure</button>
-        <button onclick="loadGenre(35,'Comedy')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Comedy</button>
-        <button onclick="loadGenre(18,'Drama')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Drama</button>
-        <button onclick="loadGenre(14,'Fantasy')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Fantasy</button>
-        <button onclick="loadGenre(9648,'Mystery')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Mystery</button>
-        <button onclick="loadGenre(10765,'Sci-Fi')" class="px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-sm hover:bg-primary/30 transition">Sci-Fi</button>
-      </div>
-    </div>
-    
-  </div>
-</section>
-
-<!-- ==================== DETAILS VIEW ==================== -->
-<section id="detailsView" class="view pb-20">
-  <div class="max-w-5xl mx-auto px-4">
-    <button onclick="goHome()" class="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition group">
-      <svg class="w-5 h-5 group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      Back
-    </button>
-    <div id="detailsContent" class="glass-card p-6">
-      <div class="animate-pulse"><div class="flex flex-col md:flex-row gap-6"><div class="skel w-full md:w-64 h-80"></div><div class="flex-1"><div class="skel h-8 w-3/4 mb-3"></div><div class="skel h-4 w-1/2 mb-4"></div><div class="skel h-3 w-full mb-2"></div><div class="skel h-3 w-11/12 mb-2"></div><div class="skel h-3 w-4/5 mb-6"></div><div class="flex gap-3"><div class="skel w-28 h-10"></div><div class="skel w-36 h-10"></div></div></div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== PLAYER VIEW ==================== -->
-<section id="playerView" class="view pb-20">
-  <div class="max-w-6xl mx-auto px-4">
-    <button onclick="showDetails(currentItem)" class="mb-4 flex items-center gap-2 text-gray-400 hover:text-white transition group">
-      <svg class="w-5 h-5 group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      Back to Details
-    </button>
-    
-    <div class="glass-card p-3 mb-6">
-      <div class="player-wrap">
-        <iframe id="playerFrame" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
-      </div>
-    </div>
-    
-    <div class="glass-card p-5 mb-6">
-      <h3 class="font-semibold mb-3 text-sm text-gray-300">Streaming Server</h3>
-      <div class="flex flex-wrap gap-2">
-        <button class="srv-btn px-4 py-2.5 rounded-xl text-sm font-medium on" onclick="switchServer(1)">🎬 Server 1 (HD)</button>
-        <button class="srv-btn px-4 py-2.5 rounded-xl text-sm font-medium" onclick="switchServer(2)">⚡ Server 2 (Fast)</button>
-        <button class="srv-btn px-4 py-2.5 rounded-xl text-sm font-medium" onclick="switchServer(3)">🔗 Server 3 (Backup)</button>
-        <button class="srv-btn px-4 py-2.5 rounded-xl text-sm font-medium" onclick="switchServer(4)">🛡️ Server 4 (Secure)</button>
-      </div>
-    </div>
-    
-    <div id="epSelector" class="glass-card p-5 mb-6 hidden">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="font-semibold text-sm text-gray-300">Season <span id="curSeason">1</span></h3>
-        <div class="flex gap-2">
-          <button onclick="changeSeason(-1)" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs">← Prev</button>
-          <button onclick="changeSeason(1)" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs">Next →</button>
-        </div>
-      </div>
-      <div id="epButtons" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2"></div>
-    </div>
-    
-    <div class="glass-card p-5">
-      <h2 id="playTitle" class="text-xl font-bold mb-2">Loading...</h2>
-      <div class="flex flex-wrap gap-2 text-sm text-gray-400 mb-3">
-        <span class="flex items-center gap-1">⭐ <span id="playRating">-</span></span>
-        <span>•</span>
-        <span id="playDate">-</span>
-        <span>•</span>
-        <span id="playSeason">S1 E1</span>
-      </div>
-      <p id="playDesc" class="text-gray-300 text-sm leading-relaxed">-</p>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== FULL GRID VIEW ==================== -->
-<section id="gridView" class="view pb-20">
-  <div class="max-w-7xl mx-auto px-4">
-    <button onclick="goHome()" class="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      Back Home
-    </button>
-    <h2 id="gridTitle" class="text-xl font-bold mb-6 neon-text">Loading...</h2>
-    <div id="gridContent" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div>
-    <div id="gridLoadMore" class="text-center py-6 hidden">
-      <button onclick="loadGridMore()" class="px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition text-sm font-medium">Load More</button>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== MOBILE NAV ==================== -->
-<nav class="mobile-nav">
-  <button onclick="goHome()" class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white/10 transition">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-    <span class="text-[10px] font-medium">Home</span>
-  </button>
-  <button onclick="toggleSearch()" class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white/10 transition">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-    <span class="text-[10px] font-medium">Search</span>
-  </button>
-  <button onclick="openSection('trending')" class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white/10 transition">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-    <span class="text-[10px] font-medium">Trending</span>
-  </button>
-  <button onclick="goHome(); toast('Watchlist: ' + (getLS('wl')||[]).length + ' items')" class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white/10 transition">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-    <span class="text-[10px] font-medium">Profile</span>
-  </button>
-</nav>
-
-<!-- ==================== TOAST ==================== -->
-<div id="toast"></div>
-
-<!-- ==================== JAVASCRIPT ==================== -->
-<script>
-// ===== CONFIG =====
-const API_KEY = 'b72a0e80058553968e369cae73736579'; // ← Replace with your TMDB API key
-const BASE = 'https://api.themoviedb.org/3';
-const IMG = 'https://image.tmdb.org/t/p/w500';
-const IMG_ORIG = 'https://image.tmdb.org/t/p/original';
-const NO_IMG = 'https://via.placeholder.com/300x450/14142a/8b5cf6?text=No+Image';
-
-// ===== STATE =====
-let currentItem = null;
-let curSeason = 1;
-let curEpisode = 1;
-let curServer = 1;
-let heroData = [];
-let heroIdx = 0;
-let gridPage = 1;
-let gridFetch = null;
-let searchTimer = null;
-
-// ===== HELPERS =====
-const $ = id => document.getElementById(id);
-const toast = msg => {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-};
-
-const getLS = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } };
-const setLS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-
-const api = async (endpoint, params = {}) => {
-  const url = new URL(`${BASE}${endpoint}`);
-  url.searchParams.append('api_key', API_KEY);
-  url.searchParams.append('language', 'en-US');
-  Object.entries(params).forEach(([k,v]) => url.searchParams.append(k,v));
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-};
-
-// Filter: Animation (16) OR Japanese shows
-const isAnime = item => {
-  return item.genre_ids?.includes(16) || 
-         item.original_language === 'ja' ||
-         (item.name && (item.name.toLowerCase().includes('anime') || item.name.includes('な') || item.name.includes('の')));
-};
-
-// ===== CARD HTML =====
-const cardHTML = item => {
-  const p = item.poster_path ? `${IMG}${item.poster_path}` : NO_IMG;
-  const r = (item.vote_average || 0).toFixed(1);
-  const y = item.first_air_date ? item.first_air_date.split('-')[0] : (item.release_date ? item.release_date.split('-')[0] : '');
-  const n = item.name || item.title || 'Unknown';
-  const ep = item.number_of_episodes ? `<span class="text-[10px] text-gray-500">${item.number_of_episodes} EP</span>` : '';
-  
-  return `
-    <div class="anime-card glass-card p-3 group" onclick="openDetails(${item.id})">
-      <div class="relative overflow-hidden rounded-xl mb-2 bg-black/30">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
-             data-src="${p}" alt="${n}" loading="lazy"
-             class="w-full h-[210px] md:h-[260px] object-cover rounded-xl transition-transform duration-300 group-hover:scale-105 card-img">
-        <div class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/60 text-[10px] font-bold flex items-center gap-0.5 backdrop-blur-sm">
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          ${r}
-        </div>
-      </div>
-      <h3 class="font-semibold text-xs line-clamp-2 group-hover:text-primary transition min-h-[32px]">${n}</h3>
-      <div class="flex items-center justify-between mt-1.5">
-        <span class="text-[10px] text-gray-400">${y}</span>
-        ${ep}
-      </div>
-    </div>
-  `;
-};
-
-const skeletonRow = () => Array(8).fill(`<div class="anime-card glass-card p-3"><div class="skel h-[210px] md:h-[260px] mb-2"></div><div class="skel h-3 w-3/4 mb-1"></div><div class="skel h-2 w-1/3"></div></div>`).join('');
-
-// ===== NAVIGATION =====
-const hideAll = () => document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-
-const goHome = () => { hideAll(); $('homeView').classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); };
-const goDetails = () => { hideAll(); $('detailsView').classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); };
-const goPlayer = () => { hideAll(); $('playerView').classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); };
-const goGrid = () => { hideAll(); $('gridView').classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); };
-
-// ===== LOAD ROW =====
-const loadRow = async (containerId, fetchFn, title, filter = true) => {
-  const el = $(containerId);
-  if (!el) return;
-  el.innerHTML = `<div class="flex items-center justify-between mb-4 px-1"><h2 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-primary/80">${title}</h2><button onclick="openSection('${containerId.replace('row-','')}')" class="text-primary text-xs hover:underline">View All →</button></div><div class="scroll-row">${skeletonRow()}</div>`;
-  
-  try {
-    const data = await fetchFn();
-    let items = filter ? data.results.filter(isAnime) : data.results;
-    items = items.slice(0, 20);
-    
-    const row = el.querySelector('.scroll-row');
-    if (items.length === 0) {
-      row.innerHTML = '<div class="text-gray-500 text-sm px-4 py-4">No content available</div>';
-      return;
-    }
-    
-    row.innerHTML = items.map(cardHTML).join('');
-    loadImages(el);
-  } catch (e) {
-    el.querySelector('.scroll-row').innerHTML = `<div class="text-red-400/80 text-sm px-4 py-4">⚠️ Failed to load. ${API_KEY === 'YOUR_TMDB_API_KEY' ? 'Add your TMDB API key!' : 'Check connection.'}</div>`;
-  }
-};
-
-// ===== SECTION HEADER HELPER =====
-const SectionHeader = (title, id) => `
-  <div class="flex items-center justify-between mb-4 px-1">
-    <h2 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-primary/80">${title}</h2>
-    <button onclick="openSection('${id}')" class="text-primary text-xs hover:underline font-medium">View All →</button>
-  </div>
-  <div class="scroll-row" id="${id}-row">${skeletonRow()}</div>
-`;
-
-// ===== HERO =====
-const initHero = async () => {
-  try {
-    const data = await api('/trending/tv/day');
-    heroData = data.results.filter(isAnime).slice(0, 3);
-    
-    heroData.forEach((item, i) => {
-      const slide = $(`heroSlide${i+1}`);
-      if (slide && item.backdrop_path) {
-        slide.style.backgroundImage = `url(${IMG_ORIG}${item.backdrop_path})`;
-      }
-    });
-    
-    if (heroData[0]) updateHero(heroData[0]);
-    
-    setInterval(() => {
-      heroIdx = (heroIdx + 1) % 3;
-      slideTo(heroIdx);
-      if (heroData[heroIdx]) updateHero(heroData[heroIdx]);
-    }, 6000);
-  } catch (e) {
-    $('heroTitle').textContent = '⚠️ API Key Required';
-    $('heroDesc').textContent = 'Replace YOUR_TMDB_API_KEY with your actual TMDB API key.';
-  }
-};
-
-const updateHero = item => {
-  $('heroTitle').textContent = item.name;
-  $('heroRating').textContent = (item.vote_average || 0).toFixed(1);
-  $('heroYear').textContent = item.first_air_date ? item.first_air_date.split('-')[0] : 'N/A';
-  $('heroEps').textContent = item.number_of_episodes ? `${item.number_of_episodes} EP` : 'TV';
-  $('heroDesc').textContent = item.overview || 'No description.';
-  $('heroWatchBtn').onclick = () => playAnime(item);
-  
-  const inList = getLS('wl').some(a => a.id === item.id);
-  $('heroListBtn').innerHTML = inList 
-    ? '<svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/></svg> In List'
-    : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Add to List';
-  $('heroListBtn').onclick = () => toggleWatchlist(item, $('heroListBtn'));
-};
-
-let heroTimer;
-const slideTo = idx => {
-  heroIdx = idx;
-  document.querySelectorAll('.hero-slide').forEach((s, i) => s.classList.toggle('active', i === idx));
-  document.querySelectorAll('.dot').forEach((d, i) => {
-    d.classList.toggle('bg-primary', i === idx);
-    d.classList.toggle('bg-white/40', i !== idx);
-  });
-};
-
-// ===== LOAD ALL SECTIONS =====
-const loadHome = async () => {
-  await initHero();
-  loadRow('row-trending', () => api('/trending/tv/day'), '🔥 Trending Now');
-  loadRow('row-popular', () => api('/tv/popular'), '⭐ Popular Anime');
-  loadRow('row-toprated', () => api('/tv/top_rated'), '🏆 Top Rated');
-  loadRow('row-airing', () => api('/tv/on_the_air'), '📺 Airing Today');
-  loadRow('row-upcoming', () => api('/tv/airing_today'), '🗓️ Upcoming', false);
-};
-
-// ===== GRID VIEW =====
-const openSection = async section => {
-  const titles = { trending: '🔥 Trending', popular: '⭐ Popular', toprated: '🏆 Top Rated', airing: '📺 Airing' };
-  const fns = { 
-    trending: () => api('/trending/tv/day'),
-    popular: () => api('/tv/popular'),
-    toprated: () => api('/tv/top_rated'),
-    airing: () => api('/tv/on_the_air')
-  };
-  
-  $('gridTitle').textContent = titles[section] || 'Anime';
-  gridPage = 1;
-  gridFetch = () => fns[section](gridPage);
-  goGrid();
-  await loadGridMore();
-};
-
-const loadGenre = async (genreId, name) => {
-  $('gridTitle').textContent = `🎭 ${name}`;
-  gridPage = 1;
-  gridFetch = () => api('/discover/tv', { with_genres: genreId, page: gridPage, sort_by: 'popularity.desc' });
-  goGrid();
-  await loadGridMore();
-};
-
-const loadGridMore = async () => {
-  if (!gridFetch) return;
-  const grid = $('gridContent');
-  const loader = $('gridLoadMore');
-  
-  if (gridPage === 1) grid.innerHTML = Array(12).fill('<div class="glass-card p-3"><div class="skel h-[210px] mb-2"></div><div class="skel h-3 w-3/4"></div></div>').join('');
-  
-  try {
-    const data = await gridFetch();
-    let items = data.results.filter(isAnime);
-    
-    if (gridPage === 1 && items.length === 0) {
-      grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">No content found</div>';
-      return;
-    }
-    
-    if (gridPage === 1) grid.innerHTML = '';
-    grid.innerHTML += items.map(cardHTML).join('');
-    loadImages(grid);
-    
-    gridPage++;
-    loader.classList.toggle('hidden', gridPage > data.total_pages || items.length === 0);
-  } catch (e) {
-    if (gridPage === 1) grid.innerHTML = '<div class="col-span-full text-center text-red-400 py-10">Failed to load</div>';
-  }
-};
-
-// ===== DETAILS =====
-const openDetails = async id => {
-  currentItem = { id };
-  goDetails();
-  
-  const el = $('detailsContent');
-  el.innerHTML = `<div class="animate-pulse"><div class="flex flex-col md:flex-row gap-6"><div class="skel w-full md:w-64 h-80"></div><div class="flex-1"><div class="skel h-8 w-3/4 mb-3"></div><div class="skel h-4 w-1/2 mb-4"></div><div class="skel h-3 w-full mb-2"></div><div class="skel h-3 w-11/12 mb-2"></div><div class="skel h-3 w-4/5 mb-6"></div><div class="flex gap-3"><div class="skel w-28 h-10"></div><div class="skel w-36 h-10"></div></div></div></div></div>`;
-  
-  try {
-    const d = await api(`/tv/${id}`);
-    currentItem = d;
-    const p = d.poster_path ? `${IMG}${d.poster_path}` : NO_IMG;
-    const genres = (d.genres || []).slice(0,3).map(g => `<span class="px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-xs">${g.name}</span>`).join('');
-    const inList = getLS('wl').some(a => a.id === d.id);
-    
-    el.innerHTML = `
-      <div class="flex flex-col md:flex-row gap-6">
-        <div class="w-full md:w-64 flex-shrink-0">
-          <img src="${p}" class="w-full rounded-2xl shadow-2xl card-img" onerror="this.src='${NO_IMG}'">
-        </div>
-        <div class="flex-1">
-          <h1 class="text-2xl md:text-3xl font-extrabold mb-2 neon-text">${d.name}</h1>
-          <div class="flex flex-wrap items-center gap-2 text-sm text-gray-300 mb-3">
-            <span class="px-2 py-0.5 rounded bg-primary/20 text-primary font-semibold text-xs">⭐ ${(d.vote_average||0).toFixed(1)}</span>
-            <span>${d.first_air_date ? d.first_air_date.split('-')[0] : ''}</span>
-            <span>•</span>
-            <span>${d.number_of_seasons} Season${d.number_of_seasons>1?'s':''}</span>
-            <span>•</span>
-            <span class="text-primary">${d.status}</span>
-          </div>
-          <div class="flex flex-wrap gap-2 mb-4">${genres}</div>
-          <p class="text-gray-300 text-sm leading-relaxed mb-5">${d.overview || 'No description.'}</p>
-          
-          <div class="flex flex-wrap gap-3 mb-5">
-            <button onclick="playAnime(currentItem)" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-sm hover:shadow-lg hover:shadow-primary/40 transition flex items-center gap-2">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/></svg>
-              Watch Now
-            </button>
-            <button onclick="toggleWatchlist(currentItem, this)" id="detailListBtn" class="px-5 py-2.5 rounded-xl bg-white/10 border border-white/20 font-semibold text-sm hover:bg-white/20 transition flex items-center gap-2">
-              ${inList ? '<svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/></svg> In List' : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Add to List'}
-            </button>
-          </div>
-          
-          ${d.number_of_seasons > 0 ? `
-          <div class="glass-card p-4 mt-4">
-            <h3 class="font-semibold mb-3 text-sm">Episodes</h3>
-            <div class="flex flex-wrap gap-2 mb-4" id="seasonBtns">
-              ${Array.from({length: Math.min(d.number_of_seasons, 15)}, (_, i) => `<button onclick="loadEps(${i+1})" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-primary/20 border border-white/10 hover:border-primary/50 text-xs font-medium ${i===0?'bg-primary/20 border-primary/50':''}">S${i+1}</button>`).join('')}
+    <!-- HOME VIEW -->
+    <div id="view-home" class="view active">
+      <!-- Hero Section -->
+      <section class="relative h-[70vh] max-h-[600px] overflow-hidden">
+        <div id="heroSlider" class="absolute inset-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+          <div id="heroContent" class="max-w-2xl animate-slide-up">
+            <span id="heroRating" class="inline-flex items-center gap-1 px-2 py-1 bg-primary/20 rounded text-xs font-medium mb-3">
+              <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <span id="heroRatingValue">8.5</span>
+            </span>
+            <h2 id="heroTitle" class="text-3xl md:text-5xl font-bold mb-3 leading-tight">Loading...</h2>
+            <p id="heroOverview" class="text-gray-300 text-sm md:text-base mb-4 line-clamp-3">Fetching trending anime...</p>
+            <div class="flex flex-wrap gap-3">
+              <button id="heroWatchBtn" class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary rounded-full font-medium hover:opacity-90 transition flex items-center gap-2 neon-glow">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                Watch Now
+              </button>
+              <button id="heroDetailsBtn" class="px-6 py-2.5 bg-white/10 rounded-full font-medium hover:bg-white/20 transition">More Info</button>
             </div>
-            <div id="epList" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2"></div>
-          </div>` : ''}
+          </div>
         </div>
-      </div>
-    `;
-    
-    if (d.number_of_seasons > 0) loadEps(1);
-    
-    // Save to recent
-    let recent = getLS('recent').filter(a => a.id !== d.id);
-    recent.unshift({ id: d.id, name: d.name, poster_path: d.poster_path });
-    setLS('recent', recent.slice(0,25));
-    
-  } catch (e) {
-    el.innerHTML = '<div class="text-center text-red-400 py-10">⚠️ Failed to load details. Check API key.</div>';
-  }
-};
+      </section>
 
-const showDetails = item => {
-  currentItem = item;
-  openDetails(item.id);
-};
+      <!-- Top 10 Trending -->
+      <section class="px-4 md:px-6 py-6">
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <span class="text-primary">🔥</span> Top 10 Trending
+        </h3>
+        <div id="top10Container" class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+          <!-- Dynamic content -->
+        </div>
+      </section>
 
-// ===== EPISODES =====
-const loadEps = async season => {
-  if (!currentItem) return;
-  curSeason = season;
-  
-  document.querySelectorAll('#seasonBtns button').forEach(btn => {
-    const s = parseInt(btn.textContent.replace('S',''));
-    btn.classList.toggle('bg-primary/20', s === season);
-    btn.classList.toggle('border-primary/50', s === season);
-    btn.classList.toggle('bg-white/10', s !== season);
-    btn.classList.toggle('border-white/10', s !== season);
-  });
-  
-  const el = $('epList');
-  if (!el) return;
-  el.innerHTML = '<div class="col-span-full text-center py-3 text-gray-500 text-xs">Loading...</div>';
-  
-  try {
-    const data = await api(`/tv/${currentItem.id}/season/${season}`);
-    const eps = data.episodes || [];
-    if (eps.length === 0) { el.innerHTML = '<div class="col-span-full text-center py-3 text-gray-500 text-xs">No episodes</div>'; return; }
-    
-    el.innerHTML = eps.map(ep => `
-      <button onclick="playEp(${season}, ${ep.episode_number}, this)" class="ep-btn p-2.5 rounded-xl text-center ${ep.episode_number===curEpisode && curSeason===season ? 'on' : ''}">
-        <div class="text-[10px] text-gray-400 mb-0.5">EP ${ep.episode_number}</div>
-        <div class="text-[10px] font-medium line-clamp-1 group-hover:text-primary">${ep.name || `Episode ${ep.episode_number}`}</div>
-      </button>
-    `).join('');
-    
-  } catch (e) {
-    el.innerHTML = '<div class="col-span-full text-center py-3 text-red-400/80 text-xs">Failed</div>';
-  }
-};
+      <!-- Content Rows -->
+      <section class="px-4 md:px-6 py-4 space-y-8">
+        <div>
+          <h3 class="text-lg font-semibold mb-3">Trending Anime</h3>
+          <div id="rowTrending" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-3">Popular Anime</h3>
+          <div id="rowPopular" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-3">Top Rated</h3>
+          <div id="rowTopRated" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"></div>
+        </div>
+      </section>
+    </div>
 
-// ===== PLAYER =====
-const playAnime = item => {
-  currentItem = item;
-  curSeason = 1;
-  curEpisode = 1;
-  curServer = 1;
-  
-  $('playTitle').textContent = item.name;
-  $('playRating').textContent = (item.vote_average || 0).toFixed(1);
-  $('playDate').textContent = item.first_air_date ? item.first_air_date.split('-')[0] : '';
-  $('playDesc').textContent = item.overview || 'No description.';
-  $('curSeason').textContent = '1';
-  $('playSeason').textContent = 'S1 E1';
-  
-  if (item.number_of_seasons > 0) {
-    $('epSelector').classList.remove('hidden');
-    loadEps(1);
-  } else {
-    $('epSelector').classList.add('hidden');
-  }
-  
-  updatePlayer();
-  saveProgress(item, 1, 1);
-  goPlayer();
-};
+    <!-- DETAILS VIEW -->
+    <div id="view-details" class="view">
+      <div class="max-w-7xl mx-auto px-4 py-4">
+        <button onclick="router.back()" class="flex items-center gap-2 text-gray-400 hover:text-white mb-4 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Back
+        </button>
+        
+        <!-- Video Player Section -->
+        <div class="glass-card rounded-2xl overflow-hidden mb-6">
+          <div id="playerContainer" class="relative backdrop-aspect bg-black">
+            <iframe id="videoFrame" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+            <div id="playerOverlay" class="absolute inset-0 flex items-center justify-center bg-black/40">
+              <button id="playBtn" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition neon-glow">
+                <svg class="w-8 h-8 md:w-10 md:h-10 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Server Selection -->
+          <div id="serverSection" class="p-4 border-t border-white/10 hidden">
+            <p class="text-sm text-gray-400 mb-3">Select Streaming Server:</p>
+            <div class="flex flex-wrap gap-2" id="serverButtons">
+              <button class="server-btn active px-4 py-2 rounded-lg text-sm bg-white/5 hover:bg-white/10 transition" data-server="1">🔥 GW Server</button>
+              <button class="server-btn px-4 py-2 rounded-lg text-sm bg-white/5 hover:bg-white/10 transition" data-server="2">⚡ 4K Quality</button>
+              <button class="server-btn px-4 py-2 rounded-lg text-sm bg-white/5 hover:bg-white/10 transition" data-server="3">🎨 Vidify</button>
+              <button class="server-btn px-4 py-2 rounded-lg text-sm bg-white/5 hover:bg-white/10 transition" data-server="4">🔄 MultiEmbed</button>
+              <button class="server-btn px-4 py-2 rounded-lg text-sm bg-white/5 hover:bg-white/10 transition" data-server="5">💾 2Embed</button>
+            </div>
+          </div>
+        </div>
 
-const updatePlayer = () => {
-  const iframe = $('playerFrame');
-  const id = currentItem?.id;
-  if (!id) return;
-  
-  const servers = [
-    `https://vidsrc.to/embed/tv/${id}/${curSeason}/${curEpisode}/`,
-    `https://www.2embed.cc/embedtv/${id}?s=${curSeason}&e=${curEpisode}`,
-    `https://multiembed.mov/directstream.php?video_id=${id}&s=${curSeason}&e=${curEpisode}`,
-    `https://pexe411qok.com/${id}?s=${curSeason}&e=${curEpisode}`
-  ];
-  
-  iframe.src = servers[curServer - 1];
-  document.querySelectorAll('.srv-btn').forEach((b, i) => b.classList.toggle('on', i + 1 === curServer));
-};
-
-const switchServer = n => {
-  curServer = n;
-  updatePlayer();
-  toast(`Server ${n} selected`);
-};
-
-const playEp = (season, episode, btn) => {
-  curSeason = season;
-  curEpisode = episode;
-  $('curSeason').textContent = season;
-  $('playSeason').textContent = `S${season} E${episode}`;
-  document.querySelectorAll('#epButtons .ep-btn').forEach(b => b.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  updatePlayer();
-  saveProgress(currentItem, season, episode);
-  toast(`Playing S${season} E${episode}`);
-};
-
-const changeSeason = delta => {
-  if (!currentItem) return;
-  const newS = curSeason + delta;
-  if (newS >= 1 && newS <= currentItem.number_of_seasons) {
-    loadEps(newS);
-  }
-};
-
-const saveProgress = (item, season, episode) => {
-  setLS('progress', { id: item.id, name: item.name, season, episode, time: Date.now() });
-};
-
-// ===== WATCHLIST =====
-const toggleWatchlist = (item, btn) => {
-  let wl = getLS('wl');
-  const idx = wl.findIndex(a => a.id === item.id);
-  if (idx === -1) {
-    wl.unshift({ id: item.id, name: item.name, poster_path: item.poster_path });
-    toast('✓ Added to watchlist');
-    if (btn) btn.innerHTML = '<svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/></svg> In List';
-  } else {
-    wl.splice(idx, 1);
-    toast('Removed from watchlist');
-    if (btn) btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Add to List';
-  }
-  setLS('wl', wl);
-};
-
-// ===== SEARCH =====
-const toggleSearch = () => {
-  $('searchOverlay').classList.toggle('open');
-  if ($('searchOverlay').classList.contains('open')) {
-    $('searchInput').focus();
-    $('searchInput').value = '';
-    $('searchResults').innerHTML = '<div class="text-center text-gray-500 pt-12">Type to search anime...</div>';
-  }
-};
-
-$('searchInput').addEventListener('input', e => {
-  clearTimeout(searchTimer);
-  const q = e.target.value.trim();
-  if (q.length < 2) {
-    $('searchResults').innerHTML = '<div class="text-center text-gray-500 pt-12">Type at least 2 characters...</div>';
-    return;
-  }
-  $('searchResults').innerHTML = '<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div></div>';
-  
-  searchTimer = setTimeout(async () => {
-    try {
-      const data = await api('/search/tv', { query: q });
-      const items = data.results.filter(isAnime).slice(0, 20);
-      if (items.length === 0) {
-        $('searchResults').innerHTML = '<div class="text-center text-gray-500 pt-12">No results found</div>';
-        return;
-      }
-      $('searchResults').innerHTML = items.map(item => {
-        const p = item.poster_path ? `${IMG}${item.poster_path}` : NO_IMG;
-        return `
-          <div class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition" onclick="pickSearch(${item.id})">
-            <img src="${p}" class="w-14 h-20 object-cover rounded-lg" onerror="this.src='${NO_IMG}'">
-            <div class="flex-1 min-w-0">
-              <h4 class="font-medium text-sm line-clamp-1">${item.name}</h4>
-              <p class="text-xs text-gray-400 line-clamp-2 mt-1">${item.overview?.slice(0,100)||''}</p>
-              <div class="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
-                <span class="flex items-center gap-1">⭐ ${(item.vote_average||0).toFixed(1)}</span>
-                <span>•</span>
-                <span>${item.first_air_date ? item.first_air_date.split('-')[0] : ''}</span>
+        <!-- Anime Info -->
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 space-y-4">
+            <div>
+              <h1 id="detailTitle" class="text-2xl md:text-3xl font-bold mb-2">Loading...</h1>
+              <div class="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-3">
+                <span id="detailRating" class="flex items-center gap-1">
+                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <span class="text-white">0.0</span>
+                </span>
+                <span id="detailYear">2024</span>
+                <span id="detailType" class="px-2 py-0.5 bg-primary/20 rounded text-xs">TV</span>
               </div>
+              <div id="detailGenres" class="flex flex-wrap gap-2 mb-4"></div>
+            </div>
+            <p id="detailOverview" class="text-gray-300 leading-relaxed">Loading description...</p>
+            
+            <!-- Credits -->
+            <div id="creditsSection" class="pt-4 border-t border-white/10">
+              <h4 class="font-semibold mb-3">Cast & Crew</h4>
+              <div id="creditsList" class="flex gap-3 overflow-x-auto pb-2"></div>
             </div>
           </div>
-        `;
-      }).join('');
-    } catch (e) {
-      $('searchResults').innerHTML = '<div class="text-center text-red-400/80 py-4 text-sm">Search failed</div>';
-    }
-  }, 300);
-});
+          
+          <!-- Sidebar -->
+          <div class="space-y-4">
+            <img id="detailPoster" src="" class="w-full rounded-xl poster-aspect object-cover skeleton" alt="Poster">
+            
+            <!-- Episode Selector (TV Only) -->
+            <div id="episodeSection" class="glass-card rounded-xl p-4 hidden">
+              <h4 class="font-semibold mb-3">Episodes</h4>
+              <div class="flex gap-2 mb-3">
+                <select id="seasonSelect" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"></select>
+                <select id="episodeSelect" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"></select>
+              </div>
+              <button id="playEpisodeBtn" class="w-full py-2 bg-gradient-to-r from-primary to-secondary rounded-lg font-medium hover:opacity-90 transition">Play Episode</button>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex gap-2">
+              <button id="addToHistoryBtn" class="flex-1 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition text-sm">📜 Add to History</button>
+              <button id="shareBtn" class="flex-1 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition text-sm">🔗 Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-const pickSearch = id => {
-  toggleSearch();
-  openDetails(id);
-};
+    <!-- WATCH HISTORY VIEW -->
+    <div id="view-history" class="view">
+      <div class="max-w-7xl mx-auto px-4 py-6">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Watch History
+        </h2>
+        <div id="historyList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <p class="col-span-full text-gray-400 text-center py-10">No watch history yet. Start watching!</p>
+        </div>
+        <button id="clearHistoryBtn" class="mt-6 px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition text-sm">Clear History</button>
+      </div>
+    </div>
 
-// ===== LAZY LOAD =====
-const loadImages = container => {
-  const imgs = container.querySelectorAll('img[data-src]:not(.card-img)');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.classList.add('card-img');
-        obs.unobserve(img);
+    <!-- DEV PAGE VIEW -->
+    <div id="view-dev" class="view">
+      <div class="max-w-2xl mx-auto px-4 py-10">
+        <div class="glass-card rounded-2xl p-6 md:p-8 text-center">
+          <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center neon-glow">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <h2 class="text-2xl font-bold mb-2">AnimeX Ultra Pro</h2>
+          <p class="text-primary text-sm mb-4">v2.0.0 • Single File SPA</p>
+          <p class="text-gray-300 mb-6 leading-relaxed">
+            A premium anime streaming experience built with vanilla JavaScript, Tailwind CSS, and TMDB API. 
+            Fully functional single-page application with Firebase auth, multi-server streaming, and watch history.
+          </p>
+          
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="glass rounded-xl p-4 text-left">
+              <p class="text-xs text-gray-400">Tech Stack</p>
+              <p class="font-medium">HTML5 • Tailwind • Vanilla JS</p>
+            </div>
+            <div class="glass rounded-xl p-4 text-left">
+              <p class="text-xs text-gray-400">APIs</p>
+              <p class="font-medium">TMDB • Firebase • Multi-Embed</p>
+            </div>
+          </div>
+          
+          <div class="flex justify-center gap-4 mb-6">
+            <a href="#" class="p-3 bg-white/5 rounded-full hover:bg-white/10 transition">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+            <a href="#" class="p-3 bg-white/5 rounded-full hover:bg-white/10 transition">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/></svg>
+            </a>
+            <a href="#" class="p-3 bg-white/5 rounded-full hover:bg-white/10 transition">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
+          
+          <p class="text-xs text-gray-500">
+            ⚠️ This is a demo application. Replace TMDB & Firebase keys with your own for production use.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE VIEW -->
+    <div id="view-profile" class="view">
+      <div class="max-w-md mx-auto px-4 py-10">
+        <div class="glass-card rounded-2xl p-6 text-center">
+          <div id="profileAvatar" class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-3xl neon-glow">👤</div>
+          <h2 id="profileName" class="text-xl font-bold mb-1">Guest User</h2>
+          <p id="profileEmail" class="text-gray-400 text-sm mb-6">Not signed in</p>
+          
+          <div id="profileAuth">
+            <button id="profileLoginBtn" class="w-full py-3 bg-gradient-to-r from-primary to-secondary rounded-xl font-medium hover:opacity-90 transition neon-glow">Sign in with Google</button>
+          </div>
+          <div id="profileSignedIn" class="hidden">
+            <button id="profileLogoutBtn" class="w-full py-3 bg-red-500/20 text-red-400 rounded-xl font-medium hover:bg-red-500/30 transition">Sign Out</button>
+          </div>
+          
+          <div class="mt-6 pt-6 border-t border-white/10 text-left space-y-3">
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-400">Watch History</span>
+              <span id="profileHistoryCount" class="font-medium">0 items</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-400">Last Active</span>
+              <span id="profileLastActive" class="font-medium">--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Nav -->
+  <nav class="fixed bottom-0 left-0 right-0 z-50 glass border-t border-white/10 md:hidden">
+    <div class="flex justify-around py-2">
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 px-3 transition" data-view="home">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-xs">Home</span>
+      </button>
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 px-3 transition" data-view="home" data-search="true">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <span class="text-xs">Search</span>
+      </button>
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 px-3 transition" data-view="history">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="text-xs">History</span>
+      </button>
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 px-3 transition" data-view="dev">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        <span class="text-xs">Dev</span>
+      </button>
+      <button class="nav-tab flex flex-col items-center gap-1 py-2 px-3 transition" data-view="profile">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <span class="text-xs">Profile</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 glass px-4 py-3 rounded-xl shadow-lg hidden animate-slide-up">
+    <p id="toastMessage" class="text-sm"></p>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ===== UTILITY FUNCTIONS =====
+    const $ = (sel, ctx = document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+    
+    const debounce = (fn, delay) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), delay);
+      };
+    };
+
+    const showToast = (msg, type = 'info') => {
+      const toast = $('#toast');
+      $('#toastMessage').textContent = msg;
+      toast.className = `fixed bottom-20 left-1/2 -translate-x-1/2 z-50 glass px-4 py-3 rounded-xl shadow-lg animate-slide-up ${type === 'error' ? 'border-red-500/50' : 'border-primary/30'}`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    };
+
+    const createRipple = (e) => {
+      const btn = e.currentTarget;
+      const ripple = document.createElement('span');
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size/2;
+      const y = e.clientY - rect.top - size/2;
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    };
+
+    // ===== ROUTER =====
+    const router = {
+      currentView: 'home',
+      currentData: null,
+      
+      navigate(view, data = null) {
+        // Hide all views
+        $$('.view').forEach(v => v.classList.remove('active'));
+        // Show target view
+        const target = $(`#view-${view}`);
+        if (target) {
+          target.classList.add('active');
+          this.currentView = view;
+          this.currentData = data;
+          
+          // View-specific logic
+          if (view === 'details' && data) this.loadDetails(data);
+          if (view === 'history') this.loadHistory();
+          if (view === 'profile') this.loadProfile();
+          
+          // Update nav active state
+          $$('.nav-tab, .nav-link').forEach(el => {
+            el.classList.toggle('active', el.dataset.view === view);
+          });
+          
+          // Scroll to top
+          window.scrollTo(0, 0);
+        }
+      },
+      
+      back() {
+        this.navigate('home');
+      },
+      
+      async loadDetails(anime) {
+        const { id, title, poster_path, backdrop_path, vote_average, overview, first_air_date, media_type, genres = [] } = anime;
+        
+        // Set basic info
+        $('#detailTitle').textContent = title;
+        $('#detailRating span:last-child').textContent = vote_average?.toFixed(1) || 'N/A';
+        $('#detailYear').textContent = first_air_date?.split('-')[0] || 'N/A';
+        $('#detailType').textContent = media_type === 'movie' ? 'Movie' : 'TV';
+        $('#detailOverview').textContent = overview || 'No description available.';
+        $('#detailPoster').src = poster_path ? `${IMG_BASE}/w500${poster_path}` : 'https://via.placeholder.com/300x450/1a1a2e/8b5cf6?text=No+Image';
+        $('#detailPoster').classList.remove('skeleton');
+        
+        // Genres
+        const genresContainer = $('#detailGenres');
+        genresContainer.innerHTML = genres.slice(0, 4).map(g => 
+          `<span class="px-2 py-1 bg-white/10 rounded text-xs">${g.name}</span>`
+        ).join('');
+        
+        // Episode selector for TV
+        const epSection = $('#episodeSection');
+        if (media_type === 'tv') {
+          epSection.classList.remove('hidden');
+          // Fetch seasons
+          try {
+            const res = await fetch(`${TMDB_BASE}/tv/${id}?api_key=${TMDB_API_KEY}`);
+            const data = await res.json();
+            const seasonSelect = $('#seasonSelect');
+            const episodeSelect = $('#episodeSelect');
+            seasonSelect.innerHTML = '';
+            
+            data.seasons?.filter(s => s.season_number > 0).forEach(s => {
+              const opt = document.createElement('option');
+              opt.value = s.season_number;
+              opt.textContent = `S${s.season_number}`;
+              seasonSelect.appendChild(opt);
+            });
+            
+            // Load episodes for first season
+            const loadEpisodes = async (seasonNum) => {
+              episodeSelect.innerHTML = '<option>Loading...</option>';
+              try {
+                const epRes = await fetch(`${TMDB_BASE}/tv/${id}/season/${seasonNum}?api_key=${TMDB_API_KEY}`);
+                const epData = await epRes.json();
+                episodeSelect.innerHTML = '';
+                epData.episodes?.forEach(ep => {
+                  const opt = document.createElement('option');
+                  opt.value = ep.episode_number;
+                  opt.textContent = `E${ep.episode_number}: ${ep.name}`;
+                  episodeSelect.appendChild(opt);
+                });
+              } catch(e) {
+                episodeSelect.innerHTML = '<option>Error loading</option>';
+              }
+            };
+            
+            seasonSelect.onchange = () => loadEpisodes(seasonSelect.value);
+            if (seasonSelect.options[0]) loadEpisodes(seasonSelect.options[0].value);
+            
+            // Play episode button
+            $('#playEpisodeBtn').onclick = () => {
+              const s = seasonSelect.value, e = episodeSelect.value;
+              this.loadPlayer(id, 'tv', s, e);
+            };
+          } catch(e) {
+            console.error('Season fetch error:', e);
+          }
+        } else {
+          epSection.classList.add('hidden');
+          // For movies, play directly
+          $('#playEpisodeBtn')?.removeEventListener('click');
+          $('#playEpisodeBtn')?.addEventListener('click', () => {
+            this.loadPlayer(id, 'movie');
+          });
+        }
+        
+        // Credits
+        try {
+          const credRes = await fetch(`${TMDB_BASE}/${media_type}/${id}/credits?api_key=${TMDB_API_KEY}`);
+          const credData = await credRes.json();
+          const creditsList = $('#creditsList');
+          creditsList.innerHTML = '';
+          credData.cast?.slice(0, 10).forEach(person => {
+            const div = document.createElement('div');
+            div.className = 'flex-shrink-0 w-16 text-center';
+            div.innerHTML = `
+              <img src="${person.profile_path ? `${IMG_BASE}/w92${person.profile_path}` : 'https://via.placeholder.com/92x92/1a1a2e/8b5cf6?text=?'}" 
+                   class="w-16 h-16 rounded-full object-cover mb-1 skeleton" 
+                   alt="${person.name}"
+                   onerror="this.src='https://via.placeholder.com/92x92/1a1a2e/8b5cf6?text=?';this.classList.remove('skeleton')"
+                   onload="this.classList.remove('skeleton')">
+              <p class="text-xs font-medium truncate">${person.name}</p>
+              <p class="text-xs text-gray-500 truncate">${person.character}</p>
+            `;
+            creditsList.appendChild(div);
+          });
+        } catch(e) { console.error('Credits error:', e); }
+        
+        // Player setup
+        const iframe = $('#videoFrame');
+        const overlay = $('#playerOverlay');
+        const playBtn = $('#playBtn');
+        const serverSection = $('#serverSection');
+        
+        // Reset player
+        iframe.src = '';
+        overlay.classList.remove('hidden');
+        serverSection.classList.add('hidden');
+        $$('.server-btn').forEach(btn => btn.classList.remove('active'));
+        $$('[data-server="1"]')[0]?.classList.add('active');
+        
+        // Play button handler
+        const startPlayback = () => {
+          overlay.classList.add('hidden');
+          serverSection.classList.remove('hidden');
+          this.loadPlayer(id, media_type, $('#seasonSelect')?.value || 1, $('#episodeSelect')?.value || 1);
+        };
+        
+        playBtn.onclick = startPlayback;
+        $('#playBtn')?.removeEventListener('click');
+        $('#playBtn')?.addEventListener('click', startPlayback);
+        
+        // Server buttons
+        $$('.server-btn').forEach(btn => {
+          btn.onclick = () => {
+            $$('.server-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const server = btn.dataset.server;
+            const s = $('#seasonSelect')?.value || 1;
+            const e = $('#episodeSelect')?.value || 1;
+            this.loadPlayer(id, media_type, s, e, server);
+          };
+        });
+        
+        // Add to history button
+        $('#addToHistoryBtn').onclick = () => {
+          this.addToHistory(anime);
+          showToast('Added to watch history ✓');
+        };
+        
+        // Share button
+        $('#shareBtn').onclick = async () => {
+          try {
+            await navigator.share({ title, text: overview, url: location.href });
+          } catch(e) {
+            // Fallback
+            navigator.clipboard?.writeText(location.href);
+            showToast('Link copied to clipboard!');
+          }
+        };
+      },
+      
+      loadPlayer(id, type, season = 1, episode = 1, server = '1') {
+        const iframe = $('#videoFrame');
+        let url = '';
+        const imdbId = this.currentData?.imdb_id || id; // Use imdb if available
+        
+        switch(server) {
+          case '1': // GW Server
+            url = `https://piexe411qok.com/play/${imdbId || id}?s=${season}&e=${episode}`;
+            break;
+          case '2': // 4K Quality
+            url = type === 'tv' 
+              ? `https://vidstorm.ru/tv/${id}/${season}/${episode}`
+              : `https://vidstorm.ru/movie/${id}`;
+            break;
+          case '3': // Vidify
+            url = type === 'tv'
+              ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}`
+              : `https://player.vidify.top/embed/movie/${id}`;
+            break;
+          case '4': // MultiEmbed
+            url = `https://multiembed.mov/directstream.php?video_id=${id}`;
+            break;
+          case '5': // 2Embed
+            url = type === 'tv'
+              ? `https://www.2embed.cc/embedtv/${id}`
+              : `https://www.2embed.cc/embed/${id}`;
+            break;
+        }
+        
+        iframe.src = url;
+        // Save to localStorage
+        localStorage.setItem('lastWatched', JSON.stringify({ id, type, season, episode, server, timestamp: Date.now() }));
+      },
+      
+      addToHistory(anime) {
+        let history = JSON.parse(localStorage.getItem('animeHistory') || '[]');
+        // Remove duplicate if exists
+        history = history.filter(a => a.id !== anime.id);
+        // Add to front
+        history.unshift({ ...anime, watchedAt: Date.now() });
+        // Limit to 50
+        if (history.length > 50) history = history.slice(0, 50);
+        localStorage.setItem('animeHistory', JSON.stringify(history));
+      },
+      
+      loadHistory() {
+        const list = $('#historyList');
+        const history = JSON.parse(localStorage.getItem('animeHistory') || '[]');
+        
+        if (history.length === 0) {
+          list.innerHTML = '<p class="col-span-full text-gray-400 text-center py-10">No watch history yet. Start watching!</p>';
+          return;
+        }
+        
+        list.innerHTML = history.map(anime => `
+          <div class="glass-card rounded-xl overflow-hidden card-hover cursor-pointer" data-id="${anime.id}" data-type="${anime.media_type}">
+            <img src="${anime.poster_path ? `${IMG_BASE}/w300${anime.poster_path}` : 'https://via.placeholder.com/200x300/1a1a2e/8b5cf6?text=No+Image'}" 
+                 class="w-full poster-aspect object-cover" alt="${anime.title}">
+            <div class="p-3">
+              <h4 class="font-medium text-sm truncate">${anime.title}</h4>
+              <p class="text-xs text-gray-400 mt-1">${anime.first_air_date?.split('-')[0] || 'N/A'}</p>
+            </div>
+          </div>
+        `).join('');
+        
+        // Click handlers
+        list.querySelectorAll('[data-id]').forEach(el => {
+          el.onclick = () => {
+            const id = el.dataset.id;
+            const type = el.dataset.type;
+            router.navigate('details', { id, media_type: type });
+          };
+        });
+      },
+      
+      loadProfile() {
+        const user = auth.currentUser;
+        const profileAuth = $('#profileAuth');
+        const profileSignedIn = $('#profileSignedIn');
+        const profileName = $('#profileName');
+        const profileEmail = $('#profileEmail');
+        const profileAvatar = $('#profileAvatar');
+        
+        if (user) {
+          profileName.textContent = user.displayName || 'User';
+          profileEmail.textContent = user.email;
+          profileAvatar.textContent = (user.displayName?.[0] || 'U').toUpperCase();
+          profileAvatar.style.backgroundImage = user.photoURL ? `url(${user.photoURL})` : '';
+          profileAvatar.style.backgroundSize = 'cover';
+          profileAuth.classList.add('hidden');
+          profileSignedIn.classList.remove('hidden');
+        } else {
+          profileName.textContent = 'Guest User';
+          profileEmail.textContent = 'Not signed in';
+          profileAvatar.textContent = '👤';
+          profileAvatar.style.backgroundImage = '';
+          profileAuth.classList.remove('hidden');
+          profileSignedIn.classList.add('hidden');
+        }
+        
+        // History count
+        const history = JSON.parse(localStorage.getItem('animeHistory') || '[]');
+        $('#profileHistoryCount').textContent = `${history.length} items`;
+        $('#profileLastActive').textContent = history[0] ? new Date(history[0].watchedAt).toLocaleDateString() : '--';
       }
+    };
+
+    // ===== TMDB API =====
+    const tmdb = {
+      async fetch(endpoint, params = {}) {
+        const url = new URL(`${TMDB_BASE}${endpoint}`);
+        url.searchParams.append('api_key', TMDB_API_KEY);
+        Object.entries(params).forEach(([k,v]) => url.searchParams.append(k, v));
+        
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`TMDB Error: ${res.status}`);
+        return res.json();
+      },
+      
+      async getTrending(time = 'day') {
+        return this.fetch('/trending/tv/day', { language: 'en-US' });
+      },
+      
+      async getPopular(page = 1) {
+        return this.fetch('/tv/popular', { page, language: 'en-US' });
+      },
+      
+      async getTopRated(page = 1) {
+        return this.fetch('/tv/top_rated', { page, language: 'en-US', with_genres: '16' });
+      },
+      
+      async search(query, page = 1) {
+        return this.fetch('/search/tv', { query, page, language: 'en-US', include_adult: false });
+      },
+      
+      async getDetails(id, type = 'tv') {
+        return this.fetch(`/${type}/${id}`, { language: 'en-US', append_to_response: 'credits' });
+      }
+    };
+
+    // ===== UI RENDERERS =====
+    const renderCard = (anime, isTop10 = false, rank = null) => {
+      const { id, title, poster_path, vote_average, first_air_date, media_type } = anime;
+      const rating = vote_average?.toFixed(1) || 'N/A';
+      const year = first_air_date?.split('-')[0] || 'N/A';
+      
+      return `
+        <div class="glass-card rounded-xl overflow-hidden card-hover cursor-pointer relative ${isTop10 ? 'min-w-[140px] md:min-w-[180px]' : ''}" 
+             data-id="${id}" data-type="${media_type || 'tv'}">
+          ${isTop10 && rank ? `<div class="absolute top-2 left-2 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-bold text-sm z-10">${rank}</div>` : ''}
+          <img src="${poster_path ? `${IMG_BASE}/w300${poster_path}` : 'https://via.placeholder.com/200x300/1a1a2e/8b5cf6?text=No+Image'}" 
+               class="w-full poster-aspect object-cover skeleton" 
+               alt="${title}"
+               onerror="this.src='https://via.placeholder.com/200x300/1a1a2e/8b5cf6?text=No+Image';this.classList.remove('skeleton')"
+               onload="this.classList.remove('skeleton')">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+            <h4 class="font-medium text-sm line-clamp-2">${title}</h4>
+            <div class="flex items-center gap-2 mt-1 text-xs text-gray-300">
+              <span class="flex items-center gap-1">
+                <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                ${rating}
+              </span>
+              <span>${year}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    // ===== HERO SLIDER =====
+    const hero = {
+      slides: [],
+      currentIndex: 0,
+      interval: null,
+      
+      async init() {
+        try {
+          const data = await tmdb.getTrending();
+          this.slides = data.results.filter(a => a.backdrop_path && a.media_type === 'tv').slice(0, 5);
+          this.render();
+          this.startAutoSlide();
+        } catch(e) {
+          console.error('Hero init error:', e);
+          $('#heroTitle').textContent = 'Error loading content';
+        }
+      },
+      
+      render() {
+        const container = $('#heroSlider');
+        container.innerHTML = this.slides.map((anime, i) => `
+          <div class="hero-slide absolute inset-0 ${i === 0 ? 'active' : ''}" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(10,10,15,1)), url('${IMG_BASE}/w1280${anime.backdrop_path}') center/cover no-repeat">
+          </div>
+        `).join('');
+        
+        // Set first slide content
+        this.updateContent(this.slides[0]);
+      },
+      
+      updateContent(anime) {
+        $('#heroTitle').textContent = anime.title || anime.name;
+        $('#heroRatingValue').textContent = anime.vote_average?.toFixed(1) || 'N/A';
+        $('#heroOverview').textContent = anime.overview || 'No description available.';
+        
+        // Store for navigation
+        const animeData = { ...anime, media_type: anime.media_type || 'tv' };
+        $('#heroWatchBtn').onclick = () => router.navigate('details', animeData);
+        $('#heroDetailsBtn').onclick = () => router.navigate('details', animeData);
+      },
+      
+      startAutoSlide() {
+        if (this.interval) clearInterval(this.interval);
+        this.interval = setInterval(() => {
+          this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+          const slides = $$('.hero-slide');
+          slides.forEach((s, i) => s.classList.toggle('active', i === this.currentIndex));
+          this.updateContent(this.slides[this.currentIndex]);
+        }, 6000);
+      },
+      
+      destroy() {
+        if (this.interval) clearInterval(this.interval);
+      }
+    };
+
+    // ===== CONTENT ROWS =====
+    const contentRows = {
+      async loadRow(containerId, fetchFn, title) {
+        const container = $(containerId);
+        container.innerHTML = Array(6).fill('<div class="skeleton rounded-xl poster-aspect"></div>').join('');
+        
+        try {
+          const data = await fetchFn();
+          container.innerHTML = data.results.slice(0, 12).map(anime => renderCard(anime)).join('');
+          
+          // Add click handlers
+          container.querySelectorAll('[data-id]').forEach(el => {
+            el.onclick = () => {
+              const id = el.dataset.id;
+              const type = el.dataset.type;
+              router.navigate('details', { id, media_type: type });
+            };
+          });
+        } catch(e) {
+          console.error(`Error loading ${title}:`, e);
+          container.innerHTML = '<p class="col-span-full text-gray-400 text-center py-4">Failed to load content</p>';
+        }
+      },
+      
+      async init() {
+        await Promise.all([
+          this.loadRow('#rowTrending', () => tmdb.getTrending(), 'Trending'),
+          this.loadRow('#rowPopular', () => tmdb.getPopular(), 'Popular'),
+          this.loadRow('#rowTopRated', () => tmdb.getTopRated(), 'Top Rated')
+        ]);
+      }
+    };
+
+    // ===== TOP 10 SECTION =====
+    const top10 = {
+      async init() {
+        const container = $('#top10Container');
+        container.innerHTML = Array(10).fill('<div class="skeleton rounded-xl min-w-[140px] md:min-w-[180px] poster-aspect"></div>').join('');
+        
+        try {
+          const data = await tmdb.getTrending();
+          const top = data.results.filter(a => a.poster_path).slice(0, 10);
+          
+          container.innerHTML = top.map((anime, i) => renderCard(anime, true, i+1)).join('');
+          
+          container.querySelectorAll('[data-id]').forEach(el => {
+            el.onclick = () => {
+              const id = el.dataset.id;
+              const type = el.dataset.type;
+              router.navigate('details', { id, media_type: type });
+            };
+          });
+        } catch(e) {
+          console.error('Top 10 error:', e);
+          container.innerHTML = '<p class="text-gray-400 px-2">Failed to load trending</p>';
+        }
+      }
+    };
+
+    // ===== SEARCH SYSTEM =====
+    const search = {
+      debounceTimer: null,
+      
+      init() {
+        const input = $('#searchInput');
+        const mobileInput = $('#searchInputMobile');
+        const results = $('#searchResults');
+        const mobileResults = $('#searchResultsMobile');
+        
+        const performSearch = async (query, resultsContainer) => {
+          if (!query.trim()) {
+            resultsContainer.innerHTML = '';
+            resultsContainer.classList.add('hidden');
+            return;
+          }
+          
+          resultsContainer.classList.remove('hidden');
+          resultsContainer.innerHTML = '<div class="p-4 text-center text-sm text-gray-400">Searching...</div>';
+          
+          try {
+            const data = await tmdb.search(query);
+            if (data.results.length === 0) {
+              resultsContainer.innerHTML = '<div class="p-4 text-center text-sm text-gray-400">No results found</div>';
+              return;
+            }
+            
+            resultsContainer.innerHTML = data.results.slice(0, 8).map(anime => `
+              <div class="search-result flex gap-3 p-3 cursor-pointer transition" data-id="${anime.id}" data-type="${anime.media_type || 'tv'}">
+                <img src="${anime.poster_path ? `${IMG_BASE}/w92${anime.poster_path}` : 'https://via.placeholder.com/92x138/1a1a2e/8b5cf6?text=?'}" 
+                     class="w-14 h-20 object-cover rounded" alt="${anime.title}">
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-medium text-sm truncate">${anime.title || anime.name}</h4>
+                  <p class="text-xs text-gray-400 mt-0.5">${anime.first_air_date?.split('-')[0] || 'Movie'}</p>
+                  <p class="text-xs text-gray-500 line-clamp-2 mt-1">${anime.overview?.substring(0, 80)}${anime.overview?.length > 80 ? '...' : ''}</p>
+                </div>
+              </div>
+            `).join('');
+            
+            resultsContainer.querySelectorAll('[data-id]').forEach(el => {
+              el.onclick = () => {
+                const id = el.dataset.id;
+                const type = el.dataset.type;
+                router.navigate('details', { id, media_type: type });
+                results.classList.add('hidden');
+                mobileResults.parentElement.parentElement.classList.add('hidden');
+                input.value = '';
+                mobileInput.value = '';
+              };
+            });
+          } catch(e) {
+            console.error('Search error:', e);
+            resultsContainer.innerHTML = '<div class="p-4 text-center text-sm text-red-400">Search failed</div>';
+          }
+        };
+        
+        // Desktop search
+        input.addEventListener('input', debounce((e) => {
+          performSearch(e.target.value, results);
+        }, 300));
+        
+        // Close search when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!input.contains(e.target) && !results.contains(e.target)) {
+            results.classList.add('hidden');
+          }
+        });
+        
+        // Mobile search
+        mobileInput.addEventListener('input', debounce((e) => {
+          performSearch(e.target.value, mobileResults);
+        }, 300));
+        
+        // Mobile search toggle
+        $('#searchBtnMobile').onclick = () => {
+          $('#searchOverlay').classList.remove('hidden');
+          mobileInput.focus();
+        };
+        $('#closeSearchMobile').onclick = () => {
+          $('#searchOverlay').classList.add('hidden');
+          mobileInput.value = '';
+          mobileResults.innerHTML = '';
+        };
+      }
+    };
+
+    // ===== FIREBASE AUTH =====
+    const authSystem = {
+      init() {
+        // Auth state observer
+        auth.onAuthStateChanged(user => {
+          const loginBtn = $('#loginBtn');
+          const userProfile = $('#userProfile');
+          const userAvatar = $('#userAvatar');
+          
+          if (user) {
+            loginBtn.classList.add('hidden');
+            userProfile.classList.remove('hidden');
+            userAvatar.src = user.photoURL || 'https://via.placeholder.com/32/8b5cf6/fff?text=U';
+            
+            // Update profile view if active
+            if (router.currentView === 'profile') router.loadProfile();
+          } else {
+            loginBtn.classList.remove('hidden');
+            userProfile.classList.add('hidden');
+          }
+        });
+        
+        // Login button handlers
+        const login = () => {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          auth.signInWithPopup(provider)
+            .then(() => showToast('Welcome! ✓'))
+            .catch(err => {
+              console.error('Login error:', err);
+              showToast('Login failed: ' + err.message, 'error');
+            });
+        };
+        
+        $('#loginBtn').onclick = login;
+        $('#profileLoginBtn').onclick = login;
+        
+        // Logout handlers
+        const logout = () => {
+          auth.signOut().then(() => {
+            showToast('Signed out');
+            router.loadProfile();
+          });
+        };
+        
+        $('#logoutBtn').onclick = logout;
+        $('#profileLogoutBtn').onclick = logout;
+      }
+    };
+
+    // ===== NAVIGATION =====
+    const nav = {
+      init() {
+        // Bottom nav tabs
+        $$('.nav-tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            const view = tab.dataset.view;
+            const isSearch = tab.dataset.search;
+            
+            if (isSearch) {
+              if (window.innerWidth < 768) {
+                $('#searchOverlay').classList.remove('hidden');
+                $('#searchInputMobile').focus();
+              } else {
+                $('#searchInput').focus();
+              }
+              return;
+            }
+            
+            router.navigate(view);
+            $$('.nav-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+          });
+        });
+        
+        // Top nav links
+        $$('.nav-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            const view = link.dataset.view;
+            const section = link.dataset.section;
+            
+            router.navigate(view);
+            $$('.nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            // Scroll to section if specified
+            if (section === 'trending') {
+              setTimeout(() => {
+                document.querySelector('#top10Container')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            } else if (section === 'top') {
+              setTimeout(() => {
+                document.querySelector('#rowTopRated')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }
+          });
+        });
+        
+        // Logo click
+        $('[data-view="home"]').onclick = () => router.navigate('home');
+        
+        // Mobile menu
+        const menu = $('#mobileMenu');
+        const overlay = $('#menuOverlay');
+        const toggleMenu = () => {
+          menu.classList.toggle('open');
+          overlay.classList.toggle('hidden');
+        };
+        
+        $('#mobileMenuBtn').onclick = toggleMenu;
+        overlay.onclick = toggleMenu;
+        
+        // Mobile menu nav
+        menu.querySelectorAll('.nav-link').forEach(link => {
+          link.onclick = () => {
+            const view = link.dataset.view;
+            const section = link.dataset.section;
+            toggleMenu();
+            router.navigate(view);
+            
+            if (section === 'trending') {
+              setTimeout(() => {
+                document.querySelector('#top10Container')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }
+          };
+        });
+        
+        // Ripple effects on buttons
+        $$('button, .card-hover, [data-id]').forEach(el => {
+          el.addEventListener('click', createRipple);
+        });
+      }
+    };
+
+    // ===== WATCH HISTORY CLEAR =====
+    const setupHistoryClear = () => {
+      $('#clearHistoryBtn').onclick = () => {
+        if (confirm('Clear all watch history?')) {
+          localStorage.removeItem('animeHistory');
+          router.loadHistory();
+          showToast('History cleared');
+        }
+      };
+    };
+
+    // ===== LAZY LOAD IMAGES =====
+    const setupLazyLoad = () => {
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                observer.unobserve(img);
+              }
+            }
+          });
+        }, { rootMargin: '50px' });
+        
+        $$('img[skeleton]').forEach(img => observer.observe(img));
+      }
+    };
+
+    // ===== INITIALIZATION =====
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize systems
+      authSystem.init();
+      nav.init();
+      search.init();
+      setupHistoryClear();
+      
+      // Load content
+      await hero.init();
+      await top10.init();
+      await contentRows.init();
+      
+      // Setup lazy load
+      setupLazyLoad();
+      
+      // Handle browser back button
+      window.addEventListener('popstate', () => {
+        router.navigate('home');
+      });
+      
+      // Update last active
+      if (auth.currentUser) {
+        localStorage.setItem('lastActive', Date.now().toString());
+      }
+      
+      console.log('✅ AnimeX Ultra Pro loaded');
     });
-  }, { rootMargin: '50px' });
-  imgs.forEach(img => obs.observe(img));
-};
-
-// ===== KEYBOARD =====
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && $('searchOverlay').classList.contains('open')) toggleSearch();
-  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); toggleSearch(); }
-});
-
-// Close mobile menu on outside click
-document.addEventListener('click', e => {
-  const menu = $('mobileMenu');
-  if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !e.target.closest('[aria-label="Menu"]')) {
-    menu.classList.add('hidden');
-  }
-});
-
-// ===== INIT =====
-window.addEventListener('DOMContentLoaded', () => {
-  if (API_KEY === 'YOUR_TMDB_API_KEY') {
-    $('heroTitle').textContent = '🔑 API Key Missing';
-    $('heroDesc').textContent = 'Open this HTML file in a text editor and replace YOUR_TMDB_API_KEY with your TMDB API key.';
-  }
-  loadHome();
-  loadImages(document);
-});
-</script>
+  </script>
 </body>
 </html>
