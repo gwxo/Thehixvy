@@ -617,6 +617,58 @@
       toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-4'); setTimeout(() => toast.classList.add('hidden'), 400); }, 3000);
     };
 
+    // --- PRELOADER & CONSENT MODAL LOGIC ---
+    window.addEventListener('load', () => {
+      // Hide Preloader after the page fully loads (with a 1.5s delay to show the cinematic effect)
+      setTimeout(() => {
+        const preloader = $('#preloader');
+        if (preloader) preloader.classList.add('hidden-loader');
+        
+        // Show Consent Modal if the user hasn't accepted it yet
+        if (!localStorage.getItem('animeConsentAccepted')) {
+          setTimeout(() => {
+            const consentModal = $('#consentModal');
+            if (consentModal) {
+              consentModal.classList.remove('hidden');
+              consentModal.classList.add('flex'); // Needs to be flex to center the content
+              // Slight delay to allow CSS transition to trigger smoothly
+              requestAnimationFrame(() => {
+                consentModal.classList.remove('opacity-0');
+              });
+            }
+          }, 600);
+        }
+      }, 1500);
+    });
+
+    // Handle Consent Checkbox & Button
+    document.addEventListener('DOMContentLoaded', () => {
+      const consentCheck = $('#consentCheck');
+      const consentBtn = $('#consentBtn');
+      const consentModal = $('#consentModal');
+
+      if (consentCheck && consentBtn) {
+        // Toggle button state when checkbox is clicked
+        consentCheck.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            consentBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+          } else {
+            consentBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+          }
+        });
+
+        // Save consent to localStorage and hide modal when accepted
+        consentBtn.addEventListener('click', () => {
+          localStorage.setItem('animeConsentAccepted', 'true');
+          consentModal.classList.add('opacity-0');
+          setTimeout(() => {
+            consentModal.classList.add('hidden');
+            consentModal.classList.remove('flex');
+          }, 500); // Matches the CSS transition duration
+        });
+      }
+    });
+
     // AUTH
     const appAuth = {
       mode: 'login', isDummy: !window.firebase || !firebase.apps.length, user: null,
