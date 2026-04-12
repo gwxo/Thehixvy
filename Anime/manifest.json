@@ -1,12 +1,12 @@
 {
-  "name": "PranjalXAnime",
+  "name": "PranXAnime",
   "short_name": "PXanime",
   "description": "The ultimate Animeverse streaming experience.",
   "start_url": "/Anime/",
   "scope": "/Anime/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#ff0000",
+  "background_color": "#6e0303",
   "theme_color": "#05050a",
   "icons": [
     {
