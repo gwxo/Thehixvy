@@ -1033,30 +1033,7 @@
       }
     };
 
-    // --- PWA REGISTRATION & OFFLINE LOGIC ---
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/Anime/sw.js')
-          .catch(err => console.error('PWA Setup Failed:', err));
-      });
-    }
-
-    const offlineModal = document.getElementById('offlineModal');
     
-    window.addEventListener('offline', () => {
-      offlineModal.classList.remove('hidden');
-      offlineModal.classList.add('flex');
-      requestAnimationFrame(() => offlineModal.classList.remove('opacity-0'));
-    });
-
-    window.addEventListener('online', () => {
-      offlineModal.classList.add('opacity-0');
-      setTimeout(() => {
-        offlineModal.classList.add('hidden');
-        offlineModal.classList.remove('flex');
-        showToast('Internet Restored!', 'info');
-      }, 500);
-    });
 
     // INIT
     document.addEventListener('DOMContentLoaded', async () => {
@@ -1092,6 +1069,37 @@
       router.loadProfile();
       window.addEventListener('popstate', () => router.navigate('home'));
     });
+
+        
+  </script>
+
+  <script>
+// --- PWA REGISTRATION & OFFLINE LOGIC ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/Anime/sw.js')
+          .catch(err => console.error('PWA Setup Failed:', err));
+      });
+    }
+
+    const offlineModal = document.getElementById('offlineModal');
+    
+    window.addEventListener('offline', () => {
+      offlineModal.classList.remove('hidden');
+      offlineModal.classList.add('flex');
+      requestAnimationFrame(() => offlineModal.classList.remove('opacity-0'));
+    });
+
+    window.addEventListener('online', () => {
+      offlineModal.classList.add('opacity-0');
+      setTimeout(() => {
+        offlineModal.classList.add('hidden');
+        offlineModal.classList.remove('flex');
+        showToast('Internet Restored!', 'info');
+      }, 500);
+    });
+
+    
   </script>
 </body>
 </html>
