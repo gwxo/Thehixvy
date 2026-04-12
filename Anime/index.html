@@ -29,7 +29,7 @@
           },
           keyframes: {
             pulseGlow: { '0%, 100%': { boxShadow: '0 0 15px rgba(255, 46, 147, 0.5)' }, '50%': { boxShadow: '0 0 40px rgba(255, 46, 147, 0.8)' } },
-            kenBurns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.1)' } },
+            kenBurns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.15)' } },
             float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
             shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } }
           }
@@ -69,7 +69,6 @@
     .poster-aspect { aspect-ratio: 2/3; object-fit: cover; }
     .skeleton { background: linear-gradient(90deg, #10101a 25%, #1a1a2e 50%, #10101a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; color: transparent !important; }
     
-    /* Dedicated Views */
     .view { display: none; min-height: 100vh; padding-bottom: 100px; }
     .view.active { display: block; animation: viewFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes viewFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -100,24 +99,25 @@
     ::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 6px; }
     ::-webkit-scrollbar-thumb:hover { background: #ff2e93; }
 
-    #preloader { transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #preloader { transition: opacity 0.6s ease, visibility 0.6s ease; }
     #preloader.hidden-loader { opacity: 0; visibility: hidden; pointer-events: none; }
   </style>
 </head>
 <body class="text-white selection:bg-primary selection:text-white">
 
-  <!-- PRELOADER WITH GIF -->
-  <div id="preloader" class="fixed inset-0 z-[9999] bg-dark flex flex-col items-center justify-center">
-    <div class="relative animate-float mb-6 flex items-center justify-center">
-      <!-- Outer Glowing Ring -->
-      <div class="absolute inset-[-10px] rounded-full border-4 border-transparent border-t-primary border-b-secondary animate-spin-slow opacity-60"></div>
-      <!-- GIF Container -->
-      <div class="w-32 h-32 rounded-full border-4 border-primary/50 overflow-hidden shadow-[0_0_40px_rgba(255,46,147,0.6)] p-1 bg-black relative z-10">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTGoumblEEHpVEbKLGXCA1qkYlgw72M9OGswh9ivDLQOkNHMYrPjDHp0RBy5XOOaEeSCHWBvBh-niWAYxsNtNgu8l2_X3AtaXU7hoIToGJ5oT18RahWyhnSKy2ysug_FhF4QySWIa4kFDb3lyiCeJed3WHP7Whyphenhyphen_1p2aaQa-M2UzL3F9oV_hmXC_tIygoB/s480/11088.gif" class="w-full h-full rounded-full object-cover">
-      </div>
+  <!-- CINEMATIC PRELOADER -->
+  <div id="preloader" class="fixed inset-0 z-[9999] bg-black flex flex-col justify-end overflow-hidden">
+    <!-- Fullscreen GIF with Zoom -->
+    <div class="absolute inset-0 z-0 bg-[url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTGoumblEEHpVEbKLGXCA1qkYlgw72M9OGswh9ivDLQOkNHMYrPjDHp0RBy5XOOaEeSCHWBvBh-niWAYxsNtNgu8l2_X3AtaXU7hoIToGJ5oT18RahWyhnSKy2ysug_FhF4QySWIa4kFDb3lyiCeJed3WHP7Whyphenhyphen_1p2aaQa-M2UzL3F9oV_hmXC_tIygoB/s480/11088.gif')] bg-cover bg-center bg-no-repeat animate-ken-burns"></div>
+    
+    <!-- Fade to Black Gradient Overlay -->
+    <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-black/60 to-black"></div>
+    
+    <!-- Logo Content (Fades up beautifully over the black half) -->
+    <div class="relative z-20 flex flex-col items-center pb-20 animate-slide-up">
+      <h1 class="text-4xl md:text-6xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary tracking-widest neon-text drop-shadow-[0_0_30px_rgba(255,46,147,0.8)]">TheHixvy Creation</h1>
+      <p class="text-white text-sm font-bold tracking-[0.4em] mt-4 uppercase border-t border-white/20 pt-3 px-10 drop-shadow-md">Gw Team</p>
     </div>
-    <h1 class="text-4xl md:text-5xl font-anime font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary tracking-widest neon-text">TheHixvy Creation</h1>
-    <p class="text-white text-xs font-bold tracking-[0.3em] mt-3 uppercase border-t border-white/20 pt-2 px-6">Gw Team</p>
   </div>
 
   <!-- API SETTINGS -->
@@ -161,13 +161,13 @@
           <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 glass-card rounded-xl overflow-hidden hidden max-h-[400px] overflow-y-auto shadow-2xl z-[62] transition-opacity duration-300"></div>
         </div>
 
-        <!-- Mobile Header Search Button -->
         <button onclick="router.navigate('search')" class="lg:hidden p-2 hover:text-primary transition bg-white/5 border border-white/10 rounded-full shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </button>
 
         <button id="headerAuthBtn" onclick="router.navigate('profile')" class="btn-primary px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap shrink-0 flex items-center gap-2">
-          <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg> Sign In
+          <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+          Sign In
         </button>
       </div>
     </div>
@@ -362,7 +362,7 @@
                 <svg class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> SERVERS
               </div>
               <div class="flex flex-wrap gap-2 overflow-x-auto scrollbar-hide pb-1" id="serverButtons">
-                <!-- Exact Requested Servers -->
+                <!-- Fixed Server Names -->
                 <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Gw Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> 4k Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg> Vidify</button>
@@ -559,7 +559,7 @@
 
   </main>
 
-  <!-- RESTORED STICKY BOTTOM NAV WITH SAFE AREA -->
+  <!-- BUG-FREE STICKY BOTTOM NAV -->
   <nav class="fixed bottom-0 left-0 right-0 z-[80] glass md:hidden border-t border-white/10" style="padding-bottom: env(safe-area-inset-bottom);">
     <div class="flex justify-around py-2 px-1">
       <button class="nav-tab active flex flex-col items-center justify-center gap-1 py-1 transition rounded-xl w-[20%]" data-view="home">
@@ -608,7 +608,7 @@
       toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', '-translate-y-4'); setTimeout(() => toast.classList.add('hidden'), 400); }, 3000);
     };
 
-    window.addEventListener('load', () => { setTimeout(() => $('#preloader').classList.add('hidden-loader'), 1500); });
+    window.addEventListener('load', () => { setTimeout(() => $('#preloader').classList.add('hidden-loader'), 1800); });
 
     // AUTH
     const appAuth = {
@@ -741,10 +741,17 @@
         } catch (e) { titleEls.forEach(el => { if(el) el.textContent = 'API Error'; }); showToast('Failed to load details', 'error'); }
       },
       
+      // FIXED EXPLICIT PIEXE LOGIC
       loadPlayer(id, type, season = 1, episode = 1, server = '1') {
         const iframe = $('#videoFrame'); let url = '';
         switch(server) {
-          case '1': url = type === 'tv' ? `https://piexe411qok.com/play/${id}?s=${season}&e=${episode}` : `https://piexe411qok.com/play/${id}`; break;
+          case '1': 
+            if (type === 'movie') {
+               url = `https://piexe411qok.com/play/${id}`;
+            } else {
+               url = `https://piexe411qok.com/play/${id}?s=${season}&e=${episode}`;
+            }
+            break;
           case '2': url = type === 'tv' ? `https://vidstorm.ru/tv/${id}/${season}/${episode}` : `https://vidstorm.ru/movie/${id}`; break;
           case '3': url = type === 'tv' ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}` : `https://player.vidify.top/embed/movie/${id}`; break;
           case '4': url = `https://multiembed.mov/directstream.php?video_id=${id}`; break;
