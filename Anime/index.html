@@ -559,7 +559,7 @@
                 </div>
               </div>
               <button onclick="appAuth.signOut()" class="w-full py-4 bg-white/5 text-gray-300 border border-white/10 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/30 rounded-xl font-bold transition text-sm flex items-center justify-center gap-2">
-                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Secure Sign Out
+                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg> Secure Sign Out
               </button>
            </div>
         </div>
@@ -759,6 +759,9 @@
 
           if (anime.genres) $('#detailGenres').innerHTML = anime.genres.map(g => `<span class="px-3 py-1.5 bg-white/5 shadow-inner rounded-lg border border-white/10 text-[10px] uppercase font-bold text-gray-300 tracking-widest">${g.name}</span>`).join('');
           
+          // Grabbing IMDb ID explicitly here to fix the Piexe Server
+          const imdbId = anime.external_ids?.imdb_id || anime.imdb_id || id;
+
           if (type === 'tv' && anime.seasons) {
             $('#episodeSection').classList.remove('hidden'); const validSeasons = anime.seasons.filter(s => s.season_number > 0);
             $('#seasonSelect').innerHTML = (validSeasons.length ? validSeasons : anime.seasons).map(s => `<option value="${s.season_number}">Season ${s.season_number}</option>`).join('');
@@ -768,7 +771,7 @@
                 const epData = await tmdb.fetch(`/tv/${id}/season/${seasonNum}`);
                 if(epData.episodes?.length > 0) {
                   epGrid.innerHTML = epData.episodes.map(ep => `<button class="ep-card bg-dark/50 border border-white/10 rounded-lg py-2.5 px-3 font-bold text-sm transition hover:bg-white/5" data-ep="${ep.episode_number}"><span class="ep-num">EP ${ep.episode_number}</span></button>`).join('');
-                  $$('.ep-card').forEach(btn => btn.onclick = () => { $$('.ep-card').forEach(b => b.classList.remove('active')); btn.classList.add('active'); this.loadPlayer(id, type, seasonNum, btn.dataset.ep, $('.server-btn.active')?.dataset.server || '1'); overlay.classList.add('hidden'); iframe.classList.remove('hidden'); serverSection.classList.remove('hidden'); });
+                  $$('.ep-card').forEach(btn => btn.onclick = () => { $$('.ep-card').forEach(b => b.classList.remove('active')); btn.classList.add('active'); this.loadPlayer(id, type, seasonNum, btn.dataset.ep, $('.server-btn.active')?.dataset.server || '1', imdbId); overlay.classList.add('hidden'); iframe.classList.remove('hidden'); serverSection.classList.remove('hidden'); });
                   $$('.ep-card')[0]?.classList.add('active');
                 } else epGrid.innerHTML = `<button class="ep-card active bg-primary/20 border border-primary/50 text-primary rounded-lg py-2.5 font-bold col-span-2" data-ep="1">EP 1</button>`;
               } catch(e) { epGrid.innerHTML = `<p class="text-red-400 text-sm">Failed to load episodes</p>`; }
@@ -787,12 +790,12 @@
 
           const triggerPlay = () => {
             overlay.classList.add('hidden'); iframe.classList.remove('hidden'); serverSection.classList.remove('hidden');
-            this.loadPlayer(id, type, $('#seasonSelect')?.value || 1, $('.ep-card.active')?.dataset.ep || 1, $('.server-btn.active')?.dataset.server || '1');
+            this.loadPlayer(id, type, $('#seasonSelect')?.value || 1, $('.ep-card.active')?.dataset.ep || 1, $('.server-btn.active')?.dataset.server || '1', imdbId);
             this.addToHistory({ id, title: titleText, media_type: type, poster_path: anime.poster_path, first_air_date: yearText }); 
           };
 
           $('#playBtn').onclick = (e) => { e.stopPropagation(); triggerPlay(); }; overlay.onclick = triggerPlay;
-          $$('.server-btn').forEach(btn => btn.onclick = () => { $$('.server-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(!overlay.classList.contains('hidden')) triggerPlay(); else this.loadPlayer(id, type, $('#seasonSelect')?.value || 1, $('.ep-card.active')?.dataset.ep || 1, btn.dataset.server); });
+          $$('.server-btn').forEach(btn => btn.onclick = () => { $$('.server-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(!overlay.classList.contains('hidden')) triggerPlay(); else this.loadPlayer(id, type, $('#seasonSelect')?.value || 1, $('.ep-card.active')?.dataset.ep || 1, btn.dataset.server, imdbId); });
 
           const addHist = () => { this.addToHistory({id, title:titleText, media_type:type, poster_path:anime.poster_path, first_air_date:yearText}); showToast('Added to watch list!'); };
           if($('#addToHistoryBtn')) $('#addToHistoryBtn').onclick = addHist; if($('#addToHistoryBtnMobile')) $('#addToHistoryBtnMobile').onclick = addHist;
@@ -800,14 +803,15 @@
         } catch (e) { console.error(e); titleEls.forEach(el => { if(el) el.textContent = 'API Error'; }); showToast('Failed to load details', 'error'); }
       },
       
-      loadPlayer(id, type, season = 1, episode = 1, server = '1') {
+      loadPlayer(id, type, season = 1, episode = 1, server = '1', imdbId = null) {
         const iframe = $('#videoFrame'); let url = '';
+        const targetId = (server === '1' && imdbId) ? imdbId : id; // Use IMDb ID for Server 1 if available
         switch(server) {
           case '1': 
             if(type === "movie") {
-              url = `https://piexe411qok.com/play/${id}`;
+              url = `https://piexe411qok.com/play/${targetId}`;
             } else {
-              url = `https://piexe411qok.com/play/${id}?s=${season}&e=${episode}`;
+              url = `https://piexe411qok.com/play/${targetId}?s=${season}&e=${episode}`;
             }
             break;
           case '2': url = type === 'tv' ? `https://vidstorm.ru/tv/${id}/${season}/${episode}` : `https://vidstorm.ru/movie/${id}`; break;
@@ -875,7 +879,8 @@
         data.results = data.results.filter(a => ['tv', 'movie'].includes(a.media_type) && (a.original_language === 'ja' || a.genre_ids?.includes(16)));
         return data;
       },
-      async getDetails(id, type = 'tv') { return this.fetch(`/${type}/${id}`, { append_to_response: 'credits' }); }
+      // Added external_ids here to fetch the IMDb ID safely
+      async getDetails(id, type = 'tv') { return this.fetch(`/${type}/${id}`, { append_to_response: 'credits,external_ids' }); }
     };
 
     const renderCard = (anime, isTop = false, rank = null, historyView = false) => {
