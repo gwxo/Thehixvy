@@ -913,8 +913,8 @@
         const targetId = (server === '1' && imdbId) ? imdbId : id; 
         
         // Base64 Encoded Server URLs (Hides them from plain text search)
-        const s1 = atob('aHR0cHM6Ly9waWV4ZTQxMXFvay5jb20='); // Gw server
-        const s2 = atob('aHR0cHM6Ly92aWRzdG9ybS5ydQ=='); // 4k Quality
+        const s1 = atob('aHR0cHM6Ly9waWV4ZTQxMXFvay5jb20='); // Gw Server
+        const s2 = atob('aHR0cHM6Ly92aWRzdG9ybS5ydQ=='); // 4k Streaming
         const s3 = atob('aHR0cHM6Ly9wbGF5ZXIudmlkZWFzeS5uZXQ='); // Mafia
         const s4 = atob('aHR0cHM6Ly92c2VtYmVkLnJ1'); // Zerox
         const s5 = atob('aHR0cHM6Ly9wbGF5ZXIudmlkaWZ5LnRvcA=='); // vidify
@@ -945,16 +945,8 @@
             break;
         }
         
-        // Load the URL
+        // Load the URL safely
         iframe.src = url;
-
-        // Security: Remove the SRC attribute visually from the HTML once it loads
-        // The video will continue to play, but inspecting the element will show a blank src=""
-        iframe.onload = () => {
-          setTimeout(() => {
-            iframe.removeAttribute('src');
-          }, 1000);
-        };
       },
       
       addToHistory(anime) {
