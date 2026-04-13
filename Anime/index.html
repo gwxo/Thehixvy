@@ -658,6 +658,38 @@
     const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
     const debounce = (fn, delay) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => fn.apply(this, args), delay); }; };
 
+    // --- SECURITY LAYER START ---
+    (function blockDevTools() {
+      // 1. Disable Right Click
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showToast('Action disabled for security.', 'error');
+      });
+
+      // 2. Disable Keyboard Shortcuts (F12, Ctrl+U, Ctrl+Shift+I/J/C)
+      document.addEventListener('keydown', (e) => {
+        if (
+          e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+          (e.ctrlKey && e.key === 'U')
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      // 3. The Debugger Trap (Freezes page if DevTools is forced open)
+      setInterval(() => {
+        const start = Date.now();
+        debugger; // This pauses execution ONLY if DevTools are open
+        if (Date.now() - start > 100) {
+          // If paused, wipe the website content immediately
+          document.body.innerHTML = '<div style="height:100vh;display:flex;align-items:center;justify-content:center;background:#05050a;color:#ff2e93;font-size:24px;font-family:sans-serif;font-weight:bold;">Security Alert: Developer Tools Blocked</div>';
+          window.location.replace("about:blank");
+        }
+      }, 1000);
+    })();
+    // --- SECURITY LAYER END ---
+
     let toastTimeout;
     const showToast = (msg, type = 'info') => {
       const toast = $('#toast'); clearTimeout(toastTimeout);
@@ -876,32 +908,53 @@
       },
       
       loadPlayer(id, type, season = 1, episode = 1, server = '1', imdbId = null) {
-        const iframe = $('#videoFrame'); let url = '';
+        const iframe = $('#videoFrame'); 
+        let url = '';
         const targetId = (server === '1' && imdbId) ? imdbId : id; 
+        
+        // Base64 Encoded Server URLs (Hides them from plain text search)
+        const s1 = atob('aHR0cHM6Ly9waWV4ZTQxMXFvay5jb20='); // Gw server
+        const s2 = atob('aHR0cHM6Ly92aWRzdG9ybS5ydQ=='); // 4k Quality
+        const s3 = atob('aHR0cHM6Ly9wbGF5ZXIudmlkZWFzeS5uZXQ='); // Mafia
+        const s4 = atob('aHR0cHM6Ly92c2VtYmVkLnJ1'); // Zerox
+        const s5 = atob('aHR0cHM6Ly9wbGF5ZXIudmlkaWZ5LnRvcA=='); // vidify
+        const s6 = atob('aHR0cHM6Ly9tdWx0aWVtYmVkLm1vdg=='); // multiembed
+        const s7 = atob('aHR0cHM6Ly93d3cuMmVtYmVkLmNj'); // 2embed
+
         switch(server) {
           case '1': 
-            if(type === "movie") {
-              url = `https://piexe411qok.com/play/${targetId}`;
-            } else {
-              url = `https://piexe411qok.com/play/${targetId}?s=${season}&e=${episode}`;
-            }
+            url = type === "movie" ? `${s1}/play/${targetId}` : `${s1}/play/${targetId}?s=${season}&e=${episode}`;
             break;
-          case '2': url = type === 'tv' ? `https://vidstorm.ru/tv/${id}/${season}/${episode}` : `https://vidstorm.ru/movie/${id}`; break;
-
-            case '3': 
-            url = type === 'tv' ? `https://player.videasy.net/anime/${id}/${episode}` : `https://player.videasy.net/movie/${id}`; 
+          case '2': 
+            url = type === 'tv' ? `${s2}/tv/${id}/${season}/${episode}` : `${s2}/movie/${id}`; 
+            break;
+          case '3': 
+            url = type === 'tv' ? `${s3}/anime/${id}/${episode}` : `${s3}/movie/${id}`; 
             break;
           case '4': 
-            url = type === 'tv' ? `https://vsembed.ru/embed/tv/${id}/${season}-${episode}?autoplay=1&autonext=1` : `https://vsembed.ru/embed/movie/${id}?autoplay=1&autonext=1`; 
+            url = type === 'tv' ? `${s4}/embed/tv/${id}/${season}-${episode}?autoplay=1&autonext=1` : `${s4}/embed/movie/${id}?autoplay=1&autonext=1`; 
             break;
-
-
-            
-          case '5': url = type === 'tv' ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}` : `https://player.vidify.top/embed/movie/${id}`; break;
-          case '6': url = `https://multiembed.mov/directstream.php?video_id=${id}`; break;
-          case '7': url = type === 'tv' ? `https://www.2embed.cc/embedtv/${id}` : `https://www.2embed.cc/embed/${id}`; break;
+          case '5': 
+            url = type === 'tv' ? `${s5}/embed/tv/${id}/${season}/${episode}` : `${s5}/embed/movie/${id}`; 
+            break;
+          case '6': 
+            url = `${s6}/directstream.php?video_id=${id}`; 
+            break;
+          case '7': 
+            url = type === 'tv' ? `${s7}/embedtv/${id}` : `${s7}/embed/${id}`; 
+            break;
         }
+        
+        // Load the URL
         iframe.src = url;
+
+        // Security: Remove the SRC attribute visually from the HTML once it loads
+        // The video will continue to play, but inspecting the element will show a blank src=""
+        iframe.onload = () => {
+          setTimeout(() => {
+            iframe.removeAttribute('src');
+          }, 1000);
+        };
       },
       
       addToHistory(anime) {
