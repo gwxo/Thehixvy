@@ -408,6 +408,13 @@
               <div class="flex flex-wrap gap-2 overflow-x-auto scrollbar-hide pb-1" id="serverButtons">
                 <button class="server-btn active border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="1"><svg class="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg> Gw Server</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="2"><svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg> 4k Server</button>
+                <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="6">
+  <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg> Mafia
+</button>
+
+<button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="7">
+  <svg class="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/></svg> Zerox
+</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="3"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg> Vidify</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="4"><svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7z"/></svg> MultiEmbed</button>
                 <button class="server-btn border border-white/10 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2" data-server="5"><svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.759-1.576 5.5 5.5 0 115.61 5.516L13.5 16h-8z"/></svg> 2Embed</button>
@@ -880,9 +887,19 @@
             }
             break;
           case '2': url = type === 'tv' ? `https://vidstorm.ru/tv/${id}/${season}/${episode}` : `https://vidstorm.ru/movie/${id}`; break;
-          case '3': url = type === 'tv' ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}` : `https://player.vidify.top/embed/movie/${id}`; break;
-          case '4': url = `https://multiembed.mov/directstream.php?video_id=${id}`; break;
-          case '5': url = type === 'tv' ? `https://www.2embed.cc/embedtv/${id}` : `https://www.2embed.cc/embed/${id}`; break;
+
+            case '3': 
+            url = type === 'tv' ? `https://player.videasy.net/anime/${id}/${episode}` : `https://player.videasy.net/movie/${id}`; 
+            break;
+          case '4': 
+            url = type === 'tv' ? `https://vsembed.ru/embed/tv/${id}/${season}-${episode}?autoplay=1&autonext=1` : `https://vsembed.ru/embed/movie/${id}?autoplay=1&autonext=1`; 
+            break;
+
+
+            
+          case '5': url = type === 'tv' ? `https://player.vidify.top/embed/tv/${id}/${season}/${episode}` : `https://player.vidify.top/embed/movie/${id}`; break;
+          case '6': url = `https://multiembed.mov/directstream.php?video_id=${id}`; break;
+          case '7': url = type === 'tv' ? `https://www.2embed.cc/embedtv/${id}` : `https://www.2embed.cc/embed/${id}`; break;
         }
         iframe.src = url;
       },
