@@ -1,1 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Th3Hixvy | Unlimited Professional AI Humanizer</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+   <link rel="stylesheet" href="/Humanizer/style.css">
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- History Popup Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-card">
+            <div class="card-header">
+                <span>Result Content</span>
+                <i class="fa-solid fa-xmark" onclick="closeModal()" style="cursor:pointer; font-size: 1.5rem;"></i>
+            </div>
+            <div class="modal-body" id="modalContent"></div>
+            <button class="main-btn" onclick="closeModal()">Close Preview</button>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo" onclick="showView('mainView')"><div class="logo-box">Th3</div>Hixvy.</div>
+        <div class="nav-btns">
+            <button class="icon-btn" onclick="showView('devView')" title="Developer Hub"><i class="fa-solid fa-user-gear"></i></button>
+            <button class="icon-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered"></i></button>
+        </div>
+    </nav>
+
+    <!-- Side Menu -->
+    <div class="drawer" id="drawer">
+        <h2 style="margin-bottom: 40px; font-weight: 700;">NAVIGATION</h2>
+        <a href="#" class="drawer-link" onclick="showView('mainView')">Humanize Engine</a>
+        <a href="#" class="drawer-link" onclick="showView('authView')" id="menuAuthBtn">Login / Signup</a>
+        <a href="#" class="drawer-link" onclick="showView('devView')">Developer Hub</a>
+        <a href="#" class="drawer-link" id="menuLogoutBtn" onclick="logout()" style="display:none; background:#000; color:#fff;">Sign Out</a>
+    </div>
+
+    <!-- ENGINE VIEW -->
+    <main id="mainView" class="view active">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 4rem; font-weight: 700; line-height: 0.9; letter-spacing: -2px;">REFINE YOUR VOICE.</h1>
+                <p style="margin-top: 18px; font-weight: 700; opacity: 0.6;">Professional Undetectable AI Humanization Engine.</p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="neo-card">
+                <div class="card-header"><span><i class="fa-solid fa-terminal"></i> EDITOR</span> <span id="userTag">Guest Mode</span></div>
+                <textarea id="inputText" placeholder="Paste your AI text here (Unlimited Words)..."></textarea>
+                <div class="btn-grid">
+                    <button class="action-btn" id="sampleBtn">Try Sample</button>
+                    <button class="action-btn" id="pasteBtn">Paste Text</button>
+                </div>
+                <button class="main-btn" id="bypassBtn">Humanize Content</button>
+            </div>
+
+            <!-- Output Section -->
+            <div class="neo-card">
+                <div class="card-header"><span><i class="fa-solid fa-sparkles"></i> RESULT</span></div>
+                <div id="outputText" style="padding: 25px; min-height: 100px; font-size: 1.15rem; line-height: 1.6;">Your output will appear here...</div>
+                <button class="main-btn" id="copyBtn" style="background:#fff; color:#000;">Copy Content</button>
+            </div>
+
+            <!-- Guest Sticky Notification -->
+            <div class="auth-banner" id="guestBanner">
+                <p style="font-weight: 700; font-size: 0.95rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Save history permanently?</p>
+                <div class="banner-btns">
+                    <a href="#" class="btn-mini" onclick="showView('authView')">LOGIN</a>
+                    <a href="#" class="btn-mini blue" onclick="showView('authView')">SIGNUP</a>
+                </div>
+            </div>
+
+            <!-- History Controls -->
+            <div class="history-controls">
+                <h2 style="font-weight: 700; font-size: 1.8rem;">HISTORY LOGS</h2>
+                <button class="icon-btn" style="font-size: 0.8rem; background: #000; color:#fff;" onclick="clearAllHistory()">Wipe All</button>
+            </div>
+            <div id="historyList"></div>
+            <div id="loadMoreBox" class="load-more-box" style="display: none;">
+                <button class="icon-btn" onclick="loadMore()">Load More History</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- AUTH VIEW -->
+    <section id="authView" class="view">
+        <div class="container">
+            <div class="neo-card auth-card">
+                <h2 id="authTitle" style="font-size: 2.2rem;">LOGIN</h2>
+                <div style="margin-top: 30px;">
+                    <input type="email" id="email" class="auth-input" placeholder="Email Address">
+                    <input type="password" id="password" class="auth-input" placeholder="Password">
+                    <input type="password" id="confirmPassword" class="auth-input hidden" placeholder="Confirm Password">
+                    <button class="main-btn" id="authSubmit" style="border-radius: 4px;">Continue</button>
+                    
+                    <div style="margin: 25px 0; border-top: 4px solid #000; position: relative;">
+                        <span style="position: absolute; top:-14px; left: 45%; background: #fff; padding: 0 10px; font-weight: 700;">OR</span>
+                    </div>
+
+                    <button class="action-btn" style="width: 100%; border: var(--border); box-shadow: var(--shadow-sm);" onclick="googleLogin()">
+                        <i class="fa-brands fa-google"></i> Google Sign-in
+                    </button>
+
+                    <p style="margin-top: 25px; font-weight: 700; cursor: pointer; text-decoration: underline;" onclick="toggleAuth()" id="authToggle">Need an account? Signup</p>
+                    <p style="margin-top: 12px; font-size: 0.9rem; cursor: pointer;" onclick="forgotPass()">Forgot Password?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEVELOPER VIEW -->
+    <section id="devView" class="view">
+        <div class="container" style="text-align: center;">
+            <div class="neo-card" style="padding: 60px 40px;">
+                <div style="width: 140px; height: 140px; background:var(--accent); margin: 0 auto 25px; border: var(--border); border-radius: 20px; transform: rotate(-4deg); display:flex; align-items:center; justify-content:center; font-size:4rem;"><i class="fa-solid fa-code"></i></div>
+                <h1 style="font-size: 3rem; font-weight: 700; letter-spacing: -2px;">Hixvy Labs</h1>
+                <p style="font-weight: 700; margin-bottom: 40px;">Founder & Chief Software Architect</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 40px;">
+                    <div style="border: var(--border); padding: 15px; background: #fff;"><strong>99%</strong> Bypass</div>
+                    <div style="border: var(--border); padding: 15px; background: var(--accent);"><strong>Fast</strong> Engine</div>
+                    <div style="border: var(--border); padding: 15px; background: #fff;"><strong>∞</strong> Access</div>
+                </div>
+                
+                <p style="line-height: 1.8; max-width: 650px; margin: 0 auto;">Th3Hixvy is a community-driven engine designed to restore human voice to AI content. It's fully unlimited and focuses on privacy.</p>
+                
+                <button class="main-btn" style="margin-top: 40px;" onclick="showView('mainView')">Return to Engine</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div style="font-weight: 700; font-size: 2.2rem; margin-bottom: 20px; letter-spacing: -2px;">Th3Hixvy.</div>
+            <div class="socials">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+            </div>
+            <p style="margin-top: 35px; opacity: 0.4; font-size: 0.85rem;">&copy; 2026 Th3Hixvy Labs. All Systems Go.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+   <script src="/Humanizer/app.js"></script> 
+</body>
+</html>
