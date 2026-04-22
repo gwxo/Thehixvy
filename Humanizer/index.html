@@ -10,6 +10,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
    <link rel="stylesheet" href="/Humanizer/style.css">
+    <style>
+
+.btn-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; /* Change this line */
+    border-top: var(--border); 
+}
+        
+    </style>
 </head>
 <body>
 
@@ -58,6 +67,7 @@
                 <div class="card-header"><span><i class="fa-solid fa-terminal"></i> EDITOR</span> <span id="userTag">Guest Mode</span></div>
                 <textarea id="inputText" placeholder="Paste your AI text here (Unlimited Words)..."></textarea>
                 <div class="btn-grid">
+                    <button class="action-btn" id="clearBtn">New Text</button>
                     <button class="action-btn" id="sampleBtn">Try Sample</button>
                     <button class="action-btn" id="pasteBtn">Paste Text</button>
                 </div>
@@ -157,5 +167,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
    <script src="/Humanizer/app.js"></script> 
+    <script>
+
+// New Text / Clear Logic
+document.getElementById('clearBtn').onclick = () => {
+    document.getElementById('inputText').value = "";
+    document.getElementById('outputText').innerHTML = "Your output will appear here...";
+    document.getElementById('inputText').focus();
+};
+        
+    </script>
 </body>
 </html>
